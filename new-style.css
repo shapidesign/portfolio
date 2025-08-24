@@ -9,8 +9,11 @@
 body {
   font-family: 'JetBrains Mono', monospace;
   background-color: #050301;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   color: #f8f8f2;
+  min-height: 100vh;
+  position: relative;
 }
 
 /* Only disable pointer events for specific non-interactive elements */
@@ -967,5 +970,281 @@ a {
   .hero-message {
     font-size: 1.2rem;
     bottom: 1.1rem;
+  }
 }
+
+/* Enhanced Mobile Responsive Design */
+@media (max-width: 768px) {
+  /* Launch Screen Mobile Improvements */
+  .launch-screen {
+    padding: 1rem;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .launch-content {
+    width: 100%;
+    max-width: 90vw;
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  
+  .launch-title {
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  
+  .launch-subtitle {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    margin-bottom: 2rem;
+  }
+  
+  .launch-button {
+    font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+    padding: 1rem 1.5rem;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  /* Portfolio Container Mobile */
+  .portfolio-container {
+    min-height: 100vh;
+    padding: 1rem;
+  }
+  
+  /* Solar System Section Mobile */
+  .solar-system-section {
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  /* Canvas Mobile Adjustments */
+  #star-canvas,
+  #firework-canvas,
+  #cursor-canvas,
+  #orbit-canvas {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  
+  /* Space UI Mobile */
+  .space-ui {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    z-index: 1000;
+  }
+  
+  .space-info {
+    max-width: 100%;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .info-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .info-text {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  
+  /* Mission Control Mobile */
+  .mission-control {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    padding: 1rem;
+    z-index: 1000;
+  }
+  
+  .control-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .planet-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .planet-dot {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+  
+  .progress-info {
+    font-size: 0.8rem;
+    margin-top: 0.8rem;
+  }
+  
+  /* Modal Mobile Improvements */
+  .modal-content {
+    width: 95vw;
+    max-width: 95vw;
+    height: 90vh;
+    margin: 5vh auto;
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .modal-body {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  
+  .project-modal-content {
+    width: 95vw;
+    height: 90vh;
+    padding: 1rem;
+    margin: 5vh auto;
+  }
+  
+  .project-gallery {
+    padding: 0 30px;
+  }
+  
+  .gallery-nav {
+    width: 35px;
+    height: 35px;
+    font-size: 1.2rem;
+  }
+  
+  /* Contact Phone Mobile */
+  #contact-phone {
+    width: 50px;
+    height: 50px;
+    bottom: 1rem;
+    right: 1rem;
+  }
+  
+  #contact-phone svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Three.js Canvas Container Mobile */
+  #solar-system-canvas {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+  
+  /* Close Button Mobile */
+  .close {
+    font-size: 2rem;
+    top: 0.5rem;
+    right: 1rem;
+  }
+  
+  /* Touch-friendly improvements */
+  .launch-button,
+  .planet-dot,
+  .gallery-nav,
+  .close,
+  #contact-phone {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent horizontal scroll */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .launch-title {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+  }
+  
+  .launch-subtitle {
+    font-size: clamp(0.9rem, 3.5vw, 1.3rem);
+  }
+  
+  .launch-button {
+    font-size: clamp(0.8rem, 3vw, 1.1rem);
+    padding: 0.8rem 1.2rem;
+  }
+  
+  .space-info {
+    padding: 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .mission-control {
+    padding: 0.8rem;
+  }
+  
+  .planet-dot {
+    width: 20px;
+    height: 20px;
+    font-size: 0.6rem;
+  }
+  
+  .modal-content,
+  .project-modal-content {
+    width: 98vw;
+    height: 95vh;
+    margin: 2.5vh auto;
+    padding: 1rem;
+  }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .launch-content {
+    padding: 1rem;
+  }
+  
+  .launch-title {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    margin-bottom: 0.5rem;
+  }
+  
+  .launch-subtitle {
+    font-size: clamp(0.8rem, 3vw, 1.2rem);
+    margin-bottom: 1rem;
+  }
+  
+  .space-ui {
+    top: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+  
+  .mission-control {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+  
+  .modal-content,
+  .project-modal-content {
+    height: 95vh;
+    margin: 2.5vh auto;
+  }
 }
