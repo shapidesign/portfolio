@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shapi Design</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="new-style.css">
+</head>
+<body>
+
+<!-- Star field background -->
+<canvas id="star-canvas"></canvas>
+
+<!-- Firework effects -->
+<canvas id="firework-canvas"></canvas>
+
+<!-- Cursor canvas -->
+<canvas id="cursor-canvas"></canvas>
+
+<!-- Loading/Launch Screen -->
+<div id="launch-screen" class="launch-screen">
+  <div class="launch-content">
+    <h1 class="launch-title">This is not a Landing Page</h1>
+    <p class="launch-subtitle">prepare for launch...</p>
+    <div class="spaceship-container">
+      <div class="earth-animation-container" id="earth-animation">
+        <img src="earth-rotate/earth1.png" alt="Earth" class="spaceship-img earth-frame" id="earth">
+      </div>
+    </div>
+    <button class="launch-button" id="launch-btn">
+       LAUNCH INTO THE CREATIVE UNIVERSE
+    </button>
+  </div>
+  
+  <!-- Sky overlay that will "open" -->
+  <div class="sky-overlay" id="sky-overlay"></div>
+</div>
+
+<!-- Main Portfolio Container -->
+<div id="portfolio-container" class="portfolio-container">
+  
+  <!-- 3D Solar System -->
+  <div class="solar-system-section">
+    <canvas id="orbit-canvas"></canvas>
+    
+    <!-- UI Overlays -->
+    <div class="space-ui">
+      <div class="space-info">
+        <div class="info-title">🌌 Creative Universe</div>
+        <div class="info-text">Click the sun for about me • Click planets to explore projects</div>
+      </div>
+      
+      <div class="planet-hud" id="planet-hud">
+        <div id="planet-name"></div>
+      </div>
+    </div>
+    
+    <!-- Mission Control -->
+    <div class="mission-control">
+      <div class="control-title">Mission Control</div>
+      <div class="planet-grid" id="planet-grid">
+        <!-- Planet dots will be generated here -->
+      </div>
+      <div class="progress-info" id="progress-info">0/5 projects explored</div>
+    </div>
+    
+    <!-- Three.js canvas container -->
+    <div id="solar-system-canvas"></div>
+  </div>
+  
+</div>
+
+<!-- Pixelated Phone Icon Button (inside portfolio-container, after main content) -->
+<div id="contact-phone" title="Contact Me">
+  <svg width="38" height="38" viewBox="0 0 38 38" style="image-rendering: pixelated;">
+    <rect x="8" y="2" width="22" height="34" fill="#222" stroke="#66d9ef" stroke-width="2"/>
+    <rect x="12" y="6" width="14" height="22" fill="#66d9ef"/>
+    <rect x="16" y="30" width="6" height="2" fill="#a6e22e"/>
+    <rect x="17" y="32" width="4" height="2" fill="#f92672"/>
+    <rect x="18" y="34" width="2" height="2" fill="#fff"/>
+  </svg>
+</div>
+
+<!-- About Modal -->
+<div id="about-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="close-about">&times;</span>
+    <div class="modal-header">
+      <h2>☀️ About the Creator</h2>
+    </div>
+    <div class="modal-body">
+      <div class="about-content">
+        <div class="about-text">
+          <h3 style="color: #f92672;">HEY!</h3>
+          <p>I'm Yehonatan Shapira, a creative thinker that likes to explore and create.</p>
+          <p>Other people would call this "graphic design" or whatever...</p>
+          <p style="color: #66d9ef;">I call it curiosity</p>
+          <p>ANYWAYS -- I'll start my Visual Communications degree in late 2025 so there's a lot to look up to</p>
+          <p>My current goals are learning Figma, VisualDesigner and getting better at Vibe Coding</p>
+          <p style="color: #a6e22e;">Navigate through space to see my work!</p>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Project Modal -->
+<div id="project-modal" class="modal">
+  <div class="project-modal-content">
+    <span class="close" id="close-project">&times;</span>
+    
+    <div class="gallery-counter">
+      <span id="image-current">1</span> / <span id="image-total">3</span>
+    </div>
+    
+    <div class="project-modal-header">
+      <h2 id="project-modal-title">Project Title</h2>
+      <div id="project-modal-tags"></div>
+    </div>
+    
+    <div class="project-gallery">
+      <button class="gallery-nav gallery-prev" id="gallery-prev">‹</button>
+      <div class="gallery-image-container">
+        <img id="gallery-image" src="" alt="Project Image">
+      </div>
+      <button class="gallery-nav gallery-next" id="gallery-next">›</button>
+    </div>
+    
+    <div class="project-modal-description">
+      <p id="project-modal-desc">Project description will appear here...</p>
+    </div>
+  </div>
+</div>
+
+<!-- Contact Modal -->
+<div id="contact-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="close-contact">&times;</span>
+    <div class="modal-header">
+      <h2><svg width="28" height="28" viewBox="0 0 38 38" style="image-rendering: pixelated; vertical-align: middle; margin-right: 0.5em;"><rect x="8" y="2" width="22" height="34" fill="#222" stroke="#66d9ef" stroke-width="2"/><rect x="12" y="6" width="14" height="22" fill="#66d9ef"/><rect x="16" y="30" width="6" height="2" fill="#a6e22e"/><rect x="17" y="32" width="4" height="2" fill="#f92672"/><rect x="18" y="34" width="2" height="2" fill="#fff"/></svg> Contact Me</h2>
+    </div>
+    <div class="modal-body">
+      <div class="contact-info">
+        <div class="contact-item">
+          <span>
+            <!-- Pixelated Envelope Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" style="image-rendering: pixelated; vertical-align: middle;">
+              <rect x="2" y="4" width="20" height="16" fill="#222" stroke="#66d9ef" stroke-width="2"/>
+              <rect x="4" y="6" width="16" height="12" fill="#66d9ef"/>
+              <rect x="4" y="6" width="16" height="2" fill="#a6e22e"/>
+              <rect x="4" y="16" width="16" height="2" fill="#f92672"/>
+              <polygon points="4,6 12,14 20,6" fill="#fff"/>
+            </svg>
+          </span>
+          <a href="mailto:shapira97@gmail.com">Email me!!</a>
+        </div>
+        <div class="contact-item">
+          <span>
+            <!-- Pixelated Instagram Icon -->
+            <svg width="24" height="24" viewBox="0 0 24 24" style="image-rendering: pixelated; vertical-align: middle;">
+              <rect x="2" y="2" width="20" height="20" fill="#222" stroke="#66d9ef" stroke-width="2"/>
+              <rect x="5" y="5" width="14" height="14" fill="#f92672"/>
+              <rect x="9" y="9" width="6" height="6" fill="#fff"/>
+              <rect x="16" y="5" width="2" height="2" fill="#a6e22e"/>
+            </svg>
+          </span>
+          <a href="https://www.instagram.com/shapi_design" target="_blank">check my instagram!</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hero Section Button -->
+<button id="hero-btn" class="hero-btn">Hero Section</button>
+
+<!-- Hero Modal -->
+<div id="hero-modal" class="modal">
+  <div class="modal-content hero-modal-content">
+    <span class="close" id="close-hero">&times;</span>
+    <div class="hero-video-container">
+      <video id="hero-video" autoplay playsinline></video>
+      <div class="hero-message">you are the real hero</div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<!-- Make sure scripts are loaded in this exact order: -->
+<script src="https://unpkg.com/three@0.140.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.140.0/examples/js/controls/OrbitControls.js"></script>
+<script src="new-script.js"></script>
+<script src="planet-upgrade.js"></script>
+
+
+</body>
+</html>
