@@ -1547,8 +1547,8 @@ a {
   
   /* Mobile project description - smaller and properly positioned */
   .project-modal-description {
-    font-size: 0.5rem;
-    line-height: 1.2;
+    font-size: 0.4rem;
+    line-height: 1.1;
     margin-top: 1rem;
     padding: 0 0.5rem;
   }
@@ -1729,8 +1729,16 @@ a {
   /* Smaller about modal for mobile */
   #about-modal .modal-content {
     width: 90vw;
-    height: 65vh;
-    margin: 17.5vh auto;
+    height: 55vh;
+    margin: 22.5vh auto;
+    padding: 1rem;
+  }
+  
+  /* Smaller contact modal for mobile */
+  #contact-modal .modal-content {
+    width: 90vw;
+    height: 60vh;
+    margin: 20vh auto;
     padding: 1rem;
   }
 }

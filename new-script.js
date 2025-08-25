@@ -1181,6 +1181,16 @@ function closeProjectModal() {
       camera.lookAt(0, 0, 0);
       controls.update();
     }
+    
+    // Additional reset for better mobile experience
+    setTimeout(() => {
+      if (controls && camera) {
+        controls.target.set(0, 0, 0);
+        camera.position.set(0, 0, 50);
+        controls.update();
+        console.log('Camera reset completed');
+      }
+    }, 100);
   }
   
   console.log('Project modal closed successfully');
