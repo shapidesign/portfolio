@@ -417,7 +417,8 @@ a {
 }
 
 .planet-hud-floating {
-  /* Will be set dynamically via JS */
+  position: absolute;
+  z-index: 30;
 }
 
 #planet-name {
@@ -1029,12 +1030,13 @@ a {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
     padding: 2rem;
     border-radius: 12px;
     text-align: center;
     border: 2px solid #66d9ef;
     z-index: 1001;
+    display: block;
   }
   
   .camera-permission p {
