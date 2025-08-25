@@ -1463,6 +1463,7 @@ a {
     flex-direction: column;
     gap: 0.8rem;
     margin-bottom: 1rem;
+    margin-top: 3rem; /* Lower content to avoid overlap with buttons */
   }
   
   .project-modal-header .page-info {
@@ -1476,8 +1477,19 @@ a {
     gap: 0.5rem;
   }
   
+  /* Smaller project title and text for mobile */
+  .project-modal-header h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .project-modal-body {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
   .project-gallery {
-    padding: 0 30px;
+    padding: 0 20px;
     position: relative;
   }
   
@@ -1485,7 +1497,7 @@ a {
   .project-gallery img {
     width: 100%;
     height: auto;
-    max-height: 60vh;
+    max-height: 70vh;
     object-fit: contain;
     border-radius: 8px;
   }
@@ -1494,13 +1506,14 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 50vh;
+    min-height: 60vh;
+    padding: 0.5rem;
   }
   
   .gallery-nav {
-    width: 45px;
-    height: 45px;
-    font-size: 1.4rem;
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -1518,11 +1531,11 @@ a {
   }
   
   .gallery-nav.prev {
-    left: 10px;
+    left: 5px;
   }
   
   .gallery-nav.next {
-    right: 10px;
+    right: 5px;
   }
   
   .gallery-nav:active {
