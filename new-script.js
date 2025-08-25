@@ -1722,8 +1722,20 @@ function openHeroModal() {
     return;
   }
   
+  // Reset modal state completely
+  modal.classList.remove('show');
+  modal.style.display = 'none';
+  modal.style.visibility = 'hidden';
+  modal.style.opacity = '0';
+  
+  // Force a reflow to ensure reset
+  modal.offsetHeight;
+  
+  // Now open the modal
   modal.classList.add('show');
   modal.style.display = 'flex';
+  modal.style.visibility = 'visible';
+  modal.style.opacity = '1';
   
   // Hide camera permission dialog - don't show popup
   if (cameraPermission) {
@@ -1743,6 +1755,7 @@ function openHeroModal() {
   // Hide video initially
   if (video) {
     video.style.display = 'none';
+    video.style.visibility = 'hidden';
   }
   
   // Auto-enable camera immediately
@@ -1897,6 +1910,13 @@ function closeHeroModal() {
   }
   
   console.log('Hero modal closed successfully');
+  
+  // Ensure hero button is re-enabled
+  const heroBtn = document.getElementById('hero-btn');
+  if (heroBtn) {
+    heroBtn.style.pointerEvents = 'auto';
+    heroBtn.style.cursor = 'pointer';
+  }
 }
 
 // Enhanced mobile touch interactions
