@@ -1859,25 +1859,33 @@ function showCameraError(message) {
 }
 
 function closeHeroModal() {
+  console.log('Closing hero modal...');
   const modal = document.getElementById('hero-modal');
   const video = document.getElementById('hero-video');
   const cameraPermission = document.getElementById('camera-permission');
   
+  // Hide modal completely
   modal.classList.remove('show');
+  modal.style.display = 'none';
   
   // Stop camera stream
   if (heroStream) {
     heroStream.getTracks().forEach(track => track.stop());
     heroStream = null;
+    console.log('Camera stream stopped');
   }
   
   // Reset video
-  video.srcObject = null;
-  video.style.display = 'none';
+  if (video) {
+    video.srcObject = null;
+    video.style.display = 'none';
+  }
   
   // Show permission dialog again for next time
   if (cameraPermission) {
     cameraPermission.style.display = 'block';
+    cameraPermission.style.visibility = 'visible';
+    cameraPermission.style.opacity = '1';
   }
   
   // Remove any error messages
@@ -1885,6 +1893,8 @@ function closeHeroModal() {
   if (errorMsg && errorMsg.innerHTML.includes('Camera access denied')) {
     errorMsg.remove();
   }
+  
+  console.log('Hero modal closed successfully');
 }
 
 // Enhanced mobile touch interactions
@@ -1948,17 +1958,10 @@ document.addEventListener('DOMContentLoaded', function() {
   if (heroCloseBtn) {
     console.log('Hero close button found, adding listener');
     heroCloseBtn.addEventListener('click', closeHeroModal);
+    // Also add touch event for mobile
+    heroCloseBtn.addEventListener('touchend', closeHeroModal);
   } else {
     console.error('Hero close button not found!');
-  }
-  
-  // Set up regular close button
-  const closeHero = document.getElementById('close-hero');
-  if (closeHero) {
-    console.log('Regular close button found, adding listener');
-    closeHero.addEventListener('click', closeHeroModal);
-  } else {
-    console.error('Regular close button not found!');
   }
   
   // Set up hero button
