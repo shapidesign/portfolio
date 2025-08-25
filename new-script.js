@@ -1168,6 +1168,14 @@ function closeProjectModal() {
     }
   }
   
+  // Reset camera to default position on mobile
+  if (isMobile() && controls) {
+    console.log('Resetting camera to default position...');
+    controls.reset();
+    controls.target.set(0, 0, 0);
+    controls.update();
+  }
+  
   console.log('Project modal closed successfully');
 }
 
