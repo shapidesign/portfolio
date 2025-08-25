@@ -1719,10 +1719,13 @@ function openHeroModal() {
   }
   
   modal.classList.add('show');
+  modal.style.display = 'flex';
   
   // Show camera permission dialog first
   if (cameraPermission) {
     cameraPermission.style.display = 'block';
+    cameraPermission.style.visibility = 'visible';
+    cameraPermission.style.opacity = '1';
     console.log('Camera permission dialog shown');
   } else {
     console.error('Camera permission dialog not found!');
@@ -1737,6 +1740,14 @@ function openHeroModal() {
   if (video) {
     video.style.display = 'none';
   }
+  
+  // Auto-enable camera after a short delay (for better UX)
+  setTimeout(() => {
+    if (cameraPermission && cameraPermission.style.display !== 'none') {
+      console.log('Auto-enabling camera...');
+      enableCamera();
+    }
+  }, 1000);
 }
 
 // Enhanced camera enable function
@@ -1754,11 +1765,13 @@ function enableCamera() {
   // Hide permission dialog
   if (cameraPermission) {
     cameraPermission.style.display = 'none';
+    cameraPermission.style.visibility = 'hidden';
     console.log('Camera permission dialog hidden');
   }
   
   // Show video
   video.style.display = 'block';
+  video.style.visibility = 'visible';
   
   // Check if getUserMedia is supported
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -1767,21 +1780,25 @@ function enableCamera() {
     return;
   }
   
-  // Request camera with better error handling
-  navigator.mediaDevices.getUserMedia({ 
+  // Request camera with simpler constraints for better compatibility
+  const constraints = {
     video: { 
-      facingMode: 'user',
-      width: { ideal: 1280 },
-      height: { ideal: 720 }
+      facingMode: 'user'
     }, 
     audio: false 
-  })
+  };
+  
+  console.log('Requesting camera with constraints:', constraints);
+  
+  navigator.mediaDevices.getUserMedia(constraints)
   .then(stream => {
     console.log('Camera stream obtained successfully');
     heroStream = stream;
     video.srcObject = stream;
+    
+    // Play video immediately
     video.play().then(() => {
-      console.log('Video started playing');
+      console.log('Video started playing successfully');
       // Show hero message after camera starts
       if (heroMsg) {
         heroMsg.style.display = 'block';
@@ -1789,11 +1806,31 @@ function enableCamera() {
       }
     }).catch(e => {
       console.error('Error playing video:', e);
+      // Try to play without user interaction
+      video.muted = true;
+      video.play().catch(e2 => {
+        console.error('Error playing muted video:', e2);
+        showCameraError('Error starting video playback');
+      });
     });
   })
   .catch(error => {
     console.error('Camera error:', error);
-    showCameraError(error.message || 'Camera access denied');
+    let errorMessage = 'Camera access denied';
+    
+    if (error.name === 'NotAllowedError') {
+      errorMessage = 'Camera permission denied. Please allow camera access in your browser settings.';
+    } else if (error.name === 'NotFoundError') {
+      errorMessage = 'No camera found on this device.';
+    } else if (error.name === 'NotReadableError') {
+      errorMessage = 'Camera is already in use by another application.';
+    } else if (error.name === 'OverconstrainedError') {
+      errorMessage = 'Camera does not meet the required constraints.';
+    } else if (error.name === 'NotSupportedError') {
+      errorMessage = 'Camera not supported on this device.';
+    }
+    
+    showCameraError(errorMessage);
   });
 }
 
@@ -1896,6 +1933,8 @@ document.addEventListener('DOMContentLoaded', function() {
   if (enableCameraBtn) {
     console.log('Camera enable button found, adding listener');
     enableCameraBtn.addEventListener('click', enableCamera);
+    // Also add touch event for mobile
+    enableCameraBtn.addEventListener('touchend', enableCamera);
   } else {
     console.error('Camera enable button not found!');
   }
@@ -1930,6 +1969,20 @@ document.addEventListener('DOMContentLoaded', function() {
   // Enhance mobile touch interactions
   if (isMobile()) {
     enhanceMobileTouch();
+    
+    // Add touch feedback to close buttons
+    const closeButtons = document.querySelectorAll('.close');
+    closeButtons.forEach(btn => {
+      btn.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.9)';
+        this.style.background = 'rgba(102, 217, 239, 0.3)';
+      });
+      
+      btn.addEventListener('touchend', function() {
+        this.style.transform = 'scale(1)';
+        this.style.background = 'rgba(0, 0, 0, 0.9)';
+      });
+    });
   }
   
   // Add escape key support for modals
