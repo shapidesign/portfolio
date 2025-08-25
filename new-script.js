@@ -1137,6 +1137,21 @@ function openProjectModal(project, index) {
   modal.style.visibility = 'visible';
   modal.style.opacity = '1';
   
+  // Reset camera to default position on mobile after opening project
+  if (isMobile() && controls) {
+    console.log('Resetting camera after opening project...');
+    setTimeout(() => {
+      if (controls && camera) {
+        controls.reset();
+        controls.target.set(0, 0, 0);
+        camera.position.set(0, 0, 50);
+        camera.lookAt(0, 0, 0);
+        controls.update();
+        console.log('Camera reset completed after opening project');
+      }
+    }, 200);
+  }
+  
   console.log('Project modal opened successfully');
 }
 
