@@ -1036,6 +1036,17 @@ a {
     color: #fff;
   }
   
+  /* Mobile camera aspect ratio - vertical like phone */
+  #hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 9/16;
+    max-width: 80vw;
+    max-height: 80vh;
+    border-radius: 12px;
+  }
+  
   .camera-permission {
     position: absolute;
     top: 50%;
@@ -1442,13 +1453,48 @@ a {
   .project-modal-content {
     width: 90vw;
     height: 80vh;
-    padding: 1rem;
+    padding: 1.5rem;
     margin: 10vh auto;
+  }
+  
+  /* Fix page number and tags overlap */
+  .project-modal-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .project-modal-header .page-info {
+    order: 1;
+    margin-bottom: 0.5rem;
+  }
+  
+  .project-modal-header .project-tags {
+    order: 2;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
   
   .project-gallery {
     padding: 0 30px;
     position: relative;
+  }
+  
+  /* Larger images in project modals for mobile */
+  .project-gallery img {
+    width: 100%;
+    height: auto;
+    max-height: 60vh;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  
+  .gallery-image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
   }
   
   .gallery-nav {
@@ -1467,6 +1513,8 @@ a {
     justify-content: center;
     color: #66d9ef;
     transition: all 0.2s ease;
+    /* Ensure arrows stay on same horizontal line */
+    transform: translateY(-50%) translateZ(0);
   }
   
   .gallery-nav.prev {
