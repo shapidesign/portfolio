@@ -181,9 +181,14 @@
 <div id="hero-modal" class="modal">
   <div class="modal-content hero-modal-content">
     <span class="close" id="close-hero">&times;</span>
+    <button class="hero-close-btn" id="hero-close-btn">✕</button>
     <div class="hero-video-container">
-      <video id="hero-video" autoplay playsinline></video>
+      <video id="hero-video" autoplay playsinline muted></video>
       <div class="hero-message">you are the real hero</div>
+      <div class="camera-permission" id="camera-permission">
+        <p>Click to enable camera</p>
+        <button id="enable-camera-btn">Enable Camera</button>
+      </div>
     </div>
   </div>
 </div>

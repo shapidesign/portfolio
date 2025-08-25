@@ -1586,50 +1586,6 @@ function zoomToSun() {
 
 // === Hero Section Camera Modal ===
 let heroStream = null;
-function openHeroModal() {
-  const modal = document.getElementById('hero-modal');
-  const video = document.getElementById('hero-video');
-  const heroMsg = modal.querySelector('.hero-message');
-  modal.classList.add('show');
-  // Hide the hero message by default
-  if (heroMsg) heroMsg.style.display = 'none';
-  // Request front camera
-  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false })
-    .then(stream => {
-      heroStream = stream;
-      video.srcObject = stream;
-      video.play();
-      if (heroMsg) heroMsg.style.display = '';
-    })
-    .catch(() => {
-      video.poster = '';
-      video.style.background = '#222';
-      video.style.display = 'none';
-      if (heroMsg) heroMsg.style.display = 'none';
-      const msg = document.createElement('div');
-      msg.textContent = 'Camera not available';
-      msg.style.color = '#fff';
-      msg.style.textAlign = 'center';
-      msg.style.padding = '2rem';
-      video.parentNode.appendChild(msg);
-    });
-}
-function closeHeroModal() {
-  const modal = document.getElementById('hero-modal');
-  const video = document.getElementById('hero-video');
-  modal.classList.remove('show');
-  if (heroStream) {
-    heroStream.getTracks().forEach(track => track.stop());
-    heroStream = null;
-  }
-  video.srcObject = null;
-  video.style.display = '';
-  // Remove error message if present
-  const msg = video.parentNode.querySelector('div');
-  if (msg && msg.textContent === 'Camera not available') msg.remove();
-}
-document.getElementById('hero-btn').addEventListener('click', openHeroModal);
-document.getElementById('close-hero').addEventListener('click', closeHeroModal);
 
 // === Swipe Support ===
 function isMobile() {
@@ -1746,3 +1702,216 @@ function resetView(duration = 1000) {
 }
 window.resetView = resetView;
 document.getElementById('reset-view-btn').addEventListener('click', () => window.resetView());
+
+// === Enhanced Mobile UX Improvements ===
+
+// Improved Hero Modal with Camera Permission
+function openHeroModal() {
+  const modal = document.getElementById('hero-modal');
+  const video = document.getElementById('hero-video');
+  const heroMsg = modal.querySelector('.hero-message');
+  const cameraPermission = document.getElementById('camera-permission');
+  
+  modal.classList.add('show');
+  
+  // Show camera permission dialog first
+  if (cameraPermission) {
+    cameraPermission.style.display = 'block';
+  }
+  
+  // Hide the hero message initially
+  if (heroMsg) heroMsg.style.display = 'none';
+  
+  // Hide video initially
+  video.style.display = 'none';
+}
+
+// Enhanced camera enable function
+function enableCamera() {
+  const video = document.getElementById('hero-video');
+  const heroMsg = document.querySelector('.hero-message');
+  const cameraPermission = document.getElementById('camera-permission');
+  
+  // Hide permission dialog
+  if (cameraPermission) {
+    cameraPermission.style.display = 'none';
+  }
+  
+  // Show video
+  video.style.display = 'block';
+  
+  // Request camera with better error handling
+  navigator.mediaDevices.getUserMedia({ 
+    video: { 
+      facingMode: 'user',
+      width: { ideal: 1280 },
+      height: { ideal: 720 }
+    }, 
+    audio: false 
+  })
+  .then(stream => {
+    heroStream = stream;
+    video.srcObject = stream;
+    video.play();
+    
+    // Show hero message after camera starts
+    if (heroMsg) {
+      heroMsg.style.display = 'block';
+      heroMsg.style.animation = 'fadeIn 0.5s ease-in';
+    }
+  })
+  .catch(error => {
+    console.log('Camera error:', error);
+    
+    // Show error message
+    const errorMsg = document.createElement('div');
+    errorMsg.innerHTML = `
+      <div style="text-align: center; padding: 2rem; color: #fff;">
+        <p>Camera access denied or not available</p>
+        <p style="font-size: 0.9rem; opacity: 0.8;">Please check your camera permissions</p>
+      </div>
+    `;
+    video.parentNode.appendChild(errorMsg);
+    
+    // Show hero message anyway
+    if (heroMsg) {
+      heroMsg.style.display = 'block';
+    }
+  });
+}
+
+function closeHeroModal() {
+  const modal = document.getElementById('hero-modal');
+  const video = document.getElementById('hero-video');
+  const cameraPermission = document.getElementById('camera-permission');
+  
+  modal.classList.remove('show');
+  
+  // Stop camera stream
+  if (heroStream) {
+    heroStream.getTracks().forEach(track => track.stop());
+    heroStream = null;
+  }
+  
+  // Reset video
+  video.srcObject = null;
+  video.style.display = 'none';
+  
+  // Show permission dialog again for next time
+  if (cameraPermission) {
+    cameraPermission.style.display = 'block';
+  }
+  
+  // Remove any error messages
+  const errorMsg = video.parentNode.querySelector('div');
+  if (errorMsg && errorMsg.innerHTML.includes('Camera access denied')) {
+    errorMsg.remove();
+  }
+}
+
+// Enhanced mobile touch interactions
+function enhanceMobileTouch() {
+  // Add touch feedback to launch button
+  const launchBtn = document.getElementById('launch-btn');
+  if (launchBtn) {
+    launchBtn.addEventListener('touchstart', function() {
+      this.style.transform = 'scale(0.95)';
+      this.style.boxShadow = '0 0 30px rgba(102, 217, 239, 0.8)';
+    });
+    
+    launchBtn.addEventListener('touchend', function() {
+      this.style.transform = 'scale(1)';
+      this.style.boxShadow = '';
+    });
+  }
+  
+  // Add touch feedback to planet dots
+  const planetDots = document.querySelectorAll('.planet-dot');
+  planetDots.forEach(dot => {
+    dot.addEventListener('touchstart', function() {
+      this.style.transform = 'scale(0.9)';
+    });
+    
+    dot.addEventListener('touchend', function() {
+      this.style.transform = 'scale(1)';
+    });
+  });
+  
+  // Add touch feedback to gallery navigation
+  const galleryNavs = document.querySelectorAll('.gallery-nav');
+  galleryNavs.forEach(nav => {
+    nav.addEventListener('touchstart', function() {
+      this.style.transform = 'scale(0.9)';
+    });
+    
+    nav.addEventListener('touchend', function() {
+      this.style.transform = 'scale(1)';
+    });
+  });
+}
+
+// Initialize mobile enhancements
+document.addEventListener('DOMContentLoaded', function() {
+  // Set up camera enable button
+  const enableCameraBtn = document.getElementById('enable-camera-btn');
+  if (enableCameraBtn) {
+    enableCameraBtn.addEventListener('click', enableCamera);
+  }
+  
+  // Set up hero close button
+  const heroCloseBtn = document.getElementById('hero-close-btn');
+  if (heroCloseBtn) {
+    heroCloseBtn.addEventListener('click', closeHeroModal);
+  }
+  
+  // Set up regular close button
+  const closeHero = document.getElementById('close-hero');
+  if (closeHero) {
+    closeHero.addEventListener('click', closeHeroModal);
+  }
+  
+  // Set up hero button
+  const heroBtn = document.getElementById('hero-btn');
+  if (heroBtn) {
+    heroBtn.addEventListener('click', openHeroModal);
+  }
+  
+  // Enhance mobile touch interactions
+  if (isMobile()) {
+    enhanceMobileTouch();
+  }
+  
+  // Add escape key support for modals
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const heroModal = document.getElementById('hero-modal');
+      const projectModal = document.getElementById('project-modal');
+      const contactModal = document.getElementById('contact-modal');
+      const aboutModal = document.getElementById('about-modal');
+      
+      if (heroModal && heroModal.classList.contains('show')) {
+        closeHeroModal();
+      } else if (projectModal && projectModal.classList.contains('show')) {
+        closeProjectModal();
+      } else if (contactModal && contactModal.classList.contains('show')) {
+        closeContactModal();
+      } else if (aboutModal && aboutModal.classList.contains('show')) {
+        closeAboutModal();
+      }
+    }
+  });
+});
+
+// Add CSS animation for fade in
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.5s ease-in;
+  }
+`;
+document.head.appendChild(style);
