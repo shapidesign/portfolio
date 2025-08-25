@@ -1719,10 +1719,13 @@ function openHeroModal() {
   }
   
   modal.classList.add('show');
+  modal.style.display = 'flex';
   
   // Show camera permission dialog first
   if (cameraPermission) {
     cameraPermission.style.display = 'block';
+    cameraPermission.style.visibility = 'visible';
+    cameraPermission.style.opacity = '1';
     console.log('Camera permission dialog shown');
   } else {
     console.error('Camera permission dialog not found!');
@@ -1737,6 +1740,14 @@ function openHeroModal() {
   if (video) {
     video.style.display = 'none';
   }
+  
+  // Auto-enable camera after a short delay (for better UX)
+  setTimeout(() => {
+    if (cameraPermission && cameraPermission.style.display !== 'none') {
+      console.log('Auto-enabling camera...');
+      enableCamera();
+    }
+  }, 1000);
 }
 
 // Enhanced camera enable function
@@ -1754,11 +1765,13 @@ function enableCamera() {
   // Hide permission dialog
   if (cameraPermission) {
     cameraPermission.style.display = 'none';
+    cameraPermission.style.visibility = 'hidden';
     console.log('Camera permission dialog hidden');
   }
   
   // Show video
   video.style.display = 'block';
+  video.style.visibility = 'visible';
   
   // Check if getUserMedia is supported
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -1767,12 +1780,10 @@ function enableCamera() {
     return;
   }
   
-  // Request camera with mobile-optimized settings
+  // Request camera with simpler constraints for better compatibility
   const constraints = {
     video: { 
-      facingMode: 'user',
-      width: { ideal: 640, max: 1280 },
-      height: { ideal: 480, max: 720 }
+      facingMode: 'user'
     }, 
     audio: false 
   };
@@ -1785,39 +1796,38 @@ function enableCamera() {
     heroStream = stream;
     video.srcObject = stream;
     
-    // Ensure video is loaded before playing
-    video.onloadedmetadata = () => {
-      console.log('Video metadata loaded, starting playback');
-      video.play().then(() => {
-        console.log('Video started playing successfully');
-        // Show hero message after camera starts
-        if (heroMsg) {
-          heroMsg.style.display = 'block';
-          heroMsg.style.animation = 'fadeIn 0.5s ease-in';
-        }
-      }).catch(e => {
-        console.error('Error playing video:', e);
+    // Play video immediately
+    video.play().then(() => {
+      console.log('Video started playing successfully');
+      // Show hero message after camera starts
+      if (heroMsg) {
+        heroMsg.style.display = 'block';
+        heroMsg.style.animation = 'fadeIn 0.5s ease-in';
+      }
+    }).catch(e => {
+      console.error('Error playing video:', e);
+      // Try to play without user interaction
+      video.muted = true;
+      video.play().catch(e2 => {
+        console.error('Error playing muted video:', e2);
         showCameraError('Error starting video playback');
       });
-    };
-    
-    video.onerror = (e) => {
-      console.error('Video error:', e);
-      showCameraError('Video playback error');
-    };
+    });
   })
   .catch(error => {
     console.error('Camera error:', error);
     let errorMessage = 'Camera access denied';
     
     if (error.name === 'NotAllowedError') {
-      errorMessage = 'Camera permission denied. Please allow camera access.';
+      errorMessage = 'Camera permission denied. Please allow camera access in your browser settings.';
     } else if (error.name === 'NotFoundError') {
       errorMessage = 'No camera found on this device.';
     } else if (error.name === 'NotReadableError') {
       errorMessage = 'Camera is already in use by another application.';
     } else if (error.name === 'OverconstrainedError') {
       errorMessage = 'Camera does not meet the required constraints.';
+    } else if (error.name === 'NotSupportedError') {
+      errorMessage = 'Camera not supported on this device.';
     }
     
     showCameraError(errorMessage);
