@@ -1030,13 +1030,14 @@ a {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.95);
     padding: 2rem;
     border-radius: 12px;
     text-align: center;
     border: 2px solid #66d9ef;
     z-index: 1001;
-    display: block;
+    display: block !important;
+    min-width: 250px;
   }
   
   .camera-permission p {

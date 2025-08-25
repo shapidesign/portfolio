@@ -1707,38 +1707,65 @@ document.getElementById('reset-view-btn').addEventListener('click', () => window
 
 // Improved Hero Modal with Camera Permission
 function openHeroModal() {
+  console.log('Opening hero modal...');
   const modal = document.getElementById('hero-modal');
   const video = document.getElementById('hero-video');
   const heroMsg = modal.querySelector('.hero-message');
   const cameraPermission = document.getElementById('camera-permission');
+  
+  if (!modal) {
+    console.error('Hero modal not found!');
+    return;
+  }
   
   modal.classList.add('show');
   
   // Show camera permission dialog first
   if (cameraPermission) {
     cameraPermission.style.display = 'block';
+    console.log('Camera permission dialog shown');
+  } else {
+    console.error('Camera permission dialog not found!');
   }
   
   // Hide the hero message initially
-  if (heroMsg) heroMsg.style.display = 'none';
+  if (heroMsg) {
+    heroMsg.style.display = 'none';
+  }
   
   // Hide video initially
-  video.style.display = 'none';
+  if (video) {
+    video.style.display = 'none';
+  }
 }
 
 // Enhanced camera enable function
 function enableCamera() {
+  console.log('Enabling camera...');
   const video = document.getElementById('hero-video');
   const heroMsg = document.querySelector('.hero-message');
   const cameraPermission = document.getElementById('camera-permission');
   
+  if (!video) {
+    console.error('Video element not found!');
+    return;
+  }
+  
   // Hide permission dialog
   if (cameraPermission) {
     cameraPermission.style.display = 'none';
+    console.log('Camera permission dialog hidden');
   }
   
   // Show video
   video.style.display = 'block';
+  
+  // Check if getUserMedia is supported
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    console.error('getUserMedia not supported');
+    showCameraError('Camera not supported in this browser');
+    return;
+  }
   
   // Request camera with better error handling
   navigator.mediaDevices.getUserMedia({ 
@@ -1750,34 +1777,44 @@ function enableCamera() {
     audio: false 
   })
   .then(stream => {
+    console.log('Camera stream obtained successfully');
     heroStream = stream;
     video.srcObject = stream;
-    video.play();
-    
-    // Show hero message after camera starts
-    if (heroMsg) {
-      heroMsg.style.display = 'block';
-      heroMsg.style.animation = 'fadeIn 0.5s ease-in';
-    }
+    video.play().then(() => {
+      console.log('Video started playing');
+      // Show hero message after camera starts
+      if (heroMsg) {
+        heroMsg.style.display = 'block';
+        heroMsg.style.animation = 'fadeIn 0.5s ease-in';
+      }
+    }).catch(e => {
+      console.error('Error playing video:', e);
+    });
   })
   .catch(error => {
-    console.log('Camera error:', error);
-    
-    // Show error message
-    const errorMsg = document.createElement('div');
-    errorMsg.innerHTML = `
-      <div style="text-align: center; padding: 2rem; color: #fff;">
-        <p>Camera access denied or not available</p>
-        <p style="font-size: 0.9rem; opacity: 0.8;">Please check your camera permissions</p>
-      </div>
-    `;
-    video.parentNode.appendChild(errorMsg);
-    
-    // Show hero message anyway
-    if (heroMsg) {
-      heroMsg.style.display = 'block';
-    }
+    console.error('Camera error:', error);
+    showCameraError(error.message || 'Camera access denied');
   });
+}
+
+function showCameraError(message) {
+  const video = document.getElementById('hero-video');
+  const heroMsg = document.querySelector('.hero-message');
+  
+  // Show error message
+  const errorMsg = document.createElement('div');
+  errorMsg.innerHTML = `
+    <div style="text-align: center; padding: 2rem; color: #fff; background: rgba(255,0,0,0.2); border-radius: 8px;">
+      <p>Camera Error: ${message}</p>
+      <p style="font-size: 0.9rem; opacity: 0.8;">Please check your camera permissions</p>
+    </div>
+  `;
+  video.parentNode.appendChild(errorMsg);
+  
+  // Show hero message anyway
+  if (heroMsg) {
+    heroMsg.style.display = 'block';
+  }
 }
 
 function closeHeroModal() {
@@ -1852,28 +1889,42 @@ function enhanceMobileTouch() {
 
 // Initialize mobile enhancements
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM loaded, setting up hero modal...');
+  
   // Set up camera enable button
   const enableCameraBtn = document.getElementById('enable-camera-btn');
   if (enableCameraBtn) {
+    console.log('Camera enable button found, adding listener');
     enableCameraBtn.addEventListener('click', enableCamera);
+  } else {
+    console.error('Camera enable button not found!');
   }
   
   // Set up hero close button
   const heroCloseBtn = document.getElementById('hero-close-btn');
   if (heroCloseBtn) {
+    console.log('Hero close button found, adding listener');
     heroCloseBtn.addEventListener('click', closeHeroModal);
+  } else {
+    console.error('Hero close button not found!');
   }
   
   // Set up regular close button
   const closeHero = document.getElementById('close-hero');
   if (closeHero) {
+    console.log('Regular close button found, adding listener');
     closeHero.addEventListener('click', closeHeroModal);
+  } else {
+    console.error('Regular close button not found!');
   }
   
   // Set up hero button
   const heroBtn = document.getElementById('hero-btn');
   if (heroBtn) {
+    console.log('Hero button found, adding listener');
     heroBtn.addEventListener('click', openHeroModal);
+  } else {
+    console.error('Hero button not found!');
   }
   
   // Enhance mobile touch interactions
@@ -1900,6 +1951,8 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   });
+  
+  console.log('Hero modal setup complete');
 });
 
 // Add CSS animation for fade in
