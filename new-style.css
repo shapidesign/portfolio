@@ -1490,7 +1490,7 @@ a {
     margin: 10vh auto;
   }
   
-  /* Fix page number and tags overlap */
+  /* Fix page number and title overlap */
   .project-modal-header {
     display: flex;
     flex-direction: column;
@@ -1504,21 +1504,23 @@ a {
     margin-bottom: 0.5rem;
   }
   
-  .project-modal-header .project-tags {
-    order: 2;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  /* Smaller project title and text for mobile */
+  /* Smaller project title for mobile */
   .project-modal-header h2 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
   }
   
-  .project-modal-body {
-    font-size: 0.9rem;
-    line-height: 1.4;
+  /* Mobile project description - smaller and properly positioned */
+  .project-modal-description {
+    font-size: 0.8rem;
+    line-height: 1.3;
+    margin-top: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  .project-modal-description p {
+    margin: 0;
+    padding: 0;
   }
   
   .project-gallery {

@@ -1109,7 +1109,6 @@ function openProjectModal(project, index) {
   const modal = document.getElementById('project-modal');
   const modalContent = modal.querySelector('.project-modal-content');
   const header = modalContent.querySelector('.project-modal-header h2');
-  const tagsContainer = document.getElementById('project-modal-tags');
   const galleryCounter = modalContent.querySelector('.gallery-counter');
 
   // Set accent color
@@ -1118,17 +1117,10 @@ function openProjectModal(project, index) {
   header.style.color = accent;
   galleryCounter.style.borderColor = accent;
   galleryCounter.style.color = accent;
-  // Update tag colors
-  Array.from(tagsContainer.children).forEach(tag => {
-    tag.style.background = accent + '22';
-    tag.style.borderColor = accent;
-    tag.style.color = accent;
-  });
 
   // Set content
   document.getElementById('project-modal-title').textContent = project.title;
   document.getElementById('project-modal-desc').textContent = project.description;
-  tagsContainer.innerHTML = project.tags.map(tag => `<span>${tag}</span>`).join('');
   currentProject = project;
   currentImageIndex = 0;
   updateGalleryImage();
@@ -1150,14 +1142,7 @@ setTimeout(() => {
           galleryCounter.style.borderColor = '';
           galleryCounter.style.color = '';
         }
-        const tagsContainer = document.getElementById('project-modal-tags');
-        if (tagsContainer) {
-          Array.from(tagsContainer.children).forEach(tag => {
-            tag.style.background = '';
-            tag.style.borderColor = '';
-            tag.style.color = '';
-          });
-        }
+
       }
     });
   }
