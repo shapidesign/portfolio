@@ -600,10 +600,10 @@ solarControls.addEventListener('change', () => {
 
 function createSun() {
   const sunGeometry = new THREE.SphereGeometry(3, 32, 32);
-  const sunMaterial = new THREE.MeshBasicMaterial({
+  const sunMaterial = new THREE.MeshStandardMaterial({
     color: 0xffaa00,
     emissive: 0xffaa00,
-    // emissiveIntensity: 0.6
+    emissiveIntensity: 0.6
   });
   
   solarSun = new THREE.Mesh(sunGeometry, sunMaterial);
@@ -1701,7 +1701,11 @@ function resetView(duration = 1000) {
   animate();
 }
 window.resetView = resetView;
-document.getElementById('reset-view-btn').addEventListener('click', () => window.resetView());
+// Only add event listener if the reset button exists
+const resetBtn = document.getElementById('reset-view-btn');
+if (resetBtn) {
+  resetBtn.addEventListener('click', () => window.resetView());
+}
 
 // === Enhanced Mobile UX Improvements ===
 
