@@ -782,62 +782,37 @@ a {
   bottom: 2.5rem;
   right: 2.5rem;
   z-index: 3000;
+  background: linear-gradient(135deg, #272822, #3e3f37);
+  border: 3px solid #66d9ef;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #66d9ef;
+  box-shadow: 0 0 20px #66d9ef44;
   cursor: pointer !important;
   pointer-events: auto !important;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s;
 }
 
-/* Guts-style Contact Button */
-.guts-contact-btn {
-  background: #000;
-  color: #fff;
-  padding: 1.2rem 1.8rem;
-  border-radius: 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: bold;
-  font-size: 0.9rem;
-  text-align: center;
-  line-height: 1.2;
-  transition: all 0.3s ease;
-  border: 2px solid #000;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.guts-contact-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.guts-contact-btn:hover::before {
-  left: 0;
-}
-
-.guts-contact-btn:hover {
-  color: #000;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-}
-
-.guts-text {
+#contact-phone svg {
+  width: 38px;
+  height: 38px;
+  image-rendering: pixelated;
   display: block;
-  transition: all 0.3s ease;
 }
 
-.guts-contact-btn:hover .guts-text {
-  transform: scale(1.05);
+#contact-phone:hover {
+  box-shadow: 0 0 40px #66d9efcc;
 }
 
-#contact-phone.ringing .guts-contact-btn {
+#contact-phone.ringing {
   animation: phoneRing 0.5s infinite alternate cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  box-shadow: 0 0 40px #66d9efcc, 0 0 80px #66d9ef88;
+  border-color: #66d9ef;
 }
 @keyframes phoneRing {
   0% { transform: rotate(-8deg) scale(1.08); }
@@ -849,12 +824,14 @@ a {
 }
 @media (max-width: 600px) {
   #contact-phone {
+    width: 54px;
+    height: 54px;
     bottom: 1.2rem;
     right: 1.2rem;
   }
-  .guts-contact-btn {
-    padding: 1rem 1.5rem;
-    font-size: 0.8rem;
+  #contact-phone svg {
+    width: 28px;
+    height: 28px;
   }
 }
 
