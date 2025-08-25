@@ -1767,33 +1767,60 @@ function enableCamera() {
     return;
   }
   
-  // Request camera with better error handling
-  navigator.mediaDevices.getUserMedia({ 
+  // Request camera with mobile-optimized settings
+  const constraints = {
     video: { 
       facingMode: 'user',
-      width: { ideal: 1280 },
-      height: { ideal: 720 }
+      width: { ideal: 640, max: 1280 },
+      height: { ideal: 480, max: 720 }
     }, 
     audio: false 
-  })
+  };
+  
+  console.log('Requesting camera with constraints:', constraints);
+  
+  navigator.mediaDevices.getUserMedia(constraints)
   .then(stream => {
     console.log('Camera stream obtained successfully');
     heroStream = stream;
     video.srcObject = stream;
-    video.play().then(() => {
-      console.log('Video started playing');
-      // Show hero message after camera starts
-      if (heroMsg) {
-        heroMsg.style.display = 'block';
-        heroMsg.style.animation = 'fadeIn 0.5s ease-in';
-      }
-    }).catch(e => {
-      console.error('Error playing video:', e);
-    });
+    
+    // Ensure video is loaded before playing
+    video.onloadedmetadata = () => {
+      console.log('Video metadata loaded, starting playback');
+      video.play().then(() => {
+        console.log('Video started playing successfully');
+        // Show hero message after camera starts
+        if (heroMsg) {
+          heroMsg.style.display = 'block';
+          heroMsg.style.animation = 'fadeIn 0.5s ease-in';
+        }
+      }).catch(e => {
+        console.error('Error playing video:', e);
+        showCameraError('Error starting video playback');
+      });
+    };
+    
+    video.onerror = (e) => {
+      console.error('Video error:', e);
+      showCameraError('Video playback error');
+    };
   })
   .catch(error => {
     console.error('Camera error:', error);
-    showCameraError(error.message || 'Camera access denied');
+    let errorMessage = 'Camera access denied';
+    
+    if (error.name === 'NotAllowedError') {
+      errorMessage = 'Camera permission denied. Please allow camera access.';
+    } else if (error.name === 'NotFoundError') {
+      errorMessage = 'No camera found on this device.';
+    } else if (error.name === 'NotReadableError') {
+      errorMessage = 'Camera is already in use by another application.';
+    } else if (error.name === 'OverconstrainedError') {
+      errorMessage = 'Camera does not meet the required constraints.';
+    }
+    
+    showCameraError(errorMessage);
   });
 }
 
@@ -1896,6 +1923,8 @@ document.addEventListener('DOMContentLoaded', function() {
   if (enableCameraBtn) {
     console.log('Camera enable button found, adding listener');
     enableCameraBtn.addEventListener('click', enableCamera);
+    // Also add touch event for mobile
+    enableCameraBtn.addEventListener('touchend', enableCamera);
   } else {
     console.error('Camera enable button not found!');
   }
@@ -1930,6 +1959,20 @@ document.addEventListener('DOMContentLoaded', function() {
   // Enhance mobile touch interactions
   if (isMobile()) {
     enhanceMobileTouch();
+    
+    // Add touch feedback to close buttons
+    const closeButtons = document.querySelectorAll('.close');
+    closeButtons.forEach(btn => {
+      btn.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.9)';
+        this.style.background = 'rgba(102, 217, 239, 0.3)';
+      });
+      
+      btn.addEventListener('touchend', function() {
+        this.style.transform = 'scale(1)';
+        this.style.background = 'rgba(0, 0, 0, 0.9)';
+      });
+    });
   }
   
   // Add escape key support for modals

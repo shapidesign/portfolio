@@ -1182,27 +1182,54 @@ a {
     margin-top: 0.5rem;
   }
   
-  /* Hide hero button when project modal is open */
+  /* Hide hero button when ANY modal is open */
   .modal.show ~ .hero-btn,
-  .modal.show .hero-btn {
+  .modal.show .hero-btn,
+  .modal.show + .hero-btn {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
   
-  /* Ensure close button is visible and accessible */
+  /* Also hide hero button when any modal is visible */
+  .modal[style*="display: flex"] ~ .hero-btn,
+  .modal[style*="display: flex"] .hero-btn,
+  .modal[style*="display: flex"] + .hero-btn {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  
+  /* Ensure close button is visible and accessible for ALL modals */
+  .modal-content .close,
   .project-modal-content .close {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
     font-size: 1.5rem;
     z-index: 1001;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.9);
     border-radius: 50%;
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 2px solid #66d9ef;
+    color: #66d9ef;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .modal-content .close:hover,
+  .modal-content .close:active,
+  .project-modal-content .close:hover,
+  .project-modal-content .close:active {
+    background: rgba(102, 217, 239, 0.2);
+    transform: scale(1.1);
+    color: #fff;
   }
   
   /* Contact Modal with Escape Button */
