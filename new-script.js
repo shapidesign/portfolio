@@ -1174,6 +1174,13 @@ function closeProjectModal() {
     controls.reset();
     controls.target.set(0, 0, 0);
     controls.update();
+    
+    // Force camera to look at the entire solar system
+    if (camera) {
+      camera.position.set(0, 0, 50);
+      camera.lookAt(0, 0, 0);
+      controls.update();
+    }
   }
   
   console.log('Project modal closed successfully');
