@@ -934,6 +934,39 @@ a {
   align-items: center;
   justify-content: center;
 }
+
+/* Desktop Hero Close Button */
+.hero-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #66d9ef;
+  color: #66d9ef;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-weight: normal;
+}
+
+.hero-close-btn:hover {
+  background: rgba(102, 217, 239, 0.2);
+  transform: scale(1.1);
+  color: #fff;
+}
+
+.hero-close-btn:active {
+  background: rgba(102, 217, 239, 0.3);
+  transform: scale(1.05);
+  color: #fff;
+}
 .hero-video-container {
   position: relative;
   width: 100%;
