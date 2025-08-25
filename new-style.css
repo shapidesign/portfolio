@@ -762,6 +762,14 @@ a {
   transition: all 0.3s ease;
   line-height: 1;
   z-index: 25;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #66d9ef;
 }
 
 .close:hover {
@@ -894,7 +902,7 @@ a {
   right: 2.5rem;
   left: auto;
   bottom: auto;
-  z-index: 3000;
+  z-index: 1000;
   background: linear-gradient(135deg, #272822, #3e3f37);
   border: 3px solid #f92672;
   border-radius: 18px;
@@ -1129,37 +1137,72 @@ a {
   
   /* Minimized Project Modal */
   .project-modal-content {
-    width: 95vw;
-    height: 85vh;
-    padding: 1rem;
-    margin: 7.5vh auto;
-    transform: scale(0.95);
+    width: 98vw;
+    height: 95vh;
+    padding: 0.8rem;
+    margin: 2.5vh auto;
+    transform: scale(0.9);
     transform-origin: center;
+    overflow-y: auto;
   }
   
   .project-modal-header h2 {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  #project-modal-tags {
+    gap: 0.3rem;
     margin-bottom: 0.5rem;
   }
   
+  #project-modal-tags span {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+  
   .project-gallery {
-    padding: 0 25px;
-    margin: 1rem 0;
+    padding: 0 20px;
+    margin: 0.5rem 0;
   }
   
   .gallery-image-container {
-    height: 200px;
+    height: 150px;
   }
   
   .gallery-nav {
-    width: 30px;
-    height: 30px;
-    font-size: 1rem;
+    width: 25px;
+    height: 25px;
+    font-size: 0.8rem;
   }
   
   .project-modal-description {
-    font-size: 0.8rem;
-    line-height: 1.4;
+    font-size: 0.7rem;
+    line-height: 1.3;
+    margin-top: 0.5rem;
+  }
+  
+  /* Hide hero button when project modal is open */
+  .modal.show ~ .hero-btn,
+  .modal.show .hero-btn {
+    display: none !important;
+  }
+  
+  /* Ensure close button is visible and accessible */
+  .project-modal-content .close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 1.5rem;
+    z-index: 1001;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #66d9ef;
   }
   
   /* Contact Modal with Escape Button */
@@ -1203,6 +1246,25 @@ a {
   #enable-camera-btn {
     min-height: 44px;
     min-width: 44px;
+  }
+  
+  /* Enhanced close button for mobile */
+  .close {
+    min-height: 44px;
+    min-width: 44px;
+    font-size: 1.5rem;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #66d9ef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .close:hover,
+  .close:active {
+    background: rgba(102, 217, 239, 0.2);
+    transform: scale(1.1);
   }
   
   /* Prevent horizontal scroll */
