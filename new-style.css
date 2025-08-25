@@ -1010,29 +1010,29 @@ a {
   
   .hero-close-btn {
     position: absolute;
-    top: 0.8rem;
-    right: 0.8rem;
-    background: rgba(0, 0, 0, 0.8);
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.7);
     border: 2px solid #66d9ef;
     color: #66d9ef;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
     cursor: pointer;
     z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    font-weight: bold;
+    font-weight: normal;
   }
   
   .hero-close-btn:hover,
   .hero-close-btn:active {
-    background: rgba(102, 217, 239, 0.3);
-    transform: scale(1.1);
-    color: #fff;
+    background: rgba(102, 217, 239, 0.2);
+    transform: scale(1.05);
+    color: #66d9ef;
   }
   
   .camera-permission {
@@ -1440,20 +1440,33 @@ a {
   }
   
   .project-modal-content {
-    width: 95vw;
-    height: 90vh;
+    width: 90vw;
+    height: 80vh;
     padding: 1rem;
-    margin: 5vh auto;
+    margin: 10vh auto;
   }
   
   .project-gallery {
-    padding: 0 30px;
+    padding: 0 20px;
+    position: relative;
   }
   
   .gallery-nav {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     font-size: 1.2rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+  
+  .gallery-nav.prev {
+    left: 5px;
+  }
+  
+  .gallery-nav.next {
+    right: 5px;
   }
   
   /* Contact Phone Mobile */
@@ -1483,7 +1496,15 @@ a {
   .close {
     font-size: 2rem;
     top: 0.5rem;
-    right: 1rem;
+    right: 0.5rem;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
   }
   
   /* Touch-friendly improvements */
@@ -1535,8 +1556,8 @@ a {
   
   .modal-content,
   .project-modal-content {
-    width: 98vw;
-    height: 95vh;
+    width: 92vw;
+    height: 85vh;
     margin: 2.5vh auto;
     padding: 1rem;
   }
