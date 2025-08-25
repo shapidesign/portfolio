@@ -1103,6 +1103,7 @@ function openContactModal() {
 }
 
 function openProjectModal(project, index) {
+  console.log('Opening project modal for:', project.title);
   visitedProjects.add(index);
   updateProgress();
   
@@ -1110,6 +1111,11 @@ function openProjectModal(project, index) {
   const modalContent = modal.querySelector('.project-modal-content');
   const header = modalContent.querySelector('.project-modal-header h2');
   const galleryCounter = modalContent.querySelector('.gallery-counter');
+
+  if (!modal) {
+    console.error('Project modal not found!');
+    return;
+  }
 
   // Set accent color
   const accent = `#${project.color.toString(16).padStart(6, '0')}`;
@@ -1124,27 +1130,54 @@ function openProjectModal(project, index) {
   currentProject = project;
   currentImageIndex = 0;
   updateGalleryImage();
+  
+  // Show modal
   modal.classList.add('show');
+  modal.style.display = 'flex';
+  modal.style.visibility = 'visible';
+  modal.style.opacity = '1';
+  
+  console.log('Project modal opened successfully');
 }
 
-// Remove accent color when modal closes
+function closeProjectModal() {
+  console.log('Closing project modal...');
+  const modal = document.getElementById('project-modal');
+  const modalContent = modal.querySelector('.project-modal-content');
+  
+  if (!modal) {
+    console.error('Project modal not found!');
+    return;
+  }
+  
+  // Hide modal
+  modal.classList.remove('show');
+  modal.style.display = 'none';
+  modal.style.visibility = 'hidden';
+  modal.style.opacity = '0';
+  
+  // Reset accent colors
+  if (modalContent) {
+    modalContent.style.borderColor = '';
+    const header = modalContent.querySelector('.project-modal-header h2');
+    if (header) header.style.color = '';
+    const galleryCounter = modalContent.querySelector('.gallery-counter');
+    if (galleryCounter) {
+      galleryCounter.style.borderColor = '';
+      galleryCounter.style.color = '';
+    }
+  }
+  
+  console.log('Project modal closed successfully');
+}
+
+// Set up project modal close button
 setTimeout(() => {
   const closeProject = document.getElementById('close-project');
   if (closeProject) {
-    closeProject.addEventListener('click', () => {
-      const modalContent = document.querySelector('#project-modal .project-modal-content');
-      if (modalContent) {
-        modalContent.style.borderColor = '';
-        const header = modalContent.querySelector('.project-modal-header h2');
-        if (header) header.style.color = '';
-        const galleryCounter = modalContent.querySelector('.gallery-counter');
-        if (galleryCounter) {
-          galleryCounter.style.borderColor = '';
-          galleryCounter.style.color = '';
-        }
-
-      }
-    });
+    closeProject.addEventListener('click', closeProjectModal);
+    // Also add touch event for mobile
+    closeProject.addEventListener('touchend', closeProjectModal);
   }
 }, 100);
 
@@ -1987,6 +2020,26 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.target === heroModal) {
         console.log('Touched outside hero modal, closing...');
         closeHeroModal();
+      }
+    });
+  }
+  
+  // Set up click outside to close for project modal
+  const projectModal = document.getElementById('project-modal');
+  if (projectModal) {
+    projectModal.addEventListener('click', function(e) {
+      // Close if clicking on the modal backdrop (not the content)
+      if (e.target === projectModal) {
+        console.log('Clicked outside project modal, closing...');
+        closeProjectModal();
+      }
+    });
+    
+    // Also add touch event for mobile
+    projectModal.addEventListener('touchend', function(e) {
+      if (e.target === projectModal) {
+        console.log('Touched outside project modal, closing...');
+        closeProjectModal();
       }
     });
   }
