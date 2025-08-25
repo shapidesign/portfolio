@@ -1865,6 +1865,8 @@ function closeHeroModal() {
   // Hide modal completely
   modal.classList.remove('show');
   modal.style.display = 'none';
+  modal.style.visibility = 'hidden';
+  modal.style.opacity = '0';
   
   // Stop camera stream
   if (heroStream) {
@@ -1879,17 +1881,19 @@ function closeHeroModal() {
     video.style.display = 'none';
   }
   
-  // Show permission dialog again for next time
+  // Hide permission dialog permanently
   if (cameraPermission) {
-    cameraPermission.style.display = 'block';
-    cameraPermission.style.visibility = 'visible';
-    cameraPermission.style.opacity = '1';
+    cameraPermission.style.display = 'none';
+    cameraPermission.style.visibility = 'hidden';
+    cameraPermission.style.opacity = '0';
   }
   
   // Remove any error messages
-  const errorMsg = video.parentNode.querySelector('div');
-  if (errorMsg && errorMsg.innerHTML.includes('Camera access denied')) {
-    errorMsg.remove();
+  if (video && video.parentNode) {
+    const errorMsg = video.parentNode.querySelector('div');
+    if (errorMsg && errorMsg.innerHTML.includes('Camera access denied')) {
+      errorMsg.remove();
+    }
   }
   
   console.log('Hero modal closed successfully');
@@ -1961,6 +1965,37 @@ document.addEventListener('DOMContentLoaded', function() {
   } else {
     console.error('Hero close button not found!');
   }
+  
+  // Set up click outside to close for hero modal
+  const heroModal = document.getElementById('hero-modal');
+  if (heroModal) {
+    heroModal.addEventListener('click', function(e) {
+      // Close if clicking on the modal backdrop (not the content)
+      if (e.target === heroModal) {
+        console.log('Clicked outside hero modal, closing...');
+        closeHeroModal();
+      }
+    });
+    
+    // Also add touch event for mobile
+    heroModal.addEventListener('touchend', function(e) {
+      if (e.target === heroModal) {
+        console.log('Touched outside hero modal, closing...');
+        closeHeroModal();
+      }
+    });
+  }
+  
+  // Add keyboard support for escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const heroModal = document.getElementById('hero-modal');
+      if (heroModal && heroModal.style.display === 'flex') {
+        console.log('Escape key pressed, closing hero modal...');
+        closeHeroModal();
+      }
+    }
+  });
   
   // Set up hero button
   const heroBtn = document.getElementById('hero-btn');
