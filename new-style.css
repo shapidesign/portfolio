@@ -1011,7 +1011,7 @@ a {
   .hero-close-btn {
     position: absolute;
     top: 0.8rem;
-    left: 0.8rem;
+    right: 0.8rem;
     background: rgba(0, 0, 0, 0.8);
     border: 2px solid #66d9ef;
     color: #66d9ef;
@@ -1046,9 +1046,9 @@ a {
     text-align: center;
     border: 2px solid #66d9ef;
     z-index: 1001;
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    display: none;
+    visibility: hidden;
+    opacity: 0;
     min-width: 250px;
   }
   

@@ -1725,12 +1725,12 @@ function openHeroModal() {
   modal.classList.add('show');
   modal.style.display = 'flex';
   
-  // Show camera permission dialog first
+  // Hide camera permission dialog - don't show popup
   if (cameraPermission) {
-    cameraPermission.style.display = 'block';
-    cameraPermission.style.visibility = 'visible';
-    cameraPermission.style.opacity = '1';
-    console.log('Camera permission dialog shown');
+    cameraPermission.style.display = 'none';
+    cameraPermission.style.visibility = 'hidden';
+    cameraPermission.style.opacity = '0';
+    console.log('Camera permission dialog hidden');
   } else {
     console.error('Camera permission dialog not found!');
   }
@@ -1745,13 +1745,11 @@ function openHeroModal() {
     video.style.display = 'none';
   }
   
-  // Auto-enable camera after a short delay (for better UX)
+  // Auto-enable camera immediately
   setTimeout(() => {
-    if (cameraPermission && cameraPermission.style.display !== 'none') {
-      console.log('Auto-enabling camera...');
-      enableCamera();
-    }
-  }, 1000);
+    console.log('Auto-enabling camera...');
+    enableCamera();
+  }, 100);
 }
 
 // Enhanced camera enable function
