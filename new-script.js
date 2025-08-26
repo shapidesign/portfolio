@@ -1137,21 +1137,6 @@ function openProjectModal(project, index) {
   modal.style.visibility = 'visible';
   modal.style.opacity = '1';
   
-  // Reset camera to default position on mobile after opening project
-  if (isMobile() && controls) {
-    console.log('Resetting camera after opening project...');
-    setTimeout(() => {
-      if (controls && camera) {
-        controls.reset();
-        controls.target.set(0, 0, 0);
-        camera.position.set(0, 0, 50);
-        camera.lookAt(0, 0, 0);
-        controls.update();
-        console.log('Camera reset completed after opening project');
-      }
-    }, 200);
-  }
-  
   console.log('Project modal opened successfully');
 }
 
@@ -1183,9 +1168,11 @@ function closeProjectModal() {
     }
   }
   
-  // Reset camera to default position on mobile
+  // Reset camera to default position on mobile - enhanced reset
   if (isMobile() && controls) {
     console.log('Resetting camera to default position...');
+    
+    // Immediate reset
     controls.reset();
     controls.target.set(0, 0, 0);
     controls.update();
@@ -1197,15 +1184,39 @@ function closeProjectModal() {
       controls.update();
     }
     
-    // Additional reset for better mobile experience
+    // Multiple delayed resets to ensure it takes effect
     setTimeout(() => {
       if (controls && camera) {
+        controls.reset();
         controls.target.set(0, 0, 0);
         camera.position.set(0, 0, 50);
+        camera.lookAt(0, 0, 0);
         controls.update();
-        console.log('Camera reset completed');
+        console.log('First camera reset completed');
       }
     }, 100);
+    
+    setTimeout(() => {
+      if (controls && camera) {
+        controls.reset();
+        controls.target.set(0, 0, 0);
+        camera.position.set(0, 0, 50);
+        camera.lookAt(0, 0, 0);
+        controls.update();
+        console.log('Second camera reset completed');
+      }
+    }, 300);
+    
+    setTimeout(() => {
+      if (controls && camera) {
+        controls.reset();
+        controls.target.set(0, 0, 0);
+        camera.position.set(0, 0, 50);
+        camera.lookAt(0, 0, 0);
+        controls.update();
+        console.log('Final camera reset completed');
+      }
+    }, 600);
   }
   
   console.log('Project modal closed successfully');
