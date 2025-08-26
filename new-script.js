@@ -977,37 +977,39 @@ function animate3D() {
     };
   }
 
-  // Draw planet trails as subtle glowing particles
-  solarPlanets.forEach((container, i) => {
-    // Update trail
-    const worldPos = container.position.clone();
-    planetTrails[i].push(worldPos.clone());
-    if (planetTrails[i].length > maxTrailLength) planetTrails[i].shift();
-    
-    // Draw trail as connected line segments for better mobile appearance
-    if (planetTrails[i].length > 1) {
-      orbitCtx.save();
-      orbitCtx.strokeStyle = `rgba(${(projectData[i].color>>16)&255},${(projectData[i].color>>8)&255},${projectData[i].color&255},0.3)`;
-      orbitCtx.shadowColor = orbitCtx.strokeStyle;
-      orbitCtx.shadowBlur = 8;
-      orbitCtx.lineWidth = 3;
-      orbitCtx.beginPath();
+  // Draw planet trails as subtle glowing particles (desktop only)
+  if (!isMobile()) {
+    solarPlanets.forEach((container, i) => {
+      // Update trail
+      const worldPos = container.position.clone();
+      planetTrails[i].push(worldPos.clone());
+      if (planetTrails[i].length > maxTrailLength) planetTrails[i].shift();
       
-      // Start from the planet's exact center position
-      const planetWorldPos = container.getWorldPosition(new THREE.Vector3());
-      const currentScreen = toScreen(planetWorldPos);
-      orbitCtx.moveTo(currentScreen.x, currentScreen.y);
-      
-      // Draw line through trail points
-      planetTrails[i].forEach((pos, j) => {
-        const screen = toScreen(pos);
-        orbitCtx.lineTo(screen.x, screen.y);
-      });
-      
-      orbitCtx.stroke();
-      orbitCtx.restore();
-    }
-  });
+      // Draw trail as connected line segments for better mobile appearance
+      if (planetTrails[i].length > 1) {
+        orbitCtx.save();
+        orbitCtx.strokeStyle = `rgba(${(projectData[i].color>>16)&255},${(projectData[i].color>>8)&255},${projectData[i].color&255},0.3)`;
+        orbitCtx.shadowColor = orbitCtx.strokeStyle;
+        orbitCtx.shadowBlur = 8;
+        orbitCtx.lineWidth = 3;
+        orbitCtx.beginPath();
+        
+        // Start from the planet's exact center position
+        const planetWorldPos = container.getWorldPosition(new THREE.Vector3());
+        const currentScreen = toScreen(planetWorldPos);
+        orbitCtx.moveTo(currentScreen.x, currentScreen.y);
+        
+        // Draw line through trail points
+        planetTrails[i].forEach((pos, j) => {
+          const screen = toScreen(pos);
+          orbitCtx.lineTo(screen.x, screen.y);
+        });
+        
+        orbitCtx.stroke();
+        orbitCtx.restore();
+      }
+    });
+  }
 
   // Draw glowing arc connectors between visited planets
   if (visitedOrder.length > 1) {
@@ -1230,7 +1232,15 @@ function updateGalleryImage() {
   if (!currentProject) return;
   
   const images = currentProject.images;
-  document.getElementById('gallery-image').src = images[currentImageIndex];
+  const galleryImage = document.getElementById('gallery-image');
+  
+  // Preload the image before setting it as src
+  const img = new Image();
+  img.onload = function() {
+    galleryImage.src = images[currentImageIndex];
+  };
+  img.src = images[currentImageIndex];
+  
   document.getElementById('image-current').textContent = currentImageIndex + 1;
   document.getElementById('image-total').textContent = images.length;
   
