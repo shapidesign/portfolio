@@ -464,6 +464,20 @@ function initLaunchScreen() {
       console.log('🎯 Button mousedown fired!');
     });
     
+    // Mobile touch support for launch button
+    launchBtn.addEventListener('touchstart', function(e) {
+      console.log('🎯 Button touchstart fired!');
+      e.preventDefault();
+      e.stopPropagation();
+      launchSequence();
+    });
+    
+    launchBtn.addEventListener('touchend', function(e) {
+      console.log('🎯 Button touchend fired!');
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    
     // SPACEBAR HANDLER
     document.addEventListener('keydown', function keyLaunchHandler(e) {
       if (portfolioState === 'launch' && e.key === ' ') {
