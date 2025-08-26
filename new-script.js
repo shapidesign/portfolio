@@ -1031,40 +1031,41 @@ function animate3D() {
   // Planet trails removed completely
 
   // Draw glowing arc connectors between visited planets
-  if (visitedOrder.length > 1) {
-    const sunScreen = toScreen(new THREE.Vector3(0, 0, 0));
-    orbitCtx.save();
-    orbitCtx.strokeStyle = 'rgba(255,255,255,0.85)';
-    orbitCtx.shadowColor = '#fff';
-    orbitCtx.shadowBlur = 18;
-    orbitCtx.lineWidth = 4;
-    orbitCtx.beginPath();
-    let prevScreen = null;
-    visitedOrder.forEach((idx, j) => {
-      const planetWorldPos = solarPlanets[idx].getWorldPosition(new THREE.Vector3());
-      const screen = toScreen(planetWorldPos);
-      if (j === 0) {
-        orbitCtx.moveTo(screen.x, screen.y);
-      } else {
-        // Always draw an arc (quadratic Bezier) that bows away from the sun
-        // Find midpoint
-        const mx = (prevScreen.x + screen.x) / 2;
-        const my = (prevScreen.y + screen.y) / 2;
-        // Vector from sun to midpoint
-        const vx = mx - sunScreen.x;
-        const vy = my - sunScreen.y;
-        const vlen = Math.hypot(vx, vy) || 1;
-        // Control point offset: away from sun, fixed arc height
-        const arcHeight = 48; // px
-        const cx = mx + (vx / vlen) * arcHeight;
-        const cy = my + (vy / vlen) * arcHeight;
-        orbitCtx.quadraticCurveTo(cx, cy, screen.x, screen.y);
-      }
-      prevScreen = screen;
-    });
-    orbitCtx.stroke();
-    orbitCtx.restore();
-  }
+  // Connecting lines disabled - removed as requested
+  // if (visitedOrder.length > 1) {
+  //   const sunScreen = toScreen(new THREE.Vector3(0, 0, 0));
+  //   orbitCtx.save();
+  //   orbitCtx.strokeStyle = 'rgba(255,255,255,0.85)';
+  //   orbitCtx.shadowColor = '#fff';
+  //   orbitCtx.shadowBlur = 18;
+  //   orbitCtx.lineWidth = 4;
+  //   orbitCtx.beginPath();
+  //   let prevScreen = null;
+  //   visitedOrder.forEach((idx, j) => {
+  //     const planetWorldPos = solarPlanets[idx].getWorldPosition(new THREE.Vector3());
+  //     const screen = toScreen(planetWorldPos);
+  //     if (j === 0) {
+  //       orbitCtx.moveTo(screen.x, screen.y);
+  //     } else {
+  //       // Always draw an arc (quadratic Bezier) that bows away from the sun
+  //       // Find midpoint
+  //       const mx = (prevScreen.x + screen.x) / 2;
+  //       const my = (prevScreen.y + screen.y) / 2;
+  //       // Vector from sun to midpoint
+  //       const vx = mx - sunScreen.x;
+  //       const vy = my - sunScreen.y;
+  //       const vlen = Math.hypot(vx, vy) || 1;
+  //       // Control point offset: away from sun, fixed arc height
+  //       const arcHeight = 48; // px
+  //       const cx = mx + (vx / vlen) * arcHeight;
+  //       const cy = my + (vy / vlen) * arcHeight;
+  //       orbitCtx.quadraticCurveTo(cx, cy, screen.x, screen.y);
+  //     }
+  //     prevScreen = screen;
+  //   });
+  //   orbitCtx.stroke();
+  //   orbitCtx.restore();
+  // }
 
   // Draw and animate warp particles
   for (let i = warpParticles.length - 1; i >= 0; i--) {
@@ -1100,24 +1101,32 @@ function animate3D() {
   // Update planets
   const pulseTime = Date.now() * 0.002;
   solarPlanets.forEach((container, i) => {
+    // Only move planets if not hovered
     if (!container.userData.isHovered) {
       container.userData.angle += container.userData.speed;
       const x = Math.cos(container.userData.angle) * container.userData.radius;
       const z = Math.sin(container.userData.angle) * container.userData.radius;
       container.position.set(x, 0, z);
     }
-    // Planet self-rotation
-    container.userData.planet.rotation.y += 0.02;
+    
+    // Planet self-rotation (always active)
+    if (container.userData.planet) {
+      container.userData.planet.rotation.y += 0.02;
+    }
 
     // Pulsing glow for unvisited planets
     const isVisited = visitedProjects.has(i);
-    if (!isVisited) {
+    if (!isVisited && container.userData.planet && container.userData.planet.material) {
       const pulse = 0.25 + 0.25 * Math.sin(pulseTime + i * 1.2);
       container.userData.planet.material.emissive.setHex(container.userData.project.color).multiplyScalar(0.25 + pulse);
-      container.userData.atmosphere.material.opacity = 0.35 + pulse * 0.5;
-    } else {
+      if (container.userData.atmosphere && container.userData.atmosphere.material) {
+        container.userData.atmosphere.material.opacity = 0.35 + pulse * 0.5;
+      }
+    } else if (container.userData.planet && container.userData.planet.material) {
       container.userData.planet.material.emissive.setHex(container.userData.project.color).multiplyScalar(0.1);
-      container.userData.atmosphere.material.opacity = 0.2;
+      if (container.userData.atmosphere && container.userData.atmosphere.material) {
+        container.userData.atmosphere.material.opacity = 0.2;
+      }
     }
   });
 

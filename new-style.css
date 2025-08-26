@@ -114,6 +114,7 @@ a {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 0 20px rgba(102, 217, 239, 0.3);
+    text-align: center;
   }
   
   .launch-button:hover {
@@ -1135,6 +1136,11 @@ a {
     object-fit: cover;
     border-radius: 12px;
   }
+  
+  /* Fix stars brightness on desktop */
+  #star-canvas {
+    opacity: 1 !important;
+  }
 }
   
   .camera-permission {
@@ -1181,12 +1187,12 @@ a {
   .mission-control {
     position: fixed;
     bottom: 0.5rem;
-    left: 0.5rem;
     right: 0.5rem;
+    left: auto;
     padding: 0.8rem;
     z-index: 1000;
     transform: scale(0.85);
-    transform-origin: bottom center;
+    transform-origin: bottom right;
   }
   
   .control-title {
@@ -1220,6 +1226,8 @@ a {
     gap: 0.5rem;
     z-index: 1000;
     max-width: 200px;
+    transform: scale(0.85);
+    transform-origin: top right;
   }
   
   .space-info {
