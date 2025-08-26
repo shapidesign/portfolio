@@ -458,48 +458,11 @@ function initLaunchScreen() {
       e.stopPropagation();
       launchSequence();
     });
-    
-    // Mobile touch support
-    launchBtn.addEventListener('touchstart', function(e) {
-      console.log('🎯 Touch start detected!');
-      e.preventDefault();
-      e.stopPropagation();
-    });
-    
-    launchBtn.addEventListener('touchend', function(e) {
-      console.log('🎯 Touch end detected!');
-      e.preventDefault();
-      e.stopPropagation();
-      launchSequence();
-    });
 
     // Debug: Add mousedown handler
     launchBtn.addEventListener('mousedown', function(e) {
       console.log('🎯 Button mousedown fired!');
     });
-    
-    // Mobile touch support for launch button
-    launchBtn.addEventListener('touchstart', function(e) {
-      console.log('🎯 Button touchstart fired!');
-      e.preventDefault();
-      e.stopPropagation();
-      launchSequence();
-    });
-    
-    launchBtn.addEventListener('touchend', function(e) {
-      console.log('🎯 Button touchend fired!');
-      e.preventDefault();
-      e.stopPropagation();
-    });
-    
-    // Additional mobile support
-    launchBtn.addEventListener('touchmove', function(e) {
-      e.preventDefault();
-    });
-    
-    // Ensure button is clickable on mobile
-    launchBtn.style.touchAction = 'manipulation';
-    launchBtn.style.webkitTapHighlightColor = 'transparent';
     
     // SPACEBAR HANDLER
     document.addEventListener('keydown', function keyLaunchHandler(e) {
@@ -724,24 +687,10 @@ function createPlanetGrid() {
   
   projectData.forEach((project, i) => {
     const dot = document.createElement('div');
-    dot.setAttribute('data-project', i + 1);
-    dot.setAttribute('data-state', 'Empty');
-    dot.style.width = '39px';
-    dot.style.height = '39px';
-    dot.style.position = 'relative';
+    dot.className = 'planet-dot';
+    dot.style.borderColor = `#${project.color.toString(16).padStart(6, '0')}`;
+    dot.style.color = `#${project.color.toString(16).padStart(6, '0')}`;
     dot.title = project.title;
-    
-    const innerDot = document.createElement('div');
-    innerDot.style.width = '39px';
-    innerDot.style.height = '39px';
-    innerDot.style.left = '0px';
-    innerDot.style.top = '0px';
-    innerDot.style.position = 'absolute';
-    innerDot.style.borderRadius = '9999px';
-    innerDot.style.outline = `3px #${project.color.toString(16).padStart(6, '0')} solid`;
-    innerDot.style.outlineOffset = '-1.50px';
-    
-    dot.appendChild(innerDot);
     
     dot.addEventListener('click', () => {
       focusOnPlanet(i);
@@ -1028,44 +977,73 @@ function animate3D() {
     };
   }
 
-  // Planet trails removed completely
+  // Draw planet trails as subtle glowing particles
+  solarPlanets.forEach((container, i) => {
+    // Update trail
+    const worldPos = container.position.clone();
+    planetTrails[i].push(worldPos.clone());
+    if (planetTrails[i].length > maxTrailLength) planetTrails[i].shift();
+    
+    // Draw trail as connected line segments for better mobile appearance
+    if (planetTrails[i].length > 1) {
+      orbitCtx.save();
+      orbitCtx.strokeStyle = `rgba(${(projectData[i].color>>16)&255},${(projectData[i].color>>8)&255},${projectData[i].color&255},0.3)`;
+      orbitCtx.shadowColor = orbitCtx.strokeStyle;
+      orbitCtx.shadowBlur = 8;
+      orbitCtx.lineWidth = 3;
+      orbitCtx.beginPath();
+      
+      // Start from the planet's exact center position
+      const planetWorldPos = container.getWorldPosition(new THREE.Vector3());
+      const currentScreen = toScreen(planetWorldPos);
+      orbitCtx.moveTo(currentScreen.x, currentScreen.y);
+      
+      // Draw line through trail points
+      planetTrails[i].forEach((pos, j) => {
+        const screen = toScreen(pos);
+        orbitCtx.lineTo(screen.x, screen.y);
+      });
+      
+      orbitCtx.stroke();
+      orbitCtx.restore();
+    }
+  });
 
   // Draw glowing arc connectors between visited planets
-  // Connecting lines disabled - removed as requested
-  // if (visitedOrder.length > 1) {
-  //   const sunScreen = toScreen(new THREE.Vector3(0, 0, 0));
-  //   orbitCtx.save();
-  //   orbitCtx.strokeStyle = 'rgba(255,255,255,0.85)';
-  //   orbitCtx.shadowColor = '#fff';
-  //   orbitCtx.shadowBlur = 18;
-  //   orbitCtx.lineWidth = 4;
-  //   orbitCtx.beginPath();
-  //   let prevScreen = null;
-  //   visitedOrder.forEach((idx, j) => {
-  //     const planetWorldPos = solarPlanets[idx].getWorldPosition(new THREE.Vector3());
-  //     const screen = toScreen(planetWorldPos);
-  //     if (j === 0) {
-  //       orbitCtx.moveTo(screen.x, screen.y);
-  //     } else {
-  //       // Always draw an arc (quadratic Bezier) that bows away from the sun
-  //       // Find midpoint
-  //       const mx = (prevScreen.x + screen.x) / 2;
-  //       const my = (prevScreen.y + screen.y) / 2;
-  //       // Vector from sun to midpoint
-  //       const vx = mx - sunScreen.x;
-  //       const vy = my - sunScreen.y;
-  //       const vlen = Math.hypot(vx, vy) || 1;
-  //       // Control point offset: away from sun, fixed arc height
-  //       const arcHeight = 48; // px
-  //       const cx = mx + (vx / vlen) * arcHeight;
-  //       const cy = my + (vy / vlen) * arcHeight;
-  //       orbitCtx.quadraticCurveTo(cx, cy, screen.x, screen.y);
-  //     }
-  //     prevScreen = screen;
-  //   });
-  //   orbitCtx.stroke();
-  //   orbitCtx.restore();
-  // }
+  if (visitedOrder.length > 1) {
+    const sunScreen = toScreen(new THREE.Vector3(0, 0, 0));
+    orbitCtx.save();
+    orbitCtx.strokeStyle = 'rgba(255,255,255,0.85)';
+    orbitCtx.shadowColor = '#fff';
+    orbitCtx.shadowBlur = 18;
+    orbitCtx.lineWidth = 4;
+    orbitCtx.beginPath();
+    let prevScreen = null;
+    visitedOrder.forEach((idx, j) => {
+      const planetWorldPos = solarPlanets[idx].getWorldPosition(new THREE.Vector3());
+      const screen = toScreen(planetWorldPos);
+      if (j === 0) {
+        orbitCtx.moveTo(screen.x, screen.y);
+      } else {
+        // Always draw an arc (quadratic Bezier) that bows away from the sun
+        // Find midpoint
+        const mx = (prevScreen.x + screen.x) / 2;
+        const my = (prevScreen.y + screen.y) / 2;
+        // Vector from sun to midpoint
+        const vx = mx - sunScreen.x;
+        const vy = my - sunScreen.y;
+        const vlen = Math.hypot(vx, vy) || 1;
+        // Control point offset: away from sun, fixed arc height
+        const arcHeight = 48; // px
+        const cx = mx + (vx / vlen) * arcHeight;
+        const cy = my + (vy / vlen) * arcHeight;
+        orbitCtx.quadraticCurveTo(cx, cy, screen.x, screen.y);
+      }
+      prevScreen = screen;
+    });
+    orbitCtx.stroke();
+    orbitCtx.restore();
+  }
 
   // Draw and animate warp particles
   for (let i = warpParticles.length - 1; i >= 0; i--) {
@@ -1101,32 +1079,24 @@ function animate3D() {
   // Update planets
   const pulseTime = Date.now() * 0.002;
   solarPlanets.forEach((container, i) => {
-    // Only move planets if not hovered
     if (!container.userData.isHovered) {
       container.userData.angle += container.userData.speed;
       const x = Math.cos(container.userData.angle) * container.userData.radius;
       const z = Math.sin(container.userData.angle) * container.userData.radius;
       container.position.set(x, 0, z);
     }
-    
-    // Planet self-rotation (always active)
-    if (container.userData.planet) {
-      container.userData.planet.rotation.y += 0.02;
-    }
+    // Planet self-rotation
+    container.userData.planet.rotation.y += 0.02;
 
     // Pulsing glow for unvisited planets
     const isVisited = visitedProjects.has(i);
-    if (!isVisited && container.userData.planet && container.userData.planet.material) {
+    if (!isVisited) {
       const pulse = 0.25 + 0.25 * Math.sin(pulseTime + i * 1.2);
       container.userData.planet.material.emissive.setHex(container.userData.project.color).multiplyScalar(0.25 + pulse);
-      if (container.userData.atmosphere && container.userData.atmosphere.material) {
-        container.userData.atmosphere.material.opacity = 0.35 + pulse * 0.5;
-      }
-    } else if (container.userData.planet && container.userData.planet.material) {
+      container.userData.atmosphere.material.opacity = 0.35 + pulse * 0.5;
+    } else {
       container.userData.planet.material.emissive.setHex(container.userData.project.color).multiplyScalar(0.1);
-      if (container.userData.atmosphere && container.userData.atmosphere.material) {
-        container.userData.atmosphere.material.opacity = 0.2;
-      }
+      container.userData.atmosphere.material.opacity = 0.2;
     }
   });
 
@@ -1150,90 +1120,28 @@ function openProjectModal(project, index) {
   updateProgress();
   
   const modal = document.getElementById('project-modal');
+  const modalContent = modal.querySelector('.project-modal-content');
+  const header = modalContent.querySelector('.project-modal-header h2');
+  const galleryCounter = modalContent.querySelector('.gallery-counter');
+
   if (!modal) {
     console.error('Project modal not found!');
     return;
   }
-  
-  const modalContent = modal.querySelector('.project-modal-content');
-  if (!modalContent) {
-    console.error('Project modal content not found!');
-    return;
-  }
 
-  // Reset modal state completely
-  modal.classList.remove('show');
-  modal.style.display = 'none';
-  modal.style.visibility = 'hidden';
-  modal.style.opacity = '0';
-  
-  // Force a reflow
-  modal.offsetHeight;
-
-  // Set project-specific colors and styling
+  // Set accent color
   const accent = `#${project.color.toString(16).padStart(6, '0')}`;
-  modalContent.style.outline = `3px ${accent} solid`;
-  modalContent.style.outlineOffset = '-1.50px';
-  
-  // Update title color
-  const title = document.getElementById('project-modal-title');
-  if (title) title.style.color = accent;
-  
-  // Update close button to use project-specific escape button
-  const closeBtn = document.getElementById('close-project');
-  if (closeBtn) {
-    // Map project colors to specific escape button SVGs
-    const projectColorKey = `0x${project.color.toString(16)}`;
-    const escapeColorMap = {
-      '0xf92672': 'color=pinkx.svg',      // Pink
-      '0x66d9ef': 'color=bluex.svg',      // Blue
-      '0xa6e22e': 'color=greenx.svg',     // Green
-      '0xfd971f': 'color=orangex.svg',    // Orange
-      '0xae81ff': 'color=purplex.svg'     // Purple
-    };
-    
-    const escapeSvg = escapeColorMap[projectColorKey] || 'escape.svg';
-    const img = closeBtn.querySelector('img');
-    if (img) img.src = escapeSvg;
-  }
+  modalContent.style.borderColor = accent;
+  header.style.color = accent;
+  galleryCounter.style.borderColor = accent;
+  galleryCounter.style.color = accent;
 
   // Set content
   document.getElementById('project-modal-title').textContent = project.title;
   document.getElementById('project-modal-desc').textContent = project.description;
   currentProject = project;
-  
-  // Create scrollable image gallery
-  const imagesContainer = document.getElementById('project-images-container');
-  if (imagesContainer) {
-    imagesContainer.innerHTML = '';
-    
-    // Add all project images as scrollable content
-    project.images.forEach((imageSrc, imageIndex) => {
-      const imageDiv = document.createElement('div');
-      imageDiv.style.cssText = `
-        width: 100%;
-        margin-bottom: 16px;
-        background: #2D2D2D;
-        border-radius: 12px;
-        overflow: hidden;
-        border: 2px solid ${accent};
-      `;
-      
-      const img = document.createElement('img');
-      img.src = imageSrc;
-      img.alt = `${project.title} - Image ${imageIndex + 1}`;
-      img.style.cssText = `
-        width: 100%;
-        height: auto;
-        max-height: 400px;
-        object-fit: contain;
-        display: block;
-      `;
-      
-      imageDiv.appendChild(img);
-      imagesContainer.appendChild(imageDiv);
-    });
-  }
+  currentImageIndex = 0;
+  updateGalleryImage();
   
   // Show modal
   modal.classList.add('show');
@@ -1241,27 +1149,16 @@ function openProjectModal(project, index) {
   modal.style.visibility = 'visible';
   modal.style.opacity = '1';
   
-  // Ensure close button works
-  const closeProjectBtn = document.getElementById('close-project');
-  if (closeProjectBtn) {
-    closeProjectBtn.onclick = closeProjectModal;
-    closeProjectBtn.ontouchend = closeProjectModal;
-  }
-  
   console.log('Project modal opened successfully');
 }
 
 function closeProjectModal() {
   console.log('Closing project modal...');
   const modal = document.getElementById('project-modal');
+  const modalContent = modal.querySelector('.project-modal-content');
+  
   if (!modal) {
     console.error('Project modal not found!');
-    return;
-  }
-  
-  const modalContent = modal.querySelector('.project-modal-content');
-  if (!modalContent) {
-    console.error('Project modal content not found!');
     return;
   }
   
@@ -1271,35 +1168,15 @@ function closeProjectModal() {
   modal.style.visibility = 'hidden';
   modal.style.opacity = '0';
   
-  // Reset accent colors and styling
+  // Reset accent colors
   if (modalContent) {
-    modalContent.style.outline = '3px #66D9EF solid';
-    modalContent.style.outlineOffset = '-1.50px';
-    
-    // Reset title color
-    const title = document.getElementById('project-modal-title');
-    if (title) title.style.color = '#66D9EF';
-    
-    // Reset close button to default escape button
-    const closeBtn = document.getElementById('close-project');
-    if (closeBtn) {
-      const img = closeBtn.querySelector('img');
-      if (img) img.src = 'escape.svg';
-    }
-    
-    // Reset modal outline
-    const modalContent = document.querySelector('.project-modal-content');
-    if (modalContent) modalContent.style.outline = '3px #66D9EF solid';
-    
-    // Reset navigation arrows to default
-    const prevBtn = document.getElementById('gallery-prev');
-    const nextBtn = document.getElementById('gallery-next');
-    
-    if (prevBtn && prevBtn.querySelector('img')) {
-      prevBtn.querySelector('img').src = 'state=unactive.svg';
-    }
-    if (nextBtn && nextBtn.querySelector('img')) {
-      nextBtn.querySelector('img').src = 'state=unactive.svg';
+    modalContent.style.borderColor = '';
+    const header = modalContent.querySelector('.project-modal-header h2');
+    if (header) header.style.color = '';
+    const galleryCounter = modalContent.querySelector('.gallery-counter');
+    if (galleryCounter) {
+      galleryCounter.style.borderColor = '';
+      galleryCounter.style.color = '';
     }
   }
   
@@ -1353,46 +1230,23 @@ function updateGalleryImage() {
   if (!currentProject) return;
   
   const images = currentProject.images;
-  const galleryImage = document.getElementById('gallery-image');
-  
-  // Preload the image before setting it as src
-  const img = new Image();
-  img.onload = function() {
-    galleryImage.src = images[currentImageIndex];
-  };
-  img.src = images[currentImageIndex];
-  
+  document.getElementById('gallery-image').src = images[currentImageIndex];
   document.getElementById('image-current').textContent = currentImageIndex + 1;
   document.getElementById('image-total').textContent = images.length;
   
-  // Update navigation buttons with SVG states
-  const prevBtn = document.getElementById('gallery-prev');
-  const nextBtn = document.getElementById('gallery-next');
-  
-  if (prevBtn && prevBtn.querySelector('img')) {
-    prevBtn.querySelector('img').src = currentImageIndex === 0 ? 'state=unactive.svg' : 'state=active.svg';
-    prevBtn.style.pointerEvents = currentImageIndex === 0 ? 'none' : 'auto';
-  }
-  
-  if (nextBtn && nextBtn.querySelector('img')) {
-    nextBtn.querySelector('img').src = currentImageIndex === images.length - 1 ? 'state=unactive.svg' : 'state=active.svg';
-    nextBtn.style.pointerEvents = currentImageIndex === images.length - 1 ? 'none' : 'auto';
-  }
+  // Update navigation buttons
+  document.getElementById('gallery-prev').disabled = currentImageIndex === 0;
+  document.getElementById('gallery-next').disabled = currentImageIndex === images.length - 1;
 }
 
 function updateProgress() {
   const progress = document.getElementById('progress-info');
   progress.textContent = `${visitedProjects.size}/${projectData.length} projects explored`;
   // Update planet dots
-  const dots = document.querySelectorAll('[data-project]');
+  const dots = document.querySelectorAll('.planet-dot');
   dots.forEach((dot, i) => {
-    const innerDot = dot.querySelector('div');
     if (visitedProjects.has(i)) {
-      dot.setAttribute('data-state', 'Full');
-      innerDot.style.background = `#${projectData[i].color.toString(16).padStart(6, '0')}`;
-    } else {
-      dot.setAttribute('data-state', 'Empty');
-      innerDot.style.background = 'transparent';
+      dot.classList.add('visited');
     }
   });
   // Achievement
@@ -1402,8 +1256,8 @@ function updateProgress() {
     setTimeout(() => {
       explode(window.innerWidth / 2, window.innerHeight / 2, '#a6e22e', 200);
     }, 1000);
-    // Phone icon rings with animation
-    startPhoneRinging();
+    // Phone icon rings
+    if (contactPhone) contactPhone.classList.add('ringing');
     // Show ground control message only if not dismissed and not on mobile
     if (!groundMsg && !groundControlDismissed && !isMobile()) {
       groundMsg = document.createElement('div');
@@ -1430,47 +1284,11 @@ function updateProgress() {
   }
 }
 
-// Phone ringing animation function
-function startPhoneRinging() {
-  const contactPhone = document.getElementById('contact-phone');
-  const phoneIcon = document.getElementById('phone-icon');
-  
-  if (contactPhone && phoneIcon) {
-    contactPhone.classList.add('ringing');
-    let isHigh = true;
-    
-    const ringingInterval = setInterval(() => {
-      if (contactPhone.classList.contains('ringing')) {
-        phoneIcon.src = isHigh ? 'phone-high.svg' : 'phone-low.svg';
-        isHigh = !isHigh;
-      } else {
-        clearInterval(ringingInterval);
-        phoneIcon.src = 'phone-low.svg';
-      }
-    }, 500);
-  }
-}
-
 // === Event Listeners ===
 function setupEventListeners() {
-  // Contact phone icon with hover states and ringing animation
+  // Contact phone icon - Add safety check
   const contactPhone = document.getElementById('contact-phone');
-  const phoneIcon = document.getElementById('phone-icon');
-  
-  if (contactPhone && phoneIcon) {
-    // Hover effects
-    contactPhone.addEventListener('mouseenter', () => {
-      if (!contactPhone.classList.contains('ringing')) {
-        phoneIcon.src = 'phone-high.svg';
-      }
-    });
-    
-    contactPhone.addEventListener('mouseleave', () => {
-      if (!contactPhone.classList.contains('ringing')) {
-        phoneIcon.src = 'phone-low.svg';
-      }
-    });
-    
+  if (contactPhone) {
     contactPhone.addEventListener('click', () => {
       openContactModal();
       explode(window.innerWidth - 100, window.innerHeight - 100, '#f92672', 80);
@@ -1523,17 +1341,6 @@ function setupEventListeners() {
     const galleryNext = document.getElementById('gallery-next');
 
     if (galleryPrev) {
-      // Hover effects for prev button
-      galleryPrev.addEventListener('mouseenter', () => {
-        const img = galleryPrev.querySelector('img');
-        if (img && currentImageIndex > 0) img.src = 'state=hover.svg';
-      });
-      
-      galleryPrev.addEventListener('mouseleave', () => {
-        const img = galleryPrev.querySelector('img');
-        if (img) img.src = currentImageIndex === 0 ? 'state=unactive.svg' : 'state=active.svg';
-      });
-      
       galleryPrev.addEventListener('click', () => {
         if (currentImageIndex > 0) {
           currentImageIndex--;
@@ -1544,17 +1351,6 @@ function setupEventListeners() {
     }
 
     if (galleryNext) {
-      // Hover effects for next button
-      galleryNext.addEventListener('mouseenter', () => {
-        const img = galleryNext.querySelector('img');
-        if (img && currentProject && currentImageIndex < currentProject.images.length - 1) img.src = 'state=hover.svg';
-      });
-      
-      galleryNext.addEventListener('mouseleave', () => {
-        const img = galleryNext.querySelector('img');
-        if (img) img.src = (currentProject && currentImageIndex === currentProject.images.length - 1) ? 'state=unactive.svg' : 'state=active.svg';
-      });
-      
       galleryNext.addEventListener('click', () => {
         if (currentProject && currentImageIndex < currentProject.images.length - 1) {
           currentImageIndex++;
@@ -2010,36 +1806,22 @@ function openHeroModal() {
     console.error('Camera permission dialog not found!');
   }
   
-  // Show hero message
+  // Hide the hero message initially
   if (heroMsg) {
-    heroMsg.style.display = 'block';
-    heroMsg.textContent = 'you are the real hero';
-    heroMsg.style.cursor = 'default';
+    heroMsg.style.display = 'none';
   }
   
-  // Show video container but hide video initially
+  // Hide video initially
   if (video) {
     video.style.display = 'none';
     video.style.visibility = 'hidden';
   }
   
-  // Add click listener to enable camera
-  if (heroMsg) {
-    heroMsg.onclick = enableCamera;
-  }
-  
-  // Also add click listener to the modal content for easier access
-  const modalContent = modal.querySelector('.hero-modal-content');
-  if (modalContent) {
-    modalContent.onclick = enableCamera;
-  }
-  
-  // Auto-enable camera after a short delay
+  // Auto-enable camera immediately
   setTimeout(() => {
+    console.log('Auto-enabling camera...');
     enableCamera();
   }, 100);
-  
-  console.log('Hero modal opened, auto-enabling camera...');
 }
 
 // Enhanced camera enable function
