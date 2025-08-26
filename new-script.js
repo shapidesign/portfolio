@@ -687,10 +687,24 @@ function createPlanetGrid() {
   
   projectData.forEach((project, i) => {
     const dot = document.createElement('div');
-    dot.className = 'planet-dot';
-    dot.style.borderColor = `#${project.color.toString(16).padStart(6, '0')}`;
-    dot.style.color = `#${project.color.toString(16).padStart(6, '0')}`;
+    dot.setAttribute('data-project', i + 1);
+    dot.setAttribute('data-state', 'Empty');
+    dot.style.width = '39px';
+    dot.style.height = '39px';
+    dot.style.position = 'relative';
     dot.title = project.title;
+    
+    const innerDot = document.createElement('div');
+    innerDot.style.width = '39px';
+    innerDot.style.height = '39px';
+    innerDot.style.left = '0px';
+    innerDot.style.top = '0px';
+    innerDot.style.position = 'absolute';
+    innerDot.style.borderRadius = '9999px';
+    innerDot.style.outline = `3px #${project.color.toString(16).padStart(6, '0')} solid`;
+    innerDot.style.outlineOffset = '-1.50px';
+    
+    dot.appendChild(innerDot);
     
     dot.addEventListener('click', () => {
       focusOnPlanet(i);
@@ -977,39 +991,7 @@ function animate3D() {
     };
   }
 
-  // Draw planet trails as subtle glowing particles (desktop only)
-  if (!isMobile()) {
-    solarPlanets.forEach((container, i) => {
-      // Update trail
-      const worldPos = container.position.clone();
-      planetTrails[i].push(worldPos.clone());
-      if (planetTrails[i].length > maxTrailLength) planetTrails[i].shift();
-      
-      // Draw trail as connected line segments for better mobile appearance
-      if (planetTrails[i].length > 1) {
-        orbitCtx.save();
-        orbitCtx.strokeStyle = `rgba(${(projectData[i].color>>16)&255},${(projectData[i].color>>8)&255},${projectData[i].color&255},0.3)`;
-        orbitCtx.shadowColor = orbitCtx.strokeStyle;
-        orbitCtx.shadowBlur = 8;
-        orbitCtx.lineWidth = 3;
-        orbitCtx.beginPath();
-        
-        // Start from the planet's exact center position
-        const planetWorldPos = container.getWorldPosition(new THREE.Vector3());
-        const currentScreen = toScreen(planetWorldPos);
-        orbitCtx.moveTo(currentScreen.x, currentScreen.y);
-        
-        // Draw line through trail points
-        planetTrails[i].forEach((pos, j) => {
-          const screen = toScreen(pos);
-          orbitCtx.lineTo(screen.x, screen.y);
-        });
-        
-        orbitCtx.stroke();
-        orbitCtx.restore();
-      }
-    });
-  }
+  // Planet trails removed completely
 
   // Draw glowing arc connectors between visited planets
   if (visitedOrder.length > 1) {
@@ -1253,10 +1235,15 @@ function updateProgress() {
   const progress = document.getElementById('progress-info');
   progress.textContent = `${visitedProjects.size}/${projectData.length} projects explored`;
   // Update planet dots
-  const dots = document.querySelectorAll('.planet-dot');
+  const dots = document.querySelectorAll('[data-project]');
   dots.forEach((dot, i) => {
+    const innerDot = dot.querySelector('div');
     if (visitedProjects.has(i)) {
-      dot.classList.add('visited');
+      dot.setAttribute('data-state', 'Full');
+      innerDot.style.background = `#${projectData[i].color.toString(16).padStart(6, '0')}`;
+    } else {
+      dot.setAttribute('data-state', 'Empty');
+      innerDot.style.background = 'transparent';
     }
   });
   // Achievement
@@ -1266,8 +1253,8 @@ function updateProgress() {
     setTimeout(() => {
       explode(window.innerWidth / 2, window.innerHeight / 2, '#a6e22e', 200);
     }, 1000);
-    // Phone icon rings
-    if (contactPhone) contactPhone.classList.add('ringing');
+    // Phone icon rings with animation
+    startPhoneRinging();
     // Show ground control message only if not dismissed and not on mobile
     if (!groundMsg && !groundControlDismissed && !isMobile()) {
       groundMsg = document.createElement('div');
@@ -1294,11 +1281,47 @@ function updateProgress() {
   }
 }
 
+// Phone ringing animation function
+function startPhoneRinging() {
+  const contactPhone = document.getElementById('contact-phone');
+  const phoneIcon = document.getElementById('phone-icon');
+  
+  if (contactPhone && phoneIcon) {
+    contactPhone.classList.add('ringing');
+    let isHigh = true;
+    
+    const ringingInterval = setInterval(() => {
+      if (contactPhone.classList.contains('ringing')) {
+        phoneIcon.src = isHigh ? 'phone-high.svg' : 'phone-low.svg';
+        isHigh = !isHigh;
+      } else {
+        clearInterval(ringingInterval);
+        phoneIcon.src = 'phone-low.svg';
+      }
+    }, 500);
+  }
+}
+
 // === Event Listeners ===
 function setupEventListeners() {
-  // Contact phone icon - Add safety check
+  // Contact phone icon with hover states and ringing animation
   const contactPhone = document.getElementById('contact-phone');
-  if (contactPhone) {
+  const phoneIcon = document.getElementById('phone-icon');
+  
+  if (contactPhone && phoneIcon) {
+    // Hover effects
+    contactPhone.addEventListener('mouseenter', () => {
+      if (!contactPhone.classList.contains('ringing')) {
+        phoneIcon.src = 'phone-high.svg';
+      }
+    });
+    
+    contactPhone.addEventListener('mouseleave', () => {
+      if (!contactPhone.classList.contains('ringing')) {
+        phoneIcon.src = 'phone-low.svg';
+      }
+    });
+    
     contactPhone.addEventListener('click', () => {
       openContactModal();
       explode(window.innerWidth - 100, window.innerHeight - 100, '#f92672', 80);
