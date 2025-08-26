@@ -740,6 +740,7 @@ a {
   flex-direction: column;
   overflow-y: auto;
   z-index: 10000;
+  cursor: default;
 }
 
 .gallery-counter {

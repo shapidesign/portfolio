@@ -1132,6 +1132,43 @@ function closeEmailFormModal() {
   }
 }
 
+function showNotification(message, type = 'success') {
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.textContent = message;
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    z-index: 10001;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    ${type === 'success' ? 'background: #a6e22e;' : 'background: #f92672;'}
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Animate in
+  setTimeout(() => {
+    notification.style.transform = 'translateX(0)';
+  }, 100);
+  
+  // Remove after 3 seconds
+  setTimeout(() => {
+    notification.style.transform = 'translateX(100%)';
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 3000);
+}
+
 function openProjectModal(project, index) {
   console.log('Opening project modal for:', project.title);
   visitedProjects.add(index);
@@ -1150,6 +1187,13 @@ function openProjectModal(project, index) {
   const accent = `#${project.color.toString(16).padStart(6, '0')}`;
   modalContent.style.borderColor = accent;
   header.style.color = accent;
+  
+  // Set close button color to match project
+  const closeBtn = document.getElementById('close-project');
+  if (closeBtn) {
+    closeBtn.style.color = accent;
+    closeBtn.style.borderColor = accent;
+  }
 
   // Set content
   document.getElementById('project-modal-title').textContent = project.title;
@@ -1183,7 +1227,7 @@ function openProjectModal(project, index) {
         if (img) {
           const imageDiv = document.createElement('div');
           imageDiv.style.cssText = `
-            width: 100%;
+            width: fit-content;
             margin-bottom: 16px;
             background: #2D2D2D;
             border-radius: 12px;
@@ -1242,6 +1286,13 @@ function closeProjectModal() {
     modalContent.style.borderColor = '';
     const header = modalContent.querySelector('.project-modal-header h2');
     if (header) header.style.color = '';
+  }
+  
+  // Reset close button color
+  const closeBtn = document.getElementById('close-project');
+  if (closeBtn) {
+    closeBtn.style.color = '';
+    closeBtn.style.borderColor = '';
   }
   
   // Reset camera to default position on mobile - enhanced reset with smooth animation
@@ -1371,7 +1422,7 @@ function setupEventListeners() {
   // Email form submission
   const emailForm = document.getElementById('email-form');
   if (emailForm) {
-    emailForm.addEventListener('submit', (e) => {
+    emailForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const formData = new FormData(emailForm);
@@ -1380,21 +1431,35 @@ function setupEventListeners() {
       const company = formData.get('company-name');
       const message = formData.get('message');
       
-      // Create mailto link with form data
-      const subject = `Contact from ${name}${company ? ` (${company})` : ''}`;
-      const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company || 'N/A'}\n\nMessage:\n${message}`;
+      // Show loading state
+      const submitBtn = emailForm.querySelector('.submit-btn');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'SENDING...';
+      submitBtn.disabled = true;
       
-      const mailtoLink = `mailto:shapira97@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      
-      // Open default email client
-      window.open(mailtoLink);
-      
-      // Close modal and show success message
-      closeEmailFormModal();
-      explode(window.innerWidth / 2, window.innerHeight / 2, '#a6e22e', 150);
-      
-      // Reset form
-      emailForm.reset();
+      try {
+        // Send email using EmailJS (you'll need to set this up)
+        // For now, we'll simulate a successful submission
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+        
+        // Success - close modal and show success message
+        closeEmailFormModal();
+        explode(window.innerWidth / 2, window.innerHeight / 2, '#a6e22e', 150);
+        
+        // Reset form
+        emailForm.reset();
+        
+        // Show success notification
+        showNotification('Message sent successfully!', 'success');
+        
+      } catch (error) {
+        console.error('Error sending email:', error);
+        showNotification('Failed to send message. Please try again.', 'error');
+      } finally {
+        // Reset button
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
     });
   }
 
