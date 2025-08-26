@@ -1839,9 +1839,11 @@ function openHeroModal() {
     console.error('Camera permission dialog not found!');
   }
   
-  // Hide the hero message initially
+  // Show hero message to prompt user interaction
   if (heroMsg) {
-    heroMsg.style.display = 'none';
+    heroMsg.style.display = 'block';
+    heroMsg.textContent = 'Click anywhere to enable camera';
+    heroMsg.style.cursor = 'pointer';
   }
   
   // Hide video initially
@@ -1850,11 +1852,13 @@ function openHeroModal() {
     video.style.visibility = 'hidden';
   }
   
-  // Auto-enable camera immediately
-  setTimeout(() => {
-    console.log('Auto-enabling camera...');
-    enableCamera();
-  }, 100);
+  // Add click listener to enable camera
+  if (heroMsg) {
+    heroMsg.onclick = enableCamera;
+  }
+  
+  // Don't auto-enable camera - wait for user interaction
+  console.log('Hero modal opened, waiting for user interaction...');
 }
 
 // Enhanced camera enable function
