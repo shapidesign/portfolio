@@ -993,8 +993,9 @@ function animate3D() {
       orbitCtx.lineWidth = 3;
       orbitCtx.beginPath();
       
-      // Start from the planet's current position
-      const currentScreen = toScreen(container.position);
+      // Start from the planet's exact center position
+      const planetWorldPos = container.getWorldPosition(new THREE.Vector3());
+      const currentScreen = toScreen(planetWorldPos);
       orbitCtx.moveTo(currentScreen.x, currentScreen.y);
       
       // Draw line through trail points
@@ -1019,8 +1020,8 @@ function animate3D() {
     orbitCtx.beginPath();
     let prevScreen = null;
     visitedOrder.forEach((idx, j) => {
-      const pos = solarPlanets[idx].position;
-      const screen = toScreen(pos);
+      const planetWorldPos = solarPlanets[idx].getWorldPosition(new THREE.Vector3());
+      const screen = toScreen(planetWorldPos);
       if (j === 0) {
         orbitCtx.moveTo(screen.x, screen.y);
       } else {
