@@ -1116,6 +1116,22 @@ function openContactModal() {
   modal.classList.add('show');
 }
 
+function openEmailFormModal() {
+  const modal = document.getElementById('email-form-modal');
+  if (modal) {
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+  }
+}
+
+function closeEmailFormModal() {
+  const modal = document.getElementById('email-form-modal');
+  if (modal) {
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+  }
+}
+
 function openProjectModal(project, index) {
   console.log('Opening project modal for:', project.title);
   visitedProjects.add(index);
@@ -1341,6 +1357,52 @@ function setupEventListeners() {
       const groundMsg = document.getElementById('ground-control-msg');
       if (groundMsg) groundMsg.remove();
       if (contactPhone.classList.contains('ringing')) groundControlDismissed = true;
+    });
+  }
+
+  // Email form trigger
+  const emailFormTrigger = document.getElementById('email-form-trigger');
+  if (emailFormTrigger) {
+    emailFormTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      openEmailFormModal();
+      explode(window.innerWidth / 2, window.innerHeight / 2, '#66d9ef', 100);
+    });
+  }
+
+  // Email form close button
+  const closeEmailForm = document.getElementById('close-email-form');
+  if (closeEmailForm) {
+    closeEmailForm.addEventListener('click', closeEmailFormModal);
+  }
+
+  // Email form submission
+  const emailForm = document.getElementById('email-form');
+  if (emailForm) {
+    emailForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(emailForm);
+      const name = formData.get('full-name');
+      const email = formData.get('email-address');
+      const company = formData.get('company-name');
+      const message = formData.get('message');
+      
+      // Create mailto link with form data
+      const subject = `Contact from ${name}${company ? ` (${company})` : ''}`;
+      const body = `Name: ${name}\nEmail: ${email}\nCompany: ${company || 'N/A'}\n\nMessage:\n${message}`;
+      
+      const mailtoLink = `mailto:shapira97@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      
+      // Open default email client
+      window.open(mailtoLink);
+      
+      // Close modal and show success message
+      closeEmailFormModal();
+      explode(window.innerWidth / 2, window.innerHeight / 2, '#a6e22e', 150);
+      
+      // Reset form
+      emailForm.reset();
     });
   }
 
