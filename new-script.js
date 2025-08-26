@@ -983,18 +983,29 @@ function animate3D() {
     const worldPos = container.position.clone();
     planetTrails[i].push(worldPos.clone());
     if (planetTrails[i].length > maxTrailLength) planetTrails[i].shift();
-    // Draw trail as particles
-    planetTrails[i].forEach((pos, j) => {
-      const screen = toScreen(pos);
+    
+    // Draw trail as connected line segments for better mobile appearance
+    if (planetTrails[i].length > 1) {
       orbitCtx.save();
+      orbitCtx.strokeStyle = `rgba(${(projectData[i].color>>16)&255},${(projectData[i].color>>8)&255},${projectData[i].color&255},0.3)`;
+      orbitCtx.shadowColor = orbitCtx.strokeStyle;
+      orbitCtx.shadowBlur = 8;
+      orbitCtx.lineWidth = 3;
       orbitCtx.beginPath();
-      orbitCtx.arc(screen.x, screen.y, 2, 0, 2 * Math.PI);
-      orbitCtx.fillStyle = `rgba(${(projectData[i].color>>16)&255},${(projectData[i].color>>8)&255},${projectData[i].color&255},0.18)`;
-      orbitCtx.shadowColor = orbitCtx.fillStyle;
-      orbitCtx.shadowBlur = 6;
-      orbitCtx.fill();
+      
+      // Start from the planet's current position
+      const currentScreen = toScreen(container.position);
+      orbitCtx.moveTo(currentScreen.x, currentScreen.y);
+      
+      // Draw line through trail points
+      planetTrails[i].forEach((pos, j) => {
+        const screen = toScreen(pos);
+        orbitCtx.lineTo(screen.x, screen.y);
+      });
+      
+      orbitCtx.stroke();
       orbitCtx.restore();
-    });
+    }
   });
 
   // Draw glowing arc connectors between visited planets
@@ -1168,18 +1179,23 @@ function closeProjectModal() {
     }
   }
   
-  // Reset camera to default position on mobile - enhanced reset
+  // Reset camera to default position on mobile - enhanced reset with smooth animation
   if (isMobile() && solarControls) {
-    console.log('Resetting solar camera to default position...');
+    console.log('Resetting solar camera to default position with smooth animation...');
     
-    // Immediate reset using correct solar system camera
-    solarControls.reset();
-    solarControls.target.set(0, 0, 0);
-    solarCamera.position.set(0, 20, 30);
-    solarCamera.lookAt(0, 0, 0);
-    solarControls.update();
+    // Use the existing smooth reset function for visible animation
+    if (typeof smoothCameraReset === 'function') {
+      smoothCameraReset(800); // 800ms smooth animation
+    } else {
+      // Fallback to immediate reset if smooth function not available
+      solarControls.reset();
+      solarControls.target.set(0, 0, 0);
+      solarCamera.position.set(0, 20, 30);
+      solarCamera.lookAt(0, 0, 0);
+      solarControls.update();
+    }
     
-    // Multiple delayed resets to ensure it takes effect
+    // Additional reset to ensure it takes effect
     setTimeout(() => {
       if (solarControls && solarCamera) {
         solarControls.reset();
@@ -1187,31 +1203,9 @@ function closeProjectModal() {
         solarCamera.position.set(0, 20, 30);
         solarCamera.lookAt(0, 0, 0);
         solarControls.update();
-        console.log('First solar camera reset completed');
+        console.log('Camera reset animation completed');
       }
-    }, 100);
-    
-    setTimeout(() => {
-      if (solarControls && solarCamera) {
-        solarControls.reset();
-        solarControls.target.set(0, 0, 0);
-        solarCamera.position.set(0, 20, 30);
-        solarCamera.lookAt(0, 0, 0);
-        solarControls.update();
-        console.log('Second solar camera reset completed');
-      }
-    }, 300);
-    
-    setTimeout(() => {
-      if (solarControls && solarCamera) {
-        solarControls.reset();
-        solarControls.target.set(0, 0, 0);
-        solarCamera.position.set(0, 20, 30);
-        solarCamera.lookAt(0, 0, 0);
-        solarControls.update();
-        console.log('Final solar camera reset completed');
-      }
-    }, 600);
+    }, 1000);
   }
   
   console.log('Project modal closed successfully');
@@ -1263,8 +1257,8 @@ function updateProgress() {
     }, 1000);
     // Phone icon rings
     if (contactPhone) contactPhone.classList.add('ringing');
-    // Show ground control message only if not dismissed
-    if (!groundMsg && !groundControlDismissed) {
+    // Show ground control message only if not dismissed and not on mobile
+    if (!groundMsg && !groundControlDismissed && !isMobile()) {
       groundMsg = document.createElement('div');
       groundMsg.id = 'ground-control-msg';
       groundMsg.textContent = 'call ground control';

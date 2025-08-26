@@ -1706,9 +1706,21 @@ a {
   /* Smaller about modal for mobile */
   #about-modal .modal-content {
     width: 90vw;
-    height: 55vh;
-    margin: 22.5vh auto;
-    padding: 1rem;
+    height: 70vh;
+    margin: 15vh auto;
+    padding: 1.2rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    overflow-y: auto;
+  }
+  
+  #about-modal .modal-content h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+  
+  #about-modal .modal-content p {
+    margin-bottom: 0.8rem;
   }
   
   /* Smaller contact modal for mobile */
