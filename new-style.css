@@ -95,12 +95,35 @@ a {
   pointer-events: auto;
 }
 
-/* Keep the launch button working */
-.launch-button {
-  pointer-events: auto !important;
-  z-index: 9999;
-  /* ... rest of launch button styles ... */
-}
+  /* Keep the launch button working */
+  .launch-button {
+    pointer-events: auto !important;
+    z-index: 9999;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(39, 40, 34, 0.9);
+    border: 2px solid #66d9ef;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    color: #66d9ef;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(102, 217, 239, 0.3);
+  }
+  
+  .launch-button:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+    box-shadow: 0 0 30px rgba(102, 217, 239, 0.5);
+  }
+  
+  .launch-button:active {
+    transform: translate(-50%, -50%) scale(0.95);
+  }
 
 #cursor-canvas {
   position: fixed;
@@ -990,17 +1013,18 @@ a {
 }
 @media (max-width: 600px) {
   .hero-btn {
-    position: relative;
-    top: auto;
-    right: auto;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
     left: auto;
     bottom: auto;
-    margin: 1rem auto;
+    margin: 0;
     font-size: 0.8rem;
     padding: 0.5rem 0.8rem;
     max-width: 120px;
     max-height: 60px;
     display: block;
+    z-index: 1000;
   }
   .hero-btn div {
     font-size: 14px !important;
@@ -1014,19 +1038,32 @@ a {
   }
 }
 
-/* Enhanced Mobile Responsive Design */
-@media (max-width: 768px) {
-  /* Launch Button Mobile Improvements */
-  .launch-button {
-    font-size: clamp(0.9rem, 3.5vw, 1.2rem);
-    padding: 1rem 1.5rem;
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
-    transition: all 0.2s ease;
-    transform: scale(1);
-    -webkit-tap-highlight-color: transparent;
-  }
+  /* Enhanced Mobile Responsive Design */
+  @media (max-width: 768px) {
+    /* Launch Button Mobile Improvements */
+    .launch-button {
+      font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+      padding: 1rem 1.5rem;
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+      transition: all 0.2s ease;
+      transform: scale(1);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      min-height: 44px;
+    }
+    
+    /* Mobile touch improvements for all buttons */
+    .hero-btn,
+    .close,
+    .gallery-nav,
+    .planet-dot {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      min-height: 44px;
+      min-width: 44px;
+    }
   
   .launch-button:active {
     transform: scale(0.98);
@@ -1074,6 +1111,11 @@ a {
     height: 100%;
     object-fit: cover;
     border-radius: 12px;
+  }
+  
+  /* Fix stars brightness on mobile */
+  #star-canvas {
+    opacity: 1 !important;
   }
 }
 
@@ -1164,8 +1206,8 @@ a {
   .space-ui {
     position: fixed;
     top: 0.5rem;
-    left: 0.5rem;
-    right: auto;
+    right: 0.5rem;
+    left: auto;
     flex-direction: column;
     gap: 0.5rem;
     z-index: 1000;

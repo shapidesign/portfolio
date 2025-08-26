@@ -1127,10 +1127,14 @@ function openProjectModal(project, index) {
   updateProgress();
   
   const modal = document.getElementById('project-modal');
-  const modalContent = modal.querySelector('div[style*="background: rgba(39, 40, 34, 0.90)"]');
-
   if (!modal) {
     console.error('Project modal not found!');
+    return;
+  }
+  
+  const modalContent = modal.querySelector('.project-modal-content');
+  if (!modalContent) {
+    console.error('Project modal content not found!');
     return;
   }
 
@@ -1219,10 +1223,14 @@ function openProjectModal(project, index) {
 function closeProjectModal() {
   console.log('Closing project modal...');
   const modal = document.getElementById('project-modal');
-  const modalContent = modal.querySelector('div[style*="background: rgba(39, 40, 34, 0.90)"]');
-  
   if (!modal) {
     console.error('Project modal not found!');
+    return;
+  }
+  
+  const modalContent = modal.querySelector('.project-modal-content');
+  if (!modalContent) {
+    console.error('Project modal content not found!');
     return;
   }
   
