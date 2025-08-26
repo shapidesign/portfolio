@@ -625,6 +625,7 @@ a {
   animation: modalSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .gallery-counter {
@@ -1701,6 +1702,14 @@ a {
     height: 85vh;
     margin: 2.5vh auto;
     padding: 1rem;
+  }
+  
+  .project-images-container {
+    margin-top: 1rem;
+  }
+  
+  .project-images-container img {
+    border-radius: 8px;
   }
   
   /* Smaller about modal for mobile */

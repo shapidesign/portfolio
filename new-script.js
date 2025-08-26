@@ -977,37 +977,39 @@ function animate3D() {
     };
   }
 
-  // Draw planet trails as subtle glowing particles
-  solarPlanets.forEach((container, i) => {
-    // Update trail
-    const worldPos = container.position.clone();
-    planetTrails[i].push(worldPos.clone());
-    if (planetTrails[i].length > maxTrailLength) planetTrails[i].shift();
-    
-    // Draw trail as connected line segments for better mobile appearance
-    if (planetTrails[i].length > 1) {
-      orbitCtx.save();
-      orbitCtx.strokeStyle = `rgba(${(projectData[i].color>>16)&255},${(projectData[i].color>>8)&255},${projectData[i].color&255},0.3)`;
-      orbitCtx.shadowColor = orbitCtx.strokeStyle;
-      orbitCtx.shadowBlur = 8;
-      orbitCtx.lineWidth = 3;
-      orbitCtx.beginPath();
+  // Draw planet trails as subtle glowing particles (desktop only)
+  if (!isMobile()) {
+    solarPlanets.forEach((container, i) => {
+      // Update trail
+      const worldPos = container.position.clone();
+      planetTrails[i].push(worldPos.clone());
+      if (planetTrails[i].length > maxTrailLength) planetTrails[i].shift();
       
-      // Start from the planet's exact center position
-      const planetWorldPos = container.getWorldPosition(new THREE.Vector3());
-      const currentScreen = toScreen(planetWorldPos);
-      orbitCtx.moveTo(currentScreen.x, currentScreen.y);
-      
-      // Draw line through trail points
-      planetTrails[i].forEach((pos, j) => {
-        const screen = toScreen(pos);
-        orbitCtx.lineTo(screen.x, screen.y);
-      });
-      
-      orbitCtx.stroke();
-      orbitCtx.restore();
-    }
-  });
+      // Draw trail as connected line segments for better mobile appearance
+      if (planetTrails[i].length > 1) {
+        orbitCtx.save();
+        orbitCtx.strokeStyle = `rgba(${(projectData[i].color>>16)&255},${(projectData[i].color>>8)&255},${projectData[i].color&255},0.3)`;
+        orbitCtx.shadowColor = orbitCtx.strokeStyle;
+        orbitCtx.shadowBlur = 8;
+        orbitCtx.lineWidth = 3;
+        orbitCtx.beginPath();
+        
+        // Start from the planet's exact center position
+        const planetWorldPos = container.getWorldPosition(new THREE.Vector3());
+        const currentScreen = toScreen(planetWorldPos);
+        orbitCtx.moveTo(currentScreen.x, currentScreen.y);
+        
+        // Draw line through trail points
+        planetTrails[i].forEach((pos, j) => {
+          const screen = toScreen(pos);
+          orbitCtx.lineTo(screen.x, screen.y);
+        });
+        
+        orbitCtx.stroke();
+        orbitCtx.restore();
+      }
+    });
+  }
 
   // Draw glowing arc connectors between visited planets
   if (visitedOrder.length > 1) {
@@ -1140,8 +1142,64 @@ function openProjectModal(project, index) {
   document.getElementById('project-modal-title').textContent = project.title;
   document.getElementById('project-modal-desc').textContent = project.description;
   currentProject = project;
-  currentImageIndex = 0;
-  updateGalleryImage();
+  
+  // Create scrollable image gallery with preloaded images
+  const imagesContainer = document.getElementById('project-images-container');
+  if (imagesContainer) {
+    imagesContainer.innerHTML = '';
+    
+    // Preload all images first
+    const imagePromises = project.images.map((imageSrc, imageIndex) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          console.log(`Image ${imageIndex + 1} loaded:`, imageSrc);
+          resolve({ img, imageSrc, imageIndex });
+        };
+        img.onerror = () => {
+          console.error(`Failed to load image ${imageIndex + 1}:`, imageSrc);
+          resolve({ img: null, imageSrc, imageIndex });
+        };
+        img.src = imageSrc;
+      });
+    });
+    
+    // Once all images are loaded, add them to the container
+    Promise.all(imagePromises).then((loadedImages) => {
+      loadedImages.forEach(({ img, imageSrc, imageIndex }) => {
+        if (img) {
+          const imageDiv = document.createElement('div');
+          imageDiv.style.cssText = `
+            width: 100%;
+            margin-bottom: 16px;
+            background: #2D2D2D;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid ${accent};
+          `;
+          
+          const displayImg = document.createElement('img');
+          displayImg.src = imageSrc;
+          displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
+          displayImg.style.cssText = `
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: contain;
+            display: block;
+          `;
+          
+          imageDiv.appendChild(displayImg);
+          imagesContainer.appendChild(imageDiv);
+        }
+      });
+      
+      // Update gallery counter
+      if (galleryCounter) {
+        galleryCounter.innerHTML = `1 / ${project.images.length}`;
+      }
+    });
+  }
   
   // Show modal
   modal.classList.add('show');
@@ -1226,18 +1284,7 @@ setTimeout(() => {
 let currentProject = null;
 let currentImageIndex = 0;
 
-function updateGalleryImage() {
-  if (!currentProject) return;
-  
-  const images = currentProject.images;
-  document.getElementById('gallery-image').src = images[currentImageIndex];
-  document.getElementById('image-current').textContent = currentImageIndex + 1;
-  document.getElementById('image-total').textContent = images.length;
-  
-  // Update navigation buttons
-  document.getElementById('gallery-prev').disabled = currentImageIndex === 0;
-  document.getElementById('gallery-next').disabled = currentImageIndex === images.length - 1;
-}
+// Gallery navigation removed - now using scrollable content
 
 function updateProgress() {
   const progress = document.getElementById('progress-info');
@@ -1336,29 +1383,7 @@ function setupEventListeners() {
       });
     }
 
-    // Gallery navigation - Set up ONCE here
-    const galleryPrev = document.getElementById('gallery-prev');
-    const galleryNext = document.getElementById('gallery-next');
-
-    if (galleryPrev) {
-      galleryPrev.addEventListener('click', () => {
-        if (currentImageIndex > 0) {
-          currentImageIndex--;
-          updateGalleryImage();
-          explode(200, window.innerHeight / 2, '#66d9ef', 50);
-        }
-      });
-    }
-
-    if (galleryNext) {
-      galleryNext.addEventListener('click', () => {
-        if (currentProject && currentImageIndex < currentProject.images.length - 1) {
-          currentImageIndex++;
-          updateGalleryImage();
-          explode(window.innerWidth - 200, window.innerHeight / 2, '#66d9ef', 50);
-        }
-      });
-    }
+    // Gallery navigation removed - now using scrollable content
   }, 100);
 
   // Click outside modal to close
