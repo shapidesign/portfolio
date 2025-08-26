@@ -1104,21 +1104,48 @@ function openProjectModal(project, index) {
   updateProgress();
   
   const modal = document.getElementById('project-modal');
-  const modalContent = modal.querySelector('.project-modal-content');
-  const header = modalContent.querySelector('.project-modal-header h2');
-  const galleryCounter = modalContent.querySelector('.gallery-counter');
+  const modalContent = modal.querySelector('div[style*="background: rgba(39, 40, 34, 0.90)"]');
 
   if (!modal) {
     console.error('Project modal not found!');
     return;
   }
 
-  // Set accent color
+  // Set project-specific colors and styling
   const accent = `#${project.color.toString(16).padStart(6, '0')}`;
-  modalContent.style.borderColor = accent;
-  header.style.color = accent;
-  galleryCounter.style.borderColor = accent;
-  galleryCounter.style.color = accent;
+  modalContent.style.outline = `3px ${accent} solid`;
+  modalContent.style.outlineOffset = '-1.50px';
+  
+  // Update title color
+  const title = document.getElementById('project-modal-title');
+  if (title) title.style.color = accent;
+  
+  // Update close button color
+  const closeBtn = document.getElementById('close-project');
+  if (closeBtn) closeBtn.style.color = accent;
+  
+  // Update navigation arrows based on project color
+  const prevBtn = document.getElementById('gallery-prev');
+  const nextBtn = document.getElementById('gallery-next');
+  
+  // Map project colors to specific SVG files
+  const colorMap = {
+    '0xf92672': 'color=pinkx.svg',    // Pink
+    '0x66d9ef': 'color=bluex.svg',    // Blue
+    '0xa6e22e': 'color=greenx.svg',   // Green
+    '0xfd971f': 'color=orangex.svg',  // Orange
+    '0xae81ff': 'color=purplex.svg'   // Purple
+  };
+  
+  const projectColorKey = `0x${project.color.toString(16)}`;
+  const colorSvg = colorMap[projectColorKey] || 'color=bluex.svg';
+  
+  if (prevBtn && prevBtn.querySelector('img')) {
+    prevBtn.querySelector('img').src = colorSvg;
+  }
+  if (nextBtn && nextBtn.querySelector('img')) {
+    nextBtn.querySelector('img').src = colorSvg;
+  }
 
   // Set content
   document.getElementById('project-modal-title').textContent = project.title;
@@ -1139,7 +1166,7 @@ function openProjectModal(project, index) {
 function closeProjectModal() {
   console.log('Closing project modal...');
   const modal = document.getElementById('project-modal');
-  const modalContent = modal.querySelector('.project-modal-content');
+  const modalContent = modal.querySelector('div[style*="background: rgba(39, 40, 34, 0.90)"]');
   
   if (!modal) {
     console.error('Project modal not found!');
@@ -1152,15 +1179,28 @@ function closeProjectModal() {
   modal.style.visibility = 'hidden';
   modal.style.opacity = '0';
   
-  // Reset accent colors
+  // Reset accent colors and styling
   if (modalContent) {
-    modalContent.style.borderColor = '';
-    const header = modalContent.querySelector('.project-modal-header h2');
-    if (header) header.style.color = '';
-    const galleryCounter = modalContent.querySelector('.gallery-counter');
-    if (galleryCounter) {
-      galleryCounter.style.borderColor = '';
-      galleryCounter.style.color = '';
+    modalContent.style.outline = '3px #66D9EF solid';
+    modalContent.style.outlineOffset = '-1.50px';
+    
+    // Reset title color
+    const title = document.getElementById('project-modal-title');
+    if (title) title.style.color = '#66D9EF';
+    
+    // Reset close button color
+    const closeBtn = document.getElementById('close-project');
+    if (closeBtn) closeBtn.style.color = '#66D9EF';
+    
+    // Reset navigation arrows to default
+    const prevBtn = document.getElementById('gallery-prev');
+    const nextBtn = document.getElementById('gallery-next');
+    
+    if (prevBtn && prevBtn.querySelector('img')) {
+      prevBtn.querySelector('img').src = 'state=unactive.svg';
+    }
+    if (nextBtn && nextBtn.querySelector('img')) {
+      nextBtn.querySelector('img').src = 'state=unactive.svg';
     }
   }
   
@@ -1226,9 +1266,19 @@ function updateGalleryImage() {
   document.getElementById('image-current').textContent = currentImageIndex + 1;
   document.getElementById('image-total').textContent = images.length;
   
-  // Update navigation buttons
-  document.getElementById('gallery-prev').disabled = currentImageIndex === 0;
-  document.getElementById('gallery-next').disabled = currentImageIndex === images.length - 1;
+  // Update navigation buttons with SVG states
+  const prevBtn = document.getElementById('gallery-prev');
+  const nextBtn = document.getElementById('gallery-next');
+  
+  if (prevBtn && prevBtn.querySelector('img')) {
+    prevBtn.querySelector('img').src = currentImageIndex === 0 ? 'state=unactive.svg' : 'state=active.svg';
+    prevBtn.style.pointerEvents = currentImageIndex === 0 ? 'none' : 'auto';
+  }
+  
+  if (nextBtn && nextBtn.querySelector('img')) {
+    nextBtn.querySelector('img').src = currentImageIndex === images.length - 1 ? 'state=unactive.svg' : 'state=active.svg';
+    nextBtn.style.pointerEvents = currentImageIndex === images.length - 1 ? 'none' : 'auto';
+  }
 }
 
 function updateProgress() {
@@ -1374,6 +1424,17 @@ function setupEventListeners() {
     const galleryNext = document.getElementById('gallery-next');
 
     if (galleryPrev) {
+      // Hover effects for prev button
+      galleryPrev.addEventListener('mouseenter', () => {
+        const img = galleryPrev.querySelector('img');
+        if (img && currentImageIndex > 0) img.src = 'state=hover.svg';
+      });
+      
+      galleryPrev.addEventListener('mouseleave', () => {
+        const img = galleryPrev.querySelector('img');
+        if (img) img.src = currentImageIndex === 0 ? 'state=unactive.svg' : 'state=active.svg';
+      });
+      
       galleryPrev.addEventListener('click', () => {
         if (currentImageIndex > 0) {
           currentImageIndex--;
@@ -1384,6 +1445,17 @@ function setupEventListeners() {
     }
 
     if (galleryNext) {
+      // Hover effects for next button
+      galleryNext.addEventListener('mouseenter', () => {
+        const img = galleryNext.querySelector('img');
+        if (img && currentProject && currentImageIndex < currentProject.images.length - 1) img.src = 'state=hover.svg';
+      });
+      
+      galleryNext.addEventListener('mouseleave', () => {
+        const img = galleryNext.querySelector('img');
+        if (img) img.src = (currentProject && currentImageIndex === currentProject.images.length - 1) ? 'state=unactive.svg' : 'state=active.svg';
+      });
+      
       galleryNext.addEventListener('click', () => {
         if (currentProject && currentImageIndex < currentProject.images.length - 1) {
           currentImageIndex++;
