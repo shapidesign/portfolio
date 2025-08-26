@@ -1205,6 +1205,13 @@ function openProjectModal(project, index) {
   modal.style.visibility = 'visible';
   modal.style.opacity = '1';
   
+  // Ensure close button works
+  const closeProjectBtn = document.getElementById('close-project');
+  if (closeProjectBtn) {
+    closeProjectBtn.onclick = closeProjectModal;
+    closeProjectBtn.ontouchend = closeProjectModal;
+  }
+  
   console.log('Project modal opened successfully');
 }
 
@@ -1959,11 +1966,11 @@ function openHeroModal() {
     console.error('Camera permission dialog not found!');
   }
   
-  // Show hero message to prompt user interaction
+  // Show hero message
   if (heroMsg) {
     heroMsg.style.display = 'block';
-    heroMsg.textContent = 'Click anywhere to enable camera';
-    heroMsg.style.cursor = 'pointer';
+    heroMsg.textContent = 'you are the real hero';
+    heroMsg.style.cursor = 'default';
   }
   
   // Show video container but hide video initially

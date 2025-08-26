@@ -1088,8 +1088,18 @@ a {
     aspect-ratio: 9/16;
     max-width: 80vw;
     max-height: 80vh;
+  }
+}
+
+/* Desktop camera aspect ratio - landscape */
+@media (min-width: 769px) {
+  #hero-video {
+    aspect-ratio: 16/9;
+    max-width: 90vw;
+    max-height: 70vh;
     border-radius: 12px;
   }
+}
   
   .camera-permission {
     position: absolute;

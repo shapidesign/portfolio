@@ -9,6 +9,11 @@
   <link rel="stylesheet" href="new-style.css">
 </head>
 <body>
+  <!-- Version Indicator -->
+  <div style="position: fixed; top: 10px; left: 10px; background: rgba(39, 40, 34, 0.9); color: #FD971F; padding: 5px 10px; border-radius: 5px; font-family: JetBrains Mono; font-size: 12px; z-index: 10000; border: 1px solid #FD971F;">
+    v2.1.0 - Mobile & UI Fixes
+  </div>
+<body>
 
 <!-- Star field background -->
 <canvas id="star-canvas"></canvas>
@@ -48,9 +53,9 @@
     <!-- UI Overlays -->
     <div class="space-ui">
       <div class="space-info">
-        <div style="width: 100%; height: 100%; padding-left: 18px; padding-right: 18px; padding-top: 26px; padding-bottom: 26px; background: rgba(39, 40, 34, 0.90); box-shadow: 0px 0px 15px 4px rgba(248, 248, 242, 0.60); border-radius: 24px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
-          <div style="color: #FFAA00; font-size: 20px; font-family: JetBrains Mono; font-weight: 700; word-wrap: break-word">creative universe</div>
-          <div style="width: 325px; height: 48px; color: #F8F8F2; font-size: 14px; font-family: JetBrains Mono; font-weight: 400; word-wrap: break-word">Click the sun to read about me • <br/>Click planets to explore projects • <br/>Press C to go into chaos mode •</div>
+        <div style="width: 403px; padding-left: 21px; padding-right: 21px; padding-top: 21px; padding-bottom: 21px; background: rgba(39, 40, 34, 0.90); box-shadow: 0px 0px 15px 4px rgba(248, 248, 242, 0.60); border-radius: 24px; outline: 3px #FD971F solid; outline-offset: -1.50px; flex-direction: column; justify-content: center; align-items: center; gap: 16px; display: inline-flex">
+          <div style="align-self: stretch; text-align: center; color: #FD971F; font-size: 20px; font-family: JetBrains Mono; font-weight: 700; word-wrap: break-word; overflow-wrap: break-word;">creative universe</div>
+          <div style="align-self: stretch; text-align: center; color: #F8F8F2; font-size: 14px; font-family: JetBrains Mono; font-weight: 400; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.4;">explore my creative projects through an interactive solar system experience. each planet represents a unique project waiting to be discovered.</div>
         </div>
       </div>
       
@@ -83,31 +88,28 @@
 
 <!-- About Modal -->
 <div id="about-modal" class="modal">
-  <div class="modal-content">
-    <span class="close" id="close-about">&times;</span>
-    <div class="modal-header">
-      <h2>About Me</h2>
+  <div class="modal-content" style="width: 374px; height: 274px; padding-left: 18px; padding-right: 18px; padding-top: 26px; padding-bottom: 26px; background: rgba(39, 40, 34, 0.90); box-shadow: 0px 0px 15px 4px rgba(248, 248, 242, 0.60); border-radius: 24px; outline: 3px #FD971F solid; outline-offset: -1.50px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+    <div style="align-self: stretch; justify-content: space-between; align-items: flex-start; display: inline-flex">
+      <div style="color: #FD971F; font-size: 20px; font-family: JetBrains Mono; font-weight: 700; word-wrap: break-word">About Me</div>
+      <button class="close" id="close-about" style="background: none; border: none; cursor: pointer; padding: 0; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;">
+        <img src="escape.svg" alt="Close" style="width: 52px; height: 52px;">
+      </button>
     </div>
-    <div class="modal-body">
-      <div class="about-content">
-        <div class="about-text">
-          <h3 style="color: #f92672;">HEY!</h3>
-          <p>I'm Yehonatan Shapira, a creative thinker that likes to explore and create.</p>
-          <p>Other people would call this "graphic design" or whatever...</p>
-          <p style="color: #66d9ef;">I call it curiosity</p>
-          <p>ANYWAYS -- I'll start my Visual Communications degree in late 2025 so there's a lot to look up to</p>
-          <p>My current goals are learning Figma, TouchDesigner, Cavalry and getting better at Vibe Coding</p>
-          <p style="color: #a6e22e;">Navigate through space to see my work!</p>
-        </div>
-        </div>
-      </div>
+    <div style="align-self: stretch; color: #F8F8F2; font-size: 14px; font-family: JetBrains Mono; font-weight: 400; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.5;">
+      <h3 style="color: #f92672; margin: 0 0 16px 0;">HEY!</h3>
+      <p style="margin: 0 0 12px 0;">I'm Yehonatan Shapira, a creative thinker that likes to explore and create.</p>
+      <p style="margin: 0 0 12px 0;">Other people would call this "graphic design" or whatever...</p>
+      <p style="color: #66d9ef; margin: 0 0 12px 0;">I call it curiosity</p>
+      <p style="margin: 0 0 12px 0;">ANYWAYS -- I'll start my Visual Communications degree in late 2025 so there's a lot to look up to</p>
+      <p style="margin: 0 0 12px 0;">My current goals are learning Figma, TouchDesigner, Cavalry and getting better at Vibe Coding</p>
+      <p style="color: #a6e22e; margin: 0;">Navigate through space to see my work!</p>
     </div>
   </div>
 </div>
 
 <!-- Project Modal -->
 <div id="project-modal" class="modal">
-  <div style="width: 100%; height: 100%; padding-left: 18px; padding-right: 18px; padding-top: 26px; padding-bottom: 26px; background: rgba(39, 40, 34, 0.90); box-shadow: 0px 0px 15px 4px rgba(248, 248, 242, 0.60); border-radius: 24px; outline: 3px #66D9EF solid; outline-offset: -1.50px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
+  <div class="project-modal-content" style="width: 100%; height: 100%; padding-left: 18px; padding-right: 18px; padding-top: 26px; padding-bottom: 26px; background: rgba(39, 40, 34, 0.90); box-shadow: 0px 0px 15px 4px rgba(248, 248, 242, 0.60); border-radius: 24px; outline: 3px #66D9EF solid; outline-offset: -1.50px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
     <div style="align-self: stretch; justify-content: space-between; align-items: flex-start; display: inline-flex">
       <div style="color: #66D9EF; font-size: 20px; font-family: JetBrains Mono; font-weight: 700; word-wrap: break-word" id="project-modal-title">Project Title</div>
       <button class="close" id="close-project" style="background: none; border: none; cursor: pointer; padding: 0; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;">
