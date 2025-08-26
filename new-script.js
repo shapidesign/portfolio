@@ -1176,6 +1176,7 @@ function openProjectModal(project, index) {
             border-radius: 12px;
             overflow: hidden;
             border: 2px solid ${accent};
+            display: inline-block;
           `;
           
           const displayImg = document.createElement('img');
@@ -1194,10 +1195,7 @@ function openProjectModal(project, index) {
         }
       });
       
-      // Update gallery counter
-      if (galleryCounter) {
-        galleryCounter.innerHTML = `1 / ${project.images.length}`;
-      }
+      // Update gallery counter removed - no longer needed
     });
   }
   
