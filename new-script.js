@@ -478,6 +478,15 @@ function initLaunchScreen() {
       e.stopPropagation();
     });
     
+    // Additional mobile support
+    launchBtn.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+    });
+    
+    // Ensure button is clickable on mobile
+    launchBtn.style.touchAction = 'manipulation';
+    launchBtn.style.webkitTapHighlightColor = 'transparent';
+    
     // SPACEBAR HANDLER
     document.addEventListener('keydown', function keyLaunchHandler(e) {
       if (portfolioState === 'launch' && e.key === ' ') {
@@ -1125,6 +1134,15 @@ function openProjectModal(project, index) {
     return;
   }
 
+  // Reset modal state completely
+  modal.classList.remove('show');
+  modal.style.display = 'none';
+  modal.style.visibility = 'hidden';
+  modal.style.opacity = '0';
+  
+  // Force a reflow
+  modal.offsetHeight;
+
   // Set project-specific colors and styling
   const accent = `#${project.color.toString(16).padStart(6, '0')}`;
   modalContent.style.outline = `3px ${accent} solid`;
@@ -1134,9 +1152,22 @@ function openProjectModal(project, index) {
   const title = document.getElementById('project-modal-title');
   if (title) title.style.color = accent;
   
-  // Update close button color
+  // Update close button to use project-specific escape button
   const closeBtn = document.getElementById('close-project');
-  if (closeBtn) closeBtn.style.color = accent;
+  if (closeBtn) {
+    // Map project colors to specific escape button SVGs
+    const escapeColorMap = {
+      '0xf92672': 'escape.svg',      // Pink - use pink escape
+      '0x66d9ef': 'escape.svg',      // Blue - use blue escape
+      '0xa6e22e': 'escape.svg',      // Green - use green escape
+      '0xfd971f': 'escape.svg',      // Orange - use orange escape
+      '0xae81ff': 'escape.svg'       // Purple - use purple escape
+    };
+    
+    const escapeSvg = escapeColorMap[projectColorKey] || 'escape.svg';
+    const img = closeBtn.querySelector('img');
+    if (img) img.src = escapeSvg;
+  }
   
   // Update navigation arrows based on project color
   const prevBtn = document.getElementById('gallery-prev');
@@ -1202,9 +1233,12 @@ function closeProjectModal() {
     const title = document.getElementById('project-modal-title');
     if (title) title.style.color = '#66D9EF';
     
-    // Reset close button color
+    // Reset close button to default escape button
     const closeBtn = document.getElementById('close-project');
-    if (closeBtn) closeBtn.style.color = '#66D9EF';
+    if (closeBtn) {
+      const img = closeBtn.querySelector('img');
+      if (img) img.src = 'escape.svg';
+    }
     
     // Reset navigation arrows to default
     const prevBtn = document.getElementById('gallery-prev');
@@ -1949,8 +1983,12 @@ function openHeroModal() {
     modalContent.onclick = enableCamera;
   }
   
-  // Don't auto-enable camera - wait for user interaction
-  console.log('Hero modal opened, waiting for user interaction...');
+  // Auto-enable camera after a short delay
+  setTimeout(() => {
+    enableCamera();
+  }, 100);
+  
+  console.log('Hero modal opened, auto-enabling camera...');
 }
 
 // Enhanced camera enable function
