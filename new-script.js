@@ -1169,52 +1169,47 @@ function closeProjectModal() {
   }
   
   // Reset camera to default position on mobile - enhanced reset
-  if (isMobile() && controls) {
-    console.log('Resetting camera to default position...');
+  if (isMobile() && solarControls) {
+    console.log('Resetting solar camera to default position...');
     
-    // Immediate reset
-    controls.reset();
-    controls.target.set(0, 0, 0);
-    controls.update();
-    
-    // Force camera to look at the entire solar system
-    if (camera) {
-      camera.position.set(0, 0, 50);
-      camera.lookAt(0, 0, 0);
-      controls.update();
-    }
+    // Immediate reset using correct solar system camera
+    solarControls.reset();
+    solarControls.target.set(0, 0, 0);
+    solarCamera.position.set(0, 20, 30);
+    solarCamera.lookAt(0, 0, 0);
+    solarControls.update();
     
     // Multiple delayed resets to ensure it takes effect
     setTimeout(() => {
-      if (controls && camera) {
-        controls.reset();
-        controls.target.set(0, 0, 0);
-        camera.position.set(0, 0, 50);
-        camera.lookAt(0, 0, 0);
-        controls.update();
-        console.log('First camera reset completed');
+      if (solarControls && solarCamera) {
+        solarControls.reset();
+        solarControls.target.set(0, 0, 0);
+        solarCamera.position.set(0, 20, 30);
+        solarCamera.lookAt(0, 0, 0);
+        solarControls.update();
+        console.log('First solar camera reset completed');
       }
     }, 100);
     
     setTimeout(() => {
-      if (controls && camera) {
-        controls.reset();
-        controls.target.set(0, 0, 0);
-        camera.position.set(0, 0, 50);
-        camera.lookAt(0, 0, 0);
-        controls.update();
-        console.log('Second camera reset completed');
+      if (solarControls && solarCamera) {
+        solarControls.reset();
+        solarControls.target.set(0, 0, 0);
+        solarCamera.position.set(0, 20, 30);
+        solarCamera.lookAt(0, 0, 0);
+        solarControls.update();
+        console.log('Second solar camera reset completed');
       }
     }, 300);
     
     setTimeout(() => {
-      if (controls && camera) {
-        controls.reset();
-        controls.target.set(0, 0, 0);
-        camera.position.set(0, 0, 50);
-        camera.lookAt(0, 0, 0);
-        controls.update();
-        console.log('Final camera reset completed');
+      if (solarControls && solarCamera) {
+        solarControls.reset();
+        solarControls.target.set(0, 0, 0);
+        solarCamera.position.set(0, 20, 30);
+        solarCamera.lookAt(0, 0, 0);
+        solarControls.update();
+        console.log('Final solar camera reset completed');
       }
     }, 600);
   }
