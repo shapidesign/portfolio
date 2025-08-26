@@ -1846,7 +1846,7 @@ function openHeroModal() {
     heroMsg.style.cursor = 'pointer';
   }
   
-  // Hide video initially
+  // Show video container but hide video initially
   if (video) {
     video.style.display = 'none';
     video.style.visibility = 'hidden';
@@ -1855,6 +1855,12 @@ function openHeroModal() {
   // Add click listener to enable camera
   if (heroMsg) {
     heroMsg.onclick = enableCamera;
+  }
+  
+  // Also add click listener to the modal content for easier access
+  const modalContent = modal.querySelector('.hero-modal-content');
+  if (modalContent) {
+    modalContent.onclick = enableCamera;
   }
   
   // Don't auto-enable camera - wait for user interaction
