@@ -458,6 +458,20 @@ function initLaunchScreen() {
       e.stopPropagation();
       launchSequence();
     });
+    
+    // Mobile touch support
+    launchBtn.addEventListener('touchstart', function(e) {
+      console.log('🎯 Touch start detected!');
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    
+    launchBtn.addEventListener('touchend', function(e) {
+      console.log('🎯 Touch end detected!');
+      e.preventDefault();
+      e.stopPropagation();
+      launchSequence();
+    });
 
     // Debug: Add mousedown handler
     launchBtn.addEventListener('mousedown', function(e) {
@@ -1173,36 +1187,44 @@ function openProjectModal(project, index) {
     const img = closeBtn.querySelector('img');
     if (img) img.src = escapeSvg;
   }
-  
-  // Update navigation arrows based on project color
-  const prevBtn = document.getElementById('gallery-prev');
-  const nextBtn = document.getElementById('gallery-next');
-  
-  // Map project colors to specific SVG files
-  const colorMap = {
-    '0xf92672': 'color=pinkx.svg',    // Pink
-    '0x66d9ef': 'color=bluex.svg',    // Blue
-    '0xa6e22e': 'color=greenx.svg',   // Green
-    '0xfd971f': 'color=orangex.svg',  // Orange
-    '0xae81ff': 'color=purplex.svg'   // Purple
-  };
-  
-  const projectColorKey = `0x${project.color.toString(16)}`;
-  const colorSvg = colorMap[projectColorKey] || 'color=bluex.svg';
-  
-  if (prevBtn && prevBtn.querySelector('img')) {
-    prevBtn.querySelector('img').src = colorSvg;
-  }
-  if (nextBtn && nextBtn.querySelector('img')) {
-    nextBtn.querySelector('img').src = colorSvg;
-  }
 
   // Set content
   document.getElementById('project-modal-title').textContent = project.title;
   document.getElementById('project-modal-desc').textContent = project.description;
   currentProject = project;
-  currentImageIndex = 0;
-  updateGalleryImage();
+  
+  // Create scrollable image gallery
+  const imagesContainer = document.getElementById('project-images-container');
+  if (imagesContainer) {
+    imagesContainer.innerHTML = '';
+    
+    // Add all project images as scrollable content
+    project.images.forEach((imageSrc, imageIndex) => {
+      const imageDiv = document.createElement('div');
+      imageDiv.style.cssText = `
+        width: 100%;
+        margin-bottom: 16px;
+        background: #2D2D2D;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 2px solid ${accent};
+      `;
+      
+      const img = document.createElement('img');
+      img.src = imageSrc;
+      img.alt = `${project.title} - Image ${imageIndex + 1}`;
+      img.style.cssText = `
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+        object-fit: contain;
+        display: block;
+      `;
+      
+      imageDiv.appendChild(img);
+      imagesContainer.appendChild(imageDiv);
+    });
+  }
   
   // Show modal
   modal.classList.add('show');

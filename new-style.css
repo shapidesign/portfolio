@@ -448,7 +448,8 @@ a {
 .mission-control {
   position: absolute;
   bottom: 2rem;
-  left: 2rem;
+  right: 2rem;
+  left: auto;
   z-index: 20;
   pointer-events: auto;
 }
@@ -1025,6 +1026,13 @@ a {
     max-height: 60px;
     display: block;
     z-index: 1000;
+    text-align: center;
+    background: rgba(39, 40, 34, 0.90);
+    border: 2px solid #F92672;
+    border-radius: 12px;
+    color: #F92672;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
   }
   .hero-btn div {
     font-size: 14px !important;
