@@ -979,20 +979,20 @@ function animate3D() {
 
   // Draw planet trails as subtle glowing particles (desktop only)
   if (!isMobile()) {
-    solarPlanets.forEach((container, i) => {
-      // Update trail
-      const worldPos = container.position.clone();
-      planetTrails[i].push(worldPos.clone());
-      if (planetTrails[i].length > maxTrailLength) planetTrails[i].shift();
+  solarPlanets.forEach((container, i) => {
+    // Update trail
+    const worldPos = container.position.clone();
+    planetTrails[i].push(worldPos.clone());
+    if (planetTrails[i].length > maxTrailLength) planetTrails[i].shift();
       
       // Draw trail as connected line segments for better mobile appearance
       if (planetTrails[i].length > 1) {
-        orbitCtx.save();
+      orbitCtx.save();
         orbitCtx.strokeStyle = `rgba(${(projectData[i].color>>16)&255},${(projectData[i].color>>8)&255},${projectData[i].color&255},0.3)`;
         orbitCtx.shadowColor = orbitCtx.strokeStyle;
         orbitCtx.shadowBlur = 8;
         orbitCtx.lineWidth = 3;
-        orbitCtx.beginPath();
+      orbitCtx.beginPath();
         
         // Start from the planet's exact center position
         const planetWorldPos = container.getWorldPosition(new THREE.Vector3());
@@ -1006,7 +1006,7 @@ function animate3D() {
         });
         
         orbitCtx.stroke();
-        orbitCtx.restore();
+      orbitCtx.restore();
       }
     });
   }
@@ -1140,7 +1140,6 @@ function openProjectModal(project, index) {
   const modal = document.getElementById('project-modal');
   const modalContent = modal.querySelector('.project-modal-content');
   const header = modalContent.querySelector('.project-modal-header h2');
-  const galleryCounter = modalContent.querySelector('.gallery-counter');
 
   if (!modal) {
     console.error('Project modal not found!');
@@ -1151,8 +1150,6 @@ function openProjectModal(project, index) {
   const accent = `#${project.color.toString(16).padStart(6, '0')}`;
   modalContent.style.borderColor = accent;
   header.style.color = accent;
-  galleryCounter.style.borderColor = accent;
-  galleryCounter.style.color = accent;
 
   // Set content
   document.getElementById('project-modal-title').textContent = project.title;
@@ -1240,16 +1237,11 @@ function closeProjectModal() {
   modal.style.visibility = 'hidden';
   modal.style.opacity = '0';
   
-  // Reset accent colors
+    // Reset accent colors
   if (modalContent) {
     modalContent.style.borderColor = '';
     const header = modalContent.querySelector('.project-modal-header h2');
     if (header) header.style.color = '';
-    const galleryCounter = modalContent.querySelector('.gallery-counter');
-    if (galleryCounter) {
-      galleryCounter.style.borderColor = '';
-      galleryCounter.style.color = '';
-    }
   }
   
   // Reset camera to default position on mobile - enhanced reset with smooth animation
