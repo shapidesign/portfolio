@@ -1156,12 +1156,13 @@ function openProjectModal(project, index) {
   const closeBtn = document.getElementById('close-project');
   if (closeBtn) {
     // Map project colors to specific escape button SVGs
+    const projectColorKey = `0x${project.color.toString(16)}`;
     const escapeColorMap = {
-      '0xf92672': 'escape.svg',      // Pink - use pink escape
-      '0x66d9ef': 'escape.svg',      // Blue - use blue escape
-      '0xa6e22e': 'escape.svg',      // Green - use green escape
-      '0xfd971f': 'escape.svg',      // Orange - use orange escape
-      '0xae81ff': 'escape.svg'       // Purple - use purple escape
+      '0xf92672': 'color=pinkx.svg',      // Pink
+      '0x66d9ef': 'color=bluex.svg',      // Blue
+      '0xa6e22e': 'color=greenx.svg',     // Green
+      '0xfd971f': 'color=orangex.svg',    // Orange
+      '0xae81ff': 'color=purplex.svg'     // Purple
     };
     
     const escapeSvg = escapeColorMap[projectColorKey] || 'escape.svg';
@@ -1246,6 +1247,10 @@ function closeProjectModal() {
       const img = closeBtn.querySelector('img');
       if (img) img.src = 'escape.svg';
     }
+    
+    // Reset modal outline
+    const modalContent = document.querySelector('.project-modal-content');
+    if (modalContent) modalContent.style.outline = '3px #66D9EF solid';
     
     // Reset navigation arrows to default
     const prevBtn = document.getElementById('gallery-prev');
