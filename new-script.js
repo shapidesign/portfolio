@@ -1233,6 +1233,11 @@ function openProjectModal(project, index) {
           displayImg.src = imageSrc;
           displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
           
+          // Add click event for zoom
+          imageDiv.addEventListener('click', () => {
+            openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`);
+          });
+          
           imageDiv.appendChild(displayImg);
           imagesContainer.appendChild(imageDiv);
         }
@@ -1248,6 +1253,54 @@ function openProjectModal(project, index) {
   
   console.log('Project modal opened successfully');
 }
+
+// Image Zoom Functions
+function openImageZoom(imageSrc, altText) {
+  const zoomModal = document.getElementById('image-zoom-modal');
+  const zoomedImage = document.getElementById('zoomed-image');
+  
+  if (zoomModal && zoomedImage) {
+    zoomedImage.src = imageSrc;
+    zoomedImage.alt = altText;
+    zoomModal.classList.add('show');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+  }
+}
+
+function closeImageZoom() {
+  const zoomModal = document.getElementById('image-zoom-modal');
+  if (zoomModal) {
+    zoomModal.classList.remove('show');
+    document.body.style.overflow = ''; // Restore scrolling
+  }
+}
+
+// Add event listeners for image zoom modal
+document.addEventListener('DOMContentLoaded', () => {
+  const zoomModal = document.getElementById('image-zoom-modal');
+  const zoomClose = document.querySelector('.image-zoom-close');
+  
+  if (zoomModal) {
+    // Close on background click
+    zoomModal.addEventListener('click', (e) => {
+      if (e.target === zoomModal) {
+        closeImageZoom();
+      }
+    });
+    
+    // Close on close button click
+    if (zoomClose) {
+      zoomClose.addEventListener('click', closeImageZoom);
+    }
+    
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && zoomModal.classList.contains('show')) {
+        closeImageZoom();
+      }
+    });
+  }
+});
 
 function closeProjectModal() {
   console.log('Closing project modal...');

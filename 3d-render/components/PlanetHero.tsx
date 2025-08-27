@@ -87,7 +87,12 @@ export default function PlanetHero({
           {/* Post FX */}
           <EffectComposer multisampling={4}>
             <Bloom intensity={0.9} mipmapBlur luminanceThreshold={1} levels={6} />
-            <ChromaticAberration offset={[0.0008, 0.0008]} blendFunction={BlendFunction.NORMAL} />
+            <ChromaticAberration 
+              offset={new THREE.Vector2(0.0008, 0.0008)} 
+              blendFunction={BlendFunction.NORMAL}
+              radialModulation={false}
+              modulationOffset={0.5}
+            />
             <Vignette eskil={false} offset={0.25} darkness={0.9} />
           </EffectComposer>
 
@@ -186,7 +191,7 @@ function Planet({
   return (
     <group>
       <mesh ref={ref} rotation={rotation} castShadow receiveShadow>
-        <icosahedronGeometry args={[radius, 8]} />
+        <sphereGeometry args={[radius, 64, 64]} />
         <meshStandardMaterial
           color={"#ffffff"}
           metalness={metalness}
