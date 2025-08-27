@@ -935,8 +935,8 @@ a {
   }
   
   .zoom-nav {
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
   }
   
   .zoom-prev {
@@ -1025,15 +1025,15 @@ a {
   color: #000;
 }
 
-/* Zoom Navigation Arrows */
+/* Zoom Navigation Arrows - Elegant Design */
 .zoom-nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1042,6 +1042,7 @@ a {
   background: none;
   border: none;
   padding: 0;
+  border-radius: 50%;
 }
 
 .zoom-prev {
@@ -1050,25 +1051,26 @@ a {
 
 .zoom-next {
   right: 20px;
-  transform: translateY(-50%) rotate(180deg);
 }
 
 .zoom-nav:hover {
   transform: translateY(-50%) scale(1.1);
-}
-
-.zoom-nav:hover.zoom-next {
-  transform: translateY(-50%) rotate(180deg) scale(1.1);
+  background: rgba(102, 217, 239, 0.1);
 }
 
 .zoom-nav:disabled {
   opacity: 0.3;
   cursor: not-allowed;
-  transform: translateY(-50%);
 }
 
-.zoom-nav:disabled.zoom-next {
-  transform: translateY(-50%) rotate(180deg);
+.zoom-nav svg {
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.zoom-nav:hover svg {
+  filter: brightness(1.2);
 }
 
 /* Mobile swipe area */
@@ -1082,20 +1084,34 @@ a {
   z-index: 30000;
 }
 
-/* Navigation arrow styling */
-.nav-arrow {
+/* Elegant zoom modal styling */
+.image-zoom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  transition: all 0.3s ease;
-  border: 2px solid red !important;
+  background: rgba(0, 0, 0, 0.95);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 30000;
+  cursor: pointer;
+  pointer-events: auto;
 }
 
-.zoom-nav:hover .nav-arrow {
-  filter: brightness(1.2);
+.image-zoom-modal.show {
+  display: flex;
+  animation: zoomFadeIn 0.3s ease;
+  cursor: pointer;
 }
 
-.zoom-nav:disabled .nav-arrow {
-  opacity: 0.3;
+.image-zoom-content {
+  max-width: 90vw;
+  max-height: 90vh;
+  position: relative;
+  cursor: default;
+  pointer-events: auto;
 }
 
 /* Custom Scrollbar Styling */

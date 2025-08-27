@@ -1333,9 +1333,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const swipeArea = document.getElementById('zoom-swipe-area');
   
   if (zoomModal) {
-    // Simple and direct close on background click
+    // Close on background click - this is the main exit method
     zoomModal.addEventListener('click', function(e) {
-      if (e.target === this) {
+      if (e.target === zoomModal) {
         closeImageZoom();
       }
     });
@@ -1353,6 +1353,13 @@ document.addEventListener('DOMContentLoaded', () => {
       zoomClose.addEventListener('click', function(e) {
         e.stopPropagation();
         closeImageZoom();
+      });
+    }
+    
+    // Prevent clicks on content area from closing the modal
+    if (zoomContent) {
+      zoomContent.addEventListener('click', function(e) {
+        e.stopPropagation();
       });
     }
     
