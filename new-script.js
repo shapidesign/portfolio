@@ -12,40 +12,40 @@ let visitedProjects = new Set();
 const projectData = [
   {
     title: "AFL Israel Designs",
-    description: "Complete branding and design package for AFL Israel, including posters, countdown graphics, and promotional materials. This project showcases my ability to create cohesive visual systems that capture the energy and excitement of sports marketing.",
-    tags: ["Branding", "Sports Marketing", "Print Design"],
+    description: "Complete branding and design package for AFL Israel, including posters, countdown graphics, and promotional materials. This project showcases my ability to create cohesive visual systems that capture the energy and excitement of sports marketing. All designs were prototyped and refined in Figma before final production, ensuring professional quality and brand consistency.",
+    tags: ["Branding", "Sports Marketing", "Print Design", "Figma Prototyping"],
     images: ["project1/Artboard 1.png", "project1/winter league english 2.png", "project1/POSTER12.png", "project1/Artboard 36.png", "project1/Artboard 3 copy.png", "project1/COUNTDOWN 9.png", "project1/COUNTDOWN 16.png", "project1/general.png"],
     color: 0xf92672
   },
   {
     title: "The Bible: Remastered",
-    description: "Everyone own the bible in their home, but it's so ugly and generic - always with that blue or brown leathery cover. So why shouldn't the top selling book in the world get a unique design? I created several modern designs for the classic bible, giving it a fresh outfit, and I hope people won't be afraid to place it as a coffee table book now.",
-    tags: ["Book Design", "Typography", "Modern Design", "Print Design"],
+    description: "Everyone own the bible in their home, but it's so ugly and generic - always with that blue or brown leathery cover. So why shouldn't the top selling book in the world get a unique design? I created several modern designs for the classic bible, giving it a fresh outfit, and I hope people won't be afraid to place it as a coffee table book now. Each design was carefully prototyped in Figma, exploring different visual approaches and ensuring every detail was perfectly crafted.",
+    tags: ["Book Design", "Typography", "Modern Design", "Print Design", "Figma Design"],
     images: ["project2/SHAPES.png", "project2/modrian.png", "project2/חושן.png", "project2/JAPANESE WAVES.png", "project2/ABSTRACT.png", "project2/NOODLES.png", "project2/HITS.png", "project2/COLORBLIND.png", "project2/WEIRD.png", "project2/SWIRLY.png", "project2/BAUHAUS SHAPES.png", "project2/BAUHAUS LINES.png", "project2/TORAH2 2.png", "project2/סיפורי התנך.png", "project2/TORAH.png"],
     color: 0x66d9ef
   },
   {
     title: "Pixel Portrait Challenge",
-    description: "A viral TikTok challenge that transformed my creative approach to social media. I drew my followers in pixel art style, creating a unique engagement strategy that resulted in 800+ new followers in just 24 hours. This project demonstrates the power of personal connection through digital art and the effectiveness of community-driven content creation.",
-    tags: ["Pixel Art", "Social Media", "Digital Illustration", "Community Engagement"],
+    description: "A viral TikTok challenge that transformed my creative approach to social media. I drew my followers in pixel art style, creating a unique engagement strategy that resulted in 800+ new followers in just 24 hours. This project demonstrates the power of personal connection through digital art and the effectiveness of community-driven content creation. The pixel art style was developed through iterative prototyping in Figma, ensuring consistent visual quality across all portraits.",
+    tags: ["Pixel Art", "Social Media", "Digital Illustration", "Community Engagement", "Figma Prototyping"],
     images: ["project3/NIR.png", "project3/amichai.png", "project3/bar.png", "project3/guysha.png", "project3/lenny.png", "project3/potato.png", "project3/thrift.png"],
     videos: ["project3/pixels2.mp4"],
     color: 0xa6e22e
   },
   {
     title: "Design as Social Commentary",
-    description: "A provocative exploration of graphic design as a medium for social criticism. Through deliberately mismatched visuals and messages, this project challenges the notion that 'the medium is the message.' Each poster intentionally disconnects graphic elements from their textual content, creating visual dissonance that forces viewers to question the relationship between form and meaning in contemporary communication.",
-    tags: ["Social Commentary", "Graphic Design", "Poster Design", "Conceptual Art"],
+    description: "A provocative exploration of graphic design as a medium for social criticism. Through deliberately mismatched visuals and messages, this project challenges the notion that 'the medium is the message.' Each poster intentionally disconnects graphic elements from their textual content, creating visual dissonance that forces viewers to question the relationship between form and meaning in contemporary communication. All concepts were developed and refined through Figma prototyping, allowing for precise control over visual elements and typography.",
+    tags: ["Social Commentary", "Graphic Design", "Poster Design", "Conceptual Art", "Figma Design"],
     images: ["project4/Artboard 6.png", "project4/Artboard 10.png", "project4/Artboard 13.png", "project4/Artboard 14.png", "project4/Artboard 17.png", "project4/Artboard 32.png", "project4/Artboard 40.png", "project4/bun.png", "project4/table.png", "project4/לא הפוכה.png", "project4/טטריס.png", "project4/להשקיע.png", "project4/מדיח.png", "project4/אסקפיזם.png", "project4/כל ישראל.png", "project4/הרבה יותר קל.png", "project4/נעליים.png"],
     color: 0xfd971f
   },
   {
     title: "Vibe Coding!",
-    description: "A journey through my coding evolution - from playful experiments to serious development. This collection showcases my growth as a developer, featuring this very portfolio website, a whimsical 'rice cooker' project, a professional squadron website, a retro pixel-style bubble-trouble game, and an endless wave animation. Each project represents a different phase of my coding journey, blending creativity with technical skill.",
-    tags: ["Web Development", "Game Development", "Animation", "Full-Stack", "Creative Coding"],
+    description: "A journey through my coding evolution - from playful experiments to serious development. This collection showcases my growth as a developer, featuring this very portfolio website, a whimsical 'rice cooker' project, a professional squadron website, a retro pixel-style bubble-trouble game, and an endless wave animation. Each project represents a different phase of my coding journey, blending creativity with technical skill. User interfaces and interactions were prototyped in Figma before development, ensuring intuitive user experiences and polished final products.",
+    tags: ["Web Development", "Game Development", "Animation", "Full-Stack", "Creative Coding", "Figma Prototyping"],
     images: ["project5/Screenshot 2025-08-27 at 15.16.08.png", "project5/3.jpeg", "project5/1.svg", "project5/2.svg"],
     videos: ["project5/Screen Recording 2025-08-27 at 15.16.51.mov"],
-    gifs: ["project5/wave-loop.gif"],
+    gifs: ["project5/wave-loop-hd.gif"],
     color: 0xae81ff
   },
   {
