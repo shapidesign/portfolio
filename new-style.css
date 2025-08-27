@@ -1018,10 +1018,7 @@ a {
     right: 10px;
   }
   
-  .zoom-exit-text {
-    font-size: 1rem;
-    padding: 8px 16px;
-  }
+  /* Mobile zoom modal - clean and simple */
 }
 
 /* Image Zoom Modal */
@@ -1069,36 +1066,7 @@ a {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
 }
 
-.zoom-exit-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 30000;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-.zoom-exit-text {
-  color: white;
-  font-size: 1.2rem;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 12px 20px;
-  border-radius: 8px;
-  border: 2px solid #66d9ef;
-  font-family: 'JetBrains Mono', monospace;
-  opacity: 0.8;
-  transition: opacity 0.3s ease;
-}
-
-.zoom-exit-overlay:hover .zoom-exit-text {
-  opacity: 1;
-}
+/* Simple zoom modal - clean and minimal */
 
 /* Zoom Navigation Arrows - Elegant Design */
 .zoom-nav {
