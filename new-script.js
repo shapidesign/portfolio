@@ -1276,21 +1276,25 @@ function openProjectModal(project, index) {
             const prevIndex = currentImageIndex;
             
             if (diffX > 0 && currentImageIndex < loadedImages.length - 1) {
-              // Swipe left - next image
+              // Swipe left - next image (correct direction)
               currentImageIndex++;
             } else if (diffX < 0 && currentImageIndex > 0) {
-              // Swipe right - previous image
+              // Swipe right - previous image (correct direction)
               currentImageIndex--;
             }
             
             // Update active image with animation
             const images = imagesContainer.querySelectorAll('.image-item');
             images.forEach((img, index) => {
-              img.classList.remove('active', 'prev');
+              img.classList.remove('active', 'prev', 'next');
               if (index === currentImageIndex) {
                 img.classList.add('active');
               } else if (index === prevIndex) {
-                img.classList.add('prev');
+                if (currentImageIndex > prevIndex) {
+                  img.classList.add('prev'); // Swiped left, previous image goes left
+                } else {
+                  img.classList.add('next'); // Swiped right, previous image goes right
+                }
               }
             });
             
@@ -1441,54 +1445,48 @@ function initializeZoomModalEvents() {
   
   if (!zoomModal) return;
   
-  // Clear all existing event listeners by cloning and replacing
-  const newZoomModal = zoomModal.cloneNode(true);
-  zoomModal.parentNode.replaceChild(newZoomModal, zoomModal);
-  
-  // Get fresh references after cloning
-  const freshZoomModal = document.getElementById('image-zoom-modal');
-  const freshZoomClose = document.getElementById('zoom-modal-close');
-  const freshZoomContent = document.querySelector('.image-zoom-content');
-  const freshZoomedImage = document.getElementById('zoomed-image');
-  const freshPrevBtn = document.getElementById('zoom-prev');
-  const freshNextBtn = document.getElementById('zoom-next');
-  
   // Add event listeners with direct function calls
-  freshZoomModal.addEventListener('click', function(e) {
-    if (e.target === freshZoomModal) {
+  zoomModal.addEventListener('click', function(e) {
+    if (e.target === zoomModal) {
       closeImageZoom();
     }
   });
   
-  if (freshZoomedImage) {
-    freshZoomedImage.addEventListener('click', function(e) {
+  if (zoomedImage) {
+    zoomedImage.addEventListener('click', function(e) {
       e.stopPropagation();
       closeImageZoom();
     });
   }
   
-  if (freshZoomClose) {
-    freshZoomClose.addEventListener('click', function(e) {
+  if (zoomClose) {
+    zoomClose.addEventListener('click', function(e) {
+      e.stopPropagation();
+      closeImageZoom();
+    });
+    
+    // Add touch event for mobile
+    zoomClose.addEventListener('touchend', function(e) {
       e.stopPropagation();
       closeImageZoom();
     });
   }
   
-  if (freshZoomContent) {
-    freshZoomContent.addEventListener('click', function(e) {
+  if (zoomContent) {
+    zoomContent.addEventListener('click', function(e) {
       e.stopPropagation();
     });
   }
   
-  if (freshPrevBtn) {
-    freshPrevBtn.addEventListener('click', function(e) {
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function(e) {
       e.stopPropagation();
       prevZoomImage();
     });
   }
   
-  if (freshNextBtn) {
-    freshNextBtn.addEventListener('click', function(e) {
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function(e) {
       e.stopPropagation();
       nextZoomImage();
     });
@@ -1537,10 +1535,10 @@ document.addEventListener('touchend', (e) => {
   // Check if it's a horizontal swipe
   if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
     if (diffX > 0) {
-      // Swipe left - next image
+      // Swipe left - next image (correct direction)
       nextZoomImage();
     } else {
-      // Swipe right - previous image
+      // Swipe right - previous image (correct direction)
       prevZoomImage();
     }
   }
