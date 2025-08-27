@@ -1715,44 +1715,73 @@ function setupEventListeners() {
       submitBtn.disabled = true;
       
       try {
-        // Initialize EmailJS with your service configuration
-        // You'll need to replace these with your actual EmailJS credentials
-        const serviceID = 'your_service_id'; // Replace with your EmailJS service ID
-        const templateID = 'your_template_id'; // Replace with your EmailJS template ID
-        const userID = 'your_user_id'; // Replace with your EmailJS user ID
+        // Validate form data
+        if (!name || !email || !message) {
+          throw new Error('Please fill in all required fields');
+        }
         
-        // Check if EmailJS is available
-        if (typeof emailjs !== 'undefined') {
-          // Initialize EmailJS
-          emailjs.init(userID);
-          
-          // Send email using EmailJS
-          const templateParams = {
-            from_name: name,
-            from_email: email,
-            company: company,
-            message: message,
-            to_email: 'your-email@example.com' // Replace with your email
-          };
-          
-          await emailjs.send(serviceID, templateID, templateParams);
-          
-          // Success - close modal and show success message
-          closeEmailFormModal();
-          explode(window.innerWidth / 2, window.innerHeight / 2, '#a6e22e', 150);
-          
-          // Reset form
-          emailForm.reset();
-          
-          // Show success notification
-          showNotification('Message sent successfully!', 'success');
-        } else {
-          // Fallback to mailto link if EmailJS is not available
-          const mailtoLink = `mailto:your-email@example.com?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\nCompany: ${company}\n\nMessage:\n${message}`)}`;
-          
-          // Open default email client
-          window.open(mailtoLink);
-          
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          throw new Error('Please enter a valid email address');
+        }
+        
+        // Create email content
+        const emailSubject = `Portfolio Contact from ${name}`;
+        const emailBody = `Name: ${name}
+Email: ${email}
+Company: ${company || 'Not specified'}
+
+Message:
+${message}
+
+---
+Sent from shapidesign.com portfolio contact form`;
+
+        // Try EmailJS first (if configured)
+        const serviceID = 'service_yehonatan'; // Your actual EmailJS service ID
+        const templateID = 'template_yehonatan'; // Your actual EmailJS template ID
+        const userID = 'user_yehonatan'; // Your actual EmailJS user ID
+        
+        if (typeof emailjs !== 'undefined' && serviceID !== 'service_yehonatan') {
+          try {
+            // Initialize EmailJS
+            emailjs.init(userID);
+            
+            // Send email using EmailJS
+            const templateParams = {
+              from_name: name,
+              from_email: email,
+              company: company || 'Not specified',
+              message: message,
+              to_email: 'yehonatan@shapidesign.com'
+            };
+            
+            await emailjs.send(serviceID, templateID, templateParams);
+            
+            // Success - close modal and show success message
+            closeEmailFormModal();
+            explode(window.innerWidth / 2, window.innerHeight / 2, '#a6e22e', 150);
+            
+            // Reset form
+            emailForm.reset();
+            
+            // Show success notification
+            showNotification('Message sent successfully!', 'success');
+            return;
+          } catch (emailjsError) {
+            console.warn('EmailJS failed, falling back to mailto:', emailjsError);
+            // Continue to fallback
+          }
+        }
+        
+        // Fallback: Use mailto link with proper email
+        const mailtoLink = `mailto:yehonatan@shapidesign.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+        
+        // Try to open email client
+        const emailWindow = window.open(mailtoLink, '_blank');
+        
+        if (emailWindow) {
           // Success - close modal and show success message
           closeEmailFormModal();
           explode(window.innerWidth / 2, window.innerHeight / 2, '#a6e22e', 150);
@@ -1762,11 +1791,23 @@ function setupEventListeners() {
           
           // Show success notification
           showNotification('Email client opened! Please send the message.', 'success');
+        } else {
+          // If window.open fails, show instructions
+          closeEmailFormModal();
+          showNotification('Please copy this email and send manually: yehonatan@shapidesign.com', 'success');
+          
+          // Copy email content to clipboard
+          navigator.clipboard.writeText(emailBody).then(() => {
+            showNotification('Email content copied to clipboard!', 'success');
+          }).catch(() => {
+            // If clipboard fails, show the content
+            alert(`Email content:\n\n${emailBody}`);
+          });
         }
         
       } catch (error) {
-        console.error('Error sending email:', error);
-        showNotification('Failed to send message. Please try again.', 'error');
+        console.error('Error in email form:', error);
+        showNotification(error.message || 'Failed to send message. Please try again.', 'error');
       } finally {
         // Reset button
         submitBtn.textContent = originalText;
