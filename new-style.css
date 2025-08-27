@@ -1874,13 +1874,17 @@ a {
   /* Canvas Mobile Adjustments */
   #star-canvas,
   #firework-canvas,
-  #cursor-canvas,
-  #orbit-canvas {
+  #cursor-canvas {
     width: 100vw;
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
+  }
+  
+  /* Hide orbit canvas on mobile to remove connecting curves */
+  #orbit-canvas {
+    display: none !important;
   }
   
   /* Space UI Mobile */
@@ -2378,6 +2382,23 @@ a {
   .project-images-container .image-item img {
     touch-action: manipulation;
     -webkit-touch-callout: none;
+    cursor: zoom-in;
+  }
+  
+  /* Zoomed image state */
+  .project-images-container .image-item img.zoomed {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(2);
+    z-index: 10000;
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    cursor: zoom-out;
   }
   
   /* Zoom modal image should be zoomable */

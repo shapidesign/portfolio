@@ -1304,6 +1304,74 @@ function openProjectModal(project, index) {
           imagesContainer.appendChild(imageDiv);
         });
         
+        // Add pinch-to-zoom functionality for mobile images
+        const images = imagesContainer.querySelectorAll('.image-item img');
+        images.forEach((img) => {
+          let initialDistance = 0;
+          let currentScale = 1;
+          let isZoomed = false;
+          
+          // Handle touch events for pinch-to-zoom
+          img.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+              // Two finger touch - start pinch
+              initialDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+              );
+              e.preventDefault();
+            }
+          }, { passive: false });
+          
+          img.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2) {
+              // Two finger touch - handle pinch
+              const currentDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+              );
+              
+              if (initialDistance > 0) {
+                const scale = currentDistance / initialDistance;
+                currentScale = Math.max(1, Math.min(3, scale)); // Limit scale between 1x and 3x
+                
+                img.style.transform = `scale(${currentScale})`;
+                img.style.transition = 'none';
+              }
+              e.preventDefault();
+            }
+          }, { passive: false });
+          
+          img.addEventListener('touchend', (e) => {
+            if (e.touches.length === 0) {
+              // No fingers - end pinch
+              if (currentScale > 1.5) {
+                // Zoom in
+                img.classList.add('zoomed');
+                isZoomed = true;
+              } else {
+                // Zoom out
+                img.classList.remove('zoomed');
+                img.style.transform = '';
+                currentScale = 1;
+                isZoomed = false;
+              }
+              initialDistance = 0;
+            }
+          });
+          
+          // Single tap to zoom out if zoomed
+          img.addEventListener('click', (e) => {
+            if (isZoomed) {
+              img.classList.remove('zoomed');
+              img.style.transform = '';
+              currentScale = 1;
+              isZoomed = false;
+              e.preventDefault();
+            }
+          });
+        });
+        
         // Set first image as active
         const firstImage = imagesContainer.querySelector('.image-item');
         if (firstImage) {
