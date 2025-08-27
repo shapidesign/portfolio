@@ -1426,7 +1426,7 @@ function openProjectModal(project, index) {
         console.log('Active image:', imagesContainer.querySelector('.image-item.active'));
         
         // Update image counter
-        imagesContainer.setAttribute('data-image-counter', `1/${loadedImages.length}`);
+        imagesContainer.setAttribute('data-image-counter', `1/${loadedMedia.length}`);
         
         // Add Instagram-like mobile swipe functionality
         let startX = 0;
@@ -1470,7 +1470,7 @@ function openProjectModal(project, index) {
           if (Math.abs(diffX) > threshold) {
             const prevIndex = currentImageIndex;
             
-            if (diffX < 0 && currentImageIndex < loadedImages.length - 1) {
+            if (diffX < 0 && currentImageIndex < loadedMedia.length - 1) {
               // Swipe left - next image
               currentImageIndex++;
             } else if (diffX > 0 && currentImageIndex > 0) {
@@ -1500,7 +1500,7 @@ function openProjectModal(project, index) {
             });
             
             // Update counter
-            imagesContainer.setAttribute('data-image-counter', `${currentImageIndex + 1}/${loadedImages.length}`);
+            imagesContainer.setAttribute('data-image-counter', `${currentImageIndex + 1}/${loadedMedia.length}`);
           } else {
             // Snap back to current position
             const images = imagesContainer.querySelectorAll('.image-item');
