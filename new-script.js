@@ -11,37 +11,37 @@ let visitedProjects = new Set();
 // === Project Data ===
 const projectData = [
   {
+    title: "AFL Israel Designs",
+    description: "Complete branding and design package for AFL Israel, including posters, countdown graphics, and promotional materials. This project showcases my ability to create cohesive visual systems that capture the energy and excitement of sports marketing.",
+    tags: ["Branding", "Sports Marketing", "Print Design"],
+    images: ["project1/Artboard 1.png", "project1/winter league english 2.png", "project1/POSTER12.png", "project1/Artboard 36.png", "project1/Artboard 3 copy.png", "project1/COUNTDOWN 9.png", "project1/COUNTDOWN 16.png", "project1/general.png"],
+    color: 0xf92672
+  },
+  {
     title: "Generative Poster Series",
     description: "Algorithmic design exploration using p5.js with modular repetition and dynamic color systems. Each poster is generated through code, blending randomness with structured design principles.",
     tags: ["p5.js", "Generative Art", "Print Design"],
     images: ["kiwi.png", "nature.jpg", "kiwi.png"],
-    color: 0xf92672
+    color: 0x66d9ef
   },
   {
     title: "Hebrew Glitch Typography",
     description: "Experimental typography project exploring ASCII manipulation with Hebrew letterforms and digital aesthetics, pushing the boundaries of traditional typography.",
     tags: ["Typography", "Hebrew", "Digital Art"],
     images: ["kiwi.png", "nature.jpg"],
-    color: 0x66d9ef
+    color: 0xa6e22e
   },
   {
     title: "Interactive Portfolio",
     description: "This very website - a canvas-based portfolio with particle systems, interactive typography, and explosive animations built with HTML5 Canvas and JavaScript.",
     tags: ["Web Development", "Canvas API", "Interactive Design"],
     images: ["kiwi.png", "nature.jpg"],
-    color: 0xa6e22e
+    color: 0xfd971f
   },
   {
     title: "Motion Graphics Exploration",
     description: "Learning motion design principles through experimental animations and kinetic typography, exploring the intersection of time and visual design.",
     tags: ["Motion Design", "Animation", "Learning"],
-    images: ["kiwi.png", "nature.jpg"],
-    color: 0xfd971f
-  },
-  {
-    title: "WebGL Experiments",
-    description: "Pushing the boundaries of web graphics with custom shaders and effects, exploring real-time rendering techniques in the browser.",
-    tags: ["WebGL", "Shaders", "Three.js"],
     images: ["kiwi.png", "nature.jpg"],
     color: 0xae81ff
   }
@@ -1226,33 +1226,17 @@ function openProjectModal(project, index) {
       loadedImages.forEach(({ img, imageSrc, imageIndex }) => {
         if (img) {
           const imageDiv = document.createElement('div');
-          imageDiv.style.cssText = `
-            width: fit-content;
-            margin-bottom: 16px;
-            background: #2D2D2D;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid ${accent};
-            display: inline-block;
-          `;
+          imageDiv.className = 'image-item';
+          imageDiv.style.borderColor = accent;
           
           const displayImg = document.createElement('img');
           displayImg.src = imageSrc;
           displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
-          displayImg.style.cssText = `
-            width: 100%;
-            height: auto;
-            max-height: 400px;
-            object-fit: contain;
-            display: block;
-          `;
           
           imageDiv.appendChild(displayImg);
           imagesContainer.appendChild(imageDiv);
         }
       });
-      
-      // Update gallery counter removed - no longer needed
     });
   }
   

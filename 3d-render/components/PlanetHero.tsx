@@ -1,55 +1,57 @@
 'use client';
 
-// NOTE: ASCII-only source to avoid parser errors like "Expecting Unicode escape sequence \\uXXXX".
-// This version adds scroll-driven camera motion and realistic default textures (Earth + Moon).
-
-import React, { useRef, Suspense, useMemo, useEffect } from 'react';
+import React, { useRef, Suspense, useEffect } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Stars, Float, Environment, Html, useTexture } from '@react-three/drei';
 import { EffectComposer, Bloom, ChromaticAberration, Vignette } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 
-/*
-  HOW TO USE
-  1) Install deps:
-     npm i three @react-three/fiber @react-three/drei @react-three/postprocessing postprocessing
-  2) Drop <PlanetHero /> into any React/Next page section.
-  3) Scroll the page to drive the camera. Section progress controls camera x/z.
-  4) Realistic textures default to CDN links; override via props if you host your own.
-*/
-
-// -----------------------------
-// Scroll mapping (exported so we can test it)
-// -----------------------------
-export function mapScrollToCamera(progress) {
-  // Clamp 0..1
+// Scroll mapping function
+export function mapScrollToCamera(progress: number) {
   const t = Math.max(0, Math.min(1, progress || 0));
-  // Path: x from -2 to +2, y fixed, z from 12 to 6
   const x = THREE.MathUtils.lerp(-2, 2, t);
   const y = 0;
   const z = THREE.MathUtils.lerp(12, 6, t);
   return { x, y, z };
 }
 
-// Simple runtime tests (acts as a sanity check in dev/preview)
-(function runTests() {
-  function approx(a, b, eps = 1e-6) { return Math.abs(a - b) <= eps; }
-  const a0 = mapScrollToCamera(0);
-  console.assert(approx(a0.x, -2) && approx(a0.y, 0) && approx(a0.z, 12), 'mapScrollToCamera(0) failed');
-  const a05 = mapScrollToCamera(0.5);
-  console.assert(approx(a05.x, 0) && approx(a05.y, 0) && approx(a05.z, 9), 'mapScrollToCamera(0.5) failed');
-  const a1 = mapScrollToCamera(1);
-  console.assert(approx(a1.x, 2) && approx(a1.y, 0) && approx(a1.z, 6), 'mapScrollToCamera(1) failed');
-})();
+// Default texture URLs
+const DEFAULT_EARTH_DIFFUSE = 'https://cdn.apewebapps.com/threejs/168/examples/textures/planets/earth_day_4096.jpg';
+const DEFAULT_EARTH_NORMAL = 'https://cdn.apewebapps.com/threejs/168/examples/textures/planets/earth_normal_2048.jpg';
+const DEFAULT_EARTH_CLOUDS = 'https://cdn.apewebapps.com/threejs/168/examples/textures/planets/earth_clouds_2048.png';
+const DEFAULT_MOON_DIFFUSE = 'https://cdn.apewebapps.com/threejs/168/examples/textures/planets/moon_1024.jpg';
 
-export default function PlanetHero() {
-  const containerRef = useRef(null);
+interface PlanetHeroProps {
+  title?: string;
+  subtitle?: string;
+  customColors?: {
+    primary: string;
+    secondary: string;
+    accent: string;
+  };
+}
+
+export default function PlanetHero({ 
+  title = "Shapi Design",
+  subtitle = "Creative developer crafting cosmic digital experiences. Scroll to explore my universe of projects.",
+  customColors = {
+    primary: '#66d9ef',
+    secondary: '#a6e22e',
+    accent: '#f92672'
+  }
+}: PlanetHeroProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
   return (
-    <div ref={containerRef} className="relative w-full h-[120vh] overflow-hidden rounded-2xl">
+    <div ref={containerRef} className="planet-hero-section">
       <Canvas camera={{ position: [0, 0, 12], fov: 45 }} dpr={[1, 2]}>
         <color attach="background" args={["#0c0c0c"]} />
-        <Suspense fallback={<Html center><span className="text-white">Loading space...</span></Html>}>
+        <Suspense fallback={
+          <Html center>
+            <span className="text-primary font-mono">Loading space...</span>
+          </Html>
+        }>
           <Stars radius={80} depth={40} count={8000} factor={4} fade speed={0.5} />
           <ambientLight intensity={0.4} />
           <directionalLight position={[5, 4, 3]} intensity={2.2} />
@@ -65,14 +67,20 @@ export default function PlanetHero() {
               roughness={0.9}
               metalness={0.0}
             />
-            <RimAtmosphere radius={2.18} color="#7ad8ff" intensity={1.0} />
+            <RimAtmosphere radius={2.18} color={customColors.primary} intensity={1.0} />
           </Float>
 
           {/* Companion moon */}
           <Float speed={1.5} rotationIntensity={0.4} floatIntensity={0.8}>
             <group position={[4.2, 0.6, -1.5]}>
-              <Planet radius={0.7} rotation={[0, 1.1, 0]} roughness={1.0} metalness={0.0} textureUrl={DEFAULT_MOON_DIFFUSE} />
-              <RimAtmosphere radius={0.73} color="#a0b6ff" intensity={0.5} />
+              <Planet 
+                radius={0.7} 
+                rotation={[0, 1.1, 0]} 
+                roughness={1.0} 
+                metalness={0.0} 
+                textureUrl={DEFAULT_MOON_DIFFUSE} 
+              />
+              <RimAtmosphere radius={0.73} color={customColors.secondary} intensity={0.5} />
             </group>
           </Float>
 
@@ -86,25 +94,26 @@ export default function PlanetHero() {
           <Environment preset="city" />
           <ScrollCameraRig containerRef={containerRef} />
         </Suspense>
-        {/* Keep controls for minor interaction; no autorotate because scroll drives motion */}
         <OrbitControls enablePan={false} enableZoom={false} />
       </Canvas>
 
       {/* Overlay UI */}
-      <div className="pointer-events-none absolute inset-0 flex items-end">
-        <div className="m-6 md:m-10 p-4 md:p-6 rounded-2xl bg-black/30 border border-white/10 backdrop-blur">
-          <h1 className="text-white text-3xl md:text-5xl font-semibold tracking-tight">Cosmic Interfaces</h1>
-          <p className="text-white/80 mt-2 max-w-xl text-sm md:text-base">Scroll to fly the camera. Real textures, subtle glow, and post-processing for a studio look.</p>
+      <div className="planet-hero-overlay">
+        <div className="planet-hero-content">
+          <h1 className="planet-hero-title">
+            {title}
+          </h1>
+          <p className="planet-hero-subtitle">
+            {subtitle}
+          </p>
         </div>
       </div>
     </div>
   );
 }
 
-// -----------------------------
-// Camera scroll rig
-// -----------------------------
-function ScrollCameraRig({ containerRef }) {
+// Scroll Camera Rig Component
+function ScrollCameraRig({ containerRef }: { containerRef: React.RefObject<HTMLDivElement> }) {
   const { camera } = useThree();
   const progressRef = useRef(0);
 
@@ -115,15 +124,18 @@ function ScrollCameraRig({ containerRef }) {
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight || 1;
       const total = rect.height + vh;
-      const passed = vh - rect.top; // how much of the section has passed the viewport top
+      const passed = vh - rect.top;
       const raw = passed / total;
       return Math.max(0, Math.min(1, raw));
     }
+    
     function onScroll() { progressRef.current = computeProgress(); }
     function onResize() { progressRef.current = computeProgress(); }
+    
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize);
+    
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
@@ -137,31 +149,39 @@ function ScrollCameraRig({ containerRef }) {
     camera.position.z = THREE.MathUtils.damp(camera.position.z, z, 3, dt);
     camera.lookAt(0, 0, 0);
   });
+  
   return null;
 }
 
-// -----------------------------
-// Planet with optional realistic textures + clouds
-// -----------------------------
+// Planet Component
 interface PlanetProps {
   radius?: number;
   rotation?: [number, number, number];
-  textureUrl?: string | undefined;
-  normalUrl?: string | undefined;
-  cloudsUrl?: string | undefined;
+  textureUrl?: string;
+  normalUrl?: string;
+  cloudsUrl?: string;
   metalness?: number;
   roughness?: number;
 }
 
-function Planet({ radius = 1, rotation = [0, 0, 0], textureUrl, normalUrl, cloudsUrl, metalness = 0.0, roughness = 1.0 }: PlanetProps) {
+function Planet({ 
+  radius = 1, 
+  rotation = [0, 0, 0], 
+  textureUrl, 
+  normalUrl, 
+  cloudsUrl, 
+  metalness = 0.0, 
+  roughness = 1.0 
+}: PlanetProps) {
   const ref = useRef<THREE.Mesh>(null);
 
-  // Load maps only if urls provided; useTexture plays well with Suspense
-  const colorMap = useTexture(textureUrl || undefined);
-  const normalMap = useTexture(normalUrl || undefined);
-  const cloudsMap = useTexture(cloudsUrl || undefined);
+  const colorMap = useTexture(textureUrl || '');
+  const normalMap = useTexture(normalUrl || '');
+  const cloudsMap = useTexture(cloudsUrl || '');
 
-  useFrame((_, dt) => { if (ref.current) ref.current.rotation.y += dt * 0.08; });
+  useFrame((_, dt) => { 
+    if (ref.current) ref.current.rotation.y += dt * 0.08; 
+  });
 
   return (
     <group>
@@ -171,34 +191,37 @@ function Planet({ radius = 1, rotation = [0, 0, 0], textureUrl, normalUrl, cloud
           color={"#ffffff"}
           metalness={metalness}
           roughness={roughness}
-          map={textureUrl ? (colorMap as THREE.Texture) : undefined}
-          normalMap={normalUrl ? (normalMap as THREE.Texture) : undefined}
+          map={textureUrl ? colorMap : undefined}
+          normalMap={normalUrl ? normalMap : undefined}
           envMapIntensity={0.3}
           toneMapped={false}
         />
       </mesh>
 
       {/* Cloud layer if provided */}
-      {cloudsUrl ? (
+      {cloudsUrl && (
         <mesh>
           <sphereGeometry args={[radius * 1.03, 64, 64]} />
           <meshStandardMaterial
             transparent
             opacity={0.6}
             depthWrite={false}
-            map={cloudsMap as THREE.Texture}
+            map={cloudsMap}
           />
         </mesh>
-      ) : null}
+      )}
     </group>
   );
 }
 
-// -----------------------------
-// Rim atmosphere shader
-// -----------------------------
-interface RimProps { radius?: number; color?: string; intensity?: number }
-function RimAtmosphere({ radius = 1.05, color = '#88ccff', intensity = 1.0 }: RimProps) {
+// Rim Atmosphere Component
+interface RimAtmosphereProps {
+  radius?: number;
+  color?: string;
+  intensity?: number;
+}
+
+function RimAtmosphere({ radius = 1.05, color = '#88ccff', intensity = 1.0 }: RimAtmosphereProps) {
   return (
     <mesh>
       <sphereGeometry args={[radius, 64, 64]} />
@@ -228,24 +251,5 @@ function RimAtmosphere({ radius = 1.05, color = '#88ccff', intensity = 1.0 }: Ri
         `}
       />
     </mesh>
-  );
-}
-
-// -----------------------------
-// Default texture URLs (swap to your own if you prefer hosting locally)
-// -----------------------------
-const DEFAULT_EARTH_DIFFUSE = 'https://cdn.apewebapps.com/threejs/168/examples/textures/planets/earth_day_4096.jpg';
-const DEFAULT_EARTH_NORMAL  = 'https://cdn.apewebapps.com/threejs/168/examples/textures/planets/earth_normal_2048.jpg';
-const DEFAULT_EARTH_CLOUDS  = 'https://cdn.apewebapps.com/threejs/168/examples/textures/planets/earth_clouds_2048.png';
-const DEFAULT_MOON_DIFFUSE  = 'https://cdn.apewebapps.com/threejs/168/examples/textures/planets/moon_1024.jpg';
-
-// -----------------------------
-// Minimal demo
-// -----------------------------
-export function PlanetHeroDemo() {
-  return (
-    <div className="w-full h-[60vh]">
-      <PlanetHero />
-    </div>
   );
 }
