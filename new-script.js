@@ -1741,6 +1741,15 @@ function closeProjectModal() {
     return;
   }
   
+  // Pause all videos in the modal before closing
+  const videos = modal.querySelectorAll('video');
+  videos.forEach(video => {
+    if (!video.paused) {
+      console.log('Pausing video:', video.src);
+      video.pause();
+    }
+  });
+  
   // Hide modal
   modal.classList.remove('show');
   modal.style.display = 'none';
