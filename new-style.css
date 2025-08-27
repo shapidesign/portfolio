@@ -960,6 +960,17 @@ a {
     filter: none;
   }
   
+  .project-images-container .image-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    border: none;
+    box-shadow: none;
+    filter: none;
+    background: #000;
+  }
+  
   /* Image counter */
   .project-images-container::after {
     content: attr(data-image-counter);
@@ -1212,6 +1223,16 @@ a {
   object-fit: contain;
   display: block;
   background: #1a1a1a;
+}
+
+.project-images-container .image-item video {
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  display: block;
+  background: #000;
+  border-radius: 8px;
 }
 
 /* Close Button */

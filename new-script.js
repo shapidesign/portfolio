@@ -1218,10 +1218,10 @@ function openProjectModal(project, index) {
     console.log('Image paths:', project.images);
     console.log('Video paths:', project.videos || []);
     
-    // Combine images and videos into one array
+    // Combine videos first, then images into one array
     const allMedia = [
-      ...project.images.map(src => ({ src, type: 'image' })),
-      ...(project.videos || []).map(src => ({ src, type: 'video' }))
+      ...(project.videos || []).map(src => ({ src, type: 'video' })),
+      ...project.images.map(src => ({ src, type: 'image' }))
     ];
     
     const mediaPromises = allMedia.map((media, mediaIndex) => {
