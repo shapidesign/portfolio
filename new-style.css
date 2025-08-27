@@ -580,6 +580,53 @@ a {
   line-height: 1.6;
 }
 
+/* Skills and Tools Section */
+.skills-section {
+  margin-top: 2rem;
+}
+
+.skills-grid,
+.tools-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.skill-tag,
+.tool-tag {
+  background: rgba(102, 217, 239, 0.1);
+  border: 1px solid #66d9ef;
+  color: #66d9ef;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.skill-tag:hover,
+.tool-tag:hover {
+  background: rgba(102, 217, 239, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 217, 239, 0.3);
+}
+
+/* Mobile responsive for skills and tools */
+@media (max-width: 768px) {
+  .skills-grid,
+  .tools-grid {
+    gap: 0.3rem;
+  }
+  
+  .skill-tag,
+  .tool-tag {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+
 .about-content {
   display: grid;
   gap: 2rem;

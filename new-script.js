@@ -48,13 +48,7 @@ const projectData = [
     gifs: ["project5/wave-loop-hd.gif"],
     color: 0xae81ff
   },
-  {
-    title: "Motion Graphics Exploration",
-    description: "Learning motion design principles through experimental animations and kinetic typography, exploring the intersection of time and visual design.",
-    tags: ["Motion Design", "Animation", "Learning"],
-    images: ["kiwi.png", "nature.jpg"],
-    color: 0xae81ff
-  }
+
 ];
 
 // === Star Field Background ===
