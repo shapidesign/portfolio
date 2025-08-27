@@ -1239,10 +1239,10 @@ function openProjectModal(project, index) {
             displayImg.src = imageSrc;
             displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
             
-            // Add click event for zoom
-            imageDiv.addEventListener('click', () => {
-              openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
-            });
+            // Zoom functionality disabled - click does nothing for now
+            // imageDiv.addEventListener('click', () => {
+            //   openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
+            // });
             
             imageDiv.appendChild(displayImg);
             imagesContainer.appendChild(imageDiv);
@@ -1354,10 +1354,10 @@ function openProjectModal(project, index) {
             displayImg.src = imageSrc;
             displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
             
-            // Add click event for zoom
-            imageDiv.addEventListener('click', () => {
-              openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
-            });
+            // Zoom functionality disabled - click does nothing for now
+            // imageDiv.addEventListener('click', () => {
+            //   openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
+            // });
             
             imageDiv.appendChild(displayImg);
             imagesContainer.appendChild(imageDiv);
