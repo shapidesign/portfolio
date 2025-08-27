@@ -25,17 +25,17 @@ const projectData = [
     color: 0x66d9ef
   },
   {
-    title: "Hebrew Glitch Typography",
-    description: "Experimental typography project exploring ASCII manipulation with Hebrew letterforms and digital aesthetics, pushing the boundaries of traditional typography.",
-    tags: ["Typography", "Hebrew", "Digital Art"],
-    images: ["kiwi.png", "nature.jpg"],
+    title: "Pixel Portrait Challenge",
+    description: "A viral TikTok challenge that transformed my creative approach to social media. I drew my followers in pixel art style, creating a unique engagement strategy that resulted in 800+ new followers in just 24 hours. This project demonstrates the power of personal connection through digital art and the effectiveness of community-driven content creation.",
+    tags: ["Pixel Art", "Social Media", "Digital Illustration", "Community Engagement"],
+    images: ["project3/pixel-portrait-1.png", "project3/pixel-portrait-2.png", "project3/pixel-portrait-3.png", "project3/pixel-portrait-4.png", "project3/pixel-portrait-5.png"],
     color: 0xa6e22e
   },
   {
-    title: "Interactive Portfolio",
-    description: "This very website - a canvas-based portfolio with particle systems, interactive typography, and explosive animations built with HTML5 Canvas and JavaScript.",
-    tags: ["Web Development", "Canvas API", "Interactive Design"],
-    images: ["kiwi.png", "nature.jpg"],
+    title: "Design as Social Commentary",
+    description: "A provocative exploration of graphic design as a medium for social criticism. Through deliberately mismatched visuals and messages, this project challenges the notion that 'the medium is the message.' Each poster intentionally disconnects graphic elements from their textual content, creating visual dissonance that forces viewers to question the relationship between form and meaning in contemporary communication.",
+    tags: ["Social Commentary", "Graphic Design", "Poster Design", "Conceptual Art"],
+    images: ["project4/social-commentary-1.png", "project4/social-commentary-2.png", "project4/social-commentary-3.png", "project4/social-commentary-4.png", "project4/social-commentary-5.png"],
     color: 0xfd971f
   },
   {
