@@ -1262,6 +1262,7 @@ function openImageZoom(imageSrc, altText, imageIndex = 0) {
   const zoomModal = document.getElementById('image-zoom-modal');
   const zoomedImage = document.getElementById('zoomed-image');
   const projectModal = document.getElementById('project-modal');
+  const projectModalContent = document.querySelector('.project-modal-content');
   
   if (zoomModal && zoomedImage) {
     // Get all images from current project
@@ -1276,9 +1277,13 @@ function openImageZoom(imageSrc, altText, imageIndex = 0) {
     zoomModal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
     
-    // Disable project modal interactions
+    // Completely disable project modal interactions
     if (projectModal) {
       projectModal.style.pointerEvents = 'none';
+      projectModal.style.userSelect = 'none';
+    }
+    if (projectModalContent) {
+      projectModalContent.style.pointerEvents = 'none';
     }
     
     // Update navigation buttons
@@ -1289,6 +1294,7 @@ function openImageZoom(imageSrc, altText, imageIndex = 0) {
 function closeImageZoom() {
   const zoomModal = document.getElementById('image-zoom-modal');
   const projectModal = document.getElementById('project-modal');
+  const projectModalContent = document.querySelector('.project-modal-content');
   
   if (zoomModal) {
     zoomModal.classList.remove('show');
@@ -1297,6 +1303,10 @@ function closeImageZoom() {
     // Re-enable project modal interactions
     if (projectModal) {
       projectModal.style.pointerEvents = 'auto';
+      projectModal.style.userSelect = 'auto';
+    }
+    if (projectModalContent) {
+      projectModalContent.style.pointerEvents = 'auto';
     }
     
     zoomImages = [];
@@ -1344,7 +1354,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const zoomedImage = document.getElementById('zoomed-image');
   const prevBtn = document.getElementById('zoom-prev');
   const nextBtn = document.getElementById('zoom-next');
-  const swipeArea = document.getElementById('zoom-swipe-area');
   
   if (zoomModal) {
     // Close on background click - this is the main exit method
