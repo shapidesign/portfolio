@@ -956,6 +956,8 @@ a {
     object-fit: contain;
     border-radius: 8px;
     border: none;
+    box-shadow: none;
+    filter: none;
   }
   
   /* Image counter */

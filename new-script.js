@@ -1319,8 +1319,10 @@ function openProjectModal(project, index) {
                 img.classList.add('active');
               } else if (index === prevIndex) {
                 if (currentImageIndex > prevIndex) {
+                  // Swiped left, previous image goes left
                   img.classList.add('prev');
                 } else {
+                  // Swiped right, previous image goes right
                   img.classList.add('next');
                 }
               }
