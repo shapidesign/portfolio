@@ -1279,6 +1279,7 @@ function closeImageZoom() {
 document.addEventListener('DOMContentLoaded', () => {
   const zoomModal = document.getElementById('image-zoom-modal');
   const zoomClose = document.querySelector('.image-zoom-close');
+  const zoomContent = document.querySelector('.image-zoom-content');
   
   if (zoomModal) {
     // Close on background click
@@ -1288,9 +1289,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     
+    // Close on image click
+    if (zoomContent) {
+      zoomContent.addEventListener('click', (e) => {
+        if (e.target.tagName === 'IMG') {
+          closeImageZoom();
+        }
+      });
+    }
+    
     // Close on close button click
     if (zoomClose) {
-      zoomClose.addEventListener('click', closeImageZoom);
+      zoomClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeImageZoom();
+      });
     }
     
     // Close on escape key
