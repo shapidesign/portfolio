@@ -1207,6 +1207,11 @@ function openProjectModal(project, index) {
   if (imagesContainer) {
     imagesContainer.innerHTML = '';
     
+    // Add loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.innerHTML = '<div style="text-align: center; padding: 2rem; color: #66d9ef;">Loading images...</div>';
+    imagesContainer.appendChild(loadingDiv);
+    
     // Preload all images first
     console.log('Loading images for project:', project.title);
     console.log('Image paths:', project.images);
@@ -1222,36 +1227,81 @@ function openProjectModal(project, index) {
           console.error(`❌ Failed to load image ${imageIndex + 1}:`, imageSrc);
           resolve({ img: null, imageSrc, imageIndex });
         };
+        // Set timeout for image loading
+        const timeout = setTimeout(() => {
+          console.warn(`⚠️ Image ${imageIndex + 1} loading timeout:`, imageSrc);
+          resolve({ img: null, imageSrc, imageIndex });
+        }, 10000); // 10 second timeout
+        
+        img.onload = () => {
+          clearTimeout(timeout);
+          console.log(`✅ Image ${imageIndex + 1} loaded successfully:`, imageSrc);
+          resolve({ img, imageSrc, imageIndex });
+        };
+        img.onerror = () => {
+          clearTimeout(timeout);
+          console.error(`❌ Failed to load image ${imageIndex + 1}:`, imageSrc);
+          resolve({ img: null, imageSrc, imageIndex });
+        };
         img.src = imageSrc;
       });
     });
     
     // Once all images are loaded, add them to the container
     Promise.all(imagePromises).then((loadedImages) => {
+      // Remove loading indicator
+      const loadingDiv = imagesContainer.querySelector('div');
+      if (loadingDiv) {
+        loadingDiv.remove();
+      }
+      
+      console.log('All images processed:', loadedImages.length);
+      
       // Check if mobile
       const isMobile = window.innerWidth <= 768;
       
       if (isMobile) {
         // Instagram-style mobile layout
         loadedImages.forEach(({ img, imageSrc, imageIndex }) => {
+          const imageDiv = document.createElement('div');
+          imageDiv.className = 'image-item';
+          imageDiv.style.borderColor = accent;
+          imageDiv.dataset.index = imageIndex;
+          
           if (img) {
-            const imageDiv = document.createElement('div');
-            imageDiv.className = 'image-item';
-            imageDiv.style.borderColor = accent;
-            imageDiv.dataset.index = imageIndex;
-            
+            // Image loaded successfully
             const displayImg = document.createElement('img');
             displayImg.src = imageSrc;
             displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
-            
-            // Zoom functionality disabled - click does nothing for now
-            // imageDiv.addEventListener('click', () => {
-            //   openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
-            // });
-            
             imageDiv.appendChild(displayImg);
-            imagesContainer.appendChild(imageDiv);
+          } else {
+            // Image failed to load - create placeholder
+            const placeholderDiv = document.createElement('div');
+            placeholderDiv.style.cssText = `
+              width: 200px;
+              height: 200px;
+              background: linear-gradient(45deg, #272822, #3e3d32);
+              border: 2px solid ${accent};
+              border-radius: 8px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: ${accent};
+              font-family: 'JetBrains Mono', monospace;
+              font-size: 0.8rem;
+              text-align: center;
+              padding: 1rem;
+            `;
+            placeholderDiv.innerHTML = `Image ${imageIndex + 1}<br><small>Failed to load</small>`;
+            imageDiv.appendChild(placeholderDiv);
           }
+          
+          // Zoom functionality disabled - click does nothing for now
+          // imageDiv.addEventListener('click', () => {
+          //   openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
+          // });
+          
+          imagesContainer.appendChild(imageDiv);
         });
         
         // Set first image as active
@@ -1359,30 +1409,45 @@ function openProjectModal(project, index) {
         // Desktop layout - horizontal scrolling
         console.log('Creating desktop layout with', loadedImages.length, 'images');
         loadedImages.forEach(({ img, imageSrc, imageIndex }) => {
+          const imageDiv = document.createElement('div');
+          imageDiv.className = 'image-item';
+          imageDiv.style.borderColor = accent;
+          
           if (img) {
-            const imageDiv = document.createElement('div');
-            imageDiv.className = 'image-item';
-            imageDiv.style.borderColor = accent;
-            
+            // Image loaded successfully
             const displayImg = document.createElement('img');
             displayImg.src = imageSrc;
             displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
-            
-            // Add error handling for image display
-            displayImg.onerror = () => {
-              console.error('Failed to display image:', imageSrc);
-              imageDiv.innerHTML = `<div style="padding: 2rem; text-align: center; color: #666;">Image ${imageIndex + 1} failed to load</div>`;
-            };
-            
-            // Zoom functionality disabled - click does nothing for now
-            // imageDiv.addEventListener('click', () => {
-            //   openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
-            // });
-            
             imageDiv.appendChild(displayImg);
-            imagesContainer.appendChild(imageDiv);
-            console.log('Added desktop image:', imageIndex + 1);
+          } else {
+            // Image failed to load - create placeholder
+            const placeholderDiv = document.createElement('div');
+            placeholderDiv.style.cssText = `
+              width: 200px;
+              height: 200px;
+              background: linear-gradient(45deg, #272822, #3e3d32);
+              border: 2px solid ${accent};
+              border-radius: 8px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: ${accent};
+              font-family: 'JetBrains Mono', monospace;
+              font-size: 0.8rem;
+              text-align: center;
+              padding: 1rem;
+            `;
+            placeholderDiv.innerHTML = `Image ${imageIndex + 1}<br><small>Failed to load</small>`;
+            imageDiv.appendChild(placeholderDiv);
           }
+          
+          // Zoom functionality disabled - click does nothing for now
+          // imageDiv.addEventListener('click', () => {
+          //   openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
+          // });
+          
+          imagesContainer.appendChild(imageDiv);
+          console.log('Added desktop image/placeholder:', imageIndex + 1);
         });
         
         console.log('Desktop images created:', imagesContainer.querySelectorAll('.image-item').length);
