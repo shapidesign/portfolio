@@ -40,6 +40,15 @@ const projectData = [
     color: 0xfd971f
   },
   {
+    title: "Vibe Coding!",
+    description: "A journey through my coding evolution - from playful experiments to serious development. This collection showcases my growth as a developer, featuring this very portfolio website, a whimsical 'rice cooker' project, a professional squadron website, a retro pixel-style bubble-trouble game, and an endless wave animation. Each project represents a different phase of my coding journey, blending creativity with technical skill.",
+    tags: ["Web Development", "Game Development", "Animation", "Full-Stack", "Creative Coding"],
+    images: ["project5/Screenshot 2025-08-27 at 15.16.08.png", "project5/3.jpeg", "project5/1.svg", "project5/2.svg"],
+    videos: ["project5/Screen Recording 2025-08-27 at 15.16.51.mov"],
+    gifs: ["project5/wave-loop.gif"],
+    color: 0xae81ff
+  },
+  {
     title: "Motion Graphics Exploration",
     description: "Learning motion design principles through experimental animations and kinetic typography, exploring the intersection of time and visual design.",
     tags: ["Motion Design", "Animation", "Learning"],
@@ -1218,9 +1227,10 @@ function openProjectModal(project, index) {
     console.log('Image paths:', project.images);
     console.log('Video paths:', project.videos || []);
     
-    // Combine videos first, then images into one array
+    // Combine videos first, then gifs, then images into one array
     const allMedia = [
       ...(project.videos || []).map(src => ({ src, type: 'video' })),
+      ...(project.gifs || []).map(src => ({ src, type: 'gif' })),
       ...project.images.map(src => ({ src, type: 'image' }))
     ];
     
@@ -1249,6 +1259,10 @@ function openProjectModal(project, index) {
           // For videos, we'll create the video element directly
           console.log(`✅ Video ${mediaIndex + 1} ready:`, media.src);
           resolve({ media: 'video', mediaSrc: media.src, mediaIndex, type: 'video' });
+        } else if (media.type === 'gif') {
+          // For GIFs, we'll create the img element directly with loop
+          console.log(`✅ GIF ${mediaIndex + 1} ready:`, media.src);
+          resolve({ media: 'gif', mediaSrc: media.src, mediaIndex, type: 'gif' });
         }
       });
     });
@@ -1316,6 +1330,18 @@ function openProjectModal(project, index) {
             `;
             videoElement.alt = `${project.title} - Video ${mediaIndex + 1}`;
             imageDiv.appendChild(videoElement);
+          } else if (type === 'gif') {
+            // GIF element with endless loop
+            const gifElement = document.createElement('img');
+            gifElement.src = mediaSrc;
+            gifElement.style.cssText = `
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 8px;
+            `;
+            gifElement.alt = `${project.title} - GIF ${mediaIndex + 1}`;
+            imageDiv.appendChild(gifElement);
           }
           
           // Zoom functionality disabled - click does nothing for now
@@ -1545,6 +1571,20 @@ function openProjectModal(project, index) {
             `;
             videoElement.alt = `${project.title} - Video ${mediaIndex + 1}`;
             imageDiv.appendChild(videoElement);
+          } else if (type === 'gif') {
+            // GIF element with endless loop
+            const gifElement = document.createElement('img');
+            gifElement.src = mediaSrc;
+            gifElement.style.cssText = `
+              width: 100%;
+              height: 100%;
+              max-height: 400px;
+              object-fit: contain;
+              display: block;
+              border-radius: 8px;
+            `;
+            gifElement.alt = `${project.title} - GIF ${mediaIndex + 1}`;
+            imageDiv.appendChild(gifElement);
           }
           
           // Zoom functionality disabled - click does nothing for now
