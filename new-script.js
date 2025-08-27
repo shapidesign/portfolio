@@ -18,6 +18,13 @@ const projectData = [
     color: 0xf92672
   },
   {
+    title: "The Bible: Remastered",
+    description: "Everyone own the bible in their home, but it's so ugly and generic - always with that blue or brown leathery cover. So why shouldn't the top selling book in the world get a unique design? I created several modern designs for the classic bible, giving it a fresh outfit, and I hope people won't be afraid to place it as a coffee table book now.",
+    tags: ["Book Design", "Typography", "Modern Design", "Print Design"],
+    images: ["project2/SHAPES.png", "project2/modrian.png", "project2/חושן.png", "project2/JAPANESE WAVES.png", "project2/ABSTRACT.png", "project2/NOODLES.png", "project2/HITS.png", "project2/COLORBLIND.png", "project2/WEIRD.png", "project2/SWIRLY.png", "project2/BAUHAUS SHAPES.png", "project2/BAUHAUS LINES.png", "project2/TORAH2 2.png", "project2/סיפורי התנך.png", "project2/TORAH.png"],
+    color: 0xae81ff
+  },
+  {
     title: "Generative Poster Series",
     description: "Algorithmic design exploration using p5.js with modular repetition and dynamic color systems. Each poster is generated through code, blending randomness with structured design principles.",
     tags: ["p5.js", "Generative Art", "Print Design"],
