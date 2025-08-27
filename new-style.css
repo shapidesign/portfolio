@@ -1005,6 +1005,8 @@ a {
     border: none;
     box-shadow: none;
     filter: none;
+    max-width: 100%;
+    max-height: 100%;
   }
   
   .project-images-container .image-item video {
@@ -1016,6 +1018,8 @@ a {
     box-shadow: none;
     filter: none;
     background: #000;
+    max-width: 100%;
+    max-height: 100%;
   }
   
   /* Image counter */
@@ -1441,11 +1445,11 @@ a {
   z-index: 1000;
   background: linear-gradient(135deg, #272822, #3e3f37);
   border: 3px solid #f92672;
-  border-radius: 18px;
+  border-radius: 12px;
   color: #f92672;
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-family: 'JetBrains Mono', monospace;
-  padding: 1.1rem 2.2rem;
+  padding: 0.8rem 1.6rem;
   box-shadow: 0 0 20px #f9267244;
   cursor: pointer;
   transition: box-shadow 0.3s, transform 0.2s;
@@ -1539,8 +1543,8 @@ a {
     right: 1.2rem;
     left: auto;
     bottom: auto;
-    font-size: 1rem;
-    padding: 0.7rem 1.2rem;
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
   }
   #hero-video {
     height: 180px;

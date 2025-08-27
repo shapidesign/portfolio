@@ -1236,7 +1236,7 @@ function openProjectModal(project, index) {
           const timeout = setTimeout(() => {
             console.warn(`⚠️ Image ${mediaIndex + 1} loading timeout:`, media.src);
             resolve({ media: null, mediaSrc: media.src, mediaIndex, type: 'image' });
-          }, 5000); // 5 second timeout for faster loading
+          }, 2000); // 2 second timeout for faster loading
 
           img.onload = () => {
             clearTimeout(timeout);
@@ -2839,3 +2839,37 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
+// Preload all project images for faster loading
+function preloadProjectImages() {
+  console.log('🔄 Starting image preloading...');
+  const allImages = [];
+  
+  // Collect all image paths from all projects
+  projectData.forEach(project => {
+    if (project.images) {
+      allImages.push(...project.images);
+    }
+  });
+  
+  console.log(`📸 Preloading ${allImages.length} images...`);
+  
+  // Preload images in background
+  allImages.forEach((imageSrc, index) => {
+    const img = new Image();
+    img.onload = () => {
+      console.log(`✅ Preloaded image ${index + 1}/${allImages.length}:`, imageSrc);
+    };
+    img.onerror = () => {
+      console.warn(`⚠️ Failed to preload image ${index + 1}/${allImages.length}:`, imageSrc);
+    };
+    img.src = imageSrc;
+  });
+}
+
+// Start preloading when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', preloadProjectImages);
+} else {
+  preloadProjectImages();
+}
