@@ -1356,6 +1356,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
     
+    // Close on content area click (outside image)
+    if (zoomContent) {
+      zoomContent.addEventListener('click', (e) => {
+        if (e.target === zoomContent) {
+          closeImageZoom();
+        }
+      });
+    }
+    
     // Navigation buttons
     if (prevBtn) {
       prevBtn.addEventListener('click', (e) => {
