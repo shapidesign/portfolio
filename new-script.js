@@ -1232,23 +1232,46 @@ function openProjectModal(project, index) {
       return new Promise((resolve) => {
         if (media.type === 'image') {
           const img = new Image();
-          // Set timeout for image loading
-          const timeout = setTimeout(() => {
-            console.warn(`⚠️ Image ${mediaIndex + 1} loading timeout:`, media.src);
-            resolve({ media: null, mediaSrc: media.src, mediaIndex, type: 'image' });
-          }, 2000); // 2 second timeout for faster loading
+          let retryCount = 0;
+          const maxRetries = 3;
+          
+          const attemptLoad = () => {
+            // Set timeout for image loading
+            const timeout = setTimeout(() => {
+              console.warn(`⚠️ Image ${mediaIndex + 1} loading timeout (attempt ${retryCount + 1}):`, media.src);
+              if (retryCount < maxRetries - 1) {
+                retryCount++;
+                console.log(`🔄 Retrying image ${mediaIndex + 1} (attempt ${retryCount + 1}/${maxRetries}):`, media.src);
+                attemptLoad();
+              } else {
+                console.error(`❌ Failed to load image ${mediaIndex + 1} after ${maxRetries} attempts:`, media.src);
+                resolve({ media: null, mediaSrc: media.src, mediaIndex, type: 'image' });
+              }
+            }, 3000); // 3 second timeout with retry mechanism
 
-          img.onload = () => {
-            clearTimeout(timeout);
-            console.log(`✅ Image ${mediaIndex + 1} loaded successfully:`, media.src);
-            resolve({ media: img, mediaSrc: media.src, mediaIndex, type: 'image' });
+            img.onload = () => {
+              clearTimeout(timeout);
+              console.log(`✅ Image ${mediaIndex + 1} loaded successfully (attempt ${retryCount + 1}):`, media.src);
+              resolve({ media: img, mediaSrc: media.src, mediaIndex, type: 'image' });
+            };
+            
+            img.onerror = () => {
+              clearTimeout(timeout);
+              console.error(`❌ Failed to load image ${mediaIndex + 1} (attempt ${retryCount + 1}):`, media.src);
+              if (retryCount < maxRetries - 1) {
+                retryCount++;
+                console.log(`🔄 Retrying image ${mediaIndex + 1} (attempt ${retryCount + 1}/${maxRetries}):`, media.src);
+                setTimeout(attemptLoad, 500); // Wait 500ms before retry
+              } else {
+                console.error(`❌ Failed to load image ${mediaIndex + 1} after ${maxRetries} attempts:`, media.src);
+                resolve({ media: null, mediaSrc: media.src, mediaIndex, type: 'image' });
+              }
+            };
+            
+            img.src = media.src;
           };
-          img.onerror = () => {
-            clearTimeout(timeout);
-            console.error(`❌ Failed to load image ${mediaIndex + 1}:`, media.src);
-            resolve({ media: null, mediaSrc: media.src, mediaIndex, type: 'image' });
-          };
-          img.src = media.src;
+          
+          attemptLoad();
         } else if (media.type === 'video') {
           // For videos, we'll create the video element directly
           console.log(`✅ Video ${mediaIndex + 1} ready:`, media.src);
@@ -2854,16 +2877,33 @@ function preloadProjectImages() {
   
   console.log(`📸 Preloading ${allImages.length} images...`);
   
-  // Preload images in background
+  // Preload images in background with retry mechanism
   allImages.forEach((imageSrc, index) => {
-    const img = new Image();
-    img.onload = () => {
-      console.log(`✅ Preloaded image ${index + 1}/${allImages.length}:`, imageSrc);
+    let retryCount = 0;
+    const maxRetries = 2;
+    
+    const attemptPreload = () => {
+      const img = new Image();
+      
+      img.onload = () => {
+        console.log(`✅ Preloaded image ${index + 1}/${allImages.length}:`, imageSrc);
+      };
+      
+      img.onerror = () => {
+        console.warn(`⚠️ Failed to preload image ${index + 1}/${allImages.length} (attempt ${retryCount + 1}):`, imageSrc);
+        if (retryCount < maxRetries - 1) {
+          retryCount++;
+          console.log(`🔄 Retrying preload for image ${index + 1}/${allImages.length} (attempt ${retryCount + 1}/${maxRetries}):`, imageSrc);
+          setTimeout(attemptPreload, 1000); // Wait 1 second before retry
+        } else {
+          console.error(`❌ Failed to preload image ${index + 1}/${allImages.length} after ${maxRetries} attempts:`, imageSrc);
+        }
+      };
+      
+      img.src = imageSrc;
     };
-    img.onerror = () => {
-      console.warn(`⚠️ Failed to preload image ${index + 1}/${allImages.length}:`, imageSrc);
-    };
-    img.src = imageSrc;
+    
+    attemptPreload();
   });
 }
 
