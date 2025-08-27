@@ -1261,6 +1261,7 @@ let zoomImages = [];
 function openImageZoom(imageSrc, altText, imageIndex = 0) {
   const zoomModal = document.getElementById('image-zoom-modal');
   const zoomedImage = document.getElementById('zoomed-image');
+  const projectModal = document.getElementById('project-modal');
   
   if (zoomModal && zoomedImage) {
     // Get all images from current project
@@ -1275,6 +1276,11 @@ function openImageZoom(imageSrc, altText, imageIndex = 0) {
     zoomModal.classList.add('show');
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
     
+    // Disable project modal interactions
+    if (projectModal) {
+      projectModal.style.pointerEvents = 'none';
+    }
+    
     // Update navigation buttons
     updateZoomNavigation();
   }
@@ -1282,9 +1288,17 @@ function openImageZoom(imageSrc, altText, imageIndex = 0) {
 
 function closeImageZoom() {
   const zoomModal = document.getElementById('image-zoom-modal');
+  const projectModal = document.getElementById('project-modal');
+  
   if (zoomModal) {
     zoomModal.classList.remove('show');
     document.body.style.overflow = ''; // Restore scrolling
+    
+    // Re-enable project modal interactions
+    if (projectModal) {
+      projectModal.style.pointerEvents = 'auto';
+    }
+    
     zoomImages = [];
     currentZoomIndex = 0;
   }
@@ -1325,7 +1339,7 @@ function updateZoomNavigation() {
 // Add event listeners for image zoom modal
 document.addEventListener('DOMContentLoaded', () => {
   const zoomModal = document.getElementById('image-zoom-modal');
-  const zoomClose = document.querySelector('.image-zoom-close');
+  const zoomClose = document.getElementById('zoom-modal-close');
   const zoomContent = document.querySelector('.image-zoom-content');
   const zoomedImage = document.getElementById('zoomed-image');
   const prevBtn = document.getElementById('zoom-prev');
@@ -1348,7 +1362,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
     
-    // Close on close button click
+    // Close on zoom modal close button click
     if (zoomClose) {
       zoomClose.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -1395,36 +1409,35 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let startY = 0;
     
-    if (swipeArea) {
-      swipeArea.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-      });
+    // Add swipe support to the entire modal
+    zoomModal.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    });
+    
+    zoomModal.addEventListener('touchend', (e) => {
+      if (!startX || !startY) return;
       
-      swipeArea.addEventListener('touchend', (e) => {
-        if (!startX || !startY) return;
-        
-        const endX = e.changedTouches[0].clientX;
-        const endY = e.changedTouches[0].clientY;
-        
-        const diffX = startX - endX;
-        const diffY = startY - endY;
-        
-        // Check if it's a horizontal swipe
-        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-          if (diffX > 0) {
-            // Swipe left - next image
-            nextZoomImage();
-          } else {
-            // Swipe right - previous image
-            prevZoomImage();
-          }
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      
+      const diffX = startX - endX;
+      const diffY = startY - endY;
+      
+      // Check if it's a horizontal swipe
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+        if (diffX > 0) {
+          // Swipe left - next image
+          nextZoomImage();
+        } else {
+          // Swipe right - previous image
+          prevZoomImage();
         }
-        
-        startX = 0;
-        startY = 0;
-      });
-    }
+      }
+      
+      startX = 0;
+      startY = 0;
+    });
   }
 });
 

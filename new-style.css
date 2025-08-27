@@ -885,9 +885,9 @@ a {
 /* Mobile responsive grid */
 @media (max-width: 768px) {
   .project-images-container {
-    gap: 1rem;
+    gap: 0.5rem;
     padding: 0 0.5rem;
-    max-height: 40vh;
+    max-height: 35vh;
     overflow-x: auto;
     overflow-y: hidden;
   }
@@ -906,17 +906,17 @@ a {
   
   .project-modal-description p {
     font-size: 0.85rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
   
   .project-images-container .image-item {
-    height: 200px;
-    min-height: 200px;
-    min-width: 200px;
+    height: 180px;
+    min-height: 180px;
+    min-width: 180px;
   }
   
   .project-images-container .image-item img {
-    max-height: 200px;
+    max-height: 180px;
   }
   
   /* Mobile zoom modal adjustments */
@@ -947,7 +947,7 @@ a {
     right: 10px;
   }
   
-  .image-zoom-close {
+  .zoom-modal-close {
     top: -35px;
     width: 35px;
     height: 35px;
@@ -1000,7 +1000,7 @@ a {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
 }
 
-.image-zoom-close {
+.zoom-modal-close {
   position: absolute;
   top: -40px;
   right: 0;
@@ -1020,7 +1020,7 @@ a {
   z-index: 30001;
 }
 
-.image-zoom-close:hover {
+.zoom-modal-close:hover {
   background: #66d9ef;
   color: #000;
 }
