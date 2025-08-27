@@ -2374,8 +2374,8 @@ a {
 /* Version Tag */
 .version-tag {
   position: fixed;
-  bottom: 10px;
-  right: 10px;
+  top: 10px;
+  left: 10px;
   background: rgba(39, 40, 34, 0.9);
   color: #66d9ef;
   padding: 4px 8px;
