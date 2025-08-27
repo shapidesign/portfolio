@@ -37,6 +37,13 @@ const projectData = [
     tags: ["Web Development", "Canvas API", "Interactive Design"],
     images: ["kiwi.png", "nature.jpg"],
     color: 0xfd971f
+  },
+  {
+    title: "Motion Graphics Exploration",
+    description: "Learning motion design principles through experimental animations and kinetic typography, exploring the intersection of time and visual design.",
+    tags: ["Motion Design", "Animation", "Learning"],
+    images: ["kiwi.png", "nature.jpg"],
+    color: 0xae81ff
   }
 ];
 
@@ -1201,15 +1208,18 @@ function openProjectModal(project, index) {
     imagesContainer.innerHTML = '';
     
     // Preload all images first
+    console.log('Loading images for project:', project.title);
+    console.log('Image paths:', project.images);
+    
     const imagePromises = project.images.map((imageSrc, imageIndex) => {
       return new Promise((resolve) => {
         const img = new Image();
         img.onload = () => {
-          console.log(`Image ${imageIndex + 1} loaded:`, imageSrc);
+          console.log(`✅ Image ${imageIndex + 1} loaded successfully:`, imageSrc);
           resolve({ img, imageSrc, imageIndex });
         };
         img.onerror = () => {
-          console.error(`Failed to load image ${imageIndex + 1}:`, imageSrc);
+          console.error(`❌ Failed to load image ${imageIndex + 1}:`, imageSrc);
           resolve({ img: null, imageSrc, imageIndex });
         };
         img.src = imageSrc;
@@ -1248,7 +1258,12 @@ function openProjectModal(project, index) {
         const firstImage = imagesContainer.querySelector('.image-item');
         if (firstImage) {
           firstImage.classList.add('active');
+          console.log('First image set as active:', firstImage);
         }
+        
+        // Debug: Log all created images
+        console.log('Created images:', imagesContainer.querySelectorAll('.image-item').length);
+        console.log('Active image:', imagesContainer.querySelector('.image-item.active'));
         
         // Update image counter
         imagesContainer.setAttribute('data-image-counter', `1/${loadedImages.length}`);
@@ -1342,6 +1357,7 @@ function openProjectModal(project, index) {
         
       } else {
         // Desktop layout - horizontal scrolling
+        console.log('Creating desktop layout with', loadedImages.length, 'images');
         loadedImages.forEach(({ img, imageSrc, imageIndex }) => {
           if (img) {
             const imageDiv = document.createElement('div');
@@ -1352,6 +1368,12 @@ function openProjectModal(project, index) {
             displayImg.src = imageSrc;
             displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
             
+            // Add error handling for image display
+            displayImg.onerror = () => {
+              console.error('Failed to display image:', imageSrc);
+              imageDiv.innerHTML = `<div style="padding: 2rem; text-align: center; color: #666;">Image ${imageIndex + 1} failed to load</div>`;
+            };
+            
             // Zoom functionality disabled - click does nothing for now
             // imageDiv.addEventListener('click', () => {
             //   openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
@@ -1359,8 +1381,11 @@ function openProjectModal(project, index) {
             
             imageDiv.appendChild(displayImg);
             imagesContainer.appendChild(imageDiv);
+            console.log('Added desktop image:', imageIndex + 1);
           }
         });
+        
+        console.log('Desktop images created:', imagesContainer.querySelectorAll('.image-item').length);
       }
     });
   }
