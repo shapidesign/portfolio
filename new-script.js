@@ -1735,7 +1735,7 @@ function setupEventListeners() {
         formData.append('subject', `Portfolio Contact from ${name}`);
         
         // Send to Formspree
-        const response = await fetch('https://formspree.io/f/your-formspree-id', {
+        const response = await fetch('https://formspree.io/f/meolqyap', {
           method: 'POST',
           body: formData,
           headers: {
