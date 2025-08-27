@@ -28,14 +28,15 @@ const projectData = [
     title: "Pixel Portrait Challenge",
     description: "A viral TikTok challenge that transformed my creative approach to social media. I drew my followers in pixel art style, creating a unique engagement strategy that resulted in 800+ new followers in just 24 hours. This project demonstrates the power of personal connection through digital art and the effectiveness of community-driven content creation.",
     tags: ["Pixel Art", "Social Media", "Digital Illustration", "Community Engagement"],
-    images: ["project3/pixel-portrait-1.png", "project3/pixel-portrait-2.png", "project3/pixel-portrait-3.png", "project3/pixel-portrait-4.png", "project3/pixel-portrait-5.png"],
+    images: ["project3/NIR.png", "project3/amichai.png", "project3/bar.png", "project3/guysha.png", "project3/lenny.png", "project3/potato.png", "project3/thrift.png"],
+    videos: ["project3/pixels2.mp4"],
     color: 0xa6e22e
   },
   {
     title: "Design as Social Commentary",
     description: "A provocative exploration of graphic design as a medium for social criticism. Through deliberately mismatched visuals and messages, this project challenges the notion that 'the medium is the message.' Each poster intentionally disconnects graphic elements from their textual content, creating visual dissonance that forces viewers to question the relationship between form and meaning in contemporary communication.",
     tags: ["Social Commentary", "Graphic Design", "Poster Design", "Conceptual Art"],
-    images: ["project4/social-commentary-1.png", "project4/social-commentary-2.png", "project4/social-commentary-3.png", "project4/social-commentary-4.png", "project4/social-commentary-5.png"],
+    images: ["project4/Artboard 6.png", "project4/Artboard 10.png", "project4/Artboard 13.png", "project4/Artboard 14.png", "project4/Artboard 17.png", "project4/Artboard 32.png", "project4/Artboard 40.png", "project4/bun.png", "project4/table.png", "project4/לא הפוכה.png", "project4/טטריס.png", "project4/להשקיע.png", "project4/מדיח.png", "project4/אסקפיזם.png", "project4/כל ישראל.png", "project4/הרבה יותר קל.png", "project4/נעליים.png"],
     color: 0xfd971f
   },
   {
@@ -1212,88 +1213,109 @@ function openProjectModal(project, index) {
     loadingDiv.innerHTML = '<div style="text-align: center; padding: 2rem; color: #66d9ef;">Loading images...</div>';
     imagesContainer.appendChild(loadingDiv);
     
-    // Preload all images first
-    console.log('Loading images for project:', project.title);
+    // Preload all images and videos first
+    console.log('Loading media for project:', project.title);
     console.log('Image paths:', project.images);
+    console.log('Video paths:', project.videos || []);
     
-    const imagePromises = project.images.map((imageSrc, imageIndex) => {
+    // Combine images and videos into one array
+    const allMedia = [
+      ...project.images.map(src => ({ src, type: 'image' })),
+      ...(project.videos || []).map(src => ({ src, type: 'video' }))
+    ];
+    
+    const mediaPromises = allMedia.map((media, mediaIndex) => {
       return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => {
-          console.log(`✅ Image ${imageIndex + 1} loaded successfully:`, imageSrc);
-          resolve({ img, imageSrc, imageIndex });
-        };
-        img.onerror = () => {
-          console.error(`❌ Failed to load image ${imageIndex + 1}:`, imageSrc);
-          resolve({ img: null, imageSrc, imageIndex });
-        };
-        // Set timeout for image loading
-        const timeout = setTimeout(() => {
-          console.warn(`⚠️ Image ${imageIndex + 1} loading timeout:`, imageSrc);
-          resolve({ img: null, imageSrc, imageIndex });
-        }, 5000); // 5 second timeout for faster loading
-        
-        img.onload = () => {
-          clearTimeout(timeout);
-          console.log(`✅ Image ${imageIndex + 1} loaded successfully:`, imageSrc);
-          resolve({ img, imageSrc, imageIndex });
-        };
-        img.onerror = () => {
-          clearTimeout(timeout);
-          console.error(`❌ Failed to load image ${imageIndex + 1}:`, imageSrc);
-          resolve({ img: null, imageSrc, imageIndex });
-        };
-        img.src = imageSrc;
+        if (media.type === 'image') {
+          const img = new Image();
+          // Set timeout for image loading
+          const timeout = setTimeout(() => {
+            console.warn(`⚠️ Image ${mediaIndex + 1} loading timeout:`, media.src);
+            resolve({ media: null, mediaSrc: media.src, mediaIndex, type: 'image' });
+          }, 5000); // 5 second timeout for faster loading
+
+          img.onload = () => {
+            clearTimeout(timeout);
+            console.log(`✅ Image ${mediaIndex + 1} loaded successfully:`, media.src);
+            resolve({ media: img, mediaSrc: media.src, mediaIndex, type: 'image' });
+          };
+          img.onerror = () => {
+            clearTimeout(timeout);
+            console.error(`❌ Failed to load image ${mediaIndex + 1}:`, media.src);
+            resolve({ media: null, mediaSrc: media.src, mediaIndex, type: 'image' });
+          };
+          img.src = media.src;
+        } else if (media.type === 'video') {
+          // For videos, we'll create the video element directly
+          console.log(`✅ Video ${mediaIndex + 1} ready:`, media.src);
+          resolve({ media: 'video', mediaSrc: media.src, mediaIndex, type: 'video' });
+        }
       });
     });
     
-    // Once all images are loaded, add them to the container
-    Promise.all(imagePromises).then((loadedImages) => {
+    // Once all media is loaded, add them to the container
+    Promise.all(mediaPromises).then((loadedMedia) => {
       // Remove loading indicator
       const loadingDiv = imagesContainer.querySelector('div');
       if (loadingDiv) {
         loadingDiv.remove();
       }
       
-      console.log('All images processed:', loadedImages.length);
+      console.log('All media processed:', loadedMedia.length);
       
       // Check if mobile
       const isMobile = window.innerWidth <= 768;
       
       if (isMobile) {
         // Instagram-style mobile layout
-        loadedImages.forEach(({ img, imageSrc, imageIndex }) => {
+        loadedMedia.forEach(({ media, mediaSrc, mediaIndex, type }) => {
           const imageDiv = document.createElement('div');
           imageDiv.className = 'image-item';
           imageDiv.style.borderColor = accent;
-          imageDiv.dataset.index = imageIndex;
+          imageDiv.dataset.index = mediaIndex;
           
-          if (img) {
-            // Image loaded successfully
-            const displayImg = document.createElement('img');
-            displayImg.src = imageSrc;
-            displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
-            imageDiv.appendChild(displayImg);
-          } else {
-            // Image failed to load - create placeholder
-            const placeholderDiv = document.createElement('div');
-            placeholderDiv.style.cssText = `
-              width: 200px;
-              height: 200px;
-              background: linear-gradient(45deg, #272822, #3e3d32);
-              border: 2px solid ${accent};
+          if (type === 'image') {
+            if (media) {
+              // Image loaded successfully
+              const displayImg = document.createElement('img');
+              displayImg.src = mediaSrc;
+              displayImg.alt = `${project.title} - Image ${mediaIndex + 1}`;
+              imageDiv.appendChild(displayImg);
+            } else {
+              // Image failed to load - create placeholder
+              const placeholderDiv = document.createElement('div');
+              placeholderDiv.style.cssText = `
+                width: 200px;
+                height: 200px;
+                background: linear-gradient(45deg, #272822, #3e3d32);
+                border: 2px solid ${accent};
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: ${accent};
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.8rem;
+                text-align: center;
+                padding: 1rem;
+              `;
+              placeholderDiv.innerHTML = `Image ${mediaIndex + 1}<br><small>Failed to load</small>`;
+              imageDiv.appendChild(placeholderDiv);
+            }
+          } else if (type === 'video') {
+            // Video element
+            const videoElement = document.createElement('video');
+            videoElement.src = mediaSrc;
+            videoElement.controls = true;
+            videoElement.preload = 'metadata';
+            videoElement.style.cssText = `
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
               border-radius: 8px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: ${accent};
-              font-family: 'JetBrains Mono', monospace;
-              font-size: 0.8rem;
-              text-align: center;
-              padding: 1rem;
             `;
-            placeholderDiv.innerHTML = `Image ${imageIndex + 1}<br><small>Failed to load</small>`;
-            imageDiv.appendChild(placeholderDiv);
+            videoElement.alt = `${project.title} - Video ${mediaIndex + 1}`;
+            imageDiv.appendChild(videoElement);
           }
           
           // Zoom functionality disabled - click does nothing for now
@@ -1475,50 +1497,66 @@ function openProjectModal(project, index) {
         
       } else {
         // Desktop layout - horizontal scrolling
-        console.log('Creating desktop layout with', loadedImages.length, 'images');
-        loadedImages.forEach(({ img, imageSrc, imageIndex }) => {
+        console.log('Creating desktop layout with', loadedMedia.length, 'media items');
+        loadedMedia.forEach(({ media, mediaSrc, mediaIndex, type }) => {
           const imageDiv = document.createElement('div');
           imageDiv.className = 'image-item';
           imageDiv.style.borderColor = accent;
           
-          if (img) {
-            // Image loaded successfully
-            const displayImg = document.createElement('img');
-            displayImg.src = imageSrc;
-            displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
-            imageDiv.appendChild(displayImg);
-          } else {
-            // Image failed to load - create placeholder
-            const placeholderDiv = document.createElement('div');
-            placeholderDiv.style.cssText = `
-              width: 200px;
-              height: 200px;
-              background: linear-gradient(45deg, #272822, #3e3d32);
-              border: 2px solid ${accent};
+          if (type === 'image') {
+            if (media) {
+              // Image loaded successfully
+              const displayImg = document.createElement('img');
+              displayImg.src = mediaSrc;
+              displayImg.alt = `${project.title} - Image ${mediaIndex + 1}`;
+              imageDiv.appendChild(displayImg);
+            } else {
+              // Image failed to load - create placeholder
+              const placeholderDiv = document.createElement('div');
+              placeholderDiv.style.cssText = `
+                width: 200px;
+                height: 200px;
+                background: linear-gradient(45deg, #272822, #3e3d32);
+                border: 2px solid ${accent};
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: ${accent};
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.8rem;
+                text-align: center;
+                padding: 1rem;
+              `;
+              placeholderDiv.innerHTML = `Image ${mediaIndex + 1}<br><small>Failed to load</small>`;
+              imageDiv.appendChild(placeholderDiv);
+            }
+          } else if (type === 'video') {
+            // Video element
+            const videoElement = document.createElement('video');
+            videoElement.src = mediaSrc;
+            videoElement.controls = true;
+            videoElement.preload = 'metadata';
+            videoElement.style.cssText = `
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
               border-radius: 8px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: ${accent};
-              font-family: 'JetBrains Mono', monospace;
-              font-size: 0.8rem;
-              text-align: center;
-              padding: 1rem;
             `;
-            placeholderDiv.innerHTML = `Image ${imageIndex + 1}<br><small>Failed to load</small>`;
-            imageDiv.appendChild(placeholderDiv);
+            videoElement.alt = `${project.title} - Video ${mediaIndex + 1}`;
+            imageDiv.appendChild(videoElement);
           }
           
           // Zoom functionality disabled - click does nothing for now
           // imageDiv.addEventListener('click', () => {
-          //   openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
+          //   openImageZoom(mediaSrc, `${project.title} - ${type === 'video' ? 'Video' : 'Image'} ${mediaIndex + 1}`, mediaIndex);
           // });
           
           imagesContainer.appendChild(imageDiv);
-          console.log('Added desktop image/placeholder:', imageIndex + 1);
+          console.log('Added desktop media item:', mediaIndex + 1, type);
         });
         
-        console.log('Desktop images created:', imagesContainer.querySelectorAll('.image-item').length);
+        console.log('Desktop media items created:', imagesContainer.querySelectorAll('.image-item').length);
       }
     });
   }
