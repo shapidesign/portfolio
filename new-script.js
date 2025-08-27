@@ -1223,25 +1223,99 @@ function openProjectModal(project, index) {
     
     // Once all images are loaded, add them to the container
     Promise.all(imagePromises).then((loadedImages) => {
-      loadedImages.forEach(({ img, imageSrc, imageIndex }) => {
-        if (img) {
-          const imageDiv = document.createElement('div');
-          imageDiv.className = 'image-item';
-          imageDiv.style.borderColor = accent;
-          
-          const displayImg = document.createElement('img');
-          displayImg.src = imageSrc;
-          displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
-          
-          // Add click event for zoom
-          imageDiv.addEventListener('click', () => {
-            openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
-          });
-          
-          imageDiv.appendChild(displayImg);
-          imagesContainer.appendChild(imageDiv);
+      // Check if mobile
+      const isMobile = window.innerWidth <= 768;
+      
+      if (isMobile) {
+        // Instagram-style mobile layout
+        loadedImages.forEach(({ img, imageSrc, imageIndex }) => {
+          if (img) {
+            const imageDiv = document.createElement('div');
+            imageDiv.className = 'image-item';
+            imageDiv.style.borderColor = accent;
+            imageDiv.dataset.index = imageIndex;
+            
+            const displayImg = document.createElement('img');
+            displayImg.src = imageSrc;
+            displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
+            
+            // Add click event for zoom
+            imageDiv.addEventListener('click', () => {
+              openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
+            });
+            
+            imageDiv.appendChild(displayImg);
+            imagesContainer.appendChild(imageDiv);
+          }
+        });
+        
+        // Set first image as active
+        const firstImage = imagesContainer.querySelector('.image-item');
+        if (firstImage) {
+          firstImage.classList.add('active');
         }
-      });
+        
+        // Update image counter
+        imagesContainer.setAttribute('data-image-counter', `1/${loadedImages.length}`);
+        
+        // Add mobile swipe functionality
+        let startX = 0;
+        let currentImageIndex = 0;
+        
+        imagesContainer.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+        });
+        
+        imagesContainer.addEventListener('touchend', (e) => {
+          if (!startX) return;
+          
+          const endX = e.changedTouches[0].clientX;
+          const diffX = startX - endX;
+          
+          if (Math.abs(diffX) > 50) {
+            if (diffX > 0 && currentImageIndex < loadedImages.length - 1) {
+              // Swipe left - next image
+              currentImageIndex++;
+            } else if (diffX < 0 && currentImageIndex > 0) {
+              // Swipe right - previous image
+              currentImageIndex--;
+            }
+            
+            // Update active image
+            const images = imagesContainer.querySelectorAll('.image-item');
+            images.forEach((img, index) => {
+              img.classList.toggle('active', index === currentImageIndex);
+            });
+            
+            // Update counter
+            imagesContainer.setAttribute('data-image-counter', `${currentImageIndex + 1}/${loadedImages.length}`);
+          }
+          
+          startX = 0;
+        });
+        
+      } else {
+        // Desktop layout - horizontal scrolling
+        loadedImages.forEach(({ img, imageSrc, imageIndex }) => {
+          if (img) {
+            const imageDiv = document.createElement('div');
+            imageDiv.className = 'image-item';
+            imageDiv.style.borderColor = accent;
+            
+            const displayImg = document.createElement('img');
+            displayImg.src = imageSrc;
+            displayImg.alt = `${project.title} - Image ${imageIndex + 1}`;
+            
+            // Add click event for zoom
+            imageDiv.addEventListener('click', () => {
+              openImageZoom(imageSrc, `${project.title} - Image ${imageIndex + 1}`, imageIndex);
+            });
+            
+            imageDiv.appendChild(displayImg);
+            imagesContainer.appendChild(imageDiv);
+          }
+        });
+      }
     });
   }
   
@@ -1285,6 +1359,9 @@ function openImageZoom(imageSrc, altText, imageIndex = 0) {
     if (projectModalContent) {
       projectModalContent.style.pointerEvents = 'none';
     }
+    
+    // Reinitialize zoom modal events
+    initializeZoomModalEvents();
     
     // Update navigation buttons
     updateZoomNavigation();
@@ -1346,8 +1423,8 @@ function updateZoomNavigation() {
   }
 }
 
-// Add event listeners for image zoom modal
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize zoom modal event listeners
+function initializeZoomModalEvents() {
   const zoomModal = document.getElementById('image-zoom-modal');
   const zoomClose = document.getElementById('zoom-modal-close');
   const zoomContent = document.querySelector('.image-zoom-content');
@@ -1355,99 +1432,108 @@ document.addEventListener('DOMContentLoaded', () => {
   const prevBtn = document.getElementById('zoom-prev');
   const nextBtn = document.getElementById('zoom-next');
   
-  if (zoomModal) {
-    // Close on background click - this is the main exit method
-    zoomModal.addEventListener('click', function(e) {
-      if (e.target === zoomModal) {
-        closeImageZoom();
-      }
-    });
-    
-    // Close on image click
-    if (zoomedImage) {
-      zoomedImage.addEventListener('click', function(e) {
-        e.stopPropagation();
-        closeImageZoom();
-      });
-    }
-    
-    // Close on zoom modal close button click
-    if (zoomClose) {
-      zoomClose.addEventListener('click', function(e) {
-        e.stopPropagation();
-        closeImageZoom();
-      });
-    }
-    
-    // Prevent clicks on content area from closing the modal
-    if (zoomContent) {
-      zoomContent.addEventListener('click', function(e) {
-        e.stopPropagation();
-      });
-    }
-    
-    // Navigation buttons
-    if (prevBtn) {
-      prevBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        prevZoomImage();
-      });
-    }
-    
-    if (nextBtn) {
-      nextBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        nextZoomImage();
-      });
-    }
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (zoomModal.classList.contains('show')) {
-        if (e.key === 'Escape') {
-          closeImageZoom();
-        } else if (e.key === 'ArrowLeft') {
-          prevZoomImage();
-        } else if (e.key === 'ArrowRight') {
-          nextZoomImage();
-        }
-      }
-    });
-    
-    // Touch/swipe support for mobile
-    let startX = 0;
-    let startY = 0;
-    
-    // Add swipe support to the entire modal
-    zoomModal.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-    });
-    
-    zoomModal.addEventListener('touchend', (e) => {
-      if (!startX || !startY) return;
-      
-      const endX = e.changedTouches[0].clientX;
-      const endY = e.changedTouches[0].clientY;
-      
-      const diffX = startX - endX;
-      const diffY = startY - endY;
-      
-      // Check if it's a horizontal swipe
-      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-        if (diffX > 0) {
-          // Swipe left - next image
-          nextZoomImage();
-        } else {
-          // Swipe right - previous image
-          prevZoomImage();
-        }
-      }
-      
-      startX = 0;
-      startY = 0;
-    });
+  if (!zoomModal) return;
+  
+  // Remove existing listeners to prevent duplicates
+  zoomModal.removeEventListener('click', handleZoomBackgroundClick);
+  zoomedImage?.removeEventListener('click', handleZoomImageClick);
+  zoomClose?.removeEventListener('click', handleZoomCloseClick);
+  zoomContent?.removeEventListener('click', handleZoomContentClick);
+  prevBtn?.removeEventListener('click', handlePrevClick);
+  nextBtn?.removeEventListener('click', handleNextClick);
+  
+  // Add event listeners
+  zoomModal.addEventListener('click', handleZoomBackgroundClick);
+  zoomedImage?.addEventListener('click', handleZoomImageClick);
+  zoomClose?.addEventListener('click', handleZoomCloseClick);
+  zoomContent?.addEventListener('click', handleZoomContentClick);
+  prevBtn?.addEventListener('click', handlePrevClick);
+  nextBtn?.addEventListener('click', handleNextClick);
+}
+
+// Event handler functions
+function handleZoomBackgroundClick(e) {
+  if (e.target === e.currentTarget) {
+    closeImageZoom();
   }
+}
+
+function handleZoomImageClick(e) {
+  e.stopPropagation();
+  closeImageZoom();
+}
+
+function handleZoomCloseClick(e) {
+  e.stopPropagation();
+  closeImageZoom();
+}
+
+function handleZoomContentClick(e) {
+  e.stopPropagation();
+}
+
+function handlePrevClick(e) {
+  e.stopPropagation();
+  prevZoomImage();
+}
+
+function handleNextClick(e) {
+  e.stopPropagation();
+  nextZoomImage();
+}
+
+// Initialize events when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeZoomModalEvents);
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  const zoomModal = document.getElementById('image-zoom-modal');
+  if (zoomModal && zoomModal.classList.contains('show')) {
+    if (e.key === 'Escape') {
+      closeImageZoom();
+    } else if (e.key === 'ArrowLeft') {
+      prevZoomImage();
+    } else if (e.key === 'ArrowRight') {
+      nextZoomImage();
+    }
+  }
+});
+
+// Touch/swipe support for mobile
+let startX = 0;
+let startY = 0;
+
+document.addEventListener('touchstart', (e) => {
+  const zoomModal = document.getElementById('image-zoom-modal');
+  if (zoomModal && zoomModal.classList.contains('show')) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }
+});
+
+document.addEventListener('touchend', (e) => {
+  const zoomModal = document.getElementById('image-zoom-modal');
+  if (!zoomModal || !zoomModal.classList.contains('show') || !startX || !startY) return;
+  
+  const endX = e.changedTouches[0].clientX;
+  const endY = e.changedTouches[0].clientY;
+  
+  const diffX = startX - endX;
+  const diffY = startY - endY;
+  
+  // Check if it's a horizontal swipe
+  if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+    if (diffX > 0) {
+      // Swipe left - next image
+      nextZoomImage();
+    } else {
+      // Swipe right - previous image
+      prevZoomImage();
+    }
+  }
+  
+  startX = 0;
+  startY = 0;
 });
 
 function closeProjectModal() {
