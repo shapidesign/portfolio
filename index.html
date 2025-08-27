@@ -169,8 +169,10 @@
 
 <!-- Image Zoom Modal -->
 <div id="image-zoom-modal" class="image-zoom-modal">
+  <div class="zoom-exit-overlay" id="zoom-exit-overlay">
+    <div class="zoom-exit-text">Tap anywhere to close</div>
+  </div>
   <div class="image-zoom-content">
-    <span class="zoom-modal-close" id="zoom-modal-close">&times;</span>
     <button class="zoom-nav zoom-prev" id="zoom-prev">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <circle cx="10" cy="10" r="9" fill="#272822" fill-opacity="0.9" stroke="#66d9ef" stroke-width="2"/>
@@ -185,7 +187,6 @@
     </button>
     <img id="zoomed-image" src="" alt="Zoomed Image">
   </div>
-  <div class="zoom-swipe-area" id="zoom-swipe-area"></div>
 </div>
 
 <!-- Email Form Modal -->
@@ -237,7 +238,7 @@
 </div>
 
     <!-- Version Tag -->
-    <div class="version-tag">v2.5.0</div>
+    <div class="version-tag">v2.6.0</div>
 
 <!-- Scripts -->
 <!-- Make sure scripts are loaded in this exact order: -->

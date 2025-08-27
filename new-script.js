@@ -1474,7 +1474,7 @@ function updateZoomNavigation() {
 // Initialize zoom modal event listeners
 function initializeZoomModalEvents() {
   const zoomModal = document.getElementById('image-zoom-modal');
-  const zoomClose = document.getElementById('zoom-modal-close');
+  const zoomExitOverlay = document.getElementById('zoom-exit-overlay');
   const zoomContent = document.querySelector('.image-zoom-content');
   const zoomedImage = document.getElementById('zoomed-image');
   const prevBtn = document.getElementById('zoom-prev');
@@ -1483,12 +1483,19 @@ function initializeZoomModalEvents() {
   if (!zoomModal) return;
   
   // Add event listeners with direct function calls
-  // Click outside modal to close
-  zoomModal.addEventListener('click', function(e) {
-    if (e.target === zoomModal) {
+  // Click on exit overlay to close
+  if (zoomExitOverlay) {
+    zoomExitOverlay.addEventListener('click', function(e) {
+      e.stopPropagation();
       closeImageZoom();
-    }
-  });
+    });
+    
+    // Add touch event for mobile
+    zoomExitOverlay.addEventListener('touchend', function(e) {
+      e.stopPropagation();
+      closeImageZoom();
+    });
+  }
   
   // Click on image to close (escape)
   if (zoomedImage) {
@@ -1499,20 +1506,6 @@ function initializeZoomModalEvents() {
     
     // Add touch event for mobile
     zoomedImage.addEventListener('touchend', function(e) {
-      e.stopPropagation();
-      closeImageZoom();
-    });
-  }
-  
-  // X button to close
-  if (zoomClose) {
-    zoomClose.addEventListener('click', function(e) {
-      e.stopPropagation();
-      closeImageZoom();
-    });
-    
-    // Add touch event for mobile
-    zoomClose.addEventListener('touchend', function(e) {
       e.stopPropagation();
       closeImageZoom();
     });
