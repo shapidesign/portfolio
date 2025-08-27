@@ -1236,15 +1236,16 @@ function openProjectModal(project, index) {
           const maxRetries = 3;
           const isMobile = window.innerWidth <= 768;
           
-          // Mobile-specific optimizations
+          // Enhanced mobile-specific optimizations
           if (isMobile) {
             img.crossOrigin = 'anonymous'; // Handle CORS issues on mobile
             img.decoding = 'async'; // Async decoding for better performance
+            img.loading = 'eager'; // Force eager loading on mobile
           }
           
           const attemptLoad = () => {
-            // Mobile-specific timeout (longer for mobile networks)
-            const timeoutDuration = isMobile ? 5000 : 3000;
+            // Enhanced mobile-specific timeout (even longer for mobile networks)
+            const timeoutDuration = isMobile ? 8000 : 3000; // 8 seconds for mobile
             
             // Set timeout for image loading
             const timeout = setTimeout(() => {
@@ -1270,7 +1271,7 @@ function openProjectModal(project, index) {
               console.error(`❌ Failed to load image ${mediaIndex + 1} (attempt ${retryCount + 1}) [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, media.src);
               if (retryCount < maxRetries - 1) {
                 retryCount++;
-                const retryDelay = isMobile ? 1000 : 500; // Longer delay for mobile
+                const retryDelay = isMobile ? 2000 : 500; // Even longer delay for mobile (2 seconds)
                 console.log(`🔄 Retrying image ${mediaIndex + 1} (attempt ${retryCount + 1}/${maxRetries}) [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, media.src);
                 setTimeout(attemptLoad, retryDelay);
               } else {
@@ -1278,6 +1279,23 @@ function openProjectModal(project, index) {
                 resolve({ media: null, mediaSrc: media.src, mediaIndex, type: 'image' });
               }
             };
+            
+            // Add mobile-specific error handling
+            if (isMobile) {
+              img.onabort = () => {
+                clearTimeout(timeout);
+                console.warn(`⚠️ Image ${mediaIndex + 1} loading aborted [MOBILE]:`, media.src);
+                if (retryCount < maxRetries - 1) {
+                  retryCount++;
+                  const retryDelay = 2000;
+                  console.log(`🔄 Retrying aborted image ${mediaIndex + 1} (attempt ${retryCount + 1}/${maxRetries}) [MOBILE]:`, media.src);
+                  setTimeout(attemptLoad, retryDelay);
+                } else {
+                  console.error(`❌ Failed to load image ${mediaIndex + 1} after ${maxRetries} attempts [MOBILE]:`, media.src);
+                  resolve({ media: null, mediaSrc: media.src, mediaIndex, type: 'image' });
+                }
+              };
+            }
             
             img.src = media.src;
           };
@@ -2874,6 +2892,47 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Mobile-specific image loading optimization
+function optimizeMobileImageLoading() {
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    console.log('📱 Mobile detected - applying mobile image loading optimizations...');
+    
+    // Set mobile-specific image loading attributes
+    const style = document.createElement('style');
+    style.textContent = `
+      img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Preload critical images for mobile
+    const criticalImages = [
+      'project1/Artboard 1.png',
+      'project2/SHAPES.png',
+      'project3/NIR.png',
+      'project4/Artboard 6.png',
+      'project5/Screenshot 2025-08-27 at 15.16.08.png'
+    ];
+    
+    criticalImages.forEach((src, index) => {
+      setTimeout(() => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.decoding = 'async';
+        img.loading = 'eager';
+        img.onload = () => console.log(`✅ Critical mobile image preloaded: ${src}`);
+        img.onerror = () => console.warn(`⚠️ Critical mobile image failed: ${src}`);
+        img.src = src;
+      }, index * 500); // 500ms delay between critical images
+    });
+  }
+}
+
 // Preload all project images for faster loading
 function preloadProjectImages() {
   console.log('🔄 Starting image preloading...');
@@ -2922,15 +2981,19 @@ function preloadProjectImages() {
       img.src = imageSrc;
     };
     
-    // Stagger preloading for mobile to avoid overwhelming the network
-    const preloadDelay = isMobile ? index * 200 : 0; // 200ms delay between preloads on mobile
+    // Enhanced staggered preloading for mobile to avoid overwhelming the network
+    const preloadDelay = isMobile ? index * 300 : 0; // 300ms delay between preloads on mobile
     setTimeout(attemptPreload, preloadDelay);
   });
 }
 
 // Start preloading when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', preloadProjectImages);
+  document.addEventListener('DOMContentLoaded', () => {
+    optimizeMobileImageLoading();
+    preloadProjectImages();
+  });
 } else {
+  optimizeMobileImageLoading();
   preloadProjectImages();
 }
