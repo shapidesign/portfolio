@@ -1142,13 +1142,15 @@ function showNotification(message, type = 'success') {
     right: 20px;
     padding: 1rem 1.5rem;
     border-radius: 8px;
-    color: white;
+    color: #272822;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.9rem;
+    font-weight: 600;
     z-index: 10001;
     transform: translateX(100%);
     transition: transform 0.3s ease;
     ${type === 'success' ? 'background: #a6e22e;' : 'background: #f92672;'}
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   `;
   
   document.body.appendChild(notification);
@@ -1713,26 +1715,58 @@ function setupEventListeners() {
       submitBtn.disabled = true;
       
       try {
-        // Initialize EmailJS (you'll need to set up your own service)
-        // For now, we'll use a simple mailto link as fallback
-        const mailtoLink = `mailto:your-email@example.com?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\nCompany: ${company}\n\nMessage:\n${message}`)}`;
+        // Initialize EmailJS with your service configuration
+        // You'll need to replace these with your actual EmailJS credentials
+        const serviceID = 'your_service_id'; // Replace with your EmailJS service ID
+        const templateID = 'your_template_id'; // Replace with your EmailJS template ID
+        const userID = 'your_user_id'; // Replace with your EmailJS user ID
         
-        // Open default email client
-        window.open(mailtoLink);
-        
-        // Success - close modal and show success message
-        closeEmailFormModal();
-        explode(window.innerWidth / 2, window.innerHeight / 2, '#a6e22e', 150);
-        
-        // Reset form
-        emailForm.reset();
-        
-        // Show success notification
-        showNotification('Email client opened! Please send the message.', 'success');
+        // Check if EmailJS is available
+        if (typeof emailjs !== 'undefined') {
+          // Initialize EmailJS
+          emailjs.init(userID);
+          
+          // Send email using EmailJS
+          const templateParams = {
+            from_name: name,
+            from_email: email,
+            company: company,
+            message: message,
+            to_email: 'your-email@example.com' // Replace with your email
+          };
+          
+          await emailjs.send(serviceID, templateID, templateParams);
+          
+          // Success - close modal and show success message
+          closeEmailFormModal();
+          explode(window.innerWidth / 2, window.innerHeight / 2, '#a6e22e', 150);
+          
+          // Reset form
+          emailForm.reset();
+          
+          // Show success notification
+          showNotification('Message sent successfully!', 'success');
+        } else {
+          // Fallback to mailto link if EmailJS is not available
+          const mailtoLink = `mailto:your-email@example.com?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\nCompany: ${company}\n\nMessage:\n${message}`)}`;
+          
+          // Open default email client
+          window.open(mailtoLink);
+          
+          // Success - close modal and show success message
+          closeEmailFormModal();
+          explode(window.innerWidth / 2, window.innerHeight / 2, '#a6e22e', 150);
+          
+          // Reset form
+          emailForm.reset();
+          
+          // Show success notification
+          showNotification('Email client opened! Please send the message.', 'success');
+        }
         
       } catch (error) {
         console.error('Error sending email:', error);
-        showNotification('Failed to open email client. Please try again.', 'error');
+        showNotification('Failed to send message. Please try again.', 'error');
       } finally {
         // Reset button
         submitBtn.textContent = originalText;
