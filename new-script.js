@@ -1258,51 +1258,88 @@ function openProjectModal(project, index) {
         // Update image counter
         imagesContainer.setAttribute('data-image-counter', `1/${loadedImages.length}`);
         
-        // Add mobile swipe functionality
+        // Add Instagram-like mobile swipe functionality
         let startX = 0;
+        let currentX = 0;
         let currentImageIndex = 0;
+        let isDragging = false;
         
+        // Touch start
         imagesContainer.addEventListener('touchstart', (e) => {
           startX = e.touches[0].clientX;
-        });
+          currentX = startX;
+          isDragging = true;
+          e.preventDefault();
+        }, { passive: false });
         
+        // Touch move - smooth dragging
+        imagesContainer.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          
+          currentX = e.touches[0].clientX;
+          const diffX = currentX - startX;
+          
+          // Apply smooth transform to current image
+          const images = imagesContainer.querySelectorAll('.image-item');
+          const activeImage = images[currentImageIndex];
+          if (activeImage) {
+            activeImage.style.transform = `translateX(${diffX}px)`;
+            activeImage.style.transition = 'none';
+          }
+          
+          e.preventDefault();
+        }, { passive: false });
+        
+        // Touch end - snap to position
         imagesContainer.addEventListener('touchend', (e) => {
-          if (!startX) return;
+          if (!isDragging) return;
           
-          const endX = e.changedTouches[0].clientX;
-          const diffX = startX - endX;
+          const diffX = currentX - startX;
+          const threshold = 100; // Minimum swipe distance
           
-          if (Math.abs(diffX) > 50) {
+          if (Math.abs(diffX) > threshold) {
             const prevIndex = currentImageIndex;
             
-            if (diffX > 0 && currentImageIndex < loadedImages.length - 1) {
-              // Swipe left - next image (correct direction)
+            if (diffX < 0 && currentImageIndex < loadedImages.length - 1) {
+              // Swipe left - next image
               currentImageIndex++;
-            } else if (diffX < 0 && currentImageIndex > 0) {
-              // Swipe right - previous image (correct direction)
+            } else if (diffX > 0 && currentImageIndex > 0) {
+              // Swipe right - previous image
               currentImageIndex--;
             }
             
-            // Update active image with animation
+            // Update active image with smooth animation
             const images = imagesContainer.querySelectorAll('.image-item');
             images.forEach((img, index) => {
+              img.style.transition = 'transform 0.3s ease-out';
+              img.style.transform = '';
               img.classList.remove('active', 'prev', 'next');
+              
               if (index === currentImageIndex) {
                 img.classList.add('active');
               } else if (index === prevIndex) {
                 if (currentImageIndex > prevIndex) {
-                  img.classList.add('prev'); // Swiped left, previous image goes left
+                  img.classList.add('prev');
                 } else {
-                  img.classList.add('next'); // Swiped right, previous image goes right
+                  img.classList.add('next');
                 }
               }
             });
             
             // Update counter
             imagesContainer.setAttribute('data-image-counter', `${currentImageIndex + 1}/${loadedImages.length}`);
+          } else {
+            // Snap back to current position
+            const images = imagesContainer.querySelectorAll('.image-item');
+            images.forEach((img) => {
+              img.style.transition = 'transform 0.3s ease-out';
+              img.style.transform = '';
+            });
           }
           
+          isDragging = false;
           startX = 0;
+          currentX = 0;
         });
         
       } else {
@@ -1446,19 +1483,28 @@ function initializeZoomModalEvents() {
   if (!zoomModal) return;
   
   // Add event listeners with direct function calls
+  // Click outside modal to close
   zoomModal.addEventListener('click', function(e) {
     if (e.target === zoomModal) {
       closeImageZoom();
     }
   });
   
+  // Click on image to close (escape)
   if (zoomedImage) {
     zoomedImage.addEventListener('click', function(e) {
       e.stopPropagation();
       closeImageZoom();
     });
+    
+    // Add touch event for mobile
+    zoomedImage.addEventListener('touchend', function(e) {
+      e.stopPropagation();
+      closeImageZoom();
+    });
   }
   
+  // X button to close
   if (zoomClose) {
     zoomClose.addEventListener('click', function(e) {
       e.stopPropagation();
@@ -1510,42 +1556,8 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Touch/swipe support for mobile
-let startX = 0;
-let startY = 0;
-
-document.addEventListener('touchstart', (e) => {
-  const zoomModal = document.getElementById('image-zoom-modal');
-  if (zoomModal && zoomModal.classList.contains('show')) {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-  }
-});
-
-document.addEventListener('touchend', (e) => {
-  const zoomModal = document.getElementById('image-zoom-modal');
-  if (!zoomModal || !zoomModal.classList.contains('show') || !startX || !startY) return;
-  
-  const endX = e.changedTouches[0].clientX;
-  const endY = e.changedTouches[0].clientY;
-  
-  const diffX = startX - endX;
-  const diffY = startY - endY;
-  
-  // Check if it's a horizontal swipe
-  if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-    if (diffX > 0) {
-      // Swipe left - next image (correct direction)
-      nextZoomImage();
-    } else {
-      // Swipe right - previous image (correct direction)
-      prevZoomImage();
-    }
-  }
-  
-  startX = 0;
-  startY = 0;
-});
+// Touch/swipe support for mobile - REMOVED from zoom modal
+// Navigation is now only with buttons
 
 function closeProjectModal() {
   console.log('Closing project modal...');
