@@ -1234,36 +1234,47 @@ function openProjectModal(project, index) {
           const img = new Image();
           let retryCount = 0;
           const maxRetries = 3;
+          const isMobile = window.innerWidth <= 768;
+          
+          // Mobile-specific optimizations
+          if (isMobile) {
+            img.crossOrigin = 'anonymous'; // Handle CORS issues on mobile
+            img.decoding = 'async'; // Async decoding for better performance
+          }
           
           const attemptLoad = () => {
+            // Mobile-specific timeout (longer for mobile networks)
+            const timeoutDuration = isMobile ? 5000 : 3000;
+            
             // Set timeout for image loading
             const timeout = setTimeout(() => {
-              console.warn(`⚠️ Image ${mediaIndex + 1} loading timeout (attempt ${retryCount + 1}):`, media.src);
+              console.warn(`⚠️ Image ${mediaIndex + 1} loading timeout (attempt ${retryCount + 1}) [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, media.src);
               if (retryCount < maxRetries - 1) {
                 retryCount++;
-                console.log(`🔄 Retrying image ${mediaIndex + 1} (attempt ${retryCount + 1}/${maxRetries}):`, media.src);
+                console.log(`🔄 Retrying image ${mediaIndex + 1} (attempt ${retryCount + 1}/${maxRetries}) [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, media.src);
                 attemptLoad();
               } else {
-                console.error(`❌ Failed to load image ${mediaIndex + 1} after ${maxRetries} attempts:`, media.src);
+                console.error(`❌ Failed to load image ${mediaIndex + 1} after ${maxRetries} attempts [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, media.src);
                 resolve({ media: null, mediaSrc: media.src, mediaIndex, type: 'image' });
               }
-            }, 3000); // 3 second timeout with retry mechanism
+            }, timeoutDuration);
 
             img.onload = () => {
               clearTimeout(timeout);
-              console.log(`✅ Image ${mediaIndex + 1} loaded successfully (attempt ${retryCount + 1}):`, media.src);
+              console.log(`✅ Image ${mediaIndex + 1} loaded successfully (attempt ${retryCount + 1}) [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, media.src);
               resolve({ media: img, mediaSrc: media.src, mediaIndex, type: 'image' });
             };
             
             img.onerror = () => {
               clearTimeout(timeout);
-              console.error(`❌ Failed to load image ${mediaIndex + 1} (attempt ${retryCount + 1}):`, media.src);
+              console.error(`❌ Failed to load image ${mediaIndex + 1} (attempt ${retryCount + 1}) [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, media.src);
               if (retryCount < maxRetries - 1) {
                 retryCount++;
-                console.log(`🔄 Retrying image ${mediaIndex + 1} (attempt ${retryCount + 1}/${maxRetries}):`, media.src);
-                setTimeout(attemptLoad, 500); // Wait 500ms before retry
+                const retryDelay = isMobile ? 1000 : 500; // Longer delay for mobile
+                console.log(`🔄 Retrying image ${mediaIndex + 1} (attempt ${retryCount + 1}/${maxRetries}) [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, media.src);
+                setTimeout(attemptLoad, retryDelay);
               } else {
-                console.error(`❌ Failed to load image ${mediaIndex + 1} after ${maxRetries} attempts:`, media.src);
+                console.error(`❌ Failed to load image ${mediaIndex + 1} after ${maxRetries} attempts [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, media.src);
                 resolve({ media: null, mediaSrc: media.src, mediaIndex, type: 'image' });
               }
             };
@@ -2867,6 +2878,7 @@ document.head.appendChild(style);
 function preloadProjectImages() {
   console.log('🔄 Starting image preloading...');
   const allImages = [];
+  const isMobile = window.innerWidth <= 768;
   
   // Collect all image paths from all projects
   projectData.forEach(project => {
@@ -2875,35 +2887,44 @@ function preloadProjectImages() {
     }
   });
   
-  console.log(`📸 Preloading ${allImages.length} images...`);
+  console.log(`📸 Preloading ${allImages.length} images [${isMobile ? 'MOBILE' : 'DESKTOP'}]...`);
   
-  // Preload images in background with retry mechanism
+  // Preload images in background with mobile-optimized retry mechanism
   allImages.forEach((imageSrc, index) => {
     let retryCount = 0;
-    const maxRetries = 2;
+    const maxRetries = isMobile ? 3 : 2; // More retries for mobile
     
     const attemptPreload = () => {
       const img = new Image();
       
+      // Mobile-specific optimizations
+      if (isMobile) {
+        img.crossOrigin = 'anonymous';
+        img.decoding = 'async';
+      }
+      
       img.onload = () => {
-        console.log(`✅ Preloaded image ${index + 1}/${allImages.length}:`, imageSrc);
+        console.log(`✅ Preloaded image ${index + 1}/${allImages.length} [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, imageSrc);
       };
       
       img.onerror = () => {
-        console.warn(`⚠️ Failed to preload image ${index + 1}/${allImages.length} (attempt ${retryCount + 1}):`, imageSrc);
+        console.warn(`⚠️ Failed to preload image ${index + 1}/${allImages.length} (attempt ${retryCount + 1}) [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, imageSrc);
         if (retryCount < maxRetries - 1) {
           retryCount++;
-          console.log(`🔄 Retrying preload for image ${index + 1}/${allImages.length} (attempt ${retryCount + 1}/${maxRetries}):`, imageSrc);
-          setTimeout(attemptPreload, 1000); // Wait 1 second before retry
+          const retryDelay = isMobile ? 1500 : 1000; // Longer delay for mobile
+          console.log(`🔄 Retrying preload for image ${index + 1}/${allImages.length} (attempt ${retryCount + 1}/${maxRetries}) [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, imageSrc);
+          setTimeout(attemptPreload, retryDelay);
         } else {
-          console.error(`❌ Failed to preload image ${index + 1}/${allImages.length} after ${maxRetries} attempts:`, imageSrc);
+          console.error(`❌ Failed to preload image ${index + 1}/${allImages.length} after ${maxRetries} attempts [${isMobile ? 'MOBILE' : 'DESKTOP'}]:`, imageSrc);
         }
       };
       
       img.src = imageSrc;
     };
     
-    attemptPreload();
+    // Stagger preloading for mobile to avoid overwhelming the network
+    const preloadDelay = isMobile ? index * 200 : 0; // 200ms delay between preloads on mobile
+    setTimeout(attemptPreload, preloadDelay);
   });
 }
 
