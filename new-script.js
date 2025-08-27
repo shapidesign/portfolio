@@ -1231,7 +1231,7 @@ function openProjectModal(project, index) {
         const timeout = setTimeout(() => {
           console.warn(`⚠️ Image ${imageIndex + 1} loading timeout:`, imageSrc);
           resolve({ img: null, imageSrc, imageIndex });
-        }, 10000); // 10 second timeout
+        }, 5000); // 5 second timeout for faster loading
         
         img.onload = () => {
           clearTimeout(timeout);

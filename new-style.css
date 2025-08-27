@@ -856,7 +856,7 @@ a {
 }
 
 .project-modal-description {
-  text-align: right;
+  text-align: left;
   flex-shrink: 0;
   margin-top: 2rem;
   padding: 0 2rem;
