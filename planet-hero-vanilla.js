@@ -34,8 +34,8 @@ class PlanetHero {
     this.setupThreeJS();
     this.createScene();
     this.createLights();
-    this.createEarth();
-    this.createMoon();
+    // this.createEarth(); // Removed Earth
+    // this.createMoon(); // Removed Moon
     this.createStars();
     this.createAtmosphere();
     this.setupControls();
@@ -362,15 +362,15 @@ class PlanetHero {
   animate() {
     this.animationId = requestAnimationFrame(() => this.animate());
     
-    // Rotate Earth
-    if (this.earth) {
-      this.earth.rotation.y += 0.008;
-    }
+    // Rotate Earth (removed)
+    // if (this.earth) {
+    //   this.earth.rotation.y += 0.008;
+    // }
     
-    // Rotate Moon
-    if (this.moon) {
-      this.moon.rotation.y += 0.005;
-    }
+    // Rotate Moon (removed)
+    // if (this.moon) {
+    //   this.moon.rotation.y += 0.005;
+    // }
     
     // Rotate Stars
     if (this.stars) {

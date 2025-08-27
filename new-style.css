@@ -285,13 +285,12 @@ a {
   opacity: 1;
 }
 
-/* Solar System Section - Hidden */
+/* Solar System Section */
 .solar-system-section {
   position: relative;
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  display: none; /* Hide 3D solar system */
 }
 
 #solar-system-canvas {
