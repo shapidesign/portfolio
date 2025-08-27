@@ -887,20 +887,71 @@ a {
   .project-images-container {
     gap: 1rem;
     padding: 0 0.5rem;
+    max-height: 40vh;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
   
   .project-modal-content {
-    padding: 1.5rem;
-    height: 90vh;
-    width: 95%;
+    padding: 1rem;
+    height: 95vh;
+    width: 98%;
+    max-height: 95vh;
   }
   
   .project-modal-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
   }
   
   .project-modal-description p {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+  
+  .project-images-container .image-item {
+    height: 200px;
+    min-height: 200px;
+    min-width: 200px;
+  }
+  
+  .project-images-container .image-item img {
+    max-height: 200px;
+  }
+  
+  /* Mobile zoom modal adjustments */
+  .image-zoom-modal {
+    padding: 1rem;
+  }
+  
+  .image-zoom-content {
+    max-width: 95vw;
+    max-height: 80vh;
+  }
+  
+  .image-zoom-content img {
+    max-width: 95vw;
+    max-height: 80vh;
+  }
+  
+  .zoom-nav {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .zoom-prev {
+    left: 10px;
+  }
+  
+  .zoom-next {
+    right: 10px;
+  }
+  
+  .image-zoom-close {
+    top: -35px;
+    width: 35px;
+    height: 35px;
+    font-size: 1.5rem;
   }
 }
 
@@ -981,8 +1032,8 @@ a {
   transform: translateY(-50%);
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
