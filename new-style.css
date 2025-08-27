@@ -923,6 +923,7 @@ a {
 .image-zoom-modal.show {
   display: flex;
   animation: zoomFadeIn 0.3s ease;
+  cursor: pointer;
 }
 
 @keyframes zoomFadeIn {
@@ -980,8 +981,8 @@ a {
   transform: translateY(-50%);
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 135px;
-  height: 135px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;

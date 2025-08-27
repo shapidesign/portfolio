@@ -1281,12 +1281,14 @@ function openImageZoom(imageSrc, altText, imageIndex = 0) {
 }
 
 function closeImageZoom() {
+  console.log('closeImageZoom called');
   const zoomModal = document.getElementById('image-zoom-modal');
   if (zoomModal) {
     zoomModal.classList.remove('show');
     document.body.style.overflow = ''; // Restore scrolling
     zoomImages = [];
     currentZoomIndex = 0;
+    console.log('Modal closed successfully');
   }
 }
 
@@ -1333,16 +1335,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const swipeArea = document.getElementById('zoom-swipe-area');
   
   if (zoomModal) {
-    // Close on background click
+    // Close on background click - more direct approach
     zoomModal.addEventListener('click', (e) => {
-      if (e.target === zoomModal || e.target === swipeArea) {
+      console.log('Modal clicked:', e.target, e.target.className);
+      if (e.target === zoomModal || e.target.classList.contains('image-zoom-modal')) {
+        console.log('Closing modal - background click');
         closeImageZoom();
       }
     });
     
+    // Additional click handler for the entire modal
+    zoomModal.onclick = function(e) {
+      console.log('Modal onclick triggered:', e.target);
+      if (e.target === this) {
+        console.log('Closing via onclick');
+        closeImageZoom();
+      }
+    };
+    
     // Close on image click
     if (zoomedImage) {
       zoomedImage.addEventListener('click', (e) => {
+        console.log('Image clicked - closing modal');
         e.stopPropagation();
         closeImageZoom();
       });
@@ -1351,6 +1365,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close on close button click
     if (zoomClose) {
       zoomClose.addEventListener('click', (e) => {
+        console.log('Close button clicked');
         e.stopPropagation();
         closeImageZoom();
       });
@@ -1359,7 +1374,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Close on content area click (outside image)
     if (zoomContent) {
       zoomContent.addEventListener('click', (e) => {
+        console.log('Content area clicked:', e.target);
         if (e.target === zoomContent) {
+          console.log('Closing modal - content area click');
           closeImageZoom();
         }
       });
