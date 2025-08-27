@@ -1318,11 +1318,12 @@ function openProjectModal(project, index) {
               if (index === currentImageIndex) {
                 img.classList.add('active');
               } else if (index === prevIndex) {
-                if (currentImageIndex > prevIndex) {
-                  // Swiped left, previous image goes left
+                // Previous image should go in the opposite direction of the swipe
+                if (diffX < 0) {
+                  // Swiped left, previous image goes left (prev)
                   img.classList.add('prev');
                 } else {
-                  // Swiped right, previous image goes right
+                  // Swiped right, previous image goes right (next)
                   img.classList.add('next');
                 }
               }
@@ -1712,9 +1713,12 @@ function setupEventListeners() {
       submitBtn.disabled = true;
       
       try {
-        // Send email using EmailJS (you'll need to set this up)
-        // For now, we'll simulate a successful submission
-        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call
+        // Initialize EmailJS (you'll need to set up your own service)
+        // For now, we'll use a simple mailto link as fallback
+        const mailtoLink = `mailto:your-email@example.com?subject=Portfolio Contact from ${encodeURIComponent(name)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\nCompany: ${company}\n\nMessage:\n${message}`)}`;
+        
+        // Open default email client
+        window.open(mailtoLink);
         
         // Success - close modal and show success message
         closeEmailFormModal();
@@ -1724,11 +1728,11 @@ function setupEventListeners() {
         emailForm.reset();
         
         // Show success notification
-        showNotification('Message sent successfully!', 'success');
+        showNotification('Email client opened! Please send the message.', 'success');
         
       } catch (error) {
         console.error('Error sending email:', error);
-        showNotification('Failed to send message. Please try again.', 'error');
+        showNotification('Failed to open email client. Please try again.', 'error');
       } finally {
         // Reset button
         submitBtn.textContent = originalText;
