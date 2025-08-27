@@ -1273,6 +1273,8 @@ function openProjectModal(project, index) {
           const diffX = startX - endX;
           
           if (Math.abs(diffX) > 50) {
+            const prevIndex = currentImageIndex;
+            
             if (diffX > 0 && currentImageIndex < loadedImages.length - 1) {
               // Swipe left - next image
               currentImageIndex++;
@@ -1281,10 +1283,15 @@ function openProjectModal(project, index) {
               currentImageIndex--;
             }
             
-            // Update active image
+            // Update active image with animation
             const images = imagesContainer.querySelectorAll('.image-item');
             images.forEach((img, index) => {
-              img.classList.toggle('active', index === currentImageIndex);
+              img.classList.remove('active', 'prev');
+              if (index === currentImageIndex) {
+                img.classList.add('active');
+              } else if (index === prevIndex) {
+                img.classList.add('prev');
+              }
             });
             
             // Update counter
@@ -1434,52 +1441,58 @@ function initializeZoomModalEvents() {
   
   if (!zoomModal) return;
   
-  // Remove existing listeners to prevent duplicates
-  zoomModal.removeEventListener('click', handleZoomBackgroundClick);
-  zoomedImage?.removeEventListener('click', handleZoomImageClick);
-  zoomClose?.removeEventListener('click', handleZoomCloseClick);
-  zoomContent?.removeEventListener('click', handleZoomContentClick);
-  prevBtn?.removeEventListener('click', handlePrevClick);
-  nextBtn?.removeEventListener('click', handleNextClick);
+  // Clear all existing event listeners by cloning and replacing
+  const newZoomModal = zoomModal.cloneNode(true);
+  zoomModal.parentNode.replaceChild(newZoomModal, zoomModal);
   
-  // Add event listeners
-  zoomModal.addEventListener('click', handleZoomBackgroundClick);
-  zoomedImage?.addEventListener('click', handleZoomImageClick);
-  zoomClose?.addEventListener('click', handleZoomCloseClick);
-  zoomContent?.addEventListener('click', handleZoomContentClick);
-  prevBtn?.addEventListener('click', handlePrevClick);
-  nextBtn?.addEventListener('click', handleNextClick);
-}
-
-// Event handler functions
-function handleZoomBackgroundClick(e) {
-  if (e.target === e.currentTarget) {
-    closeImageZoom();
+  // Get fresh references after cloning
+  const freshZoomModal = document.getElementById('image-zoom-modal');
+  const freshZoomClose = document.getElementById('zoom-modal-close');
+  const freshZoomContent = document.querySelector('.image-zoom-content');
+  const freshZoomedImage = document.getElementById('zoomed-image');
+  const freshPrevBtn = document.getElementById('zoom-prev');
+  const freshNextBtn = document.getElementById('zoom-next');
+  
+  // Add event listeners with direct function calls
+  freshZoomModal.addEventListener('click', function(e) {
+    if (e.target === freshZoomModal) {
+      closeImageZoom();
+    }
+  });
+  
+  if (freshZoomedImage) {
+    freshZoomedImage.addEventListener('click', function(e) {
+      e.stopPropagation();
+      closeImageZoom();
+    });
   }
-}
-
-function handleZoomImageClick(e) {
-  e.stopPropagation();
-  closeImageZoom();
-}
-
-function handleZoomCloseClick(e) {
-  e.stopPropagation();
-  closeImageZoom();
-}
-
-function handleZoomContentClick(e) {
-  e.stopPropagation();
-}
-
-function handlePrevClick(e) {
-  e.stopPropagation();
-  prevZoomImage();
-}
-
-function handleNextClick(e) {
-  e.stopPropagation();
-  nextZoomImage();
+  
+  if (freshZoomClose) {
+    freshZoomClose.addEventListener('click', function(e) {
+      e.stopPropagation();
+      closeImageZoom();
+    });
+  }
+  
+  if (freshZoomContent) {
+    freshZoomContent.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+  }
+  
+  if (freshPrevBtn) {
+    freshPrevBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      prevZoomImage();
+    });
+  }
+  
+  if (freshNextBtn) {
+    freshNextBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nextZoomImage();
+    });
+  }
 }
 
 // Initialize events when DOM is ready
