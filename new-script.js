@@ -479,7 +479,7 @@ function initLaunchScreen() {
     });
 
     // TEST: Make button super obvious it's clickable
-    launchBtn.style.cursor = 'pointer';
+            launchBtn.style.cursor = 'none';
     launchBtn.title = 'Click me to launch!';
   };
 
@@ -734,7 +734,7 @@ function setupInteractions() {
     // Check sun intersection
     const sunIntersects = raycaster.intersectObject(solarSun);
     if (sunIntersects.length > 0) {
-      solarRenderer.domElement.style.cursor = 'pointer';
+      solarRenderer.domElement.style.cursor = 'none';
     }
     
     // Check planet intersections
@@ -2705,7 +2705,7 @@ function closeHeroModal() {
   const heroBtn = document.getElementById('hero-btn');
   if (heroBtn) {
     heroBtn.style.pointerEvents = 'auto';
-    heroBtn.style.cursor = 'pointer';
+            heroBtn.style.cursor = 'none';
   }
 }
 
