@@ -94,22 +94,32 @@ function extractUrl(prop) {
   return match ? match[0] : "";
 }
 
+function isStableImageUrl(url) {
+  if (!url) return false;
+  if (url.includes("prod-files-secure.s3.us-west-2.amazonaws.com")) return false;
+  if (/\.(pdf)(\?|$)/i.test(url)) return false;
+  return true;
+}
+
 function extractImages(prop) {
   if (!prop) return [];
+  let urls = [];
   if (prop.type === "files") {
-    return (prop.files || [])
+    urls = (prop.files || [])
       .map((file) => {
         if (file.type === "external") return file.external?.url;
         if (file.type === "file") return file.file?.url;
         return null;
       })
       .filter(Boolean);
+  } else {
+    const text = extractText(prop);
+    urls = text
+      .split(/[\n,\s]+/)
+      .map((value) => value.trim())
+      .filter((value) => /^https?:\/\//i.test(value));
   }
-  const text = extractText(prop);
-  return text
-    .split(/[\n,\s]+/)
-    .map((value) => value.trim())
-    .filter((value) => /^https?:\/\//i.test(value));
+  return urls.filter(isStableImageUrl);
 }
 
 function extractTags(prop) {

@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Reveal } from "@/components/ui/Reveal";
+import { ImageCarousel } from "@/components/ui/ImageCarousel";
 import { getProjectBySlug, projects } from "@/data/projects";
+import { DigitalHandprintEmbed } from "./DigitalHandprintEmbed";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -31,92 +33,50 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const project = getProjectBySlug(slug);
   if (!project) notFound();
 
+  const isDigitalHandprint = slug === "digital-handprint";
+
   return (
     <main className="section content-wrap project-detail">
       <Reveal>
         <p className="eyebrow">{project.subHeader || project.category}</p>
         <h1>{project.title}</h1>
-        <p className="lead">{project.description || project.summary}</p>
       </Reveal>
 
       <Reveal>
         <div className="meta-row">
-          {project.tags.length > 0 && (
-            <p>
-              <strong>Tags</strong> {project.tags.join(" • ")}
-            </p>
-          )}
-          {project.year && (
-            <p>
-              <strong>Year</strong> {project.year}
-            </p>
-          )}
+          {project.tags.length > 0 &&
+            project.tags.map((tag) => (
+              <span key={tag} className="project-tag">
+                {tag}
+              </span>
+            ))}
+          {project.year && <span className="meta-year">{project.year}</span>}
         </div>
       </Reveal>
 
+      {isDigitalHandprint ? (
+        <Reveal>
+          <DigitalHandprintEmbed />
+        </Reveal>
+      ) : (
+        project.images.length > 0 && (
+          <Reveal>
+            <ImageCarousel images={project.images} alt={project.title} />
+          </Reveal>
+        )
+      )}
+
       <Reveal>
         <section className="detail-block">
-          <h2>Overview</h2>
-          <p>{project.bodyText}</p>
+          <p className="preserve-breaks">{project.description || project.bodyText}</p>
         </section>
       </Reveal>
 
-      {project.challenge && (
-        <Reveal>
-          <section className="detail-block">
-            <h2>The Challenge</h2>
-            <p>{project.challenge}</p>
-          </section>
-        </Reveal>
-      )}
-
-      {project.process && (
-        <Reveal>
-          <section className="detail-block">
-            <h2>The Process</h2>
-            <p>{project.process}</p>
-          </section>
-        </Reveal>
-      )}
-
-      {project.outcome && (
-        <Reveal>
-          <section className="detail-block">
-            <h2>The Outcome</h2>
-            <p>{project.outcome}</p>
-          </section>
-        </Reveal>
-      )}
-
-      {project.images.length > 0 && (
-        <Reveal>
-          <section className="detail-block">
-            <h2>Images</h2>
-            <div className="project-image-list">
-              {project.images.map((imageUrl) => (
-                <a
-                  key={imageUrl}
-                  href={imageUrl}
-                  className="text-link"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  {imageUrl}
-                </a>
-              ))}
-            </div>
-          </section>
-        </Reveal>
-      )}
-
       {project.url && (
         <Reveal>
-          <section className="detail-block">
-            <h2>Project URL</h2>
-            <a href={project.url} className="text-link" target="_blank" rel="noreferrer noopener">
-              Visit external project
-            </a>
-          </section>
+          <a href={project.url} className="button button-ghost" target="_blank" rel="noreferrer noopener">
+            Visit project
+          </a>
         </Reveal>
       )}
 

@@ -14,8 +14,8 @@ function isValidProject(item: any): item is Project {
   );
 }
 
-const generatedProjects = Array.isArray(generatedRaw)
-  ? generatedRaw.filter(isValidProject)
+const generatedProjects: Project[] = Array.isArray(generatedRaw)
+  ? (generatedRaw as unknown[]).filter(isValidProject)
   : [];
 
 // Use generated projects if available, otherwise fallback to static content

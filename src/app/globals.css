@@ -396,11 +396,13 @@ p {
 }
 
 .project-tag {
-  border: 1px solid color-mix(in srgb, var(--color-accent-white) 22%, transparent);
+  background: color-mix(in srgb, var(--color-accent-blue) 18%, transparent);
+  color: var(--color-accent-blue);
+  border: none;
   border-radius: var(--radius-pill);
-  padding: 0.2rem 0.5rem;
-  font-size: 0.74rem;
-  color: var(--color-text-soft);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.76rem;
+  font-weight: 500;
 }
 
 .project-category {
@@ -426,27 +428,33 @@ p {
 
 .project-detail {
   display: grid;
-  gap: 1.2rem;
+  gap: 1.6rem;
+  max-width: var(--container-max);
+  margin-inline: auto;
 }
 
 .meta-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.85rem;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.meta-row p {
+.meta-year {
   background: var(--color-surface);
   border: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
-  border-radius: 12px;
-  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-pill);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--color-text-soft);
 }
 
 .detail-block {
   border: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
   border-radius: 14px;
   background: var(--color-surface);
-  padding: 1rem;
+  padding: clamp(1rem, 2.5vw, 1.5rem);
 }
 
 .detail-block h2 {
@@ -458,16 +466,170 @@ p {
   max-width: 70ch;
 }
 
-.project-image-list {
-  margin-top: 0.7rem;
-  display: grid;
-  gap: 0.6rem;
+.preserve-breaks {
+  white-space: pre-line;
 }
 
 .detail-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
+}
+
+/* ---------- Image Carousel ---------- */
+
+.image-carousel {
+  position: relative;
+  border-radius: var(--radius-soft);
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 0;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  background: var(--color-surface-2);
+}
+
+.carousel-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background: color-mix(in srgb, var(--color-bg) 75%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 20%, transparent);
+  color: var(--color-text);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.carousel-btn:hover {
+  background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+  border-color: var(--color-accent-blue);
+}
+
+.carousel-btn:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
+  outline-offset: 2px;
+}
+
+.carousel-btn-prev {
+  left: 12px;
+}
+
+.carousel-btn-next {
+  right: 12px;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 0 0;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: color-mix(in srgb, var(--color-accent-white) 22%, transparent);
+  cursor: pointer;
+  padding: 0;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.carousel-dot.active {
+  background: var(--color-accent-blue);
+  transform: scale(1.25);
+}
+
+/* ---------- Interactive Cursor Art Player ---------- */
+
+.cursor-art-interactive {
+  border-radius: var(--radius-soft);
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
+}
+
+.cursor-art-canvas-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 300px;
+  background: #000;
+}
+
+.cursor-art-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-accent-white) 10%, transparent);
+}
+
+.cursor-art-controls select,
+.cursor-art-controls button {
+  background: var(--color-surface-2);
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 18%, transparent);
+  border-radius: 8px;
+  color: var(--color-text);
+  padding: 0.4rem 0.65rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: border-color 180ms ease;
+}
+
+.cursor-art-controls select:focus,
+.cursor-art-controls button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
+  outline-offset: 2px;
+}
+
+.cursor-art-controls button:hover {
+  border-color: var(--color-accent-blue);
+}
+
+.cursor-art-controls button.active {
+  background: color-mix(in srgb, var(--color-accent-blue) 20%, transparent);
+  border-color: var(--color-accent-blue);
+  color: var(--color-accent-blue);
+}
+
+.cursor-art-counter {
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-family: monospace;
+  color: var(--color-text-soft);
 }
 
 /* ---------- About Page ---------- */
