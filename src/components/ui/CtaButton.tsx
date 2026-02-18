@@ -32,6 +32,7 @@ export function CtaButton({ href, variant = "primary", download, children }: Cta
     <Link
       ref={ref as React.RefObject<HTMLAnchorElement>}
       href={href}
+      prefetch={href === "/work" ? false : undefined}
       className={className}
     >
       {children}

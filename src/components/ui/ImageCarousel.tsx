@@ -62,6 +62,7 @@ export function ImageCarousel({ images, alt }: ImageCarouselProps) {
       <div className="carousel-track" ref={trackRef}>
         {filteredImages.map((src, i) => (
           <div key={src} className="carousel-slide">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={src} alt={`${alt} — image ${i + 1}`} loading={i === 0 ? "eager" : "lazy"} />
           </div>
         ))}

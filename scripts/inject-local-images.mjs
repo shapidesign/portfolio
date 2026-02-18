@@ -7,10 +7,31 @@ const IMAGES_DIR = resolve(process.cwd(), "public/images");
 async function listImages(dir) {
   try {
     const files = await readdir(dir);
-    return files
-      .filter((f) => /\.(png|jpe?g|webp|svg|avif|gif)$/i.test(f))
-      .sort()
-      .map((f) => `/images/${dir.split("/public/images/")[1]}/${f}`);
+    const imageFiles = files.filter((f) => /\.(png|jpe?g|webp|svg|avif|gif)$/i.test(f));
+    const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
+    const naturallySorted = [...imageFiles].sort((a, b) => collator.compare(a, b));
+
+    let orderMap = new Map();
+    try {
+      const customOrderRaw = await readFile(resolve(dir, "_order.txt"), "utf8");
+      const customOrder = customOrderRaw
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+      orderMap = new Map(customOrder.map((filename, index) => [filename, index]));
+    } catch {
+      // _order.txt is optional
+    }
+
+    const sorted = [...naturallySorted].sort((a, b) => {
+      const aIndex = orderMap.has(a) ? orderMap.get(a) : Number.POSITIVE_INFINITY;
+      const bIndex = orderMap.has(b) ? orderMap.get(b) : Number.POSITIVE_INFINITY;
+      if (aIndex !== bIndex) return aIndex - bIndex;
+      return collator.compare(a, b);
+    });
+
+    const relativeDir = dir.replace(`${IMAGES_DIR}/`, "").replace(/\\/g, "/");
+    return sorted.map((f) => `/images/${relativeDir}/${f}`);
   } catch {
     return [];
   }

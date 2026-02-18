@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 const DEFAULT_TEXT =
   "השימוש בגופנים ממשפחת הסריף, ובפרט בגופן 'דוד', נחשב לסטנדרט המקובל בכתיבה אקדמית ומשפטית בישראל מזה עשרות שנים.";
@@ -19,14 +20,20 @@ export function DavidkaEmbed() {
         aria-label="Toggle between Davidka and David Libre fonts"
       >
         <div className="davidka-flip-stack">
-          <img
+          <Image
             src="/assets/davidka/Davidka-over-David.svg"
             alt="Davidka font"
-            className={`davidka-flip-img ${isDavidka ? "active" : ""}`}
+            width={520}
+            height={80}
+            sizes="(max-width: 700px) 100vw, 520px"
+            className={`davidka-flip-img davidka-flip-img-davidka ${isDavidka ? "active" : ""}`}
           />
-          <img
+          <Image
             src="/assets/davidka/David-over-Davidka.svg"
             alt="David Libre font"
+            width={520}
+            height={80}
+            sizes="(max-width: 700px) 100vw, 520px"
             className={`davidka-flip-img ${!isDavidka ? "active" : ""}`}
           />
         </div>
@@ -53,7 +60,7 @@ export function DavidkaEmbed() {
           </div>
           <div className="davidka-col">
             <span className="davidka-col-label davidka-col-label-alt">Davidka</span>
-            <div className="davidka-col-paper" style={{ fontFamily: "'Davidka', serif" }}>
+            <div className="davidka-col-paper davidka-col-paper-alt" style={{ fontFamily: "'Davidka', serif" }}>
               <p dir="rtl">{text}</p>
             </div>
           </div>

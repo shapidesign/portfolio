@@ -1,11 +1,10 @@
 import { Project, Accent, ShapeVariant } from "../types/project";
-import { projectsContent } from "./projects.content";
 import generatedRaw from "./projects.generated.json";
 
 export type { Project, Accent, ShapeVariant };
 
 // Helper to validate generated data
-function isValidProject(item: any): item is Project {
+function isValidProject(item: unknown): item is Project {
   return (
     typeof item === "object" &&
     item !== null &&
@@ -18,9 +17,8 @@ const generatedProjects: Project[] = Array.isArray(generatedRaw)
   ? (generatedRaw as unknown[]).filter(isValidProject)
   : [];
 
-// Use generated projects if available, otherwise fallback to static content
-export const projects: Project[] =
-  generatedProjects.length > 0 ? generatedProjects : projectsContent;
+// Always prefer generated projects to avoid showing placeholder content.
+export const projects: Project[] = generatedProjects;
 
 export function getProjectBySlug(slug: string) {
   return projects.find((project) => project.slug === slug);

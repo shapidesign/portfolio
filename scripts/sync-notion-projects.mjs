@@ -256,8 +256,9 @@ async function run() {
   const databaseId = process.env.NOTION_DATABASE_ID;
 
   if (!apiKey || !databaseId) {
-    console.warn("[sync:projects] Missing NOTION_API_KEY or NOTION_DATABASE_ID. Writing empty generated data.");
-    await writeGenerated([]);
+    console.warn(
+      "[sync:projects] Missing NOTION_API_KEY or NOTION_DATABASE_ID. Keeping existing generated project data."
+    );
     return;
   }
 
@@ -291,9 +292,8 @@ async function run() {
     await writeGenerated(projects);
     console.log(`[sync:projects] Wrote ${projects.length} project(s) to src/data/projects.generated.json`);
   } catch (error) {
-    console.warn("[sync:projects] Notion sync failed, writing empty generated data for local fallback.");
+    console.warn("[sync:projects] Notion sync failed. Keeping existing generated project data.");
     console.warn(error instanceof Error ? error.message : String(error));
-    await writeGenerated([]);
   }
 }
 

@@ -14,13 +14,19 @@ export default function WorkPage() {
         </div>
       </Reveal>
 
-      <div className="project-grid">
-        {projects.map((project) => (
-          <Reveal key={project.slug}>
-            <ProjectCard project={project} />
-          </Reveal>
-        ))}
-      </div>
+      {projectCount > 0 ? (
+        <div className="project-grid">
+          {projects.map((project) => (
+            <Reveal key={project.slug}>
+              <ProjectCard project={project} />
+            </Reveal>
+          ))}
+        </div>
+      ) : (
+        <Reveal>
+          <p className="subtitle">Project data is currently unavailable. Please refresh shortly.</p>
+        </Reveal>
+      )}
     </main>
   );
 }

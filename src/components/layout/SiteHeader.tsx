@@ -47,6 +47,7 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={item.href === "/work" ? false : undefined}
                 className={`nav-link ${isActive ? "active" : ""}`}
                 onClick={() => setOpen(false)}
               >

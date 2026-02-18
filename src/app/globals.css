@@ -604,6 +604,59 @@ p {
   transform: scale(1.25);
 }
 
+/* ---------- Project Media Navigation ---------- */
+
+.project-media-shell {
+  position: relative;
+}
+
+.project-media-content {
+  border-radius: var(--radius-soft);
+  overflow: hidden;
+}
+
+.project-nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  background: color-mix(in srgb, var(--color-bg) 75%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 20%, transparent);
+  color: var(--color-text);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  backdrop-filter: blur(6px);
+  transition: border-color 180ms ease, background 180ms ease;
+}
+
+.project-nav-arrow:hover {
+  border-color: var(--color-accent-blue);
+  background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+}
+
+.project-nav-arrow:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
+  outline-offset: 2px;
+}
+
+.project-nav-arrow-prev {
+  left: 12px;
+}
+
+.project-nav-arrow-next {
+  right: 12px;
+}
+
+@media (max-width: 768px) {
+  .project-nav-arrow {
+    width: 38px;
+    height: 38px;
+  }
+}
+
 /* ---------- Interactive Cursor Art Player ---------- */
 
 .cursor-art-interactive {
@@ -707,6 +760,10 @@ p {
   transition: opacity 500ms ease;
 }
 
+.davidka-flip-img-davidka {
+  filter: brightness(0) invert(1);
+}
+
 .davidka-flip-img.active {
   opacity: 1;
 }
@@ -791,6 +848,11 @@ p {
   line-height: 1.7;
 }
 
+.davidka-col-paper-alt {
+  border-color: color-mix(in srgb, var(--color-accent-blue) 75%, white);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-accent-blue) 35%, transparent);
+}
+
 .davidka-col-paper p {
   color: var(--color-text);
   white-space: pre-wrap;
@@ -832,11 +894,11 @@ p {
   padding: 1.2rem;
   max-width: 680px;
   display: grid;
-  gap: 0.48rem;
+  gap: 0.72rem;
 }
 
 .contact-form label {
-  margin-top: 0.55rem;
+  margin-top: 0.7rem;
   font-weight: 600;
   color: var(--color-accent-white);
 }
@@ -855,6 +917,14 @@ p {
 .contact-form textarea:focus {
   outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 75%, transparent);
   border-color: var(--color-accent-blue);
+}
+
+.contact-form textarea {
+  margin-bottom: 0.55rem;
+}
+
+.contact-form button[type="submit"] {
+  margin-top: 0.45rem;
 }
 
 .contact-form button:disabled {

@@ -48,7 +48,7 @@ export default function HomePage() {
           <Reveal>
             <div className="section-head">
               <h2>Selected Work</h2>
-              <Link href="/work" className="text-link">
+              <Link href="/work" prefetch={false} className="text-link">
                 See all projects
               </Link>
             </div>

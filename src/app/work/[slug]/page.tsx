@@ -36,6 +36,18 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const isDigitalHandprint = slug === "digital-handprint";
   const isDavidka = slug === "small-world-problems";
+  const projectIndex = projects.findIndex((item) => item.slug === slug);
+  const previousProject =
+    projects.length > 1 ? projects[(projectIndex - 1 + projects.length) % projects.length] : null;
+  const nextProject = projects.length > 1 ? projects[(projectIndex + 1) % projects.length] : null;
+
+  const mediaNode = isDigitalHandprint ? (
+    <DigitalHandprintEmbed />
+  ) : isDavidka ? (
+    <DavidkaProjectEmbed />
+  ) : project.images.length > 0 ? (
+    <ImageCarousel images={project.images} alt={project.title} />
+  ) : null;
 
   return (
     <main className="section content-wrap project-detail">
@@ -64,20 +76,36 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </Reveal>
       )}
 
-      {isDigitalHandprint ? (
+      {mediaNode && (
         <Reveal>
-          <DigitalHandprintEmbed />
+          <section className="project-media-shell">
+            {previousProject && (
+              <Link
+                href={`/work/${previousProject.slug}`}
+                className="project-nav-arrow project-nav-arrow-prev"
+                aria-label={`View previous project: ${previousProject.title}`}
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+                  <path d="M11 4L6 9L11 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            )}
+
+            <div className="project-media-content">{mediaNode}</div>
+
+            {nextProject && (
+              <Link
+                href={`/work/${nextProject.slug}`}
+                className="project-nav-arrow project-nav-arrow-next"
+                aria-label={`View next project: ${nextProject.title}`}
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+                  <path d="M7 4L12 9L7 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            )}
+          </section>
         </Reveal>
-      ) : isDavidka ? (
-        <Reveal>
-          <DavidkaProjectEmbed />
-        </Reveal>
-      ) : (
-        project.images.length > 0 && (
-          <Reveal>
-            <ImageCarousel images={project.images} alt={project.title} />
-          </Reveal>
-        )
       )}
 
       <Reveal>

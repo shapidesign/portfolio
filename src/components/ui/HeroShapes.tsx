@@ -23,7 +23,10 @@ const draw = {
 
 export function HeroShapes() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -43,7 +46,11 @@ export function HeroShapes() {
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
+    const handleMotionChange = (event: MediaQueryListEvent) => {
+      setReducedMotion(event.matches);
+    };
+    mq.addEventListener("change", handleMotionChange);
+    return () => mq.removeEventListener("change", handleMotionChange);
   }, []);
 
   const handleMouseMove = useCallback(
