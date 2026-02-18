@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "sync:projects": "node ./scripts/sync-notion-projects.mjs",
+    "sync:projects": "node ./scripts/sync-notion-projects.mjs && node ./scripts/inject-local-images.mjs",
     "dev": "npm run sync:projects && next dev",
     "build": "npm run sync:projects && next build",
     "start": "next start",
