@@ -1,0 +1,34 @@
+---
+description: Portfolio visual system and layout rules for consistent geometric UI.
+alwaysApply: true
+---
+
+# Portfolio Design System Rule
+
+Use a calm, minimal layout language with geometric accents.
+
+## Visual Direction
+- Keep composition simple and grid-driven.
+- Use one dominant primary color and one supporting secondary color.
+- Use accent colors sparingly for calls to action and micro-details.
+- Prefer whitespace over visual noise.
+
+## Geometry Usage
+- Geometric shapes are decorative, not content containers by default.
+- Keep shape opacity and contrast low enough to protect readability.
+- Reuse a small set of motifs: circle, quarter-arc, square block, dot clusters.
+- Avoid adding new shape types unless they solve a clear layout purpose.
+
+## Typography and Hierarchy
+- Keep text hierarchy clear: strong heading contrast, readable body size.
+- Limit line length for long text sections to improve scanning.
+- Keep section titles concise and action-oriented.
+
+## Motion Principles
+- Use subtle, short-duration motion for entrance and interaction feedback.
+- Avoid large movement or continuous animation loops.
+- Always provide reduced-motion fallbacks.
+
+## UX Tone
+- Prioritize clarity, confidence, and professional warmth.
+- Keep copy direct, concise, and in plain English.

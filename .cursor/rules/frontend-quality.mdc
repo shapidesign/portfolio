@@ -1,0 +1,31 @@
+---
+description: Frontend quality guardrails for accessibility, responsiveness, and performance.
+alwaysApply: true
+---
+
+# Frontend Quality Rule
+
+Every UI change must preserve accessibility, responsiveness, and speed.
+
+## Accessibility
+- Use semantic HTML landmarks and meaningful heading order.
+- Ensure keyboard navigation works for interactive elements.
+- Keep visible focus states on links, buttons, and inputs.
+- Maintain sufficient color contrast for text and controls.
+- Never make critical actions hover-only.
+
+## Responsive Behavior
+- Design mobile-first and scale up progressively.
+- Ensure touch targets are comfortable on phones.
+- Avoid fixed heights that clip content on small screens.
+- Test major layouts on mobile, tablet, and desktop breakpoints.
+
+## Performance
+- Prefer CSS transforms/opacity for lightweight animations.
+- Avoid animation patterns that cause layout shift.
+- Optimize image usage and avoid oversized media in above-the-fold sections.
+
+## Code Quality
+- Keep components focused and reusable.
+- Centralize design tokens and reuse them consistently.
+- Validate forms and provide clear success/error states.

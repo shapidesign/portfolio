@@ -1,0 +1,24 @@
+:root {
+  --color-bg: #07080c;
+  --color-bg-elevated: #0f1118;
+  --color-surface: #151823;
+  --color-surface-2: #1c2030;
+  --color-text: #f3f6ff;
+  --color-text-soft: #b4bdd3;
+
+  /* Bauhaus primary palette */
+  --color-primary: #e10600;
+  --color-secondary: #f5cf00;
+  --color-accent-blue: #0096db;
+  --color-accent-green: #009b4c;
+  --color-accent-white: #f5f7ff;
+
+  --radius-card: 24px;
+  --radius-pill: 999px;
+  --radius-soft: 16px;
+
+  --shadow-soft: 0 14px 42px rgba(0, 0, 0, 0.5);
+
+  --container-max: 1120px;
+  --space-section: clamp(3.5rem, 7vw, 6rem);
+}
