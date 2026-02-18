@@ -9,12 +9,12 @@ const ACCENTS = ["primary", "secondary", "blue", "green", "white"];
 const SHAPES = ["square", "circle", "triangle"];
 
 const ALIASES = {
-  projectName: ["projectname", "project", "name", "title"],
+  projectName: ["title", "name", "projectname", "project"],
   subHeader: ["subheader", "sub-header", "subtitle", "category", "header"],
-  description: ["description", "summary", "shortdescription", "overview"],
+  description: ["projectdescription", "description", "summary", "shortdescription", "overview"],
   bodyText: ["bodytext", "body", "content", "details", "longdescription"],
-  url: ["url", "link", "website", "projecturl", "externalurl"],
-  images: ["images", "image", "gallery", "cover", "media"],
+  url: ["projecturl", "url", "link", "website", "externalurl", "projectlink"],
+  images: ["files&media", "filesmedia", "images", "image", "gallery", "cover", "media"],
   tags: ["tags", "tag", "topics", "labels", "services"],
   year: ["year", "date"]
 };
