@@ -57,9 +57,36 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <Reveal>
         <section className="detail-block">
           <h2>Overview</h2>
-          <p>{project.bodyText || project.challenge}</p>
+          <p>{project.bodyText}</p>
         </section>
       </Reveal>
+
+      {project.challenge && (
+        <Reveal>
+          <section className="detail-block">
+            <h2>The Challenge</h2>
+            <p>{project.challenge}</p>
+          </section>
+        </Reveal>
+      )}
+
+      {project.process && (
+        <Reveal>
+          <section className="detail-block">
+            <h2>The Process</h2>
+            <p>{project.process}</p>
+          </section>
+        </Reveal>
+      )}
+
+      {project.outcome && (
+        <Reveal>
+          <section className="detail-block">
+            <h2>The Outcome</h2>
+            <p>{project.outcome}</p>
+          </section>
+        </Reveal>
+      )}
 
       {project.images.length > 0 && (
         <Reveal>

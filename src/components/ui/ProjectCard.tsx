@@ -3,14 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MouseEvent, useState, useMemo } from "react";
-import type { Project } from "@/data/projects";
+import type { Project, Accent, ShapeVariant } from "@/types/project";
 import { GeometricAccent } from "./GeometricAccent";
 
-type ShapeVariant = "circle" | "square" | "triangle";
-type ShapeColor = "primary" | "secondary" | "blue" | "green" | "white";
-
 const ALL_SHAPES: ShapeVariant[] = ["circle", "square", "triangle"];
-const ALL_COLORS: ShapeColor[] = ["primary", "secondary", "blue", "green", "white"];
+const ALL_COLORS: Accent[] = ["primary", "secondary", "blue", "green", "white"];
 
 function pickRandom<T>(arr: T[], exclude?: T): T {
   const filtered = exclude !== undefined ? arr.filter((item) => item !== exclude) : arr;

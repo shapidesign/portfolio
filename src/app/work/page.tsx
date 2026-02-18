@@ -10,7 +10,7 @@ export default function WorkPage() {
       <Reveal>
         <div className="section-head">
           <h1>Work</h1>
-          <p className="subtitle">{projectCount} projects curated from my Notion workspace.</p>
+          <p className="subtitle">{projectCount} selected works showcasing design & development.</p>
         </div>
       </Reveal>
 
