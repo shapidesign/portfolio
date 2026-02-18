@@ -31,20 +31,24 @@ export function ProjectCard({ project }: ProjectCardProps) {
     [project.accent]
   );
 
-  function handleCardNavigate(event: MouseEvent<HTMLAnchorElement>) {
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-      return;
-    }
+  const projectHref = `/work/${project.slug}`;
 
+  function handleCardClick(event: MouseEvent<HTMLElement>) {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     setIsExiting(true);
     window.setTimeout(() => {
-      router.push(`/work/${project.slug}`);
+      router.push(projectHref);
     }, 180);
   }
 
   return (
-    <article className={`project-card ${isExiting ? "card-exit" : ""}`}>
+    <article
+      className={`project-card ${isExiting ? "card-exit" : ""}`}
+      onClick={handleCardClick}
+      role="link"
+      tabIndex={-1}
+    >
       <div className="project-art">
         <div className="project-shape-frame">
           <GeometricAccent
@@ -76,11 +80,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         )}
       </div>
 
-      <Link
-        href={`/work/${project.slug}`}
-        className="project-link"
-        onClick={handleCardNavigate}
-      >
+      <Link href={projectHref} className="project-link" tabIndex={0}>
         View project
       </Link>
     </article>

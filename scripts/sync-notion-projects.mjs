@@ -47,6 +47,30 @@ function richTextToString(items = []) {
   return items.map((item) => item?.plain_text ?? "").join("").trim();
 }
 
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function richTextToHtml(items = []) {
+  return items
+    .map((item) => {
+      const text = escapeHtml(item?.plain_text ?? "");
+      if (!text) return "";
+      const bold = item?.annotations?.bold;
+      const italic = item?.annotations?.italic;
+      let result = text.replace(/\n/g, "<br />");
+      if (bold) result = `<strong>${result}</strong>`;
+      if (italic) result = `<em>${result}</em>`;
+      return result;
+    })
+    .join("")
+    .trim();
+}
+
 function extractText(prop) {
   if (!prop) return "";
   switch (prop.type) {
@@ -77,6 +101,18 @@ function extractText(prop) {
       return "";
     default:
       return "";
+  }
+}
+
+function extractHtml(prop) {
+  if (!prop) return "";
+  switch (prop.type) {
+    case "title":
+      return richTextToHtml(prop.title);
+    case "rich_text":
+      return richTextToHtml(prop.rich_text);
+    default:
+      return escapeHtml(extractText(prop));
   }
 }
 
@@ -151,8 +187,8 @@ function makeProjectFromPage(page, index, usedSlugs) {
   if (!title) return null;
 
   const subHeader = extractText(findProperty(props, ALIASES.subHeader));
-  const description = extractText(findProperty(props, ALIASES.description));
-  const bodyText = extractText(findProperty(props, ALIASES.bodyText));
+  const description = extractHtml(findProperty(props, ALIASES.description));
+  const bodyText = extractHtml(findProperty(props, ALIASES.bodyText));
   const url = extractUrl(findProperty(props, ALIASES.url));
   const images = extractImages(findProperty(props, ALIASES.images));
   const tags = extractTags(findProperty(props, ALIASES.tags));

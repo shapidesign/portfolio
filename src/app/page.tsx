@@ -30,8 +30,7 @@ export default function HomePage() {
               />
             </h1>
             <p className="hero-copy">
-              I design visual identities and digital experiences with geometric clarity, thoughtful systems,
-              and expressive detail.
+              I design with passion and curiosity, through research and learning, to find solutions to any problem.
             </p>
             <div className="hero-actions">
               <CtaButton href="/work">View Work</CtaButton>
@@ -68,8 +67,7 @@ export default function HomePage() {
         <Reveal>
           <h2>About</h2>
           <p>
-            I am a visual creator focused on logo design, identity systems, packaging, web design, and
-            experimental typography. I value clarity, emotion, and purpose in every creative decision.
+            I design with passion and curiosity, through research and learning, to find solutions to any problem.
           </p>
           <Link href="/about" className="text-link">
             Read more

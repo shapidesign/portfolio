@@ -1,34 +1,58 @@
 import { CtaButton } from "@/components/ui/CtaButton";
 import { Reveal } from "@/components/ui/Reveal";
 
+const SKILLS = [
+  "Figma",
+  "Adobe CC",
+  "Web Design",
+  "Branding and Identity",
+  "Copywriting",
+  "Typography",
+];
+
 export default function AboutPage() {
   return (
     <main className="section content-wrap about-page">
       <Reveal className="about-intro">
         <h1>About</h1>
         <p className="lead">
-          I am Yehonatan Shapira, a visual creator shaping brand and digital experiences through simple,
-          geometric, and thoughtful design systems.
+          I design with passion and curiosity, through research and learning, to find solutions to any problem.
         </p>
       </Reveal>
 
       <Reveal className="about-block">
         <section className="detail-block">
-          <h2>What I focus on</h2>
+          <h2>What I believe in</h2>
           <p>
-            My work combines logo design, packaging, identity systems, web design, and experimental
-            typography. I care about visual clarity, emotional depth, and practical implementation.
+            Design is never <em>my</em> style, it&apos;s <em>your</em> problem
+            and <em>our</em> solution.
           </p>
         </section>
       </Reveal>
 
       <Reveal className="about-block">
         <section className="detail-block">
-          <h2>How I work</h2>
+          <h2>Why I Do</h2>
           <p>
-            Every project begins with context and intent. From there, I develop clear visual structures,
-            test ideas quickly, and refine details that make the final result both memorable and usable.
+            I love researching, studying and finding the problems and needs.
           </p>
+        </section>
+      </Reveal>
+
+      <Reveal className="about-block">
+        <section className="detail-block">
+          <h2>How I Do</h2>
+          <p>
+            I don&apos;t confine myself to one area of expertise, and I can learn any skill
+            needed for any project you have.
+          </p>
+          <div className="about-skills">
+            {SKILLS.map((skill) => (
+              <span key={skill} className="project-tag">
+                {skill}
+              </span>
+            ))}
+          </div>
         </section>
       </Reveal>
 

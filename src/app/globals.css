@@ -1,5 +1,37 @@
 @import "../styles/tokens.css";
 
+@font-face {
+  font-family: "DavidLibre";
+  src: url("/fonts/DavidLibre-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DavidLibre";
+  src: url("/fonts/DavidLibre-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Davidka";
+  src: url("/fonts/Davidka-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Davidka";
+  src: url("/fonts/Davidka-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -319,6 +351,7 @@ p {
   display: flex;
   flex-direction: column;
   overflow: clip;
+  cursor: pointer;
   transition: transform 280ms ease, border-color 260ms ease, box-shadow 260ms ease;
 }
 
@@ -632,6 +665,138 @@ p {
   color: var(--color-text-soft);
 }
 
+/* ---------- Davidka Embed ---------- */
+
+.davidka-embed {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.davidka-flip {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
+  border-radius: var(--radius-soft);
+  padding: 2rem 1rem;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.davidka-flip:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
+  outline-offset: 2px;
+}
+
+.davidka-flip-stack {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  min-height: 80px;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  place-items: center;
+}
+
+.davidka-flip-img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.davidka-flip-img.active {
+  opacity: 1;
+}
+
+.davidka-flip-hint {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.8rem;
+  font-size: 0.75rem;
+  color: var(--color-text-soft);
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+.davidka-flip:hover .davidka-flip-hint {
+  opacity: 1;
+}
+
+.davidka-comparison {
+  display: grid;
+  gap: 1rem;
+}
+
+.davidka-textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 80px;
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 18%, transparent);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: "DavidLibre", serif;
+}
+
+.davidka-textarea:focus {
+  outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
+  border-color: var(--color-accent-blue);
+}
+
+.davidka-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .davidka-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.davidka-col {
+  position: relative;
+}
+
+.davidka-col-label {
+  position: absolute;
+  top: -0.5rem;
+  left: 0.75rem;
+  background: var(--color-bg-elevated);
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-soft);
+  z-index: 1;
+}
+
+.davidka-col-label-alt {
+  color: var(--color-accent-blue);
+}
+
+.davidka-col-paper {
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
+  border-radius: 10px;
+  padding: 1.5rem 1.2rem;
+  min-height: 180px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.davidka-col-paper p {
+  color: var(--color-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 /* ---------- About Page ---------- */
 
 .about-page {
@@ -645,6 +810,13 @@ p {
 
 .about-block .detail-block {
   padding: clamp(1.2rem, 2.5vw, 1.8rem);
+}
+
+.about-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .about-actions {

@@ -5,6 +5,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { ImageCarousel } from "@/components/ui/ImageCarousel";
 import { getProjectBySlug, projects } from "@/data/projects";
 import { DigitalHandprintEmbed } from "./DigitalHandprintEmbed";
+import { DavidkaProjectEmbed } from "./DavidkaProjectEmbed";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -34,6 +35,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   if (!project) notFound();
 
   const isDigitalHandprint = slug === "digital-handprint";
+  const isDavidka = slug === "small-world-problems";
 
   return (
     <main className="section content-wrap project-detail">
@@ -54,9 +56,21 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
       </Reveal>
 
+      {project.url && (
+        <Reveal>
+          <a href={project.url} className="button button-ghost" target="_blank" rel="noreferrer noopener">
+            Visit project
+          </a>
+        </Reveal>
+      )}
+
       {isDigitalHandprint ? (
         <Reveal>
           <DigitalHandprintEmbed />
+        </Reveal>
+      ) : isDavidka ? (
+        <Reveal>
+          <DavidkaProjectEmbed />
         </Reveal>
       ) : (
         project.images.length > 0 && (
@@ -68,17 +82,15 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       <Reveal>
         <section className="detail-block">
-          <p className="preserve-breaks">{project.description || project.bodyText}</p>
+          <div
+            className="preserve-breaks"
+            dangerouslySetInnerHTML={{
+              __html: (project.description || project.bodyText)
+                .replace(/<(?!\/?(?:strong|em|br\s*\/?)>)/gi, "&lt;")
+            }}
+          />
         </section>
       </Reveal>
-
-      {project.url && (
-        <Reveal>
-          <a href={project.url} className="button button-ghost" target="_blank" rel="noreferrer noopener">
-            Visit project
-          </a>
-        </Reveal>
-      )}
 
       <Reveal>
         <div className="detail-actions">

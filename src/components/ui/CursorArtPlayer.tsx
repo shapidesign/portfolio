@@ -184,7 +184,7 @@ export function CursorArtPlayer() {
   const router = useRouter();
 
   const handleClick = useCallback(() => {
-    router.push("/work/thoughtful-design");
+    router.push("/work/digital-handprint");
   }, [router]);
 
   useEffect(() => {
@@ -320,7 +320,7 @@ export function CursorArtPlayer() {
       onClick={handleClick}
       role="button"
       tabIndex={0}
-      aria-label="View Thoughtful Design project"
+      aria-label="View Digital Handprint project"
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
