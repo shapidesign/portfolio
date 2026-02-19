@@ -10,14 +10,14 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.shapidesign.com"),
   title: {
-    default: "Yehonatan Shapira - Visual Creator",
+    default: "Yehonatan Shapira - Designer",
     template: "%s | Yehonatan Shapira"
   },
-  description: "Portfolio website for Yehonatan Shapira, visual creator. Specializing in branding, digital design, and creative direction.",
-  keywords: ["Yehonatan Shapira", "Visual Creator", "Design", "Portfolio", "Creative", "Branding", "Digital Design"],
+  description: "Portfolio of Yehonatan Shapira, designer specializing in branding, digital design, and creative direction.",
+  keywords: ["Yehonatan Shapira", "Designer", "Design", "Portfolio", "Creative", "Branding", "Digital Design"],
   openGraph: {
-    title: "Yehonatan Shapira - Visual Creator",
-    description: "Portfolio website for Yehonatan Shapira, visual creator.",
+    title: "Yehonatan Shapira - Designer",
+    description: "Design is never my style. It's your problem and our solution.",
     url: "https://www.shapidesign.com",
     siteName: "Yehonatan Shapira Portfolio",
     locale: "en_US",
@@ -25,8 +25,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yehonatan Shapira - Visual Creator",
-    description: "Portfolio website for Yehonatan Shapira, visual creator.",
+    title: "Yehonatan Shapira - Designer",
+    description: "Design is never my style. It's your problem and our solution.",
   },
   alternates: {
     canonical: "/"
@@ -54,8 +54,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
     "@type": "Person",
     "name": "Yehonatan Shapira",
     "url": "https://www.shapidesign.com",
-    "jobTitle": "Visual Creator",
-    "description": "I design with passion and curiosity, through research and learning, to find solutions to any problem."
+    "jobTitle": "Designer",
+    "description": "Design is never my style. It's your problem and our solution."
   };
 
   return (

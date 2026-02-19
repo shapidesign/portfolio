@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import * as motion from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 
@@ -79,16 +79,16 @@ function OutlineTriangle({ color, size }: { color: string; size: number }) {
 export function IntroLoader() {
   const [visible, setVisible] = useState(shouldShowLoader);
 
+  const dismiss = useCallback(() => setVisible(false), []);
+
   useEffect(() => {
     if (!visible) return;
     window.sessionStorage.setItem(LOADER_KEY, "1");
 
-    const timer = setTimeout(() => {
-      setVisible(false);
-    }, 1600);
+    const timer = setTimeout(dismiss, 1000);
 
     return () => clearTimeout(timer);
-  }, [visible]);
+  }, [visible, dismiss]);
 
   return (
     <AnimatePresence>
@@ -98,6 +98,10 @@ export function IntroLoader() {
           variants={containerVariants}
           exit="exit"
           aria-hidden
+          onClick={dismiss}
+          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") dismiss(); }}
+          role="presentation"
+          style={{ cursor: "pointer" }}
         >
           <div className="intro-loader-grid">
             {outlineShapes.map((shape, i) => (

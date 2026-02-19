@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 import Link from "next/link";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { CursorArtPlayer } from "@/components/ui/CursorArtPlayer";
@@ -11,13 +11,20 @@ import VariableProximity from "@/components/ui/VariableProximity/VariableProximi
 
 export default function HomePage() {
   const heroRef = useRef<HTMLElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = useCallback((direction: "prev" | "next") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = el.querySelector(":scope > *")?.clientWidth ?? 320;
+    el.scrollBy({ left: direction === "next" ? cardWidth + 16 : -(cardWidth + 16), behavior: "smooth" });
+  }, []);
 
   return (
     <main>
       <section className="hero section" ref={heroRef}>
         <div className="content-wrap hero-grid">
           <div className="hero-text">
-            <p className="eyebrow">The portfolio of</p>
             <h1>
               <VariableProximity
                 label="Yehonatan Shapira"
@@ -30,7 +37,7 @@ export default function HomePage() {
               />
             </h1>
             <p className="hero-copy">
-              I design with passion and curiosity, through research and learning, to find solutions to any problem.
+              Design is never <em>my</em> style. It&apos;s <em>your</em> problem and <em>our</em> solution.
             </p>
             <div className="hero-actions">
               <CtaButton href="/work">View Work</CtaButton>
@@ -54,12 +61,30 @@ export default function HomePage() {
             </div>
           </Reveal>
         </div>
-        <div className="project-scroll">
-          {projects.map((project) => (
-            <Reveal key={project.slug}>
-              <ProjectCard project={project} />
-            </Reveal>
-          ))}
+        <div className="project-scroll-shell">
+          <button
+            type="button"
+            className="scroll-btn scroll-btn-prev"
+            aria-label="Scroll to previous project"
+            onClick={() => scroll("prev")}
+          >
+            &#8592;
+          </button>
+          <div className="project-scroll" ref={scrollRef}>
+            {projects.map((project) => (
+              <Reveal key={project.slug}>
+                <ProjectCard project={project} />
+              </Reveal>
+            ))}
+          </div>
+          <button
+            type="button"
+            className="scroll-btn scroll-btn-next"
+            aria-label="Scroll to next project"
+            onClick={() => scroll("next")}
+          >
+            &#8594;
+          </button>
         </div>
       </section>
 
@@ -67,7 +92,7 @@ export default function HomePage() {
         <Reveal>
           <h2>About</h2>
           <p>
-            I design with passion and curiosity, through research and learning, to find solutions to your problems.
+            Design is never my style. It&apos;s your problem and our solution.
           </p>
           <Link href="/about" className="text-link">
             Read more

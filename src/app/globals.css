@@ -303,6 +303,53 @@ p {
 
 /* ---------- Selected Work: Horizontal Scroll ---------- */
 
+.project-scroll-shell {
+  position: relative;
+}
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 20%, transparent);
+  background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  color: var(--color-text);
+  font-size: 1.15rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 180ms ease, border-color 180ms ease, opacity 180ms ease;
+}
+
+.scroll-btn:hover {
+  background: color-mix(in srgb, var(--color-bg) 95%, transparent);
+  border-color: var(--color-accent-blue);
+}
+
+.scroll-btn:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
+  outline-offset: 2px;
+}
+
+.scroll-btn-prev {
+  left: max(0.5rem, calc((100% - var(--container-max) + 4rem) / 2 + 0.5rem));
+}
+
+.scroll-btn-next {
+  right: max(0.5rem, calc((100% - var(--container-max) + 4rem) / 2 + 0.5rem));
+}
+
+@media (max-width: 740px) {
+  .scroll-btn {
+    display: none;
+  }
+}
+
 .section-head {
   display: flex;
   align-items: end;
@@ -1003,6 +1050,43 @@ p {
 .hp-field {
   position: absolute;
   left: -9999px;
+}
+
+/* ---------- 404 Page ---------- */
+
+.not-found-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 60vh;
+  gap: 1rem;
+}
+
+.not-found-shapes {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.not-found-page h1 {
+  font-size: clamp(4rem, 10vw, 8rem);
+  line-height: 1;
+  color: var(--color-accent-white);
+}
+
+.not-found-page .lead {
+  margin-top: 0;
+  text-align: center;
+}
+
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: center;
+  margin-top: 0.5rem;
 }
 
 /* ---------- Footer ---------- */

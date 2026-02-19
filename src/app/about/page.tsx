@@ -16,7 +16,7 @@ export default function AboutPage() {
       <Reveal className="about-intro">
         <h1>About</h1>
         <p className="lead">
-          I design with passion and curiosity, through research and learning, to find solutions to your problems.
+          Good design starts with the right question, not the right aesthetic.
         </p>
       </Reveal>
 
