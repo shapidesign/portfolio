@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1033.23 661.55">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fde047;
+      }
+
+      .cls-2 {
+        stroke: #fde047;
+      }
+
+      .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7 {
+        fill: #1f1f1f;
+        stroke-miterlimit: 10;
+        stroke-width: 3px;
+      }
+
+      .cls-8 {
+        fill: #36ef79;
+      }
+
+      .cls-3 {
+        stroke: #fd982e;
+      }
+
+      .cls-4 {
+        stroke: #36ef79;
+      }
+
+      .cls-9 {
+        fill: #f9a8d4;
+      }
+
+      .cls-5 {
+        stroke: #f9a8d4;
+      }
+
+      .cls-6 {
+        stroke: #67e8f9;
+      }
+
+      .cls-7 {
+        stroke: #7d53fa;
+      }
+
+      .cls-10 {
+        fill: #fd982e;
+      }
+
+      .cls-11 {
+        fill: #67e8f9;
+      }
+
+      .cls-12 {
+        fill: #7d53fa;
+      }
+    </style>
+  </defs>
+  <g>
+    <g>
+      <circle class="cls-7" cx="784.65" cy="466.27" r="117.79"/>
+      <path class="cls-12" d="M844.26,468.33v37h-37v-37h37ZM766.15,468.33v37h37v-37h-37ZM725.04,427.22v37h37v-37h-37ZM725.04,468.33v37h37v-37h-37Z"/>
+    </g>
+    <g>
+      <circle class="cls-4" cx="516.61" cy="466.27" r="117.79"/>
+      <path class="cls-8" d="M477.56,427.22h37v37h-37v-37ZM518.67,464.22h37v-37h-37v37ZM477.56,505.33h37v-37h-37v37ZM518.67,505.33h37v-37h-37v37Z"/>
+    </g>
+    <g>
+      <circle class="cls-3" cx="248.57" cy="466.27" r="117.79"/>
+      <path class="cls-10" d="M188.96,427.22h37v37h-37v-37ZM230.07,464.22h37v-37h-37v37ZM230.07,505.33h37v-37h-37v37ZM271.19,505.33h37v-37h-37v37Z"/>
+    </g>
+  </g>
+  <g>
+    <g>
+      <circle class="cls-2" cx="516.61" cy="195.27" r="117.79"/>
+      <path class="cls-1" d="M535.11,115.11v37h-37v-37h37ZM498.11,156.22v37h37v-37h-37ZM498.11,197.33v37h37v-37h-37ZM498.11,238.44v37h37v-37h-37Z"/>
+    </g>
+    <g>
+      <circle class="cls-5" cx="248.57" cy="195.27" r="117.79"/>
+      <path class="cls-9" d="M230.07,156.22h37v37h-37v-37ZM188.96,234.33h37v-37h-37v37ZM230.07,234.33h37v-37h-37v37ZM271.19,234.33h37v-37h-37v37Z"/>
+    </g>
+    <g>
+      <circle class="cls-6" cx="784.65" cy="195.27" r="117.79"/>
+      <path class="cls-11" d="M750.6,135.66h37v37h-37v-37ZM791.71,172.66h37v-37h-37v37ZM750.6,213.77h37v-37h-37v37ZM750.6,254.88h37v-37h-37v37Z"/>
+    </g>
+  </g>
+</svg>
