@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   description: "Portfolio website for Yehonatan Shapira, visual creator.",
   alternates: {
     canonical: "/"
+  },
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }]
   }
 };
 

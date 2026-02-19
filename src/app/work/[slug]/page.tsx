@@ -79,31 +79,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       {mediaNode && (
         <Reveal>
           <section className="project-media-shell">
-            {previousProject && (
-              <Link
-                href={`/work/${previousProject.slug}`}
-                className="project-nav-arrow project-nav-arrow-prev"
-                aria-label={`View previous project: ${previousProject.title}`}
-              >
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
-                  <path d="M11 4L6 9L11 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
-            )}
-
             <div className="project-media-content">{mediaNode}</div>
-
-            {nextProject && (
-              <Link
-                href={`/work/${nextProject.slug}`}
-                className="project-nav-arrow project-nav-arrow-next"
-                aria-label={`View next project: ${nextProject.title}`}
-              >
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
-                  <path d="M7 4L12 9L7 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
-            )}
           </section>
         </Reveal>
       )}
@@ -119,6 +95,35 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           />
         </section>
       </Reveal>
+
+      {(previousProject || nextProject) && (
+        <Reveal>
+          <nav className="project-nav-text" aria-label="Project navigation">
+            {previousProject ? (
+              <Link href={`/work/${previousProject.slug}`} className="project-nav-text-link project-nav-text-prev">
+                <span className="project-nav-text-arrow" aria-hidden>←</span>
+                <span>
+                  <span className="project-nav-text-label">Previous project</span>
+                  <span className="project-nav-text-title">{previousProject.title}</span>
+                </span>
+              </Link>
+            ) : (
+              <span />
+            )}
+            {nextProject ? (
+              <Link href={`/work/${nextProject.slug}`} className="project-nav-text-link project-nav-text-next">
+                <span>
+                  <span className="project-nav-text-label">Next project</span>
+                  <span className="project-nav-text-title">{nextProject.title}</span>
+                </span>
+                <span className="project-nav-text-arrow" aria-hidden>→</span>
+              </Link>
+            ) : (
+              <span />
+            )}
+          </nav>
+        </Reveal>
+      )}
 
       <Reveal>
         <div className="detail-actions">

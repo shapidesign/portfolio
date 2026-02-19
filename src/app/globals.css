@@ -317,7 +317,7 @@ p {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  padding: 0.5rem clamp(1rem, 2.8vw, 2rem) 1.5rem;
+  padding: 0.5rem clamp(1.5rem, 4vw, 3rem) 1.5rem;
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--color-accent-white) 22%, transparent) transparent;
   width: min(100%, calc(var(--container-max) - 4rem));
@@ -514,7 +514,7 @@ p {
 .image-carousel {
   position: relative;
   border-radius: var(--radius-soft);
-  overflow: hidden;
+  overflow: clip;
 }
 
 .carousel-track {
@@ -533,16 +533,25 @@ p {
 .carousel-slide {
   flex: 0 0 100%;
   scroll-snap-align: center;
-  aspect-ratio: 16 / 9;
   position: relative;
   background: var(--color-surface-2);
+  border-radius: var(--radius-soft);
+  overflow: hidden;
+  min-height: 200px;
+  max-height: min(70vh, 640px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .carousel-slide img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  max-height: min(70vh, 640px);
+  object-fit: contain;
+  border-radius: var(--radius-soft);
+  cursor: zoom-in;
 }
 
 .carousel-btn {
@@ -604,6 +613,65 @@ p {
   transform: scale(1.25);
 }
 
+/* ---------- Lightbox ---------- */
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  cursor: zoom-out;
+  animation: lightbox-in 180ms ease;
+}
+
+@keyframes lightbox-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius-soft);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+  cursor: default;
+}
+
+.lightbox-close {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 1001;
+  background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 20%, transparent);
+  color: var(--color-text);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.lightbox-close:hover {
+  border-color: var(--color-accent-blue);
+  background: color-mix(in srgb, var(--color-bg) 95%, transparent);
+}
+
+.lightbox-close:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
+  outline-offset: 2px;
+}
+
 /* ---------- Project Media Navigation ---------- */
 
 .project-media-shell {
@@ -615,46 +683,77 @@ p {
   overflow: hidden;
 }
 
-.project-nav-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  background: color-mix(in srgb, var(--color-bg) 75%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-accent-white) 20%, transparent);
-  color: var(--color-text);
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  backdrop-filter: blur(6px);
-  transition: border-color 180ms ease, background 180ms ease;
+.project-nav-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
 }
 
-.project-nav-arrow:hover {
-  border-color: var(--color-accent-blue);
-  background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+.project-nav-text-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  color: var(--color-text-soft);
+  text-decoration: none;
+  transition: color 180ms ease;
+  max-width: 46%;
 }
 
-.project-nav-arrow:focus-visible {
+.project-nav-text-link:hover {
+  color: var(--color-accent-blue);
+}
+
+.project-nav-text-link:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
-  outline-offset: 2px;
+  outline-offset: 4px;
+  border-radius: 4px;
 }
 
-.project-nav-arrow-prev {
-  left: 12px;
+.project-nav-text-next {
+  margin-left: auto;
+  text-align: right;
 }
 
-.project-nav-arrow-next {
-  right: 12px;
+.project-nav-text-arrow {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  transition: transform 180ms ease;
 }
 
-@media (max-width: 768px) {
-  .project-nav-arrow {
-    width: 38px;
-    height: 38px;
-  }
+.project-nav-text-prev:hover .project-nav-text-arrow {
+  transform: translateX(-3px);
+}
+
+.project-nav-text-next:hover .project-nav-text-arrow {
+  transform: translateX(3px);
+}
+
+.project-nav-text-link > span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.project-nav-text-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-soft);
+}
+
+.project-nav-text-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.project-nav-text-link:hover .project-nav-text-title {
+  color: var(--color-accent-blue);
 }
 
 /* ---------- Interactive Cursor Art Player ---------- */
@@ -729,8 +828,8 @@ p {
   position: relative;
   display: grid;
   place-items: center;
-  background: var(--color-surface);
-  border: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
+  background: #ffffff;
+  border: 1px solid color-mix(in srgb, var(--color-accent-blue) 30%, transparent);
   border-radius: var(--radius-soft);
   padding: 2rem 1rem;
   cursor: pointer;
@@ -761,7 +860,7 @@ p {
 }
 
 .davidka-flip-img-davidka {
-  filter: brightness(0) invert(1);
+  /* natural SVG colors — no filter needed */
 }
 
 .davidka-flip-img.active {
@@ -773,7 +872,7 @@ p {
   top: 0.6rem;
   right: 0.8rem;
   font-size: 0.75rem;
-  color: var(--color-text-soft);
+  color: var(--color-accent-blue);
   opacity: 0;
   transition: opacity 250ms ease;
 }
