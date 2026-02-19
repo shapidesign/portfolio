@@ -179,11 +179,23 @@
     "url": "https://index-design-hit.vercel.app/",
     "images": [
       "/images/no-gatekeeping/01-logo-dark.svg",
+      "/images/no-gatekeeping/02-logo-light.svg",
+      "/images/no-gatekeeping/03-logo-icon.svg",
+      "/images/no-gatekeeping/04-logo-hero-purple.svg",
       "/images/no-gatekeeping/05-logo-hebrew-frame.svg",
       "/images/no-gatekeeping/06-logo-purple.svg",
+      "/images/no-gatekeeping/07-logo-white.svg",
       "/images/no-gatekeeping/colors-.png",
       "/images/no-gatekeeping/font-.png",
-      "/images/no-gatekeeping/shapes.svg"
+      "/images/no-gatekeeping/shapes.svg",
+      "/images/no-gatekeeping/price.svg",
+      "/images/no-gatekeeping/11-l-block.svg",
+      "/images/no-gatekeeping/12-j-block.svg",
+      "/images/no-gatekeeping/13-i-block.svg",
+      "/images/no-gatekeeping/14-s-block.svg",
+      "/images/no-gatekeeping/15-t-block.svg",
+      "/images/no-gatekeeping/16-o-block.svg",
+      "/images/no-gatekeeping/17-z-block.svg"
     ],
     "tags": [
       "Web Design",
