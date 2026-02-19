@@ -16,35 +16,33 @@ export default function AboutPage() {
       <Reveal className="about-intro">
         <h1>About</h1>
         <p className="lead">
-          I design with passion and curiosity, through research and learning, to find solutions to any problem.
+          I design with passion and curiosity, through research and learning, to find solutions to your problems.
         </p>
       </Reveal>
 
       <Reveal className="about-block">
         <section className="detail-block">
-          <h2>What I believe in</h2>
+          <h2>What I Believe In?</h2>
           <p>
-            Design is never <em>my</em> style, it&apos;s <em>your</em> problem
-            and <em>our</em> solution.
+            Design is never <em>my</em> style. It&apos;s <em>your</em> problem and <em>our</em> solution.
           </p>
         </section>
       </Reveal>
 
       <Reveal className="about-block">
         <section className="detail-block">
-          <h2>Why I Do</h2>
+          <h2>Why I Do?</h2>
           <p>
-            I love researching, studying and finding the problems and needs.
+            Great design starts with asking the right questions. I love the process of untangling complex information and finding the core human need behind it.
           </p>
         </section>
       </Reveal>
 
       <Reveal className="about-block">
         <section className="detail-block">
-          <h2>How I Do</h2>
+          <h2>How I Do?</h2>
           <p>
-            I don&apos;t confine myself to one area of expertise, and I can learn any skill
-            needed for any project you have.
+            Every project demands different tools. I learn what the work needs, not what my portfolio already has.
           </p>
           <div className="about-skills">
             {SKILLS.map((skill) => (

@@ -67,7 +67,7 @@ export default function HomePage() {
         <Reveal>
           <h2>About</h2>
           <p>
-            I design with passion and curiosity, through research and learning, to find solutions to any problem.
+            I design with passion and curiosity, through research and learning, to find solutions to your problems.
           </p>
           <Link href="/about" className="text-link">
             Read more
