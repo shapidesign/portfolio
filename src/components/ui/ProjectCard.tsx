@@ -69,6 +69,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <div className="project-content">
         <p className="project-category">{project.subHeader || project.category}</p>
         <h3>{project.title}</h3>
+        {project.context && (
+          <p className="project-context">{project.context}</p>
+        )}
         {project.tags.length > 0 && (
           <div className="project-tags" aria-label="Project tags">
             {project.tags.slice(0, 3).map((tag) => (

@@ -5,6 +5,7 @@ export type Project = {
   slug: string;
   title: string;
   subHeader: string;
+  context: string;
   description: string;
   bodyText: string;
   url?: string;

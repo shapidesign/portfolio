@@ -491,6 +491,16 @@ p {
   letter-spacing: 0.06em;
 }
 
+.project-context {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--color-text-soft);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .project-link {
   margin-top: auto;
   padding: 0.95rem 1rem 1.1rem;
