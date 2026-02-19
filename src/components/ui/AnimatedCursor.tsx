@@ -45,6 +45,7 @@ export function AnimatedCursor() {
       ringY += (mouseY - ringY) * 0.18;
       ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) scale(${hovering ? 1.65 : 1})`;
       dot.classList.toggle("hover", hovering);
+      ring.classList.toggle("hover", hovering);
       rafId = window.requestAnimationFrame(animate);
     };
 
