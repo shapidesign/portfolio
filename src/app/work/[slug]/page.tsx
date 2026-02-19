@@ -99,6 +99,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <Reveal>
         <p className="eyebrow">{project.subHeader || project.category}</p>
         <h1>{project.title}</h1>
+        {project.context && (
+          <p className="project-context-detail">{project.context}</p>
+        )}
       </Reveal>
 
       <Reveal>

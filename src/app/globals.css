@@ -491,14 +491,12 @@ p {
   letter-spacing: 0.06em;
 }
 
-.project-context {
-  font-size: 0.84rem;
-  line-height: 1.45;
+.project-context-detail {
+  margin-top: 0.75rem;
+  max-width: 65ch;
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  line-height: 1.5;
   color: var(--color-text-soft);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .project-link {
