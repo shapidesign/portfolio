@@ -23,9 +23,36 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     return { title: "Project Not Found" };
   }
 
+  const title = `${project.title} | Yehonatan Shapira`;
+  const description = (project.description || project.summary || "")
+    .replace(/<[^>]*>?/gm, "")
+    .slice(0, 160);
+  const url = `https://www.shapidesign.com/work/${slug}`;
+  const images =
+    project.images.length > 0
+      ? [{ url: project.images[0], width: 1200, height: 630, alt: project.title }]
+      : [];
+
   return {
-    title: `${project.title} | Yehonatan Shapira`,
-    description: project.description || project.summary
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "article",
+      images,
+      siteName: "Yehonatan Shapira Portfolio"
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: images.map((img) => img.url)
+    },
+    alternates: {
+      canonical: url
+    }
   };
 }
 
@@ -49,8 +76,26 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     <ImageCarousel images={project.images} alt={project.title} />
   ) : null;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": project.title,
+    "description": (project.description || project.summary || "").replace(/<[^>]*>?/gm, ""),
+    "image": project.images[0] || "",
+    "url": `https://www.shapidesign.com/work/${project.slug}`,
+    "author": {
+      "@type": "Person",
+      "name": "Yehonatan Shapira"
+    },
+    "datePublished": project.year
+  };
+
   return (
     <main className="section content-wrap project-detail">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Reveal>
         <p className="eyebrow">{project.subHeader || project.category}</p>
         <h1>{project.title}</h1>

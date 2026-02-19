@@ -9,8 +9,25 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.shapidesign.com"),
-  title: "Yehonatan Shapira - Visual Creator",
-  description: "Portfolio website for Yehonatan Shapira, visual creator.",
+  title: {
+    default: "Yehonatan Shapira - Visual Creator",
+    template: "%s | Yehonatan Shapira"
+  },
+  description: "Portfolio website for Yehonatan Shapira, visual creator. Specializing in branding, digital design, and creative direction.",
+  keywords: ["Yehonatan Shapira", "Visual Creator", "Design", "Portfolio", "Creative", "Branding", "Digital Design"],
+  openGraph: {
+    title: "Yehonatan Shapira - Visual Creator",
+    description: "Portfolio website for Yehonatan Shapira, visual creator.",
+    url: "https://www.shapidesign.com",
+    siteName: "Yehonatan Shapira Portfolio",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Yehonatan Shapira - Visual Creator",
+    description: "Portfolio website for Yehonatan Shapira, visual creator.",
+  },
   alternates: {
     canonical: "/"
   },
@@ -32,9 +49,22 @@ type RootLayoutProps = Readonly<{
 }>;
 
 export default function RootLayout({ children }: RootLayoutProps) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Yehonatan Shapira",
+    "url": "https://www.shapidesign.com",
+    "jobTitle": "Visual Creator",
+    "description": "I design with passion and curiosity, through research and learning, to find solutions to any problem."
+  };
+
   return (
     <html lang="en">
       <body className={spaceGrotesk.variable}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <IntroLoader />
         <AnimatedCursor />
         <div className="site-shell">
