@@ -709,8 +709,15 @@ p {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  min-height: 300px;
+  min-height: 240px;
   background: #000;
+}
+
+@media (max-width: 600px) {
+  .cursor-art-canvas-wrap {
+    aspect-ratio: 4 / 3;
+    min-height: 220px;
+  }
 }
 
 .cursor-art-controls {
@@ -728,10 +735,11 @@ p {
   border: 1px solid color-mix(in srgb, var(--color-accent-white) 18%, transparent);
   border-radius: 8px;
   color: var(--color-text);
-  padding: 0.4rem 0.65rem;
-  font-size: 0.82rem;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.78rem;
   cursor: pointer;
   transition: border-color 180ms ease;
+  white-space: nowrap;
 }
 
 .cursor-art-controls select:focus,
