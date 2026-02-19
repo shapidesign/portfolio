@@ -5,12 +5,9 @@ export type { Project, Accent, ShapeVariant };
 
 // Helper to validate generated data
 function isValidProject(item: unknown): item is Project {
-  return (
-    typeof item === "object" &&
-    item !== null &&
-    typeof item.slug === "string" &&
-    typeof item.title === "string"
-  );
+  if (typeof item !== "object" || item === null) return false;
+  const p = item as Record<string, unknown>;
+  return typeof p.slug === "string" && typeof p.title === "string";
 }
 
 const generatedProjects: Project[] = Array.isArray(generatedRaw)
