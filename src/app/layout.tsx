@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
 import { IntroLoader } from "@/components/ui/IntroLoader";
 import { RouteTransition } from "@/components/ui/RouteTransition";
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <RouteTransition>{children}</RouteTransition>
           <SiteFooter />
         </div>
+        <Analytics />
       </body>
     </html>
   );
