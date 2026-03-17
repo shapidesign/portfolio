@@ -21,13 +21,19 @@ function ProjectBody({ rawHtml }: { rawHtml: string }) {
   return (
     <div className="body-sections">
       {sections.map((section, i) => {
+        // Match <strong>...</strong> that may contain <br> inside (e.g. "Title<br/>Subtitle")
         const headingMatch = section.match(
-          /^<strong>([^<]+)<\/strong>(?:<br\s*\/?>)?\s*([\s\S]*)/i
+          /^<strong>([\s\S]*?)<\/strong>(?:<br\s*\/?>)?\s*([\s\S]*)/i
         );
 
         if (headingMatch && headingMatch[1]) {
-          const headingHtml = headingMatch[1];
-          const bodyHtml = headingMatch[2]?.trim() ?? "";
+          // Flatten any <br> inside the heading into a space
+          const headingHtml = headingMatch[1]
+            .replace(/<br\s*\/?>/gi, " ")
+            .trim();
+          const bodyHtml = headingMatch[2]
+            ?.replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, "")
+            .trim() ?? "";
           return (
             <div key={i} className="body-section">
               <span
