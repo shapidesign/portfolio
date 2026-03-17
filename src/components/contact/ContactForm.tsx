@@ -105,11 +105,11 @@ export function ContactForm() {
             transition={{ delay: 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <svg width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden>
-              <circle cx="26" cy="26" r="25" fill="color-mix(in srgb, #f5cf00 22%, transparent)" stroke="#f5cf00" strokeWidth="1.5" />
+              <circle cx="26" cy="26" r="25" fill="color-mix(in srgb, #22bb66 22%, transparent)" stroke="#22bb66" strokeWidth="1.5" />
               <motion.polyline
                 points="14,26 22,34 38,18"
                 fill="none"
-                stroke="#f5cf00"
+                stroke="#22bb66"
                 strokeWidth="2.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
