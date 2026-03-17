@@ -71,7 +71,8 @@ textarea {
 }
 
 .content-wrap {
-  width: 100%;
+  width: min(100%, var(--container-max));
+  margin-inline: auto;
   padding-inline: clamp(1.25rem, 4vw, 3.5rem);
 }
 
@@ -374,11 +375,16 @@ p {
 }
 
 .project-art {
-  height: 152px;
+  aspect-ratio: 4 / 3;
   position: relative;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent-white) 4%, transparent), var(--color-surface-2));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--card-accent, var(--color-surface-2)) 18%, var(--color-surface-2)),
+    var(--color-surface-2)
+  );
   display: grid;
   place-items: center;
+  border-radius: 0 0 14px 14px;
 }
 
 .project-shape-frame {
@@ -422,10 +428,15 @@ p {
 }
 
 .project-content {
-  padding: 1.1rem 1rem 0.4rem;
+  padding: 1.25rem 1.25rem 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
+}
+
+.project-content h3 {
+  font-size: 1.5rem;
+  line-height: 1.15;
 }
 
 .project-tags {
@@ -446,9 +457,10 @@ p {
 }
 
 .project-category {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
+  color: var(--color-text-soft);
 }
 
 .project-context-detail {

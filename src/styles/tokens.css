@@ -19,6 +19,6 @@
 
   --shadow-soft: 0 14px 42px rgba(0, 0, 0, 0.5);
 
-  --container-max: 2560px;
+  --container-max: 1280px;
   --space-section: clamp(2.5rem, 5vw, 4rem);
 }

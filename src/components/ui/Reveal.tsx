@@ -50,8 +50,8 @@ export function Reveal({ children, className, delay = 0 }: RevealProps) {
   }, [show]);
 
   const style: React.CSSProperties = show
-    ? { opacity: 1, transform: "translateY(0) scale(1)", transition: `opacity 500ms ${delay}ms cubic-bezier(0.2,0.7,0.2,1), transform 500ms ${delay}ms cubic-bezier(0.2,0.7,0.2,1)` }
-    : { opacity: 0, transform: "translateY(22px) scale(0.985)" };
+    ? { opacity: 1, transform: "translateY(0) scale(1)", transition: `opacity 600ms ${delay}ms cubic-bezier(0.16,1,0.3,1), transform 600ms ${delay}ms cubic-bezier(0.16,1,0.3,1)` }
+    : { opacity: 0, transform: "translateY(56px) scale(0.97)" };
 
   return (
     <div ref={ref} className={className ?? ""} style={style}>
