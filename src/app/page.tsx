@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { CursorArtPlayer } from "@/components/ui/CursorArtPlayer";
@@ -11,14 +11,6 @@ import VariableProximity from "@/components/ui/VariableProximity/VariableProximi
 
 export default function HomePage() {
   const heroRef = useRef<HTMLElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scroll = useCallback((direction: "prev" | "next") => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const cardWidth = el.querySelector(":scope > *")?.clientWidth ?? 320;
-    el.scrollBy({ left: direction === "next" ? cardWidth + 16 : -(cardWidth + 16), behavior: "smooth" });
-  }, []);
 
   return (
     <main>
@@ -60,31 +52,13 @@ export default function HomePage() {
               </Link>
             </div>
           </Reveal>
-        </div>
-        <div className="project-scroll-shell">
-          <button
-            type="button"
-            className="scroll-btn scroll-btn-prev"
-            aria-label="Scroll to previous project"
-            onClick={() => scroll("prev")}
-          >
-            &#8592;
-          </button>
-          <div className="project-scroll" ref={scrollRef}>
-            {projects.map((project) => (
-              <Reveal key={project.slug}>
+          <div className="work-reveal-grid">
+            {projects.map((project, i) => (
+              <Reveal key={project.slug} delay={(i % 2) * 100}>
                 <ProjectCard project={project} />
               </Reveal>
             ))}
           </div>
-          <button
-            type="button"
-            className="scroll-btn scroll-btn-next"
-            aria-label="Scroll to next project"
-            onClick={() => scroll("next")}
-          >
-            &#8594;
-          </button>
         </div>
       </section>
 

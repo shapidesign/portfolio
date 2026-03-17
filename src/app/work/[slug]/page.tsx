@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Reveal } from "@/components/ui/Reveal";
-import { ImageCarousel } from "@/components/ui/ImageCarousel";
 import { getProjectBySlug, projects } from "@/data/projects";
 import { DigitalHandprintEmbed } from "./DigitalHandprintEmbed";
 import { DavidkaProjectEmbed } from "./DavidkaProjectEmbed";
@@ -73,7 +72,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   ) : isDavidka ? (
     <DavidkaProjectEmbed />
   ) : project.images.length > 0 ? (
-    <ImageCarousel images={project.images} alt={project.title} />
+    <div className="project-image-stack">
+      {project.images.map((src, index) => (
+        <img
+          key={`${src}-${index}`}
+          src={src}
+          alt={`${project.title} - Image ${index + 1}`}
+          className="project-stack-image"
+          loading={index === 0 ? "eager" : "lazy"}
+        />
+      ))}
+    </div>
   ) : null;
 
   const jsonLd = {

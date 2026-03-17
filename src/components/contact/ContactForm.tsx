@@ -1,6 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import * as motion from "motion/react-client";
+import { AnimatePresence } from "motion/react";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 
@@ -42,16 +44,34 @@ export function ContactForm() {
 
   return (
     <>
-      {status === "success" && (
-        <p className="form-status form-status-success" role="status">
-          Thanks for your message. I will get back to you soon.
-        </p>
-      )}
-      {status === "error" && (
-        <p className="form-status form-status-error" role="status">
-          Something went wrong. Please try again or email shapidesigns@gmail.com directly.
-        </p>
-      )}
+      <AnimatePresence mode="wait">
+        {status === "success" && (
+          <motion.p
+            key="success"
+            className="form-status form-status-success"
+            role="status"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+          >
+            Thanks for your message. I will get back to you soon.
+          </motion.p>
+        )}
+        {status === "error" && (
+          <motion.p
+            key="error"
+            className="form-status form-status-error"
+            role="status"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+          >
+            Something went wrong. Please try again or email shapidesigns@gmail.com directly.
+          </motion.p>
+        )}
+      </AnimatePresence>
 
       <form className="contact-form" method="POST" aria-label="Contact form" onSubmit={handleSubmit}>
         <input type="hidden" name="_subject" value="New portfolio inquiry from yehonatanshapira.com" />
@@ -70,8 +90,21 @@ export function ContactForm() {
         </label>
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" className="hp-field" />
 
-        <button className="button button-primary" type="submit" disabled={status === "sending"}>
-          {status === "sending" ? "Sending..." : "Send message"}
+        <button
+          className={`button button-primary form-submit-btn ${status === "success" ? "form-submit-success" : ""} ${status === "error" ? "form-submit-error" : ""}`}
+          type="submit"
+          disabled={status === "sending"}
+        >
+          {status === "sending" ? (
+            <span className="form-spinner" aria-label="Sending">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+                <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeDasharray="32" strokeDashoffset="12" />
+              </svg>
+              Sending…
+            </span>
+          ) : (
+            "Send message"
+          )}
         </button>
       </form>
     </>

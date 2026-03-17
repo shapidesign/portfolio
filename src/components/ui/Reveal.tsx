@@ -5,9 +5,10 @@ import { useEffect, useRef, useState } from "react";
 type RevealProps = Readonly<{
   children: React.ReactNode;
   className?: string;
+  delay?: number;
 }>;
 
-export function Reveal({ children, className }: RevealProps) {
+export function Reveal({ children, className, delay = 0 }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -49,7 +50,7 @@ export function Reveal({ children, className }: RevealProps) {
   }, [show]);
 
   const style: React.CSSProperties = show
-    ? { opacity: 1, transform: "translateY(0) scale(1)", transition: "opacity 500ms cubic-bezier(0.2,0.7,0.2,1), transform 500ms cubic-bezier(0.2,0.7,0.2,1)" }
+    ? { opacity: 1, transform: "translateY(0) scale(1)", transition: `opacity 500ms ${delay}ms cubic-bezier(0.2,0.7,0.2,1), transform 500ms ${delay}ms cubic-bezier(0.2,0.7,0.2,1)` }
     : { opacity: 0, transform: "translateY(22px) scale(0.985)" };
 
   return (
