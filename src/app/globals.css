@@ -1019,7 +1019,7 @@ p {
 }
 
 .contact-form button[type="submit"] {
-  margin-top: 0.45rem;
+  /* margin moved to .form-btn-wrap */
 }
 
 .contact-form button:disabled {
@@ -1086,6 +1086,39 @@ p {
   40%        { transform: translateX(6px); }
   60%        { transform: translateX(-4px); }
   80%        { transform: translateX(4px); }
+}
+
+/* ---------- Form Success Burst ---------- */
+
+.form-btn-wrap {
+  position: relative;
+  display: inline-flex;
+  margin-top: 0.45rem;
+}
+
+.form-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-burst-particle {
+  position: absolute;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.form-burst-envelope {
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 8px rgba(245, 207, 0, 0.5));
 }
 
 /* ---------- 404 Page ---------- */
