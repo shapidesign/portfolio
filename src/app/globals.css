@@ -530,6 +530,34 @@ p {
   white-space: pre-line;
 }
 
+.body-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.body-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.body-section-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-accent-blue);
+}
+
+.body-section-text {
+  color: var(--color-text-soft);
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  line-height: 1.75;
+  max-width: 65ch;
+}
+
 .detail-actions {
   display: flex;
   flex-wrap: wrap;

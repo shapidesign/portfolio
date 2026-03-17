@@ -10,6 +10,52 @@ type ProjectPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+function ProjectBody({ rawHtml }: { rawHtml: string }) {
+  const sanitized = rawHtml.replace(/<(?!\/?(?:strong|em|br\s*\/?)>)/gi, "&lt;");
+
+  const sections = sanitized
+    .split(/<br\s*\/?>\s*<br\s*\/?>/gi)
+    .map((s) => s.replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, "").trim())
+    .filter(Boolean);
+
+  return (
+    <div className="body-sections">
+      {sections.map((section, i) => {
+        const headingMatch = section.match(
+          /^<strong>([^<]+)<\/strong>(?:<br\s*\/?>)?\s*([\s\S]*)/i
+        );
+
+        if (headingMatch && headingMatch[1]) {
+          const headingHtml = headingMatch[1];
+          const bodyHtml = headingMatch[2]?.trim() ?? "";
+          return (
+            <div key={i} className="body-section">
+              <span
+                className="body-section-label"
+                dangerouslySetInnerHTML={{ __html: headingHtml }}
+              />
+              {bodyHtml && (
+                <div
+                  className="body-section-text"
+                  dangerouslySetInnerHTML={{ __html: bodyHtml }}
+                />
+              )}
+            </div>
+          );
+        }
+
+        return (
+          <div
+            key={i}
+            className="body-section body-section-text"
+            dangerouslySetInnerHTML={{ __html: section }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 export async function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
 }
@@ -143,13 +189,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       <Reveal>
         <section className="detail-block">
-          <div
-            className="preserve-breaks"
-            dangerouslySetInnerHTML={{
-              __html: (project.description || project.bodyText)
-                .replace(/<(?!\/?(?:strong|em|br\s*\/?)>)/gi, "&lt;")
-            }}
-          />
+          <ProjectBody rawHtml={project.description || project.bodyText} />
         </section>
       </Reveal>
 
