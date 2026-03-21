@@ -1,5 +1,17 @@
+import type { Metadata } from "next";
 import { Reveal } from "@/components/ui/Reveal";
 import { ContactForm } from "@/components/contact/ContactForm";
+
+export const metadata: Metadata = {
+  title: "Contact — Hire Yehonatan Shapira | Shapi Design",
+  description: "Get in touch with Yehonatan Shapira for branding, digital design, creative direction, or freelance design work. Based in Israel, available worldwide.",
+  alternates: { canonical: "https://www.shapidesign.com/contact" },
+  openGraph: {
+    title: "Contact Yehonatan Shapira — Shapi Design",
+    description: "Collaborate on branding, digital design, or creative direction. Send a message or email directly.",
+    url: "https://www.shapidesign.com/contact",
+  },
+};
 
 export default function ContactPage() {
   return (

@@ -1,6 +1,18 @@
+import type { Metadata } from "next";
 import { ProjectRow } from "@/components/ui/ProjectRow";
 import { Reveal } from "@/components/ui/Reveal";
 import { projects } from "@/data/projects";
+
+export const metadata: Metadata = {
+  title: "Work — Design Projects by Yehonatan Shapira",
+  description: "Selected design projects by Yehonatan Shapira (Shapi Design) in branding, typography, digital design, and visual communication.",
+  alternates: { canonical: "https://www.shapidesign.com/work" },
+  openGraph: {
+    title: "Work — Design Projects by Yehonatan Shapira",
+    description: "Branding, typography, digital design, and visual communication projects by Yehonatan Shapira.",
+    url: "https://www.shapidesign.com/work",
+  },
+};
 
 export default function WorkPage() {
   const projectCount = projects.length;

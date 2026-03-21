@@ -1,5 +1,17 @@
+import type { Metadata } from "next";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { Reveal } from "@/components/ui/Reveal";
+
+export const metadata: Metadata = {
+  title: "About — Yehonatan Shapira, Visual & Graphic Designer",
+  description: "Learn about Yehonatan Shapira (Shapi), a visual communication and graphic designer working in branding, typography, digital design, and creative direction.",
+  alternates: { canonical: "https://www.shapidesign.com/about" },
+  openGraph: {
+    title: "About Yehonatan Shapira — Visual & Graphic Designer",
+    description: "Visual communication designer who believes good design starts by understanding the problem, not the tool.",
+    url: "https://www.shapidesign.com/about",
+  },
+};
 
 const SKILLS = [
   "Figma",

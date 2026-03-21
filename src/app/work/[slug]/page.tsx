@@ -132,26 +132,27 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     return { title: "Project Not Found" };
   }
 
-  const title = `${project.title} | Yehonatan Shapira`;
+  const title = `${project.title} — Design by Yehonatan Shapira`;
   const description = (project.description || project.summary || "")
     .replace(/<[^>]*>?/gm, "")
     .slice(0, 160);
   const url = `https://www.shapidesign.com/work/${slug}`;
   const images =
     project.images.length > 0
-      ? [{ url: project.images[0], width: 1200, height: 630, alt: project.title }]
+      ? [{ url: project.images[0], width: 1200, height: 630, alt: `${project.title} — project by Yehonatan Shapira` }]
       : [];
 
   return {
     title,
     description,
+    keywords: [...project.tags, "Yehonatan Shapira", "Shapi Design", "design project"],
     openGraph: {
       title,
       description,
       url,
       type: "article",
       images,
-      siteName: "Yehonatan Shapira Portfolio"
+      siteName: "Shapi Design — Yehonatan Shapira"
     },
     twitter: {
       card: "summary_large_image",
@@ -199,14 +200,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     "name": project.title,
-    "description": (project.description || project.summary || "").replace(/<[^>]*>?/gm, ""),
+    "description": (project.description || project.summary || "").replace(/<[^>]*>?/gm, "").slice(0, 300),
     "image": project.images[0] || "",
     "url": `https://www.shapidesign.com/work/${project.slug}`,
-    "author": {
-      "@type": "Person",
-      "name": "Yehonatan Shapira"
-    },
-    "datePublished": project.year
+    "author": { "@id": "https://www.shapidesign.com/#person" },
+    "creator": { "@id": "https://www.shapidesign.com/#person" },
+    "datePublished": project.year,
+    "keywords": project.tags,
+    "isPartOf": { "@id": "https://www.shapidesign.com/#website" },
   };
 
   return (
