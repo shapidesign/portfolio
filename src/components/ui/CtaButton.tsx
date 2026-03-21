@@ -7,10 +7,11 @@ type CtaButtonProps = {
   href: string;
   variant?: "primary" | "ghost";
   download?: boolean;
+  onClick?: (e: React.MouseEvent) => void;
   children: React.ReactNode;
 };
 
-export function CtaButton({ href, variant = "primary", download, children }: CtaButtonProps) {
+export function CtaButton({ href, variant = "primary", download, onClick, children }: CtaButtonProps) {
   const ref = useAnimeButton();
 
   const className = `button button-${variant}`;
@@ -21,6 +22,7 @@ export function CtaButton({ href, variant = "primary", download, children }: Cta
         ref={ref as React.RefObject<HTMLAnchorElement>}
         className={className}
         href={href}
+        onClick={onClick}
         {...(download ? { download: true } : {})}
       >
         {children}
@@ -34,6 +36,7 @@ export function CtaButton({ href, variant = "primary", download, children }: Cta
       href={href}
       prefetch={href === "/work" ? false : undefined}
       className={className}
+      onClick={onClick}
     >
       {children}
     </Link>

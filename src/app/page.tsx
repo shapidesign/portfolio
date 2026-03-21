@@ -1,19 +1,31 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { CursorArtPlayer } from "@/components/ui/CursorArtPlayer";
 import { ProjectRow } from "@/components/ui/ProjectRow";
 import { Reveal } from "@/components/ui/Reveal";
+import { WorkGateModal } from "@/components/ui/WorkGateModal";
+import { hasVisitedWork } from "@/components/ui/WorkVisitMarker";
 import { projects } from "@/data/projects";
 import VariableProximity from "@/components/ui/VariableProximity/VariableProximity";
 
 export default function HomePage() {
   const heroRef = useRef<HTMLElement>(null);
+  const [gateOpen, setGateOpen] = useState(false);
+
+  const handleCollaborate = useCallback((e: React.MouseEvent) => {
+    if (!hasVisitedWork()) {
+      e.preventDefault();
+      setGateOpen(true);
+    }
+  }, []);
 
   return (
     <main>
+      <WorkGateModal open={gateOpen} onClose={() => setGateOpen(false)} />
+
       <section className="hero section" ref={heroRef}>
         <div className="content-wrap hero-grid">
           <div className="hero-text">
@@ -33,7 +45,7 @@ export default function HomePage() {
             </p>
             <div className="hero-actions">
               <CtaButton href="#work">View Work</CtaButton>
-              <CtaButton href="/contact" variant="ghost">
+              <CtaButton href="/contact" variant="ghost" onClick={handleCollaborate}>
                 Let&apos;s Collaborate
               </CtaButton>
             </div>
