@@ -1,4 +1,4 @@
-import { ProjectCard } from "@/components/ui/ProjectCard";
+import { ProjectRow } from "@/components/ui/ProjectRow";
 import { Reveal } from "@/components/ui/Reveal";
 import { projects } from "@/data/projects";
 
@@ -15,10 +15,10 @@ export default function WorkPage() {
       </Reveal>
 
       {projectCount > 0 ? (
-        <div className="project-grid">
-          {projects.map((project) => (
-            <Reveal key={project.slug}>
-              <ProjectCard project={project} />
+        <div className="project-list">
+          {projects.map((project, i) => (
+            <Reveal key={project.slug} delay={i * 60}>
+              <ProjectRow project={project} />
             </Reveal>
           ))}
         </div>

@@ -14,77 +14,26 @@ const colorMap: Record<NonNullable<GeometricAccentProps["color"]>, string> = {
   white: "var(--color-accent-white)"
 };
 
+const STAR_PATH =
+  "M16.1348 3.41309C19.1227 -1.13732 25.8401 -1.13732 28.8281 3.41309L28.5186 10.1064C29.534 11.6529 31.0958 12.7732 32.8877 13.2334L39.4678 10.8838C44.6726 12.2206 46.7028 18.5295 43.2549 22.6514L36.6475 24.4316C35.4529 25.8598 34.8488 27.697 34.958 29.5557L39.1621 34.7588C39.4765 40.1103 34.1666 44.03 29.1572 42.1211L25.1846 36.4492C23.4435 35.7858 21.5193 35.7858 19.7783 36.4492L15.8057 42.1211C10.7963 44.03 5.48741 40.1103 5.80176 34.7588L10.0049 29.5557C10.1141 27.6969 9.51001 25.8598 8.31543 24.4316L1.70801 22.6514C-1.73991 18.5295 0.290269 12.2206 5.49512 10.8838L12.0752 13.2334C13.8671 12.7732 15.4289 11.6529 16.4443 10.1064L16.1348 3.41309Z";
+
 export function GeometricAccent({
-  variant = "circle",
   color = "primary",
   size = 80,
-  strokeWidth = 2,
   className
 }: GeometricAccentProps) {
   const stroke = colorMap[color];
 
-  if (variant === "square") {
-    const inset = strokeWidth / 2;
-    return (
-      <svg
-        aria-hidden
-        className={className}
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
-        fill="none"
-      >
-        <rect
-          x={inset}
-          y={inset}
-          width={size - strokeWidth}
-          height={size - strokeWidth}
-          stroke={stroke}
-          strokeWidth={strokeWidth}
-        />
-      </svg>
-    );
-  }
-
-  if (variant === "triangle") {
-    const h = size * 0.866;
-    const points = `${size / 2},${strokeWidth} ${strokeWidth},${h - strokeWidth / 2} ${size - strokeWidth},${h - strokeWidth / 2}`;
-    return (
-      <svg
-        aria-hidden
-        className={className}
-        width={size}
-        height={h}
-        viewBox={`0 0 ${size} ${h}`}
-        fill="none"
-      >
-        <polygon
-          points={points}
-          stroke={stroke}
-          strokeWidth={strokeWidth}
-          strokeLinejoin="round"
-        />
-      </svg>
-    );
-  }
-
-  const r = (size - strokeWidth) / 2;
   return (
     <svg
       aria-hidden
       className={className}
       width={size}
       height={size}
-      viewBox={`0 0 ${size} ${size}`}
+      viewBox="0 0 45 43"
       fill="none"
     >
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={r}
-        stroke={stroke}
-        strokeWidth={strokeWidth}
-      />
+      <path d={STAR_PATH} stroke={stroke} strokeWidth="1.5" />
     </svg>
   );
 }

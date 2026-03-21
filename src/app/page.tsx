@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { CursorArtPlayer } from "@/components/ui/CursorArtPlayer";
-import { ProjectCard } from "@/components/ui/ProjectCard";
+import { ProjectRow } from "@/components/ui/ProjectRow";
 import { Reveal } from "@/components/ui/Reveal";
 import { projects } from "@/data/projects";
 import VariableProximity from "@/components/ui/VariableProximity/VariableProximity";
@@ -32,7 +32,7 @@ export default function HomePage() {
               Design is never <em>my</em> style. It&apos;s <em>your</em> problem and <em>our</em> solution.
             </p>
             <div className="hero-actions">
-              <CtaButton href="/work">View Work</CtaButton>
+              <CtaButton href="#work">View Work</CtaButton>
               <CtaButton href="/contact" variant="ghost">
                 Let&apos;s Collaborate
               </CtaButton>
@@ -42,7 +42,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section">
+      <section id="work" className="section">
         <div className="content-wrap">
           <Reveal>
             <div className="section-head">
@@ -52,10 +52,10 @@ export default function HomePage() {
               </Link>
             </div>
           </Reveal>
-          <div className="work-reveal-grid">
+          <div className="project-list">
             {projects.map((project, i) => (
-              <Reveal key={project.slug} delay={(i % 2) * 100}>
-                <ProjectCard project={project} />
+              <Reveal key={project.slug} delay={i * 60}>
+                <ProjectRow project={project} />
               </Reveal>
             ))}
           </div>
@@ -65,11 +65,13 @@ export default function HomePage() {
       <section className="section content-wrap about-teaser">
         <Reveal>
           <h2>About</h2>
-          <p>
-            Design is never my style. It&apos;s your problem and our solution.
+          <p className="lead">
+            I&apos;m Yehonatan Shapira — a visual communication designer who believes
+            good design starts by understanding the problem, not the tool. I work
+            across branding, digital product, and experimental typography.
           </p>
           <Link href="/about" className="text-link">
-            Read more
+            Read more about me
           </Link>
         </Reveal>
       </section>

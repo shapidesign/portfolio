@@ -15,13 +15,13 @@ export function CtaButton({ href, variant = "primary", download, children }: Cta
 
   const className = `button button-${variant}`;
 
-  if (download) {
+  if (download || href.startsWith("#")) {
     return (
       <a
         ref={ref as React.RefObject<HTMLAnchorElement>}
         className={className}
         href={href}
-        download
+        {...(download ? { download: true } : {})}
       >
         {children}
       </a>

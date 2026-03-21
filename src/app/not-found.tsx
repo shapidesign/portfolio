@@ -5,9 +5,9 @@ export default function NotFound() {
   return (
     <main className="section content-wrap not-found-page">
       <div className="not-found-shapes" aria-hidden>
-        <GeometricAccent variant="square" color="primary" size={64} />
-        <GeometricAccent variant="circle" color="blue" size={64} />
-        <GeometricAccent variant="triangle" color="secondary" size={64} />
+        <GeometricAccent color="primary" size={64} />
+        <GeometricAccent color="blue" size={64} />
+        <GeometricAccent color="green" size={64} />
       </div>
       <h1>404</h1>
       <p className="lead">This page doesn&apos;t exist — but plenty of good work does.</p>

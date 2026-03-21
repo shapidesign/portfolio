@@ -7,9 +7,12 @@
     "dev": "npm run sync:projects && next dev",
     "build": "npm run sync:projects && next build",
     "start": "next start",
-    "lint": "eslint . --max-warnings=0"
+    "lint": "eslint . --max-warnings=0",
+    "stitch:check": "node --env-file=.env.local scripts/stitch-smoke.mjs",
+    "mcp:stitch": "node --env-file=.env.local scripts/stitch-mcp.mjs"
   },
   "dependencies": {
+    "@google/stitch-sdk": "^0.0.3",
     "@notionhq/client": "^5.9.0",
     "motion": "^12.34.1",
     "next": "latest",

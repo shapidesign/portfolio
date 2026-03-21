@@ -1,4 +1,28 @@
-:root {
+:root, [data-theme="light"] {
+  --color-bg: #F9F9F7;
+  --color-bg-elevated: #FFFFFF;
+  --color-surface: #F0EFF4;
+  --color-surface-2: #E8E6EF;
+  --color-text: #1a1a2e;
+  --color-text-soft: #6B6B80;
+
+  --color-primary: #7D53FA;
+  --color-secondary: #7D53FA;
+  --color-accent-blue: #7D53FA;
+  --color-accent-green: #7D53FA;
+  --color-accent-white: #1a1a2e;
+
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.06);
+
+  --radius-card: 24px;
+  --radius-pill: 999px;
+  --radius-soft: 16px;
+
+  --container-max: 1280px;
+  --space-section: clamp(2.5rem, 5vw, 4rem);
+}
+
+[data-theme="dark"] {
   --color-bg: #07080c;
   --color-bg-elevated: #0f1118;
   --color-surface: #151823;
@@ -6,19 +30,11 @@
   --color-text: #f3f6ff;
   --color-text-soft: #b4bdd3;
 
-  /* Bauhaus primary palette */
-  --color-primary: #e10600;
-  --color-secondary: #f5cf00;
-  --color-accent-blue: #0096db;
-  --color-accent-green: #009b4c;
-  --color-accent-white: #f5f7ff;
-
-  --radius-card: 24px;
-  --radius-pill: 999px;
-  --radius-soft: 16px;
+  --color-primary: #7D53FA;
+  --color-secondary: #7D53FA;
+  --color-accent-blue: #A78BFA;
+  --color-accent-green: #C4B5FD;
+  --color-accent-white: #F0EEFF;
 
   --shadow-soft: 0 14px 42px rgba(0, 0, 0, 0.5);
-
-  --container-max: 1280px;
-  --space-section: clamp(2.5rem, 5vw, 4rem);
 }

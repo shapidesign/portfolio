@@ -5,6 +5,7 @@ import { IntroLoader } from "@/components/ui/IntroLoader";
 import { RouteTransition } from "@/components/ui/RouteTransition";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { ProjectProvider } from "@/context/ProjectContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -59,7 +60,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
   };
 
   return (
-    <html lang="en">
+    <html lang="en" data-theme="light" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var m=localStorage.getItem("theme-manual"),t;if(m){t=localStorage.getItem("theme")}else{var h=new Date().getHours();t=(h>=7&&h<18)?"light":"dark"}document.documentElement.setAttribute("data-theme",t||"light")})()` }} />
+      </head>
       <body className={spaceGrotesk.variable}>
         <script
           type="application/ld+json"
@@ -67,11 +71,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
         <IntroLoader />
         <AnimatedCursor />
-        <div className="site-shell">
-          <SiteHeader />
-          <RouteTransition>{children}</RouteTransition>
-          <SiteFooter />
-        </div>
+        <ProjectProvider>
+          <div className="site-shell">
+            <SiteHeader />
+            <RouteTransition>{children}</RouteTransition>
+            <SiteFooter />
+          </div>
+        </ProjectProvider>
       </body>
     </html>
   );

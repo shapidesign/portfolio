@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Reveal } from "@/components/ui/Reveal";
+import { ProjectHeaderObserver } from "@/components/ui/ProjectHeaderObserver";
+import { ProjectNavBar } from "@/components/ui/ProjectNavBar";
 import { getProjectBySlug, projects } from "@/data/projects";
 import { DigitalHandprintEmbed } from "./DigitalHandprintEmbed";
 import { DavidkaProjectEmbed } from "./DavidkaProjectEmbed";
@@ -10,10 +12,73 @@ type ProjectPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+function BodyBlocks({ lines }: { lines: string[] }) {
+  type Block =
+    | { kind: "text"; lines: string[] }
+    | { kind: "bullets"; items: string[] }
+    | { kind: "ordered"; items: string[] };
+
+  const blocks: Block[] = [];
+
+  for (const line of lines) {
+    if (line.startsWith("•")) {
+      const last = blocks[blocks.length - 1];
+      const content = line.replace(/^•\s*/, "");
+      if (last?.kind === "bullets") last.items.push(content);
+      else blocks.push({ kind: "bullets", items: [content] });
+    } else if (/^\d+\.\s/.test(line)) {
+      const last = blocks[blocks.length - 1];
+      const content = line.replace(/^\d+\.\s*/, "");
+      if (last?.kind === "ordered") last.items.push(content);
+      else blocks.push({ kind: "ordered", items: [content] });
+    } else {
+      const last = blocks[blocks.length - 1];
+      if (last?.kind === "text") last.lines.push(line);
+      else blocks.push({ kind: "text", lines: [line] });
+    }
+  }
+
+  return (
+    <>
+      {blocks.map((block, i) => {
+        if (block.kind === "bullets")
+          return (
+            <ul key={i} className="body-list">
+              {block.items.map((item, j) => (
+                <li key={j} dangerouslySetInnerHTML={{ __html: item }} />
+              ))}
+            </ul>
+          );
+        if (block.kind === "ordered")
+          return (
+            <ol key={i} className="body-list">
+              {block.items.map((item, j) => (
+                <li key={j} dangerouslySetInnerHTML={{ __html: item }} />
+              ))}
+            </ol>
+          );
+        return (
+          <p
+            key={i}
+            className="body-section-text"
+            dangerouslySetInnerHTML={{ __html: block.lines.join("<br />") }}
+          />
+        );
+      })}
+    </>
+  );
+}
+
 function ProjectBody({ rawHtml }: { rawHtml: string }) {
   const sanitized = rawHtml.replace(/<(?!\/?(?:strong|em|br\s*\/?)>)/gi, "&lt;");
 
-  const sections = sanitized
+  const normalized = sanitized.replace(
+    /<strong>([\s\S]*?)<\/strong>/gi,
+    (_, inner: string) =>
+      `<strong>${inner.replace(/<br\s*\/?>/gi, " ").trim()}</strong>`
+  );
+
+  const sections = normalized
     .split(/<br\s*\/?>\s*<br\s*\/?>/gi)
     .map((s) => s.replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, "").trim())
     .filter(Boolean);
@@ -21,41 +86,34 @@ function ProjectBody({ rawHtml }: { rawHtml: string }) {
   return (
     <div className="body-sections">
       {sections.map((section, i) => {
-        // Match <strong>...</strong> that may contain <br> inside (e.g. "Title<br/>Subtitle")
         const headingMatch = section.match(
-          /^<strong>([\s\S]*?)<\/strong>(?:<br\s*\/?>)?\s*([\s\S]*)/i
+          /^<strong>([\s\S]*?)<\/strong>\s*(?:$|<br\s*\/?>)\s*([\s\S]*)/i
         );
 
-        if (headingMatch && headingMatch[1]) {
-          // Flatten any <br> inside the heading into a space
-          const headingHtml = headingMatch[1]
-            .replace(/<br\s*\/?>/gi, " ")
-            .trim();
-          const bodyHtml = headingMatch[2]
-            ?.replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, "")
-            .trim() ?? "";
-          return (
-            <div key={i} className="body-section">
-              <span
-                className="body-section-label"
-                dangerouslySetInnerHTML={{ __html: headingHtml }}
-              />
-              {bodyHtml && (
-                <div
-                  className="body-section-text"
-                  dangerouslySetInnerHTML={{ __html: bodyHtml }}
-                />
-              )}
-            </div>
-          );
-        }
+        const heading = headingMatch?.[1]?.trim() || null;
+        const bodyRaw = heading
+          ? (headingMatch?.[2]
+              ?.replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, "")
+              .trim() ?? "")
+          : section;
+
+        const bodyLines = bodyRaw
+          ? bodyRaw
+              .split(/<br\s*\/?>/gi)
+              .map((l) => l.trim())
+              .filter(Boolean)
+          : [];
 
         return (
-          <div
-            key={i}
-            className="body-section body-section-text"
-            dangerouslySetInnerHTML={{ __html: section }}
-          />
+          <div key={i} className="body-section">
+            {heading && (
+              <h3
+                className="body-section-label"
+                dangerouslySetInnerHTML={{ __html: heading }}
+              />
+            )}
+            {bodyLines.length > 0 && <BodyBlocks lines={bodyLines} />}
+          </div>
         );
       })}
     </div>
@@ -152,18 +210,20 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   };
 
   return (
-    <main className="section content-wrap project-detail">
+    <main className="section content-wrap project-detail project-detail-with-nav">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Reveal>
-        <p className="eyebrow">{project.subHeader || project.category}</p>
-        <h1>{project.title}</h1>
-        {project.context && (
-          <p className="project-context-detail">{project.context}</p>
-        )}
-      </Reveal>
+      <ProjectHeaderObserver title={project.title}>
+        <Reveal>
+          <p className="eyebrow">{project.subHeader || project.category}</p>
+          <h1>{project.title}</h1>
+          {project.context && (
+            <p className="project-context-detail">{project.context}</p>
+          )}
+        </Reveal>
+      </ProjectHeaderObserver>
 
       <Reveal>
         <div className="meta-row">
@@ -238,6 +298,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </Link>
         </div>
       </Reveal>
+
+      <ProjectNavBar projects={projects} currentSlug={slug} />
     </main>
   );
 }
