@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import * as motion from "motion/react-client";
 import { AnimatePresence, LayoutGroup } from "motion/react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useProjectTitle } from "@/context/ProjectContext";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { projects } from "@/data/projects";
 
 const STAR_PATH =
   "M16.1348 3.41309C19.1227 -1.13732 25.8401 -1.13732 28.8281 3.41309L28.5186 10.1064C29.534 11.6529 31.0958 12.7732 32.8877 13.2334L39.4678 10.8838C44.6726 12.2206 46.7028 18.5295 43.2549 22.6514L36.6475 24.4316C35.4529 25.8598 34.8488 27.697 34.958 29.5557L39.1621 34.7588C39.4765 40.1103 34.1666 44.03 29.1572 42.1211L25.1846 36.4492C23.4435 35.7858 21.5193 35.7858 19.7783 36.4492L15.8057 42.1211C10.7963 44.03 5.48741 40.1103 5.80176 34.7588L10.0049 29.5557C10.1141 27.6969 9.51001 25.8598 8.31543 24.4316L1.70801 22.6514C-1.73991 18.5295 0.290269 12.2206 5.49512 10.8838L12.0752 13.2334C13.8671 12.7732 15.4289 11.6529 16.4443 10.1064L16.1348 3.41309Z";
@@ -22,9 +23,13 @@ const navItems = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [workDropdownOpen, setWorkDropdownOpen] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
   const { title: projectTitle } = useProjectTitle();
   const progressRef = useRef<HTMLDivElement>(null);
+  const starRef = useRef<SVGSVGElement>(null);
+  const spinTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const workDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const bar = progressRef.current;
@@ -43,13 +48,36 @@ export function SiteHeader() {
     return () => cancelAnimationFrame(rafId);
   }, []);
 
+  useEffect(() => {
+    if (!workDropdownOpen) return;
+    function onClickOutside(e: MouseEvent) {
+      if (workDropdownRef.current && !workDropdownRef.current.contains(e.target as Node)) {
+        setWorkDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, [workDropdownOpen]);
+
+  const handleBrandClick = useCallback(() => {
+    setOpen(false);
+    const star = starRef.current;
+    if (!star) return;
+
+    if (spinTimerRef.current) clearTimeout(spinTimerRef.current);
+    star.classList.add("brand-star--fast");
+    spinTimerRef.current = setTimeout(() => {
+      star.classList.remove("brand-star--fast");
+    }, 2000);
+  }, []);
+
   return (
     <header className="site-header">
       <div className="scroll-progress" ref={progressRef} />
       <div className="content-wrap nav-row">
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", minWidth: 0 }}>
-          <Link href="/" className="brand" onClick={() => setOpen(false)}>
-            <svg className="brand-star" width="20" height="20" viewBox="0 0 45 43" fill="none" aria-hidden>
+          <Link href="/" className="brand" onClick={handleBrandClick}>
+            <svg ref={starRef} className="brand-star" width="20" height="20" viewBox="0 0 45 43" fill="none" aria-hidden>
               <path d={STAR_PATH} fill="var(--color-primary)" />
             </svg>
             Yehonatan Shapira
@@ -77,6 +105,69 @@ export function SiteHeader() {
               {navItems.map((item) => {
                 const isActive =
                   pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
+
+                if (item.href === "/work") {
+                  return (
+                    <div
+                      key={item.href}
+                      ref={workDropdownRef}
+                      className="work-dropdown-wrap"
+                      onMouseEnter={() => setWorkDropdownOpen(true)}
+                      onMouseLeave={() => setWorkDropdownOpen(false)}
+                    >
+                      <Link
+                        href={item.href}
+                        prefetch={false}
+                        className={`nav-link ${isActive ? "active" : ""}`}
+                        onClick={() => { setOpen(false); setWorkDropdownOpen(false); }}
+                        onFocus={() => setWorkDropdownOpen(true)}
+                      >
+                        {isActive && !reducedMotion && (
+                          <motion.span
+                            className="nav-active-bg"
+                            layoutId="nav-active"
+                            transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                          />
+                        )}
+                        {item.label}
+                      </Link>
+
+                      <div
+                        className={`work-dropdown ${workDropdownOpen ? "work-dropdown--open" : ""}`}
+                        role="menu"
+                        aria-label="Projects"
+                      >
+                        {projects.map((project) => (
+                          <Link
+                            key={project.slug}
+                            href={`/work/${project.slug}`}
+                            className="work-dropdown-item"
+                            role="menuitem"
+                            onClick={() => { setOpen(false); setWorkDropdownOpen(false); }}
+                            onBlur={(e) => {
+                              if (!workDropdownRef.current?.contains(e.relatedTarget as Node)) {
+                                setWorkDropdownOpen(false);
+                              }
+                            }}
+                          >
+                            <span className="work-dropdown-thumb">
+                              {project.images[0] ? (
+                                <img
+                                  src={project.images[0]}
+                                  alt=""
+                                  loading="lazy"
+                                />
+                              ) : (
+                                <span className="work-dropdown-thumb-placeholder" />
+                              )}
+                            </span>
+                            <span className="work-dropdown-label">{project.title}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                }
 
                 return (
                   <Link

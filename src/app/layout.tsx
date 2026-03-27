@@ -97,7 +97,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){var m=localStorage.getItem("theme-manual"),t;if(m){t=localStorage.getItem("theme")}else{var h=new Date().getHours();t=(h>=7&&h<18)?"light":"dark"}document.documentElement.setAttribute("data-theme",t||"light")})()` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var h=new Date().getHours();var t=(h>=7&&h<18)?"light":"dark";document.documentElement.setAttribute("data-theme",t)})()` }} />
       </head>
       <body className={spaceGrotesk.variable}>
         <script

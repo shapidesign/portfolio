@@ -2,22 +2,16 @@
 
 import { useEffect } from "react";
 
-const STORAGE_KEY = "hasVisitedWork";
+let visited = false;
 
 export function WorkVisitMarker() {
   useEffect(() => {
-    try {
-      sessionStorage.setItem(STORAGE_KEY, "1");
-    } catch {}
+    visited = true;
   }, []);
 
   return null;
 }
 
 export function hasVisitedWork(): boolean {
-  try {
-    return sessionStorage.getItem(STORAGE_KEY) === "1";
-  } catch {
-    return true;
-  }
+  return visited;
 }
