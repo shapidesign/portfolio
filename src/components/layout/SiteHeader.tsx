@@ -8,10 +8,11 @@ import { AnimatePresence, LayoutGroup } from "motion/react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useProjectTitle } from "@/context/ProjectContext";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { projects } from "@/data/projects";
 
 const STAR_PATH =
   "M16.1348 3.41309C19.1227 -1.13732 25.8401 -1.13732 28.8281 3.41309L28.5186 10.1064C29.534 11.6529 31.0958 12.7732 32.8877 13.2334L39.4678 10.8838C44.6726 12.2206 46.7028 18.5295 43.2549 22.6514L36.6475 24.4316C35.4529 25.8598 34.8488 27.697 34.958 29.5557L39.1621 34.7588C39.4765 40.1103 34.1666 44.03 29.1572 42.1211L25.1846 36.4492C23.4435 35.7858 21.5193 35.7858 19.7783 36.4492L15.8057 42.1211C10.7963 44.03 5.48741 40.1103 5.80176 34.7588L10.0049 29.5557C10.1141 27.6969 9.51001 25.8598 8.31543 24.4316L1.70801 22.6514C-1.73991 18.5295 0.290269 12.2206 5.49512 10.8838L12.0752 13.2334C13.8671 12.7732 15.4289 11.6529 16.4443 10.1064L16.1348 3.41309Z";
+
+type NavProject = { slug: string; title: string; image: string };
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -20,7 +21,7 @@ const navItems = [
   { href: "/contact", label: "Contact" }
 ];
 
-export function SiteHeader() {
+export function SiteHeader({ navProjects }: { navProjects: NavProject[] }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [workDropdownOpen, setWorkDropdownOpen] = useState(false);
@@ -137,7 +138,7 @@ export function SiteHeader() {
                         role="menu"
                         aria-label="Projects"
                       >
-                        {projects.map((project) => (
+                        {navProjects.map((project) => (
                           <Link
                             key={project.slug}
                             href={`/work/${project.slug}`}
@@ -151,9 +152,9 @@ export function SiteHeader() {
                             }}
                           >
                             <span className="work-dropdown-thumb">
-                              {project.images[0] ? (
+                              {project.image ? (
                                 <img
-                                  src={project.images[0]}
+                                  src={project.image}
                                   alt=""
                                   loading="lazy"
                                 />
