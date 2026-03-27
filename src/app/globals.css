@@ -246,14 +246,18 @@ p {
   transition: animation-duration 400ms ease;
 }
 
-@media (hover: hover) {
+.brand[data-spin-state="active"] .brand-star {
+  animation-duration: 0.85s;
+}
+
+.brand[data-spin-state="settling"] .brand-star {
+  animation-duration: 4s;
+}
+
+@media (hover: hover) and (pointer: fine) {
   .brand:hover .brand-star {
     animation-duration: 0.6s;
   }
-}
-
-.brand-star--fast {
-  animation-duration: 0.6s !important;
 }
 
 .nav-actions {
@@ -368,9 +372,17 @@ p {
 }
 
 .nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.52rem 0.8rem;
+  border: none;
   border-radius: var(--radius-pill);
+  background: transparent;
   color: var(--color-text-soft);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
   position: relative;
   transition: color 220ms ease-out;
 }
@@ -410,61 +422,131 @@ p {
   z-index: -1;
 }
 
-/* ---------- Work Dropdown ---------- */
-
-.work-dropdown-wrap {
+.work-nav-item {
   position: relative;
+}
+
+.work-nav-trigger {
+  gap: 0.4rem;
+  z-index: 0;
+}
+
+.work-nav-chevron {
+  font-size: 0.72rem;
+  transition: transform 220ms ease-out;
+}
+
+.work-nav-item.open .work-nav-chevron {
+  transform: rotate(180deg);
 }
 
 .work-dropdown {
   position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  min-width: 260px;
-  background: var(--color-bg-elevated);
-  border: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
-  border-radius: var(--radius-soft);
-  box-shadow: var(--shadow-soft);
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  top: calc(100% + 0.7rem);
+  right: 0;
+  width: min(32rem, calc(100vw - 2rem));
+  padding: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 16%, transparent);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--color-bg-elevated) 94%, transparent);
+  box-shadow: var(--shadow-soft), 0 20px 48px rgba(0, 0, 0, 0.14);
+  display: grid;
+  gap: 0.5rem;
   opacity: 0;
+  transform: translateY(-8px) scale(0.98);
   pointer-events: none;
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition: opacity 220ms ease-out, transform 220ms ease-out;
+  backdrop-filter: blur(12px);
   z-index: 30;
 }
 
-.work-dropdown--open {
+.work-nav-item.open .work-dropdown {
   opacity: 1;
+  transform: translateY(0) scale(1);
   pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
 }
 
-.work-dropdown-item {
+.work-dropdown-all {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.45rem 0.55rem;
-  border-radius: 10px;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
   color: var(--color-text);
-  text-decoration: none;
-  transition: background 160ms ease;
+  font-weight: 600;
+  transition: background 180ms ease-out, color 180ms ease-out;
 }
 
-.work-dropdown-item:hover {
+.work-dropdown-all:hover {
+  background: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
+  color: var(--color-primary);
+}
+
+.work-dropdown-list {
+  display: grid;
+  gap: 0.45rem;
+  max-height: min(54vh, 26rem);
+  overflow: auto;
+}
+
+.work-dropdown-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.55rem;
+  border-radius: 16px;
+  color: var(--color-text);
+  transition: background 180ms ease-out, transform 180ms ease-out;
+}
+
+.work-dropdown-link:hover,
+.work-dropdown-link:focus-visible {
   background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  transform: translateX(2px);
+}
+
+.work-dropdown-copy {
+  min-width: 0;
+  display: grid;
+  gap: 0.18rem;
+}
+
+.work-dropdown-title {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.work-dropdown-meta {
+  color: var(--color-text-soft);
+  font-size: 0.83rem;
 }
 
 .work-dropdown-thumb {
   position: relative;
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  flex-shrink: 0;
-  background: var(--color-surface);
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
+  background: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
+}
+
+.work-dropdown-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-primary) 32%, white 14%),
+      color-mix(in srgb, var(--color-primary) 20%, transparent)
+    );
+  pointer-events: none;
 }
 
 .work-dropdown-thumb img {
@@ -472,28 +554,20 @@ p {
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: scale(1.01);
+  transition: transform 220ms ease-out;
 }
 
-.work-dropdown-thumb::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: color-mix(in srgb, var(--color-primary) 30%, transparent);
-  border-radius: 8px;
-  pointer-events: none;
+.work-dropdown-link:hover .work-dropdown-thumb img,
+.work-dropdown-link:focus-visible .work-dropdown-thumb img {
+  transform: scale(1.05);
 }
 
-.work-dropdown-thumb-placeholder {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
-}
-
-.work-dropdown-label {
-  font-size: 0.88rem;
-  font-weight: 500;
-  white-space: nowrap;
+.work-dropdown-thumb-fallback {
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
 }
 
 .menu-button {
@@ -1926,35 +2000,36 @@ p {
     padding: 0.72rem 0.9rem;
   }
 
-  .work-dropdown-wrap {
-    position: static;
+  .work-nav-item {
+    width: 100%;
+  }
+
+  .work-nav-trigger {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .work-dropdown {
     position: static;
-    transform: none;
-    min-width: 0;
-    background: transparent;
-    border: none;
+    width: 100%;
+    margin-top: 0.35rem;
+    padding: 0.4rem;
+    border-radius: 16px;
+    border-color: color-mix(in srgb, var(--color-accent-white) 10%, transparent);
     box-shadow: none;
-    padding: 0 0 0 0.75rem;
-    border-radius: 0;
+    backdrop-filter: none;
+    display: none;
     opacity: 1;
+    transform: none;
     pointer-events: auto;
-    gap: 0;
   }
 
-  .work-dropdown-item {
-    padding: 0.4rem 0.55rem;
+  .work-nav-item.open .work-dropdown {
+    display: grid;
   }
 
-  .work-dropdown-thumb {
-    width: 34px;
-    height: 34px;
-  }
-
-  .work-dropdown-label {
-    font-size: 0.82rem;
+  .work-dropdown-link {
+    grid-template-columns: minmax(0, 1fr) 84px;
   }
 
   .hero-grid {

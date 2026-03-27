@@ -2,16 +2,16 @@
 
 import { useEffect } from "react";
 
-let visited = false;
+let hasVisitedWorkInPageLifecycle = false;
 
 export function WorkVisitMarker() {
   useEffect(() => {
-    visited = true;
+    hasVisitedWorkInPageLifecycle = true;
   }, []);
 
   return null;
 }
 
 export function hasVisitedWork(): boolean {
-  return visited;
+  return hasVisitedWorkInPageLifecycle;
 }

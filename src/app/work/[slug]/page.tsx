@@ -185,13 +185,15 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   ) : project.images.length > 0 ? (
     <div className="project-image-stack">
       {project.images.map((src, index) => (
-        <img
-          key={`${src}-${index}`}
-          src={src}
-          alt={`${project.title} - Image ${index + 1}`}
-          className="project-stack-image"
-          loading={index === 0 ? "eager" : "lazy"}
-        />
+        <span key={`${src}-${index}`} style={{ display: "contents" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src}
+            alt={`${project.title} - Image ${index + 1}`}
+            className="project-stack-image"
+            loading={index === 0 ? "eager" : "lazy"}
+          />
+        </span>
       ))}
     </div>
   ) : null;

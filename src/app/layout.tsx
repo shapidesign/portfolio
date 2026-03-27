@@ -6,7 +6,6 @@ import { RouteTransition } from "@/components/ui/RouteTransition";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { ProjectProvider } from "@/context/ProjectContext";
-import { projects } from "@/data/projects";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -95,12 +94,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
     "publisher": { "@id": "https://www.shapidesign.com/#person" },
   };
 
-  const navProjects = projects.map((p) => ({
-    slug: p.slug,
-    title: p.title,
-    image: p.images[0] ?? "",
-  }));
-
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
       <head>
@@ -115,7 +108,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <AnimatedCursor />
         <ProjectProvider>
           <div className="site-shell">
-            <SiteHeader navProjects={navProjects} />
+            <SiteHeader />
             <RouteTransition>{children}</RouteTransition>
             <SiteFooter />
           </div>
