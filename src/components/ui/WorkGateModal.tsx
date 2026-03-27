@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
+import { useTranslation } from "@/i18n/strings";
 
 type WorkGateModalProps = {
   open: boolean;
@@ -10,6 +12,8 @@ type WorkGateModalProps = {
 
 export function WorkGateModal({ open, onClose }: WorkGateModalProps) {
   const router = useRouter();
+  const { lang } = useLanguage();
+  const s = useTranslation(lang);
   const dialogRef = useRef<HTMLDivElement>(null);
   const primaryRef = useRef<HTMLButtonElement>(null);
 
@@ -54,11 +58,11 @@ export function WorkGateModal({ open, onClose }: WorkGateModalProps) {
         className="work-gate-dialog"
         role="dialog"
         aria-modal="true"
-        aria-label="You haven't seen my work"
+        aria-label={s.workGateTitle}
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
-        <p className="work-gate-heading">You haven&apos;t seen my work!</p>
+        <p className="work-gate-heading">{s.workGateTitle}</p>
         <div className="work-gate-actions">
           <button
             ref={primaryRef}
@@ -68,7 +72,7 @@ export function WorkGateModal({ open, onClose }: WorkGateModalProps) {
               router.push("/work");
             }}
           >
-            Let me see
+            {s.workGateLetMeSee}
           </button>
           <button
             className="button button-ghost"
@@ -77,7 +81,7 @@ export function WorkGateModal({ open, onClose }: WorkGateModalProps) {
               router.push("/contact");
             }}
           >
-            I&apos;m confident I want to collaborate
+            {s.workGateConfident}
           </button>
         </div>
       </div>

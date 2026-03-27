@@ -8,12 +8,16 @@ import { ProjectRow } from "@/components/ui/ProjectRow";
 import { Reveal } from "@/components/ui/Reveal";
 import { WorkGateModal } from "@/components/ui/WorkGateModal";
 import { hasVisitedWork } from "@/components/ui/WorkVisitMarker";
+import { useLanguage } from "@/context/LanguageContext";
+import { useTranslation } from "@/i18n/strings";
 import { projects } from "@/data/projects";
 import VariableProximity from "@/components/ui/VariableProximity/VariableProximity";
 
 export default function HomePage() {
   const heroRef = useRef<HTMLElement>(null);
   const [gateOpen, setGateOpen] = useState(false);
+  const { lang } = useLanguage();
+  const s = useTranslation(lang);
 
   const handleCollaborate = useCallback((e: React.MouseEvent) => {
     if (!hasVisitedWork()) {
@@ -29,24 +33,22 @@ export default function HomePage() {
       <section className="hero section" ref={heroRef}>
         <div className="content-wrap hero-grid">
           <div className="hero-text">
-            <h1>
+            <h1 dir={lang === "he" ? "rtl" : "ltr"}>
               <VariableProximity
-                label="Yehonatan Shapira"
-                fromFontVariationSettings="'wght' 300, 'opsz' 8"
-                toFontVariationSettings="'wght' 900, 'opsz' 144"
+                label={s.heroName}
+                fromFontVariationSettings="'wght' 300"
+                toFontVariationSettings="'wght' 900"
                 containerRef={heroRef}
                 radius={200}
                 falloff="gaussian"
                 className="hero-variable-text"
               />
             </h1>
-            <p className="hero-copy">
-              Design is never <em>my</em> style. It&apos;s <em>your</em> problem and <em>our</em> solution.
-            </p>
+            <p className="hero-copy">{s.heroTagline}</p>
             <div className="hero-actions">
-              <CtaButton href="#work">View Work</CtaButton>
+              <CtaButton href="#work">{s.viewWork}</CtaButton>
               <CtaButton href="/contact" variant="ghost" onClick={handleCollaborate}>
-                Let&apos;s Collaborate
+                {s.letsCollaborate}
               </CtaButton>
             </div>
           </div>
@@ -58,9 +60,9 @@ export default function HomePage() {
         <div className="content-wrap">
           <Reveal>
             <div className="section-head">
-              <h2>Selected Work</h2>
+              <h2>{s.selectedWork}</h2>
               <Link href="/work" prefetch={false} className="text-link">
-                See all projects
+                {s.seeAllProjects}
               </Link>
             </div>
           </Reveal>
@@ -76,14 +78,10 @@ export default function HomePage() {
 
       <section className="section content-wrap about-teaser">
         <Reveal>
-          <h2>About</h2>
-          <p className="lead">
-            I&apos;m Yehonatan Shapira — a visual communication designer who believes
-            good design starts by understanding the problem, not the tool. I work
-            across branding, digital product, and experimental typography.
-          </p>
+          <h2>{s.aboutTeaserTitle}</h2>
+          <p className="lead">{s.aboutTeaserBody}</p>
           <Link href="/about" className="text-link">
-            Read more about me
+            {s.readMoreAboutMe}
           </Link>
         </Reveal>
       </section>

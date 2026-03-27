@@ -16,7 +16,12 @@ const ALIASES = {
   url: ["projecturl", "url", "link", "website", "externalurl", "projectlink"],
   images: ["files&media", "filesmedia", "images", "image", "gallery", "cover", "media"],
   tags: ["tags", "tag", "topics", "labels", "services"],
-  year: ["year", "date"]
+  year: ["year", "date"],
+  heTitle: ["hebrewtitle", "hetitle"],
+  heSubHeader: ["hebrewsubheader", "hesubheader", "hebrewsub-header"],
+  heContext: ["hebrewcontext", "hecontext"],
+  heDescription: ["hebrewdescription", "hedescription"],
+  heTags: ["hebrewtags", "hetags"]
 };
 
 function normalizeKey(value) {
@@ -195,6 +200,12 @@ function makeProjectFromPage(page, index, usedSlugs) {
   const yearText = extractText(findProperty(props, ALIASES.year));
   const parsedYear = (yearText.match(/\d{4}/) || [])[0] || String(new Date().getFullYear());
 
+  const heTitle = extractText(findProperty(props, ALIASES.heTitle)) || undefined;
+  const heSubHeader = extractText(findProperty(props, ALIASES.heSubHeader)) || undefined;
+  const heContext = extractText(findProperty(props, ALIASES.heContext)) || undefined;
+  const heDescription = extractHtml(findProperty(props, ALIASES.heDescription)) || undefined;
+  const heTags = extractTags(findProperty(props, ALIASES.heTags));
+
   const baseSlug = slugify(title) || `project-${index + 1}`;
   let slug = baseSlug;
   let counter = 2;
@@ -228,7 +239,12 @@ function makeProjectFromPage(page, index, usedSlugs) {
     outcome: bodyText || description || "Outcome details coming soon.",
     accent,
     thumbnailShape,
-    thumbnailHoverShape
+    thumbnailHoverShape,
+    ...(heTitle ? { heTitle } : {}),
+    ...(heSubHeader ? { heSubHeader } : {}),
+    ...(heContext ? { heContext } : {}),
+    ...(heDescription ? { heDescription } : {}),
+    ...(heTags.length > 0 ? { heTags } : {})
   };
 }
 

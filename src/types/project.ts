@@ -21,4 +21,9 @@ export type Project = {
   accent: Accent;
   thumbnailShape: ShapeVariant;
   thumbnailHoverShape: ShapeVariant;
+  heTitle?: string;
+  heSubHeader?: string;
+  heContext?: string;
+  heDescription?: string;
+  heTags?: string[];
 };

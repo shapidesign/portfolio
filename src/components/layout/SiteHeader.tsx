@@ -7,16 +7,21 @@ import * as motion from "motion/react-client";
 import { AnimatePresence, LayoutGroup } from "motion/react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useProjectTitle } from "@/context/ProjectContext";
+import { useLanguage } from "@/context/LanguageContext";
+import { useTranslation } from "@/i18n/strings";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { projects } from "@/data/projects";
 
 const STAR_PATH =
   "M16.1348 3.41309C19.1227 -1.13732 25.8401 -1.13732 28.8281 3.41309L28.5186 10.1064C29.534 11.6529 31.0958 12.7732 32.8877 13.2334L39.4678 10.8838C44.6726 12.2206 46.7028 18.5295 43.2549 22.6514L36.6475 24.4316C35.4529 25.8598 34.8488 27.697 34.958 29.5557L39.1621 34.7588C39.4765 40.1103 34.1666 44.03 29.1572 42.1211L25.1846 36.4492C23.4435 35.7858 21.5193 35.7858 19.7783 36.4492L15.8057 42.1211C10.7963 44.03 5.48741 40.1103 5.80176 34.7588L10.0049 29.5557C10.1141 27.6969 9.51001 25.8598 8.31543 24.4316L1.70801 22.6514C-1.73991 18.5295 0.290269 12.2206 5.49512 10.8838L12.0752 13.2334C13.8671 12.7732 15.4289 11.6529 16.4443 10.1064L16.1348 3.41309Z";
 
-const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" }
+type NavItemKey = "navHome" | "navAbout" | "navContact";
+
+const navItemDefs: { href: string; key: NavItemKey }[] = [
+  { href: "/", key: "navHome" },
+  { href: "/about", key: "navAbout" },
+  { href: "/contact", key: "navContact" },
 ];
 
 type BrandSpinState = "idle" | "active" | "settling";
@@ -31,10 +36,16 @@ function supportsPreciseHover() {
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [isMobileNav, setIsMobileNav] = useState(() =>
+    typeof window !== "undefined" && window.matchMedia("(max-width: 740px)").matches
+  );
   const [workMenuOpen, setWorkMenuOpen] = useState(false);
   const [brandSpinState, setBrandSpinState] = useState<BrandSpinState>("idle");
   const reducedMotion = usePrefersReducedMotion();
   const { title: projectTitle } = useProjectTitle();
+  const { lang, isHebrew } = useLanguage();
+  const s = useTranslation(lang);
+  const navItems = navItemDefs.map((d) => ({ href: d.href, label: s[d.key] }));
   const progressRef = useRef<HTMLDivElement>(null);
   const workMenuRef = useRef<HTMLDivElement>(null);
   const activeSpinTimeoutRef = useRef<number | null>(null);
@@ -42,6 +53,17 @@ export function SiteHeader() {
   const visitedSectionsRef = useRef<Set<Element>>(new Set());
 
   const isWorkActive = pathname === "/work" || pathname?.startsWith("/work/");
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 740px)");
+    const updateMobileState = (event?: MediaQueryListEvent) => {
+      setIsMobileNav(event ? event.matches : mediaQuery.matches);
+    };
+
+    updateMobileState();
+    mediaQuery.addEventListener("change", updateMobileState);
+    return () => mediaQuery.removeEventListener("change", updateMobileState);
+  }, []);
 
   useEffect(() => {
     const bar = progressRef.current;
@@ -221,7 +243,7 @@ export function SiteHeader() {
             <svg className="brand-star" width="20" height="20" viewBox="0 0 45 43" fill="none" aria-hidden>
               <path d={STAR_PATH} fill="var(--color-primary)" />
             </svg>
-            Yehonatan Shapira
+            {s.brandName}
           </Link>
 
           <AnimatePresence>
@@ -245,22 +267,12 @@ export function SiteHeader() {
             <nav id="main-nav" className={`main-nav ${open ? "open" : ""}`} aria-label="Main navigation">
               {renderNavLink(navItems[0])}
 
-              <div
-                ref={workMenuRef}
-                className={`work-nav-item ${workMenuOpen ? "open" : ""}`}
-                onMouseEnter={() => {
-                  if (supportsPreciseHover()) setWorkMenuOpen(true);
-                }}
-                onMouseLeave={() => {
-                  if (supportsPreciseHover()) setWorkMenuOpen(false);
-                }}
-              >
-                <button
-                  type="button"
-                  className={`nav-link work-nav-trigger ${isWorkActive ? "active" : ""}`}
-                  aria-expanded={workMenuOpen}
-                  aria-haspopup="true"
-                  onClick={() => setWorkMenuOpen((prev) => !prev)}
+              {isMobileNav ? (
+                <Link
+                  href="/work"
+                  prefetch={false}
+                  className={`nav-link work-nav-mobile ${isWorkActive ? "active" : ""}`}
+                  onClick={closeMenus}
                 >
                   {isWorkActive && !reducedMotion && (
                     <motion.span
@@ -269,69 +281,98 @@ export function SiteHeader() {
                       transition={{ type: "spring", stiffness: 400, damping: 32 }}
                     />
                   )}
-                  Work
-                  <span className="work-nav-chevron" aria-hidden>
-                    ▾
-                  </span>
-                </button>
-
-                <div className="work-dropdown" aria-label="Project navigation">
-                  <Link
-                    href="/work"
-                    prefetch={false}
-                    className="work-dropdown-all"
-                    onClick={closeMenus}
+                  {s.navWork}
+                </Link>
+              ) : (
+                <div
+                  ref={workMenuRef}
+                  className={`work-nav-item ${workMenuOpen ? "open" : ""}`}
+                  onMouseEnter={() => {
+                    if (supportsPreciseHover()) setWorkMenuOpen(true);
+                  }}
+                  onMouseLeave={() => {
+                    if (supportsPreciseHover()) setWorkMenuOpen(false);
+                  }}
+                >
+                  <button
+                    type="button"
+                    className={`nav-link work-nav-trigger ${isWorkActive ? "active" : ""}`}
+                    aria-expanded={workMenuOpen}
+                    aria-haspopup="true"
+                    onClick={() => setWorkMenuOpen((prev) => !prev)}
                   >
-                    <span>See all projects</span>
-                    <span aria-hidden>→</span>
-                  </Link>
+                    {isWorkActive && !reducedMotion && (
+                      <motion.span
+                        className="nav-active-bg"
+                        layoutId="nav-active"
+                        transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                      />
+                    )}
+                    {s.navWork}
+                    <span className="work-nav-chevron" aria-hidden>
+                      ▾
+                    </span>
+                  </button>
 
-                  <div className="work-dropdown-list">
-                    {projects.map((project) => {
-                      const thumbnailSrc = project.images[0];
+                  <div className="work-dropdown" aria-label="Project navigation">
+                    <Link
+                      href="/work"
+                      prefetch={false}
+                      className="work-dropdown-all"
+                      onClick={closeMenus}
+                    >
+                      <span>{s.seeAllProjects}</span>
+                      <span aria-hidden>{s.arrowForward}</span>
+                    </Link>
 
-                      return (
-                        <Link
-                          key={project.slug}
-                          href={`/work/${project.slug}`}
-                          className="work-dropdown-link"
-                          onClick={closeMenus}
-                        >
-                          <span className="work-dropdown-copy">
-                            <span className="work-dropdown-title">{project.title}</span>
-                            <span className="work-dropdown-meta">{project.year}</span>
-                          </span>
+                    <div className="work-dropdown-list">
+                      {projects.map((project) => {
+                        const thumbnailSrc = project.images[0];
 
-                          <span
-                            className={`work-dropdown-thumb ${thumbnailSrc ? "has-image" : "is-empty"}`}
-                            aria-hidden="true"
+                        return (
+                          <Link
+                            key={project.slug}
+                            href={`/work/${project.slug}`}
+                            className="work-dropdown-link"
+                            onClick={closeMenus}
                           >
-                            {thumbnailSrc ? (
-                              <>
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img src={thumbnailSrc} alt="" loading="lazy" decoding="async" />
-                              </>
-                            ) : (
-                              <span className="work-dropdown-thumb-fallback">
-                                {project.title
-                                  .split(" ")
-                                  .slice(0, 2)
-                                  .map((word) => word[0])
-                                  .join("")}
-                              </span>
-                            )}
-                          </span>
-                        </Link>
-                      );
-                    })}
+                            <span className="work-dropdown-copy">
+                              <span className="work-dropdown-title">{(isHebrew && project.heTitle) || project.title}</span>
+                              <span className="work-dropdown-meta">{project.year}</span>
+                            </span>
+
+                            <span
+                              className={`work-dropdown-thumb ${thumbnailSrc ? "has-image" : "is-empty"}`}
+                              aria-hidden="true"
+                            >
+                              {thumbnailSrc ? (
+                                <>
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img src={thumbnailSrc} alt="" loading="lazy" decoding="async" />
+                                </>
+                              ) : (
+                                <span className="work-dropdown-thumb-fallback">
+                                  {project.title
+                                    .split(" ")
+                                    .slice(0, 2)
+                                    .map((word) => word[0])
+                                    .join("")}
+                                </span>
+                              )}
+                            </span>
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {navItems.slice(1).map(renderNavLink)}
             </nav>
           </LayoutGroup>
 
+          <LanguageToggle />
           <ThemeToggle />
 
           <button

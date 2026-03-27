@@ -1,30 +1,24 @@
-import type { Metadata } from "next";
+"use client";
+
 import { Reveal } from "@/components/ui/Reveal";
 import { ContactForm } from "@/components/contact/ContactForm";
-
-export const metadata: Metadata = {
-  title: "Contact — Hire Yehonatan Shapira | Shapi Design",
-  description: "Get in touch with Yehonatan Shapira for branding, digital design, creative direction, or freelance design work. Based in Israel, available worldwide.",
-  alternates: { canonical: "https://www.shapidesign.com/contact" },
-  openGraph: {
-    title: "Contact Yehonatan Shapira — Shapi Design",
-    description: "Collaborate on branding, digital design, or creative direction. Send a message or email directly.",
-    url: "https://www.shapidesign.com/contact",
-  },
-};
+import { useLanguage } from "@/context/LanguageContext";
+import { useTranslation } from "@/i18n/strings";
 
 export default function ContactPage() {
+  const { lang } = useLanguage();
+  const s = useTranslation(lang);
+
   return (
     <main className="section content-wrap">
       <Reveal>
-        <h1>Contact</h1>
-        <p className="lead">
-          If you want to collaborate on branding, digital design, or creative direction, send a message.
-        </p>
+        <h1>{s.contactTitle}</h1>
+        <p className="lead">{s.contactLead}</p>
         <p className="subtitle">
-          Or email directly at <a href="mailto:shapidesigns@gmail.com">shapidesigns@gmail.com</a> and{" "}
+          {s.contactSubtitle}{" "}
+          <a href="mailto:shapidesigns@gmail.com">shapidesigns@gmail.com</a>{" "}
           <a href="/assets/YehonatanShapira-CV-Sep2025.pdf" download>
-            download my CV
+            {s.contactDownloadCV}
           </a>
           .
         </p>

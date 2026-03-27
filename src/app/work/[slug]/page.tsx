@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProjectHeaderObserver } from "@/components/ui/ProjectHeaderObserver";
 import { ProjectNavBar } from "@/components/ui/ProjectNavBar";
+import { ProjectDetailContent } from "@/components/ui/ProjectDetailContent";
 import { getProjectBySlug, projects } from "@/data/projects";
 import { DigitalHandprintEmbed } from "./DigitalHandprintEmbed";
 import { DavidkaProjectEmbed } from "./DavidkaProjectEmbed";
@@ -219,34 +219,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ProjectHeaderObserver title={project.title}>
-        <Reveal>
-          <p className="eyebrow">{project.subHeader || project.category}</p>
-          <h1>{project.title}</h1>
-          {project.context && (
-            <p className="project-context-detail">{project.context}</p>
-          )}
-        </Reveal>
+        <ProjectDetailContent
+          project={project}
+          previousProject={previousProject}
+          nextProject={nextProject}
+        />
       </ProjectHeaderObserver>
-
-      <Reveal>
-        <div className="meta-row">
-          {project.tags.length > 0 &&
-            project.tags.map((tag) => (
-              <span key={tag} className="project-tag">
-                {tag}
-              </span>
-            ))}
-          {project.year && <span className="meta-year">{project.year}</span>}
-        </div>
-      </Reveal>
-
-      {project.url && (
-        <Reveal>
-          <a href={project.url} className="button button-ghost" target="_blank" rel="noreferrer noopener">
-            Visit project
-          </a>
-        </Reveal>
-      )}
 
       {mediaNode && (
         <Reveal>
@@ -260,46 +238,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <section className="detail-block">
           <ProjectBody rawHtml={project.description || project.bodyText} />
         </section>
-      </Reveal>
-
-      {(previousProject || nextProject) && (
-        <Reveal>
-          <nav className="project-nav-text" aria-label="Project navigation">
-            {previousProject ? (
-              <Link href={`/work/${previousProject.slug}`} className="project-nav-text-link project-nav-text-prev">
-                <span className="project-nav-text-arrow" aria-hidden>←</span>
-                <span>
-                  <span className="project-nav-text-label">Previous project</span>
-                  <span className="project-nav-text-title">{previousProject.title}</span>
-                </span>
-              </Link>
-            ) : (
-              <span />
-            )}
-            {nextProject ? (
-              <Link href={`/work/${nextProject.slug}`} className="project-nav-text-link project-nav-text-next">
-                <span>
-                  <span className="project-nav-text-label">Next project</span>
-                  <span className="project-nav-text-title">{nextProject.title}</span>
-                </span>
-                <span className="project-nav-text-arrow" aria-hidden>→</span>
-              </Link>
-            ) : (
-              <span />
-            )}
-          </nav>
-        </Reveal>
-      )}
-
-      <Reveal>
-        <div className="detail-actions">
-          <Link href="/work" className="button button-ghost">
-            Back to work
-          </Link>
-          <Link href="/contact" className="button button-primary">
-            Start a project
-          </Link>
-        </div>
       </Reveal>
 
       <ProjectNavBar projects={projects} currentSlug={slug} />

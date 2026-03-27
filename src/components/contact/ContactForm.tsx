@@ -4,6 +4,8 @@ import { FormEvent, useState } from "react";
 import * as motion from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { useLanguage } from "@/context/LanguageContext";
+import { useTranslation } from "@/i18n/strings";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 
@@ -35,6 +37,8 @@ export function ContactForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [burstKey, setBurstKey] = useState(0);
   const reducedMotion = usePrefersReducedMotion();
+  const { lang } = useLanguage();
+  const s = useTranslation(lang);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -126,7 +130,7 @@ export function ContactForm() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25, duration: 0.4, ease: "easeOut" }}
           >
-            Message sent!
+            {s.formSent}
           </motion.h3>
 
           <motion.p
@@ -135,7 +139,7 @@ export function ContactForm() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.38, duration: 0.4, ease: "easeOut" }}
           >
-            Thanks for reaching out. I&apos;ll get back to you soon.
+            {s.formSentBody}
           </motion.p>
 
           <motion.button
@@ -146,7 +150,7 @@ export function ContactForm() {
             transition={{ delay: 0.55, duration: 0.3 }}
             type="button"
           >
-            Send another
+            {s.formSendAnother}
           </motion.button>
         </motion.div>
       ) : (
@@ -166,20 +170,20 @@ export function ContactForm() {
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
             >
-              Something went wrong. Please try again or email shapidesigns@gmail.com directly.
+              {s.formError}
             </motion.p>
           )}
 
           <form className="contact-form" method="POST" aria-label="Contact form" onSubmit={handleSubmit}>
             <input type="hidden" name="_subject" value="New portfolio inquiry from yehonatanshapira.com" />
 
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">{s.formName}</label>
             <input id="name" name="name" type="text" required autoComplete="name" />
 
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{s.formEmail}</label>
             <input id="email" name="email" type="email" required autoComplete="email" />
 
-            <label htmlFor="message">Message</label>
+            <label htmlFor="message">{s.formMessage}</label>
             <textarea id="message" name="message" rows={6} required />
 
             <label className="sr-only" htmlFor="website">Website</label>
@@ -192,14 +196,14 @@ export function ContactForm() {
                 disabled={status === "sending"}
               >
                 {status === "sending" ? (
-                  <span className="form-spinner" aria-label="Sending">
+                  <span className="form-spinner" aria-label={s.formSending}>
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
                       <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeDasharray="32" strokeDashoffset="12" />
                     </svg>
-                    Sending…
+                    {s.formSending}
                   </span>
                 ) : (
-                  "Send message"
+                  s.formSend
                 )}
               </button>
             </div>

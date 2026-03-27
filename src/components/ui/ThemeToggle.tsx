@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
+import { useTranslation } from "@/i18n/strings";
 
 type Theme = "light" | "dark";
 
@@ -23,6 +25,8 @@ export function ThemeToggle() {
   const [hasConfirmedThisSession, setHasConfirmedThisSession] = useState(false);
   const iconRef = useRef<SVGSVGElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const { lang } = useLanguage();
+  const s = useTranslation(lang);
 
   useEffect(() => {
     try {
@@ -89,9 +93,7 @@ export function ThemeToggle() {
 
   const daytime = isDaytime();
   const nextMode = theme === "light" ? "dark" : "light";
-  const confirmText = daytime
-    ? `It\u2019s daytime \u2014 switch to dark mode?`
-    : `It\u2019s nighttime \u2014 switch to light mode?`;
+  const confirmText = daytime ? s.themeConfirmDay : s.themeConfirmNight;
 
   return (
     <div ref={wrapRef} style={{ position: "relative" }}>
@@ -125,10 +127,10 @@ export function ThemeToggle() {
           <p className="theme-confirm-text">{confirmText}</p>
           <div className="theme-confirm-actions">
             <button type="button" className="theme-confirm-yes" onClick={handleConfirm}>
-              Yes
+              {s.themeYes}
             </button>
             <button type="button" className="theme-confirm-cancel" onClick={handleCancel}>
-              Cancel
+              {s.themeCancel}
             </button>
           </div>
         </div>

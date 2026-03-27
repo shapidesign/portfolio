@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { Rubik } from "next/font/google";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
 import { IntroLoader } from "@/components/ui/IntroLoader";
 import { RouteTransition } from "@/components/ui/RouteTransition";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { ProjectProvider } from "@/context/ProjectContext";
+import { LanguageProvider } from "@/context/LanguageContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -52,9 +53,9 @@ export const metadata: Metadata = {
   },
 };
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk"
+const rubik = Rubik({
+  subsets: ["latin", "hebrew"],
+  variable: "--font-rubik",
 });
 
 type RootLayoutProps = Readonly<{
@@ -99,20 +100,22 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: `(function(){var h=new Date().getHours();var t=(h>=7&&h<18)?"light":"dark";document.documentElement.setAttribute("data-theme",t)})()` }} />
       </head>
-      <body className={spaceGrotesk.variable}>
+      <body className={rubik.variable}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify([personJsonLd, websiteJsonLd]) }}
         />
         <IntroLoader />
         <AnimatedCursor />
-        <ProjectProvider>
-          <div className="site-shell">
-            <SiteHeader />
-            <RouteTransition>{children}</RouteTransition>
-            <SiteFooter />
-          </div>
-        </ProjectProvider>
+        <LanguageProvider>
+          <ProjectProvider>
+            <div className="site-shell">
+              <SiteHeader />
+              <RouteTransition>{children}</RouteTransition>
+              <SiteFooter />
+            </div>
+          </ProjectProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
