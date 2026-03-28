@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import { CtaButton } from "@/components/ui/CtaButton";
 import { CursorArtPlayer } from "@/components/ui/CursorArtPlayer";
@@ -11,10 +11,8 @@ import { hasVisitedWork } from "@/components/ui/WorkVisitMarker";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
 import { projects } from "@/data/projects";
-import VariableProximity from "@/components/ui/VariableProximity/VariableProximity";
 
 export default function HomePage() {
-  const heroRef = useRef<HTMLElement>(null);
   const [gateOpen, setGateOpen] = useState(false);
   const { lang } = useLanguage();
   const s = useTranslation(lang);
@@ -30,19 +28,11 @@ export default function HomePage() {
     <main>
       <WorkGateModal open={gateOpen} onClose={() => setGateOpen(false)} />
 
-      <section className="hero section" ref={heroRef}>
+      <section className="hero section">
         <div className="content-wrap hero-grid">
           <div className="hero-text">
-            <h1 dir={lang === "he" ? "rtl" : "ltr"}>
-              <VariableProximity
-                label={s.heroName}
-                fromFontVariationSettings="'wght' 300"
-                toFontVariationSettings="'wght' 900"
-                containerRef={heroRef}
-                radius={200}
-                falloff="gaussian"
-                className="hero-variable-text"
-              />
+            <h1 dir={lang === "he" ? "rtl" : "ltr"} className="hero-variable-text">
+              {s.heroName}
             </h1>
             <p className="hero-copy">{s.heroTagline}</p>
             <div className="hero-actions">

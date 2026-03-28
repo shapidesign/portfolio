@@ -10,7 +10,7 @@ const SHAPES = ["square", "circle", "triangle"];
 
 const ALIASES = {
   projectName: ["title", "name", "projectname", "project"],
-  subHeader: ["subheader", "sub-header", "subtitle", "category", "header"],
+  subHeader: ["subheaderinproject", "subtitle", "category", "header"],
   description: ["projectdescription", "description", "summary", "shortdescription", "overview"],
   bodyText: ["bodytext", "body", "content", "details", "longdescription"],
   url: ["projecturl", "url", "link", "website", "externalurl", "projectlink"],
@@ -18,7 +18,7 @@ const ALIASES = {
   tags: ["tags", "tag", "topics", "labels", "services"],
   year: ["year", "date"],
   heTitle: ["hebrewtitle", "hetitle"],
-  heSubHeader: ["hebrewsubheader", "hesubheader", "hebrewsub-header"],
+  heSubHeader: ["hebrewsubheader", "hesubheader", "hebrewsub-header", "subheader"],
   heContext: ["hebrewcontext", "hecontext"],
   heDescription: ["hebrewdescription", "hedescription"],
   heTags: ["hebrewtags", "hetags"]

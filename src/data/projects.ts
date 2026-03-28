@@ -18,6 +18,13 @@ const PROJECT_CONTEXT: Record<string, string> = {
     "A free web directory of design resources, built for students who need an easy way to find the tools that will help their academic work. Designed and developed independently for HiT VC Department.",
 };
 
+const HE_PROJECT_CONTEXT: Record<string, string> = {
+  "the-misfit-market":
+    "מחקר וזהות מותגית לסופרמרקט קונספט בר-קיימא שחוגג תוצרת לא-מושלמת. פותח כפרויקט לימודים בהיט.",
+  "keeping-it-clean":
+    "מערכת אריזות ל-The Clean Dot, בנויה סביב הרעיון שמוצרי ניקיון לא צריכים להיות פשרה מתחת לכיור — הם צריכים לעמוד על השיש!",
+};
+
 function isValidProject(item: unknown): item is Project {
   if (typeof item !== "object" || item === null) return false;
   const p = item as Record<string, unknown>;
@@ -28,6 +35,9 @@ const generatedProjects: Project[] = Array.isArray(generatedRaw)
   ? (generatedRaw as unknown[]).filter(isValidProject).map((p) => ({
       ...p,
       context: PROJECT_CONTEXT[p.slug] ?? "",
+      ...(!p.heContext && HE_PROJECT_CONTEXT[p.slug]
+        ? { heContext: HE_PROJECT_CONTEXT[p.slug] }
+        : {}),
     }))
   : [];
 

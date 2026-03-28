@@ -1006,7 +1006,7 @@ p {
 
 .project-detail {
   display: grid;
-  gap: 1.6rem;
+  gap: 2rem;
   max-width: var(--container-max);
   margin-inline: auto;
 }
@@ -1016,6 +1016,13 @@ p {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.visit-project-link {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .meta-year {
@@ -1032,7 +1039,8 @@ p {
   border: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
   border-radius: 14px;
   background: var(--color-surface);
-  padding: clamp(1rem, 2.5vw, 1.5rem);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  margin-top: 0.5rem;
 }
 
 .detail-block h2 {
@@ -1091,12 +1099,6 @@ p {
 
 .body-list li + li {
   margin-top: 0.35rem;
-}
-
-.detail-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
 }
 
 /* ---------- Image Carousel ---------- */
@@ -1233,79 +1235,6 @@ p {
 .project-media-content {
   border-radius: var(--radius-soft);
   overflow: hidden;
-}
-
-.project-nav-text {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  gap: 1rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
-}
-
-.project-nav-text-link {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 0;
-  color: var(--color-text-soft);
-  text-decoration: none;
-  transition: color 180ms ease;
-  max-width: 46%;
-}
-
-.project-nav-text-link:hover {
-  color: var(--color-accent-blue);
-}
-
-.project-nav-text-link:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
-  outline-offset: 4px;
-  border-radius: 4px;
-}
-
-.project-nav-text-next {
-  margin-left: auto;
-  text-align: right;
-}
-
-.project-nav-text-arrow {
-  font-size: 1.2rem;
-  flex-shrink: 0;
-  transition: transform 180ms ease-out;
-}
-
-.project-nav-text-prev:hover .project-nav-text-arrow {
-  transform: translateX(-4px);
-}
-
-.project-nav-text-next:hover .project-nav-text-arrow {
-  transform: translateX(4px);
-}
-
-.project-nav-text-link > span {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.project-nav-text-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-text-soft);
-}
-
-.project-nav-text-title {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--color-text);
-}
-
-.project-nav-text-link:hover .project-nav-text-title {
-  color: var(--color-accent-blue);
 }
 
 /* ---------- Interactive Cursor Art Player ---------- */
@@ -2250,20 +2179,6 @@ p {
 [dir="rtl"] .work-dropdown-link:hover,
 [dir="rtl"] .work-dropdown-link:focus-visible {
   transform: translateX(-2px);
-}
-
-[dir="rtl"] .project-nav-text-next {
-  margin-left: 0;
-  margin-right: auto;
-  text-align: left;
-}
-
-[dir="rtl"] .project-nav-text-prev:hover .project-nav-text-arrow {
-  transform: translateX(4px);
-}
-
-[dir="rtl"] .project-nav-text-next:hover .project-nav-text-arrow {
-  transform: translateX(-4px);
 }
 
 [dir="rtl"] .cursor-art-counter {

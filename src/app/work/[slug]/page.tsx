@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProjectHeaderObserver } from "@/components/ui/ProjectHeaderObserver";
 import { ProjectNavBar } from "@/components/ui/ProjectNavBar";
-import { ProjectDetailContent } from "@/components/ui/ProjectDetailContent";
+import { ProjectDetailContent, ProjectBodyBlock } from "@/components/ui/ProjectDetailContent";
 import { getProjectBySlug, projects } from "@/data/projects";
 import { DigitalHandprintEmbed } from "./DigitalHandprintEmbed";
 import { DavidkaProjectEmbed } from "./DavidkaProjectEmbed";
@@ -11,114 +11,6 @@ import { DavidkaProjectEmbed } from "./DavidkaProjectEmbed";
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
 };
-
-function BodyBlocks({ lines }: { lines: string[] }) {
-  type Block =
-    | { kind: "text"; lines: string[] }
-    | { kind: "bullets"; items: string[] }
-    | { kind: "ordered"; items: string[] };
-
-  const blocks: Block[] = [];
-
-  for (const line of lines) {
-    if (line.startsWith("•")) {
-      const last = blocks[blocks.length - 1];
-      const content = line.replace(/^•\s*/, "");
-      if (last?.kind === "bullets") last.items.push(content);
-      else blocks.push({ kind: "bullets", items: [content] });
-    } else if (/^\d+\.\s/.test(line)) {
-      const last = blocks[blocks.length - 1];
-      const content = line.replace(/^\d+\.\s*/, "");
-      if (last?.kind === "ordered") last.items.push(content);
-      else blocks.push({ kind: "ordered", items: [content] });
-    } else {
-      const last = blocks[blocks.length - 1];
-      if (last?.kind === "text") last.lines.push(line);
-      else blocks.push({ kind: "text", lines: [line] });
-    }
-  }
-
-  return (
-    <>
-      {blocks.map((block, i) => {
-        if (block.kind === "bullets")
-          return (
-            <ul key={i} className="body-list">
-              {block.items.map((item, j) => (
-                <li key={j} dangerouslySetInnerHTML={{ __html: item }} />
-              ))}
-            </ul>
-          );
-        if (block.kind === "ordered")
-          return (
-            <ol key={i} className="body-list">
-              {block.items.map((item, j) => (
-                <li key={j} dangerouslySetInnerHTML={{ __html: item }} />
-              ))}
-            </ol>
-          );
-        return (
-          <p
-            key={i}
-            className="body-section-text"
-            dangerouslySetInnerHTML={{ __html: block.lines.join("<br />") }}
-          />
-        );
-      })}
-    </>
-  );
-}
-
-function ProjectBody({ rawHtml }: { rawHtml: string }) {
-  const sanitized = rawHtml.replace(/<(?!\/?(?:strong|em|br\s*\/?)>)/gi, "&lt;");
-
-  const normalized = sanitized.replace(
-    /<strong>([\s\S]*?)<\/strong>/gi,
-    (_, inner: string) =>
-      `<strong>${inner.replace(/<br\s*\/?>/gi, " ").trim()}</strong>`
-  );
-
-  const sections = normalized
-    .split(/<br\s*\/?>\s*<br\s*\/?>/gi)
-    .map((s) => s.replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, "").trim())
-    .filter(Boolean);
-
-  return (
-    <div className="body-sections">
-      {sections.map((section, i) => {
-        const headingMatch = section.match(
-          /^<strong>([\s\S]*?)<\/strong>\s*(?:$|<br\s*\/?>)\s*([\s\S]*)/i
-        );
-
-        const heading = headingMatch?.[1]?.trim() || null;
-        const bodyRaw = heading
-          ? (headingMatch?.[2]
-              ?.replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, "")
-              .trim() ?? "")
-          : section;
-
-        const bodyLines = bodyRaw
-          ? bodyRaw
-              .split(/<br\s*\/?>/gi)
-              .map((l) => l.trim())
-              .filter(Boolean)
-          : [];
-
-        return (
-          <div key={i} className="body-section">
-            {heading && (
-              <h3
-                className="body-section-label"
-                dangerouslySetInnerHTML={{ __html: heading }}
-              />
-            )}
-            {bodyLines.length > 0 && <BodyBlocks lines={bodyLines} />}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 export async function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -173,11 +65,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const isDigitalHandprint = slug === "digital-handprint";
   const isDavidka = slug === "small-world-problems";
-  const projectIndex = projects.findIndex((item) => item.slug === slug);
-  const previousProject =
-    projects.length > 1 ? projects[(projectIndex - 1 + projects.length) % projects.length] : null;
-  const nextProject = projects.length > 1 ? projects[(projectIndex + 1) % projects.length] : null;
-
   const mediaNode = isDigitalHandprint ? (
     <DigitalHandprintEmbed />
   ) : isDavidka ? (
@@ -219,11 +106,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ProjectHeaderObserver title={project.title}>
-        <ProjectDetailContent
-          project={project}
-          previousProject={previousProject}
-          nextProject={nextProject}
-        />
+        <ProjectDetailContent project={project} />
       </ProjectHeaderObserver>
 
       {mediaNode && (
@@ -234,11 +117,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </Reveal>
       )}
 
-      <Reveal>
-        <section className="detail-block">
-          <ProjectBody rawHtml={project.description || project.bodyText} />
-        </section>
-      </Reveal>
+      <ProjectBodyBlock
+        bodyHtml={project.description || project.bodyText}
+        project={project}
+      />
 
       <ProjectNavBar projects={projects} currentSlug={slug} />
     </main>

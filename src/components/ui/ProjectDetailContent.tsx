@@ -1,18 +1,123 @@
 "use client";
 
-import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
 import type { Project } from "@/types/project";
 
+function BodyBlocks({ lines }: { lines: string[] }) {
+  type Block =
+    | { kind: "text"; lines: string[] }
+    | { kind: "bullets"; items: string[] }
+    | { kind: "ordered"; items: string[] };
+
+  const blocks: Block[] = [];
+
+  for (const line of lines) {
+    if (line.startsWith("•")) {
+      const last = blocks[blocks.length - 1];
+      const content = line.replace(/^•\s*/, "");
+      if (last?.kind === "bullets") last.items.push(content);
+      else blocks.push({ kind: "bullets", items: [content] });
+    } else if (/^\d+\.\s/.test(line)) {
+      const last = blocks[blocks.length - 1];
+      const content = line.replace(/^\d+\.\s*/, "");
+      if (last?.kind === "ordered") last.items.push(content);
+      else blocks.push({ kind: "ordered", items: [content] });
+    } else {
+      const last = blocks[blocks.length - 1];
+      if (last?.kind === "text") last.lines.push(line);
+      else blocks.push({ kind: "text", lines: [line] });
+    }
+  }
+
+  return (
+    <>
+      {blocks.map((block, i) => {
+        if (block.kind === "bullets")
+          return (
+            <ul key={i} className="body-list">
+              {block.items.map((item, j) => (
+                <li key={j} dangerouslySetInnerHTML={{ __html: item }} />
+              ))}
+            </ul>
+          );
+        if (block.kind === "ordered")
+          return (
+            <ol key={i} className="body-list">
+              {block.items.map((item, j) => (
+                <li key={j} dangerouslySetInnerHTML={{ __html: item }} />
+              ))}
+            </ol>
+          );
+        return (
+          <p
+            key={i}
+            className="body-section-text"
+            dangerouslySetInnerHTML={{ __html: block.lines.join("<br />") }}
+          />
+        );
+      })}
+    </>
+  );
+}
+
+function ProjectBody({ rawHtml }: { rawHtml: string }) {
+  const sanitized = rawHtml.replace(/<(?!\/?(?:strong|em|br\s*\/?)>)/gi, "&lt;");
+
+  const normalized = sanitized.replace(
+    /<strong>([\s\S]*?)<\/strong>/gi,
+    (_, inner: string) =>
+      `<strong>${inner.replace(/<br\s*\/?>/gi, " ").trim()}</strong>`
+  );
+
+  const sections = normalized
+    .split(/<br\s*\/?>\s*<br\s*\/?>/gi)
+    .map((s) => s.replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, "").trim())
+    .filter(Boolean);
+
+  return (
+    <div className="body-sections">
+      {sections.map((section, i) => {
+        const headingMatch = section.match(
+          /^<strong>([\s\S]*?)<\/strong>\s*(?:$|<br\s*\/?>)\s*([\s\S]*)/i
+        );
+
+        const heading = headingMatch?.[1]?.trim() || null;
+        const bodyRaw = heading
+          ? (headingMatch?.[2]
+              ?.replace(/^(<br\s*\/?>)+|(<br\s*\/?>)+$/gi, "")
+              .trim() ?? "")
+          : section;
+
+        const bodyLines = bodyRaw
+          ? bodyRaw
+              .split(/<br\s*\/?>/gi)
+              .map((l) => l.trim())
+              .filter(Boolean)
+          : [];
+
+        return (
+          <div key={i} className="body-section">
+            {heading && (
+              <h3
+                className="body-section-label"
+                dangerouslySetInnerHTML={{ __html: heading }}
+              />
+            )}
+            {bodyLines.length > 0 && <BodyBlocks lines={bodyLines} />}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 type Props = {
   project: Project;
-  previousProject: Project | null;
-  nextProject: Project | null;
 };
 
-export function ProjectDetailContent({ project, previousProject, nextProject }: Props) {
+export function ProjectDetailContent({ project }: Props) {
   const { isHebrew } = useLanguage();
   const { lang } = useLanguage();
   const s = useTranslation(lang);
@@ -21,13 +126,6 @@ export function ProjectDetailContent({ project, previousProject, nextProject }: 
   const subHeader = (isHebrew && project.heSubHeader) || project.subHeader || project.category;
   const context = (isHebrew && project.heContext) || project.context;
   const tags = isHebrew && project.heTags?.length ? project.heTags : project.tags;
-
-  const prevTitle = previousProject
-    ? (isHebrew && previousProject.heTitle) || previousProject.title
-    : "";
-  const nextTitle = nextProject
-    ? (isHebrew && nextProject.heTitle) || nextProject.title
-    : "";
 
   return (
     <>
@@ -51,51 +149,34 @@ export function ProjectDetailContent({ project, previousProject, nextProject }: 
 
       {project.url && (
         <Reveal>
-          <a href={project.url} className="button button-ghost" target="_blank" rel="noreferrer noopener">
-            {s.visitProject}
-          </a>
+          <div className="visit-project-link">
+            <a href={project.url} className="button button-ghost" target="_blank" rel="noreferrer noopener">
+              {s.visitProject}
+            </a>
+          </div>
         </Reveal>
       )}
 
-      {(previousProject || nextProject) && (
-        <Reveal>
-          <nav className="project-nav-text" aria-label="Project navigation">
-            {previousProject ? (
-              <Link href={`/work/${previousProject.slug}`} className="project-nav-text-link project-nav-text-prev">
-                <span className="project-nav-text-arrow" aria-hidden>{s.arrowBack}</span>
-                <span>
-                  <span className="project-nav-text-label">{s.previousProject}</span>
-                  <span className="project-nav-text-title">{prevTitle}</span>
-                </span>
-              </Link>
-            ) : (
-              <span />
-            )}
-            {nextProject ? (
-              <Link href={`/work/${nextProject.slug}`} className="project-nav-text-link project-nav-text-next">
-                <span>
-                  <span className="project-nav-text-label">{s.nextProject}</span>
-                  <span className="project-nav-text-title">{nextTitle}</span>
-                </span>
-                <span className="project-nav-text-arrow" aria-hidden>{s.arrowForward}</span>
-              </Link>
-            ) : (
-              <span />
-            )}
-          </nav>
-        </Reveal>
-      )}
-
-      <Reveal>
-        <div className="detail-actions">
-          <Link href="/work" className="button button-ghost">
-            {s.backToWork}
-          </Link>
-          <Link href="/contact" className="button button-primary">
-            {s.startAProject}
-          </Link>
-        </div>
-      </Reveal>
     </>
+  );
+}
+
+type BodyBlockProps = {
+  bodyHtml: string;
+  project: Project;
+};
+
+export function ProjectBodyBlock({ bodyHtml, project }: BodyBlockProps) {
+  const { isHebrew } = useLanguage();
+  const body = (isHebrew && project.heDescription) || bodyHtml;
+
+  if (!body) return null;
+
+  return (
+    <Reveal>
+      <section className="detail-block">
+        <ProjectBody rawHtml={body} />
+      </section>
+    </Reveal>
   );
 }
