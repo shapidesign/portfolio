@@ -55,7 +55,7 @@ export default function AboutPage() {
 
       <Reveal className="about-actions">
         <div className="detail-actions">
-          <CtaButton href="/assets/YehonatanShapira-CV-Sep2025.pdf" download>
+          <CtaButton href="/assets/YehonatanShapira-CV2026.pdf" download>
             {s.downloadCV}
           </CtaButton>
           <CtaButton href="/contact" variant="ghost">

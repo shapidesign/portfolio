@@ -67,8 +67,14 @@ function ProjectBody({ rawHtml }: { rawHtml: string }) {
 
   const normalized = sanitized.replace(
     /<strong>([\s\S]*?)<\/strong>/gi,
-    (_, inner: string) =>
-      `<strong>${inner.replace(/<br\s*\/?>/gi, " ").trim()}</strong>`
+    (_, inner: string) => {
+      const preserved = inner
+        .replace(/(<br\s*\/?>)\s*(<br\s*\/?>)/gi, "\x00DBL\x00")
+        .replace(/<br\s*\/?>/gi, " ")
+        .replace(/\x00DBL\x00/g, "<br /><br />")
+        .trim();
+      return `<strong>${preserved}</strong>`;
+    }
   );
 
   const sections = normalized

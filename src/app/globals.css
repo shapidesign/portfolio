@@ -1050,6 +1050,7 @@ p {
 .detail-block p {
   margin-top: 0.7rem;
   max-width: 70ch;
+  text-wrap: pretty;
 }
 
 .preserve-breaks {
@@ -1081,15 +1082,17 @@ p {
   color: var(--color-text);
   font-size: clamp(0.95rem, 1.2vw, 1.05rem);
   line-height: 1.75;
-  max-width: 65ch;
+  max-width: 100%;
+  text-wrap: pretty;
 }
 
 .body-list {
   margin: 0.25rem 0 0;
   padding-left: 1.4rem;
-  max-width: 65ch;
+  max-width: 100%;
   color: var(--color-text);
   font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  text-wrap: pretty;
   line-height: 1.75;
 }
 
@@ -1224,6 +1227,62 @@ p {
 
 .project-stack-image:hover {
   transform: scale(1.015);
+}
+
+/* ---------- Scroll-Reveal Gallery ---------- */
+
+.project-scroll-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  width: 100%;
+  margin-top: var(--space-section);
+}
+
+.project-scroll-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-soft);
+  background: var(--color-surface-2);
+}
+
+/* ---------- Tetris Loader Embed ---------- */
+
+.tetris-loader-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-soft);
+  background: var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 8%, transparent);
+}
+
+.tetris-loader-grid {
+  position: relative;
+  width: calc(10 * 15px);
+  height: calc(12 * 15px);
+}
+
+.tetris-piece {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.tetris-loader-base {
+  width: calc(10 * 15px);
+  height: 10px;
+  background: var(--color-text-soft);
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tetris-piece {
+    opacity: 1 !important;
+  }
 }
 
 /* ---------- Project Media Navigation ---------- */
@@ -2208,6 +2267,44 @@ p {
 [dir="rtl"] .body-list {
   padding-left: 0;
   padding-right: 1.4rem;
+}
+
+/* --- Hebrew typography tightening --- */
+
+[dir="rtl"] body {
+  line-height: 1.35;
+}
+
+[dir="rtl"] .lead {
+  line-height: 1.4;
+  word-spacing: -0.02em;
+}
+
+[dir="rtl"] .hero-copy {
+  word-spacing: -0.02em;
+}
+
+[dir="rtl"] .project-context-detail {
+  line-height: 1.4;
+  word-spacing: -0.02em;
+}
+
+[dir="rtl"] .body-section-text {
+  line-height: 1.55;
+  word-spacing: -0.02em;
+}
+
+[dir="rtl"] .body-list {
+  line-height: 1.55;
+  word-spacing: -0.02em;
+}
+
+[dir="rtl"] .detail-block p {
+  line-height: 1.5;
+}
+
+[dir="rtl"] .subtitle {
+  word-spacing: -0.02em;
 }
 
 @keyframes arrow-bounce-rtl {

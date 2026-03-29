@@ -17,7 +17,7 @@ export default function ContactPage() {
         <p className="subtitle">
           {s.contactSubtitle}{" "}
           <a href="mailto:shapidesigns@gmail.com">shapidesigns@gmail.com</a>{" "}
-          <a href="/assets/YehonatanShapira-CV-Sep2025.pdf" download>
+          <a href="/assets/YehonatanShapira-CV2026.pdf" download>
             {s.contactDownloadCV}
           </a>
           .

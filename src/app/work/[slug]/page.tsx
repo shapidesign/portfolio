@@ -5,6 +5,7 @@ import { ProjectHeaderObserver } from "@/components/ui/ProjectHeaderObserver";
 import { ProjectNavBar } from "@/components/ui/ProjectNavBar";
 import { ProjectDetailContent, ProjectBodyBlock } from "@/components/ui/ProjectDetailContent";
 import { getProjectBySlug, projects } from "@/data/projects";
+import { TetrisLoaderEmbed } from "@/components/ui/TetrisLoaderEmbed";
 import { DigitalHandprintEmbed } from "./DigitalHandprintEmbed";
 import { DavidkaProjectEmbed } from "./DavidkaProjectEmbed";
 
@@ -65,24 +66,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const isDigitalHandprint = slug === "digital-handprint";
   const isDavidka = slug === "small-world-problems";
-  const mediaNode = isDigitalHandprint ? (
+  const hasScrollImages = !isDigitalHandprint && !isDavidka && project.images.length > 0;
+
+  const embedNode = isDigitalHandprint ? (
     <DigitalHandprintEmbed />
   ) : isDavidka ? (
     <DavidkaProjectEmbed />
-  ) : project.images.length > 0 ? (
-    <div className="project-image-stack">
-      {project.images.map((src, index) => (
-        <span key={`${src}-${index}`} style={{ display: "contents" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={src}
-            alt={`${project.title} - Image ${index + 1}`}
-            className="project-stack-image"
-            loading={index === 0 ? "eager" : "lazy"}
-          />
-        </span>
-      ))}
-    </div>
   ) : null;
 
   const jsonLd = {
@@ -105,14 +94,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ProjectHeaderObserver title={project.title}>
+      <ProjectHeaderObserver title={project.title} heTitle={project.heTitle}>
         <ProjectDetailContent project={project} />
       </ProjectHeaderObserver>
 
-      {mediaNode && (
+      {embedNode && (
         <Reveal>
           <section className="project-media-shell">
-            <div className="project-media-content">{mediaNode}</div>
+            <div className="project-media-content">{embedNode}</div>
           </section>
         </Reveal>
       )}
@@ -121,6 +110,30 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         bodyHtml={project.description || project.bodyText}
         project={project}
       />
+
+      {hasScrollImages && (
+        <section className="project-scroll-gallery">
+          {project.images
+            .filter((src) => !src.includes("tetris animation"))
+            .map((src, index) => (
+              <Reveal key={`${src}-${index}`} delay={index === 0 ? 0 : 60}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={src}
+                  alt={`${project.title} - Image ${index + 1}`}
+                  className="project-scroll-image"
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
+              </Reveal>
+            ))}
+
+          {slug === "no-gatekeeping" && (
+            <Reveal>
+              <TetrisLoaderEmbed />
+            </Reveal>
+          )}
+        </section>
+      )}
 
       <ProjectNavBar projects={projects} currentSlug={slug} />
     </main>

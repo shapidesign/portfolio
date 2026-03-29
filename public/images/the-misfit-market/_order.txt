@@ -1,6 +1,0 @@
-fockup2.png
-fockup3.png
-fockup4.png
-package-roots.png
-package-fruits.png
-package-shakshuka.png
