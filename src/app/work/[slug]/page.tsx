@@ -74,6 +74,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     <DavidkaProjectEmbed />
   ) : null;
 
+  const scrollGalleryImages = project.images
+    .filter((src) => !src.includes("tetris animation"))
+    .filter(
+      (src) =>
+        !(slug === "animal-to-logo" && src.includes("alma + text.webp"))
+    );
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
@@ -89,7 +96,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   };
 
   return (
-    <main className="section content-wrap project-detail project-detail-with-nav">
+    <main
+      className="section content-wrap project-detail project-detail-with-nav"
+      data-project-slug={slug}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -112,20 +122,34 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       />
 
       {hasScrollImages && (
-        <section className="project-scroll-gallery">
-          {project.images
-            .filter((src) => !src.includes("tetris animation"))
-            .map((src, index) => (
+        <section
+          className={
+            slug === "animal-to-logo"
+              ? "project-scroll-gallery project-bento-gallery project-bento-gallery--alma"
+              : "project-scroll-gallery"
+          }
+        >
+          {scrollGalleryImages.map((src, index) => {
+            const isAlmaBento = slug === "animal-to-logo";
+            const isAlmaSvg = isAlmaBento && /\.svg(\?|$)/i.test(src);
+            return (
               <Reveal key={`${src}-${index}`} delay={index === 0 ? 0 : 60}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={src}
                   alt={`${project.title} - Image ${index + 1}`}
-                  className="project-scroll-image"
+                  className={[
+                    "project-scroll-image",
+                    isAlmaBento && "project-scroll-image--bento",
+                    isAlmaSvg && "project-scroll-image--bento-svg"
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                   loading={index === 0 ? "eager" : "lazy"}
                 />
               </Reveal>
-            ))}
+            );
+          })}
 
           {slug === "no-gatekeeping" && (
             <Reveal>
