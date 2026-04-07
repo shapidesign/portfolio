@@ -12,6 +12,7 @@
     "mcp:stitch": "node --env-file=.env.local scripts/stitch-mcp.mjs"
   },
   "dependencies": {
+    "@chenglou/pretext": "^0.0.4",
     "@google/stitch-sdk": "^0.0.3",
     "@notionhq/client": "^5.9.0",
     "motion": "^12.34.1",

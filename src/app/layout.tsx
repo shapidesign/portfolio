@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Rubik } from "next/font/google";
+import { Rubik, Bricolage_Grotesque } from "next/font/google";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
 import { IntroLoader } from "@/components/ui/IntroLoader";
 import { RouteTransition } from "@/components/ui/RouteTransition";
@@ -12,10 +12,10 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.shapidesign.com"),
   title: {
-    default: "Yehonatan Shapira — Visual & Graphic Designer | Shapi Design",
-    template: "%s | Yehonatan Shapira"
+    default: "Yehonatan Shapira — Product & Visual Designer",
+    template: "%s — Yehonatan Shapira"
   },
-  description: "Yehonatan Shapira (Shapi) is a visual communication and graphic designer specializing in branding, typography, digital design, and creative direction. View selected work and get in touch.",
+  description: "Yehonatan Shapira (Shapi) is a product and visual designer specializing in branding, typography, digital design, and creative direction. View selected work and get in touch.",
   keywords: [
     "Yehonatan Shapira", "Yehonatan Shapira designer", "Yehonatan Shapira portfolio",
     "Shapi Design", "Shapi", "shapidesign",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Yehonatan Shapira", url: "https://www.shapidesign.com" }],
   creator: "Yehonatan Shapira",
   openGraph: {
-    title: "Yehonatan Shapira — Visual & Graphic Designer | Shapi Design",
+    title: "Yehonatan Shapira — Product & Visual Designer",
     description: "Design is never my style. It's your problem and our solution. Portfolio of Yehonatan Shapira — branding, typography, and digital design.",
     url: "https://www.shapidesign.com",
     siteName: "Shapi Design — Yehonatan Shapira",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yehonatan Shapira — Visual & Graphic Designer",
+    title: "Yehonatan Shapira — Product & Visual Designer",
     description: "Design is never my style. It's your problem and our solution. Portfolio of Yehonatan Shapira — branding, typography, and digital design.",
   },
   alternates: {
@@ -58,6 +58,12 @@ const rubik = Rubik({
   variable: "--font-rubik",
 });
 
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["400", "700", "800"],
+  variable: "--font-bricolage",
+});
+
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
@@ -71,8 +77,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
     "alternateName": ["Shapi", "Shapi Design", "shapidesign"],
     "url": "https://www.shapidesign.com",
     "image": "https://www.shapidesign.com/opengraph-image",
-    "jobTitle": "Visual Communication Designer",
-    "description": "Visual communication and graphic designer specializing in branding, typography, digital design, and creative direction.",
+    "jobTitle": "Product & Visual Designer",
+    "description": "Product and visual designer specializing in branding, typography, digital design, and creative direction.",
     "knowsAbout": [
       "Visual Design", "Graphic Design", "Branding", "Brand Identity",
       "Typography", "Logo Design", "Digital Design", "Web Design",
@@ -96,11 +102,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
   };
 
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){var h=new Date().getHours();var t=(h>=7&&h<18)?"light":"dark";document.documentElement.setAttribute("data-theme",t)})()` }} />
-      </head>
-      <body className={rubik.variable}>
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
+      <head />
+      <body className={`${rubik.variable} ${bricolage.variable}`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify([personJsonLd, websiteJsonLd]) }}

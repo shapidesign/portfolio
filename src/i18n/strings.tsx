@@ -14,14 +14,18 @@ const strings = {
     heroName: "Yehonatan Shapira",
 
     // Hero
+    heroLine1: "design is never my style.",
+    heroLine2: "its your challenge",
+    heroLine3Prefix: "and",
+    heroLine3Accent: "our solution.",
     heroTagline: (
       <>
-        Design is never <em>my</em> style. It&apos;s <em>your</em> problem and{" "}
+        design is never <em>my</em> style. its <em>your</em> challenge and{" "}
         <em>our</em> solution.
       </>
     ),
     heroTaglineText:
-      "Design is never my style. It\u2019s your problem and our solution.",
+      "design is never my style. its your challenge and our solution.",
     viewWork: "View Work",
     letsCollaborate: "Let\u2019s Collaborate",
 
@@ -29,9 +33,9 @@ const strings = {
     selectedWork: "Selected Work",
 
     // About teaser (home)
-    aboutTeaserTitle: "About",
+    aboutTeaserTitle: "Yehonatan Shapira",
     aboutTeaserBody:
-      "I\u2019m Yehonatan Shapira \u2014 a visual communication designer who believes good design starts by understanding the problem, not the tool. I work across branding, digital product, and experimental typography.",
+      "I\u2019m Yehonatan Shapira \u2014 a visual communication designer who believes good design starts by understanding the challenge, not the tool. I work across branding, digital product, and experimental typography.",
     readMoreAboutMe: "Read more about me",
 
     // Work gate modal
@@ -46,7 +50,7 @@ const strings = {
     aboutBelieveTitle: "What I Believe In?",
     aboutBelieveBody: (
       <>
-        Design is never <em>my</em> style. It&apos;s <em>your</em> problem and{" "}
+        design is never <em>my</em> style. its <em>your</em> challenge and{" "}
         <em>our</em> solution.
       </>
     ),
@@ -73,14 +77,15 @@ const strings = {
 
     // Contact page
     contactTitle: "Contact",
+    contactHero: "Let\u2019s talk",
     contactLead:
-      "If you want to collaborate on branding, digital design, or creative direction, send a message.",
-    contactSubtitle: "Or email directly at",
+      "If you want to collaborate on branding, digital design, or creative direction, send\u00A0a\u00A0message.",
+    contactSubtitle: "Or email directly\u00A0at",
     contactDownloadCV: "download my CV",
     formName: "Name",
     formEmail: "Email",
     formMessage: "Message",
-    formSend: "Send message",
+    formSend: "Let\u2019s talk",
     formSending: "Sending\u2026",
     formSent: "Message sent!",
     formSentBody: "Thanks for reaching out. I\u2019ll get back to you soon.",
@@ -119,19 +124,23 @@ const strings = {
     brandName: "יהונתן שפירא",
     heroName: "יהונתן שפירא",
 
+    heroLine1: "עיצוב הוא אף פעם לא הסגנון שלי.",
+    heroLine2: "זה האתגר שלך",
+    heroLine3Prefix: "",
+    heroLine3Accent: "והפתרון שלנו.",
     heroTagline: (
       <>
-        {"עיצוב הוא אף פעם לא הסגנון שלי. זו הבעיה שלך והפתרון שלנו."}
+        {"עיצוב הוא אף פעם לא הסגנון שלי. זה האתגר שלך והפתרון שלנו."}
       </>
     ),
     heroTaglineText:
-      "עיצוב הוא אף פעם לא הסגנון שלי. זו הבעיה שלך והפתרון שלנו.",
+      "עיצוב הוא אף פעם לא הסגנון שלי. זה האתגר שלך והפתרון שלנו.",
     viewWork: "צפו בעבודות",
     letsCollaborate: "בואו נעבוד",
 
     selectedWork: "עבודות נבחרות",
 
-    aboutTeaserTitle: "אודות",
+    aboutTeaserTitle: "יהונתן שפירא",
     aboutTeaserBody:
       "אני יהונתן שפירא — מעצב תקשורת חזותית שמאמין שעיצוב טוב מתחיל בהבנת הבעיה, לא בכלים לפתרון שלה. אני עוסק במיתוג, מוצרים דיגיטלי וטיפוגרפיה ניסיונית.",
     readMoreAboutMe: "קראו עוד עליי",
@@ -148,7 +157,7 @@ const strings = {
       <>
         {"עיצוב הוא אף פעם לא הסגנון "}
         <em>{"שלי"}</em>
-        {". זו הבעיה "}
+        {". זה האתגר "}
         <em>{"שלך"}</em>
         {" והפתרון "}
         <em>{"שלנו"}</em>
@@ -175,14 +184,15 @@ const strings = {
     nextProject: "פרויקט הבא",
 
     contactTitle: "צור קשר",
+    contactHero: "בואו נדבר",
     contactLead:
-      "אם אתם רוצים לשתף פעולה במיתוג, עיצוב דיגיטלי, או הנחייה קריאטיבית, שלחו הודעה.",
-    contactSubtitle: "או שלחו מייל ישירות ל",
+      "אם אתם רוצים לשתף פעולה במיתוג, עיצוב דיגיטלי, או הנחייה קריאטיבית, שלחו\u00A0הודעה.",
+    contactSubtitle: "או שלחו מייל ישירות\u00A0ל",
     contactDownloadCV: "הורדת קורות חיים",
     formName: "שם",
     formEmail: "אימייל",
     formMessage: "הודעה",
-    formSend: "שליחת הודעה",
+    formSend: "בואו נדבר",
     formSending: "שולח\u2026",
     formSent: "ההודעה נשלחה!",
     formSentBody: "תודה שפניתם אליי. אחזור אליכם בהקדם.",

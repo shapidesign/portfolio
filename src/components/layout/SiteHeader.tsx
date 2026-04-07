@@ -9,7 +9,6 @@ import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useProjectTitle } from "@/context/ProjectContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { projects } from "@/data/projects";
 
@@ -373,7 +372,6 @@ export function SiteHeader() {
           </LayoutGroup>
 
           <LanguageToggle />
-          <ThemeToggle />
 
           <button
             className={`menu-button ${open ? "open" : ""}`}

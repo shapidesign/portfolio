@@ -1,37 +1,122 @@
 [
   {
-    "slug": "small-world-problems",
-    "title": "Small World Problems",
-    "subHeader": "The font that tricks the system — by design",
-    "description": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
-    "bodyText": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
-    "url": "https://davidka-font.vercel.app/",
+    "slug": "digital-handprint",
+    "title": "Digital Handprint",
+    "subHeader": "What if your cursor was a confession?",
+    "description": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
+    "bodyText": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
     "images": [],
     "tags": [
-      "Experimental",
-      "Typography"
+      "Creative Coding",
+      "Digital World"
     ],
-    "category": "The font that tricks the system — by design",
-    "summary": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
+    "category": "Creative Coding",
+    "summary": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
     "services": [
-      "Experimental",
-      "Typography"
+      "Creative Coding",
+      "Digital World"
     ],
     "year": "2026",
-    "challenge": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
-    "process": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
-    "outcome": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
-    "accent": "primary",
+    "challenge": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
+    "process": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
+    "outcome": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
+    "accent": "green",
     "thumbnailShape": "square",
     "thumbnailHoverShape": "circle",
-    "heTitle": "בעיות קטנות",
-    "heSubHeader": "הגופן שמרמה את המערכת — בכוונה תחילה",
-    "heContext": "ניסוי טיפוגרפי שחוקר כיצד אות אחת, בסקאלה ומיקום שונה, משנה משמעות. נוצר כמחקר עצמאי בהשפעה ויזואלית — ועם קצת הומור.",
-    "heDescription": "<strong>התובנה<br /></strong>עולם הכתיבה האקדמית דורש לעתים מסמכים באורכי דף מוגדרים.<br />בהשראת תותח ה״דוידקה״ - זה שבעיקר עושה רעש אך לא עושה נזק - יצרתי את השינוי בגופם ״דוד״ הקלאסי והמוכר.<br /><br /><strong>הפתרון - <br />דוידקה</strong> הוא גרסה מעובדת של הגופן הקלאסי David Libre. הוא תוכנן להיראות זהה לגופן הדוד הסטנדרטי, אך עם תכונה נסתרת: הוא רחב ב-5-10%. על ידי הרחבה עדינה של רוחב הגליף והמרווחים, דוידקה מאריך טבעית כל מסמך — ומאפשר לסטודנטים לעמוד בדרישות העמודים מבלי לכתוב יותר מילים.",
+    "heTitle": "טביעת יד דיגיטלית",
+    "heSubHeader": "מה אם העכבר של המחשב היה מכחול?",
+    "heContext": "פורטרט עצמי שנבנה בקוד, לא בפיקסלים. חקירה של מה המשמעות להשאיר חותם במרחב דיגיטלי שלא זוכר דבר — וביקורת עצמית קלה על הרגלי השימוש שלי במחשב",
+    "heDescription": "סמן העכבר הוא המגשר העיקרי בינינו, המשתמשים, לממשק הדיגיטלי, אך הוא לעיתים נדירות נתפס כיותר מכלי שימושי.<br /><br />הפרויקט הזה חוקר את העכבר כמשתתף פעיל בעיצוב — על ידי הפיכתו למכחול גנרטיבי, אנחנו שוברים את הקיר הרביעי של גלישת האינטרנט, והופכים תנועה שגרתית למעשה יצירתי. <br /><br />הניסוי הזה מעמת אותי קודם כל עם עצמי — כמה גלשתי וזזתי כל יום — ויצר ״חותם דיגיטלי״ יומי.",
     "heTags": [
-      "טיפוגרפיה",
-      "עבודה ניסיונית",
-      "הומור"
+      "קוד",
+      "עולם דיגיטלי"
+    ]
+  },
+  {
+    "slug": "no-gatekeeping",
+    "title": "No Gatekeeping",
+    "subHeader": "Everything seniors know and juniors have to figure out the hard way — in one place",
+    "description": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
+    "bodyText": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
+    "url": "https://index-design-hit.vercel.app/",
+    "images": [
+      "/images/no-gatekeeping/Index screen.webp",
+      "/images/no-gatekeeping/indexHOF.webp",
+      "/images/no-gatekeeping/indexmap.webp",
+      "/images/no-gatekeeping/Indextip.webp",
+      "/images/no-gatekeeping/indextoolbox.webp"
+    ],
+    "tags": [
+      "Web Design",
+      "Directory",
+      "Educational"
+    ],
+    "category": "Web Design",
+    "summary": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
+    "services": [
+      "Web Design",
+      "Directory",
+      "Educational"
+    ],
+    "year": "2026",
+    "challenge": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
+    "process": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
+    "outcome": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
+    "accent": "primary",
+    "thumbnailShape": "triangle",
+    "thumbnailHoverShape": "square",
+    "heTitle": "לא שומרים בבטן",
+    "heSubHeader": "כל מה שמעצבים ותיקים יודעים ומה שהחדשים צריכים לגלות בדרך הקשה — במקום אחד",
+    "heContext": "ספריית אינטרנט חינמית של משאבי עיצוב, בנויה עבור סטודנטים שצריכים דרך קלה למצוא את הכלים שיעזרו לעבודה האקדמית שלהם. עוצבה ופותחה באופן עצמאי למחלקת תקשורת חזותית בהיט.",
+    "heDescription": "כסטודנט לעיצוב, משאבים יקרי ערך — ממוקאפים וגופנים ועד המלצות על בתי דפוס מקומיים — מפוזרים בתיקיות סימניות, קבוצות וואטסאפ ועצות בעל פה.<br /><br />לא היה מקום אחד מרוכז המותאם לחוויית הסטודנט הישראלי לעיצוב. <br /><br /><strong>אינדקס</strong> הוא ריכוז דיגיטלי המאגדת את הכלים והידע החיוניים ביותר למקום אחד נגיש — <strong>בהשראת צורות טטריס</strong>, כדרך להראות שעיצוב הוא תהליך בנייה שלוקח זמן, וכל פיסת מידע מוסיפה עוד רובד למעצב.<br /><br />האתר מכיל:<br />  • <strong>ארגז כלים</strong> - אתרים וממשקים שנאצרו בקפידה, ומכילים כמעט כל דבר שמעצב צריך.<br />  • <strong>מפה</strong> הכוללת בתי דפוס, חנויות אומנות ואנשי מקצוע.<br />  • <strong>מוזיאון</strong> עם מיטב המעצבים והאומנים.<br />  • <strong>ספרייה</strong> עם הספרים שחובה לקרוא בתור מעצב.",
+    "heTags": [
+      "עיצוב אתר",
+      "חינוך ולמידה",
+      "עיצוב ממשקים"
+    ]
+  },
+  {
+    "slug": "keeping-it-clean",
+    "title": "Keeping It Clean",
+    "subHeader": "Cleaning products that deserve to be on the counter, not under it",
+    "description": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
+    "bodyText": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
+    "url": "https://thecleandot.com/collections/allproducts",
+    "images": [
+      "/images/keeping-it-clean/fresh-soap-2.png",
+      "/images/keeping-it-clean/img_4667.jpg",
+      "/images/keeping-it-clean/marz-bish-3119302.webp",
+      "/images/keeping-it-clean/marz-hl-5659863.webp",
+      "/images/keeping-it-clean/marz-hl-9276019.webp",
+      "/images/keeping-it-clean/marz-mlivt-1604784.webp",
+      "/images/keeping-it-clean/mockup1.png"
+    ],
+    "tags": [
+      "Package Design",
+      "Sustainable",
+      "Brand Identity"
+    ],
+    "category": "Package Design",
+    "summary": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
+    "services": [
+      "Package Design",
+      "Sustainable",
+      "Brand Identity"
+    ],
+    "year": "2024",
+    "challenge": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
+    "process": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
+    "outcome": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
+    "accent": "white",
+    "thumbnailShape": "circle",
+    "thumbnailHoverShape": "triangle",
+    "heTitle": "לשמור על ניקיון",
+    "heSubHeader": "מוצרי ניקוי שמגיע להם לעמוד על השיש, לא מתחתיו",
+    "heDescription": "בתור מותג אורח חיים שמקדש קיימות <strong>קלין דוט</strong> דורשת זהות עיצובית שמשדרת טוהר וניקיון וגם מודרניות ופשטות.<br />המותג משווק מוצרי ניקיון אקולוגיים, נקיים מפלסטיקים וחומרים מזהמים, במטרה לצמצם בזבוז פלסטיק ואריזות - וכך העיצוב שלהם נדרש להיות שקוף, מינימליסטי ו<strong>פשוט נקי.<br /><br />הקונספט  </strong>הוא שמוצרי ניקיון לא צריכים להיות פשרה עיצובית בבית, אלא בעלי נוכחות פיזית על השיש!<strong><br /><br /></strong>העבודה שלי עם <strong>קלין דוט</strong> כוללת עיצוב אריזות למוצרים, מצגות עסקיות וחומרי הדרכה למשתמשים.",
+    "heTags": [
+      "עיצוב אריזות",
+      "קיימות",
+      "מיתוג"
     ]
   },
   {
@@ -50,15 +135,13 @@
     ],
     "tags": [
       "Sustainable",
-      "Brand Identity",
-      "Student Work"
+      "Brand Identity"
     ],
-    "category": "One third of produce is thrown away. This brand is for the other side of that statistic.",
+    "category": "Brand Identity",
     "summary": "In the biblical <em>Gan Eden</em> (Garden of Eden), nature was perfect. In the modern commercial world, &quot;perfection&quot; is an artificial standard imposed by man. <strong>One Third </strong>of the agricultural produce in the world is thrown away due to cosmetic imperfections or retailer’s strict demands.<br /> This project, titled שליש גנעדן, challenges the retail industry's rejection of &quot;ugly&quot; produce. It explores the conflict between <strong>Nature's organic diversity</strong> and <strong>Man’s demand for uniformity</strong>.<br /><br /><strong>The Design</strong><br />The visual identity celebrates the &quot;misfits&quot;—the twisted carrots, the spotted apples, and the irregular shapes that supermarkets discard. By framing these rejected fruits in a (almost) ready-to-eat pack, the design shifts the narrative from “useless” to “useful”.<br />The interface uses raw textures and honest photography to highlight that true natural beauty is rarely symmetrical, urging the user to embrace the imperfect.",
     "services": [
       "Sustainable",
-      "Brand Identity",
-      "Student Work"
+      "Brand Identity"
     ],
     "year": "2025",
     "challenge": "In the biblical <em>Gan Eden</em> (Garden of Eden), nature was perfect. In the modern commercial world, &quot;perfection&quot; is an artificial standard imposed by man. <strong>One Third </strong>of the agricultural produce in the world is thrown away due to cosmetic imperfections or retailer’s strict demands.<br /> This project, titled שליש גנעדן, challenges the retail industry's rejection of &quot;ugly&quot; produce. It explores the conflict between <strong>Nature's organic diversity</strong> and <strong>Man’s demand for uniformity</strong>.<br /><br /><strong>The Design</strong><br />The visual identity celebrates the &quot;misfits&quot;—the twisted carrots, the spotted apples, and the irregular shapes that supermarkets discard. By framing these rejected fruits in a (almost) ready-to-eat pack, the design shifts the narrative from “useless” to “useful”.<br />The interface uses raw textures and honest photography to highlight that true natural beauty is rarely symmetrical, urging the user to embrace the imperfect.",
@@ -92,14 +175,12 @@
       "/images/animal-to-logo/mask.webp"
     ],
     "tags": [
-      "Logo Design",
-      "Student Work"
+      "Logo Design"
     ],
-    "category": "From creature to concept — reduction as a design method",
+    "category": "Logo Design",
     "summary": "Alma is a mockup organization dedicated to supporting student exchange programs, assisting with everything from logistics and housing to building a supportive community.<br /><br /><strong>The Concept: The Migrating Stork</strong><br />The visual identity centers on the stork, a bird famous for its seasonal migration.<br />• <strong>The Metaphor:</strong> The stork was chosen because it migrates in the winter and returns to the exact same spot in the spring—mirroring the journey of a student leaving for an exchange and eventually returning home.<br />• <strong>A New Narrative:</strong> While the stork is culturally associated with delivering babies, this logo reimagines the myth. Instead of a child, the stork is the carrier of <strong>academic knowledge</strong>, symbolizing the intellectual growth that travels with the student.<br /><strong><br />The Symbolism</strong><br />The logo design integrates the bird with the brand's academic mission:<br />• <strong>Wings as a Book:</strong> The stork’s wings are designed to resemble an <strong>opening book</strong>, representing the knowledge that wanders and travels alongside the student.<br /><br /><strong>The Name<br /></strong>The name &quot;Alma&quot; bridges two languages and concepts relevant to the brand:<br />1. <strong>Aramaic:</strong> It translates to &quot;World.&quot;<br />2. <strong>Latin:</strong> It references <em>Alma Mater</em> (&quot;nourishing mother&quot;), the traditional term for the university that educated a student.",
     "services": [
-      "Logo Design",
-      "Student Work"
+      "Logo Design"
     ],
     "year": "2025",
     "challenge": "Alma is a mockup organization dedicated to supporting student exchange programs, assisting with everything from logistics and housing to building a supportive community.<br /><br /><strong>The Concept: The Migrating Stork</strong><br />The visual identity centers on the stork, a bird famous for its seasonal migration.<br />• <strong>The Metaphor:</strong> The stork was chosen because it migrates in the winter and returns to the exact same spot in the spring—mirroring the journey of a student leaving for an exchange and eventually returning home.<br />• <strong>A New Narrative:</strong> While the stork is culturally associated with delivering babies, this logo reimagines the myth. Instead of a child, the stork is the carrier of <strong>academic knowledge</strong>, symbolizing the intellectual growth that travels with the student.<br /><strong><br />The Symbolism</strong><br />The logo design integrates the bird with the brand's academic mission:<br />• <strong>Wings as a Book:</strong> The stork’s wings are designed to resemble an <strong>opening book</strong>, representing the knowledge that wanders and travels alongside the student.<br /><br /><strong>The Name<br /></strong>The name &quot;Alma&quot; bridges two languages and concepts relevant to the brand:<br />1. <strong>Aramaic:</strong> It translates to &quot;World.&quot;<br />2. <strong>Latin:</strong> It references <em>Alma Mater</em> (&quot;nourishing mother&quot;), the traditional term for the university that educated a student.",
@@ -111,130 +192,45 @@
     "heTitle": "מחיה ללוגו",
     "heSubHeader": "מחיה לקונספט — הפשטה וצמצום כשיטת עיצוב",
     "heContext": "תרגיל בצמצום — לקיחת צורות חיות מורכבות וזיקוקן לאמת המשמעותית שלהן. בהשראת גישת החשיבה של המעצבים פול ראנד וג'ורג' בוקהואה.",
-    "heDescription": "<strong>עלמא (Alma</strong>) הוא ארגון שעוזר לחילופי סטודנטים - החל ממציאת המקום המתאים, דרך לוגיסטיקה ועד קהילה וחברות.<br /><br />בחרתי <strong>בקונספט</strong> הזה כי החסידה, כמו סטודנט שיוצא לחילופים, נודדת בחורף וחוזרת באביב לאותו מקום שממנו יצאה.<br />החסידה ידועה בתרבויות רבות כעוף שעוזר להוריו ולילדיו,<br />ומכאן הקונספט שסובב סביב עזרה ודאגה, אך מכיוון אחר שאינו מציג את החסידה כזו שמביאה ילדים לעולם, אלא כמי שבזכותה <strong>נודד ידע אקדמי.</strong><br /><br /><strong>בחרתי בשלושה צבעים מרכזיים לסמל:</strong><br />כחול כהה - מסמל יציבות, ומזוהה עם האקדמיה.<br />כתום - מגיע מהחסידה, ונותן אנרגיה ותנועה.<br />תכלת - מסמל את השמיים ומשרה רוגע ואיזון לכהות.<br /><br />בסמל כנפי החסידה הופכות לספר נפתח - סמל לידע שעובר ונודד עם הסטודנט בחילופים.<br /><br /><strong>השם עלמא/Alma</strong> מגיע משתי שפות - ״עולם״ בארמית,<br />ומהמושג Alma Mater שפירושו ״אם מזינה״ בלטינית, אך מייצג באקדמיה את האוניברסיטה שבה התחנך הסטודנט.",
+    "heDescription": "<strong>עלמא (Alma</strong>) הוא ארגון שעוזר לחילופי סטודנטים - החל<br />ממציאת המקום המתאים, דרך לוגיסטיקה ועד קהילה וחברות.<br /><br />בחרתי <strong>בקונספט</strong> הזה כי החסידה, כמו סטודנט שיוצא לחילופים, נודדת בחורף וחוזרת באביב לאותו מקום שממנו יצאה.<br />החסידה ידועה בתרבויות רבות כעוף שעוזר להוריו ולילדיו,<br />ומכאן הקונספט שסובב סביב עזרה ודאגה, אך מכיוון אחר שאינו מציג את החסידה כזו שמביאה ילדים לעולם, אלא כמי שבזכותה <strong>נודד ידע אקדמי.</strong><br /><br /><strong>בחרתי בשלושה צבעים מרכזיים לסמל:</strong><br />כחול כהה - מסמל יציבות, ומזוהה עם האקדמיה.<br />כתום - מגיע מהחסידה, ונותן אנרגיה ותנועה.<br />תכלת - מסמל את השמיים ומשרה רוגע ואיזון לכהות.<br /><br />בסמל כנפי החסידה הופכות לספר נפתח - סמל לידע שעובר<br />ונודד עם הסטודנט בחילופים.<br /><br /><strong>השם עלמא/Alma</strong> מגיע משתי שפות - ״עולם״ בארמית,<br />ומהמושג Alma Mater שפירושו ״אם מזינה״ בלטינית, אך מייצג באקדמיה את האוניברסיטה שבה התחנך הסטודנט.",
     "heTags": [
       "עיצוב לוגו",
       "פרויקט לימודים"
     ]
   },
   {
-    "slug": "digital-handprint",
-    "title": "Digital Handprint",
-    "subHeader": "What if your cursor was a brush?",
-    "description": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
-    "bodyText": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
+    "slug": "small-world-problems",
+    "title": "Small World Problems",
+    "subHeader": "The font that tricks the system — by design",
+    "description": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
+    "bodyText": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
+    "url": "https://davidka-font.vercel.app/",
     "images": [],
     "tags": [
-      "Creative Coding",
-      "Digital World"
+      "Experimental",
+      "Typography"
     ],
-    "category": "What if your cursor was a brush?",
-    "summary": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
+    "category": "Experimental Typography",
+    "summary": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
     "services": [
-      "Creative Coding",
-      "Digital World"
+      "Experimental",
+      "Typography"
     ],
     "year": "2026",
-    "challenge": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
-    "process": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
-    "outcome": "The mouse cursor is the primary bridge between a user and a digital interface, yet it is rarely treated as more than a utilitarian tool. <br />This project explores the cursor as an active participant in the design rather than a passive observer.<br />By transforming the cursor into a generative brush, I aimed to break the fourth wall of web navigation, turning routine movement into a playful, creative act.<br /><br />This experiment faces myself first - how much i swiped and moved each day - creating a daily <strong>self-portrait</strong> of my ”Digital Handprint”.",
-    "accent": "green",
+    "challenge": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
+    "process": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
+    "outcome": "<strong>The Insight</strong><br />In the world of academic writing, length requirements can be a burden. Inspired by the Davidka Mortar, I realized that Hebrew writers needed their own solution for stretching essays without writing more words - or like the Davidka - making noise but not damage.<br /><br /><strong>The Solution<br /><br />Davidka</strong> is a modified version of the classic, open-source <em>David Libre</em> font. It is designed to be visually indistinguishable from the standard David font used in most Israeli academic institutions, but with a hidden feature: it is <strong>5-10% wider</strong>.<br /><br />By subtly adjusting the glyph width and side-bearings (the empty space around each letter), Davidka naturally expands the length of any document. It allows students to meet page-count requirements more easily while maintaining the professional, authoritative look of the standard font.<br />",
+    "accent": "primary",
     "thumbnailShape": "square",
     "thumbnailHoverShape": "circle",
-    "heTitle": "טביעת יד דיגיטלית",
-    "heSubHeader": "מה אם העכבר של המחשב היה מכחול?",
-    "heContext": "פורטרט עצמי שנבנה בקוד, לא בפיקסלים. חקירה של מה המשמעות להשאיר חותם במרחב דיגיטלי שלא זוכר דבר — וביקורת עצמית קלה על הרגלי השימוש שלי במחשב",
-    "heDescription": "סמן העכבר הוא המגשר העיקרי בינינו, המשתמשים, לממשק הדיגיטלי, אך הוא לעיתים נדירות נתפס כיותר מכלי שימושי.<br /><br />הפרויקט הזה חוקר את העכבר כמשתתף פעיל בעיצוב — על ידי הפיכתו למכחול גנרטיבי, אנחנו שוברים את הקיר הרביעי של גלישת האינטרנט, והופכים תנועה שגרתית למעשה יצירתי. <br /><br />הניסוי הזה מעמת אותי קודם כל עם עצמי — כמה גלשתי וזזתי כל יום — ויצר ״חותם דיגיטלי״ יומי.",
+    "heTitle": "בעיות קטנות",
+    "heSubHeader": "הגופן שמרמה את המערכת — בכוונה תחילה",
+    "heContext": "ניסוי טיפוגרפי שחוקר כיצד אות אחת, בסקאלה ומיקום שונה, משנה משמעות. נוצר כמחקר עצמאי בהשפעה ויזואלית — ועם קצת הומור.",
+    "heDescription": "<strong>התובנה<br /></strong>עולם הכתיבה האקדמית דורש לעתים מסמכים באורכי דף מוגדרים.<br />בהשראת תותח ה״דוידקה״ - זה שבעיקר עושה רעש אך לא עושה נזק - יצרתי את השינוי בגופם ״דוד״ הקלאסי והמוכר.<br /><br /><strong>הפתרון - <br />דוידקה</strong> הוא גרסה מעובדת של הגופן הקלאסי David Libre. הוא תוכנן להיראות זהה לגופן הדוד הסטנדרטי, אך עם תכונה נסתרת: הוא רחב ב-5-10%. על ידי הרחבה עדינה של רוחב הגליף והמרווחים, דוידקה מאריך טבעית כל מסמך — ומאפשר לסטודנטים לעמוד בדרישות העמודים מבלי לכתוב יותר מילים.",
     "heTags": [
-      "קוד",
-      "עולם דיגיטלי"
-    ]
-  },
-  {
-    "slug": "keeping-it-clean",
-    "title": "Keeping It Clean",
-    "subHeader": "Designs for The Clean DotCleaning products that deserve to be on the counter, not under it",
-    "description": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
-    "bodyText": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
-    "url": "https://thecleandot.com/collections/allproducts",
-    "images": [
-      "/images/keeping-it-clean/fresh-soap-2.png",
-      "/images/keeping-it-clean/img_4667.jpg",
-      "/images/keeping-it-clean/marz-bish-3119302.webp",
-      "/images/keeping-it-clean/marz-hl-5659863.webp",
-      "/images/keeping-it-clean/marz-hl-9276019.webp",
-      "/images/keeping-it-clean/marz-mlivt-1604784.webp",
-      "/images/keeping-it-clean/mockup1.png"
-    ],
-    "tags": [
-      "Package Design",
-      "Sustainable",
-      "Brand Identity"
-    ],
-    "category": "Designs for The Clean DotCleaning products that deserve to be on the counter, not under it",
-    "summary": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
-    "services": [
-      "Package Design",
-      "Sustainable",
-      "Brand Identity"
-    ],
-    "year": "2024",
-    "challenge": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
-    "process": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
-    "outcome": "As a sustainable lifestyle brand, <strong>The Clean Dot</strong> requires a visual identity that communicates both purity and modern efficiency. <br />The brand creates plastic-free laundry and cleaning products designed to minimize waste, requiring packaging and visual assets that reflect their core mission of transparency, sustainability, and high-end minimalism - <strong>Simply Clean.</strong><br /><br />My work with clean includes Package design, business presentation and instructional brochures.",
-    "accent": "white",
-    "thumbnailShape": "circle",
-    "thumbnailHoverShape": "triangle",
-    "heTitle": "לשמור על ניקיון",
-    "heSubHeader": "מוצרי ניקוי שמגיע להם לעמוד על השיש, לא מתחתיו",
-    "heDescription": "בתור מותג אורח חיים שמקדש קיימות <strong>קלין דוט</strong> דורשת זהות עיצובית שמשדרת טוהר וניקיון וגם מודרניות ופשטות.<br />המותג משווק מוצרי ניקיון אקולוגיים, נקיים מפלסטיקים וחומרים מזהמים, במטרה לצמצם בזבוז פלסטיק ואריזות - וכך העיצוב שלהם נדרש להיות שקוף, מינימליסטי ו<strong>פשוט נקי.<br /><br />הקונספט  </strong>הוא שמוצרי ניקיון לא צריכים להיות פשרה עיצובית בבית, אלא בעלי נוכחות פיזית על השיש!<strong><br /><br /></strong>העבודה שלי עם <strong>קלין דוט</strong> כוללת עיצוב אריזות למוצרים, מצגות עסקיות וחומרי הדרכה למשתמשים.",
-    "heTags": [
-      "עיצוב אריזות",
-      "קיימות",
-      "מיתוג"
-    ]
-  },
-  {
-    "slug": "no-gatekeeping",
-    "title": "No Gatekeeping",
-    "subHeader": "Everything seniors know and juniors have to figure out the hard way — in one place",
-    "description": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
-    "bodyText": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
-    "url": "https://index-design-hit.vercel.app/",
-    "images": [
-      "/images/no-gatekeeping/Index screen.webp",
-      "/images/no-gatekeeping/indexHOF.webp",
-      "/images/no-gatekeeping/indexmap.webp",
-      "/images/no-gatekeeping/Indextip.webp",
-      "/images/no-gatekeeping/indextoolbox.webp"
-    ],
-    "tags": [
-      "Web Design",
-      "Directory",
-      "Educational"
-    ],
-    "category": "Everything seniors know and juniors have to figure out the hard way — in one place",
-    "summary": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
-    "services": [
-      "Web Design",
-      "Directory",
-      "Educational"
-    ],
-    "year": "2026",
-    "challenge": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
-    "process": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
-    "outcome": "<strong>The Problem</strong><br />As a design student, valuable resources—from quality mockups and fonts to local print shop recommendations—are often scattered across bookmark folders, WhatsApp groups, and word-of-mouth advice. There was no single &quot;source of truth&quot; tailored specifically for the Israeli design student experience.<br /><br /><strong>The Solution<br />Index</strong> is a centralized, digital hub designed to be the ultimate starting point for visual communication students. It aggregates the most essential tools and knowledge into one accessible platform.<br />It’s based on TETRIS shapes, my way of showing that design is a building process, and it might take time and failure, but these resources will help the student be a better designer.<br /><br /><strong>Key Features:</strong><br />• <strong>The Toolbox:</strong> A curated collection of high-quality, free assets (fonts, mockups, plugins).<br />• <strong>The Local Map:</strong> A guide to the best print shops, art supply stores, and student-friendly services in the area.<br />• <strong>The Museum &amp; Hall of Fame:</strong> An educational archive of must-know designers, studios, and visual movements to bridge the gap between history and practice.<br />• <strong>Community Driven:</strong> Includes a &quot;Student Tips&quot; section where knowledge is passed down from seniors to juniors.",
-    "accent": "primary",
-    "thumbnailShape": "triangle",
-    "thumbnailHoverShape": "square",
-    "heTitle": "לא שומרים בבטן",
-    "heSubHeader": "כל מה שמעצבים ותיקים יודעים ומה שהחדשים צריכים לגלות בדרך הקשה — במקום אחד",
-    "heContext": "ספריית אינטרנט חינמית של משאבי עיצוב, בנויה עבור סטודנטים שצריכים דרך קלה למצוא את הכלים שיעזרו לעבודה האקדמית שלהם. עוצבה ופותחה באופן עצמאי למחלקת תקשורת חזותית בהיט.",
-    "heDescription": "כסטודנט לעיצוב, משאבים יקרי ערך — ממוקאפים וגופנים ועד המלצות על בתי דפוס מקומיים — מפוזרים בתיקיות סימניות, קבוצות וואטסאפ ועצות בעל פה.<br /><br />לא היה מקום אחד מרוכז המותאם לחוויית הסטודנט הישראלי לעיצוב. <br /><br /><strong>אינדקס</strong> הוא ריכוז דיגיטלי המאגדת את הכלים והידע החיוניים ביותר למקום אחד נגיש — <strong>בהשראת צורות טטריס</strong>, כדרך להראות שעיצוב הוא תהליך בנייה שלוקח זמן, וכל פיסת מידע מוסיפה עוד רובד למעצב.<br /><br />האתר מכיל:<br />  • <strong>ארגז כלים</strong> - אתרים וממשקים שנאצרו בקפידה, ומכילים כמעט כל דבר שמעצב צריך.<br />  • <strong>מפה</strong> הכוללת בתי דפוס, חנויות אומנות ואנשי מקצוע.<br />  • <strong>מוזיאון</strong> עם מיטב המעצבים והאומנים.<br />  • <strong>ספרייה</strong> עם הספרים שחובה לקרוא בתור מעצב.",
-    "heTags": [
-      "עיצוב אתר",
-      "חינוך ולמידה",
-      "עיצוב ממשקים"
+      "טיפוגרפיה",
+      "עבודה ניסיונית",
+      "הומור"
     ]
   }
 ]

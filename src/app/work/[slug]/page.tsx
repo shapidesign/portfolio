@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     return { title: "Project Not Found" };
   }
 
-  const title = `${project.title} — Design by Yehonatan Shapira`;
+  const title = `${project.title} — Yehonatan Shapira`;
   const description = (project.description || project.summary || "")
     .replace(/<[^>]*>?/gm, "")
     .slice(0, 160);
