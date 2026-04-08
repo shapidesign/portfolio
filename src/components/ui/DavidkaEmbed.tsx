@@ -17,7 +17,7 @@ export function DavidkaEmbed() {
         type="button"
         className="davidka-flip"
         onClick={() => setIsDavidka((v) => !v)}
-        aria-label="Toggle between project logo variants"
+        aria-label="Toggle between Davidka and David Libre fonts"
       >
         <div className="davidka-flip-stack">
           <Image
@@ -53,14 +53,14 @@ export function DavidkaEmbed() {
 
         <div className="davidka-columns">
           <div className="davidka-col">
-            <span className="davidka-col-label">Rubik — regular</span>
-            <div className="davidka-col-paper davidka-col-paper--rubik-regular">
+            <span className="davidka-col-label">David Libre</span>
+            <div className="davidka-col-paper" style={{ fontFamily: "'DavidLibre', serif" }}>
               <p dir="rtl">{text}</p>
             </div>
           </div>
           <div className="davidka-col">
-            <span className="davidka-col-label davidka-col-label-alt">Rubik — bold</span>
-            <div className="davidka-col-paper davidka-col-paper-alt davidka-col-paper--rubik-bold">
+            <span className="davidka-col-label davidka-col-label-alt">Davidka</span>
+            <div className="davidka-col-paper davidka-col-paper-alt" style={{ fontFamily: "'Davidka', serif" }}>
               <p dir="rtl">{text}</p>
             </div>
           </div>
