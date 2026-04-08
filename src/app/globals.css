@@ -814,6 +814,13 @@ p {
 }
 
 @media (max-width: 740px) {
+  /* Bottom-aligned flex + full viewport leaves a large dead zone above the copy on
+     small screens; start from the top so the headline and CTAs share the viewport. */
+  .hero-section {
+    justify-content: flex-start;
+    padding-block: clamp(0.75rem, 3vw, 1.5rem) clamp(1.25rem, 5vw, 2.25rem);
+  }
+
   .hero-star-outline {
     width: clamp(120px, 35vw, 180px);
     right: -2vw;
@@ -823,6 +830,14 @@ p {
   [dir="rtl"] .hero-star-outline {
     right: auto;
     left: -2vw;
+  }
+
+  .hero-eyebrow {
+    margin-bottom: 0.55rem;
+  }
+
+  .hero-actions {
+    margin-top: 1.25rem;
   }
 }
 
@@ -1643,6 +1658,17 @@ p {
   height: auto;
   border-radius: var(--radius-soft);
   background: var(--color-surface-2);
+}
+
+/* Animal to Logo — work card: cream bg so transparent SVG logos render correctly */
+.work-card[data-slug="animal-to-logo"] {
+  background: #ecebe6;
+}
+
+.work-card[data-slug="animal-to-logo"] .work-card-img {
+  background-color: #ecebe6;
+  object-fit: contain;
+  padding: clamp(0.75rem, 3%, 1.5rem);
 }
 
 /* Animal to Logo — bento gallery (#ecebe6 tiles, image fills cell) */

@@ -111,6 +111,7 @@ export default function HomePage() {
               <button
                 type="button"
                 className="work-card work-featured"
+                data-slug={featured.slug}
                 onClick={() => handleCardClick(featured.slug)}
                 aria-label={`View project: ${isHebrew && featured.heTitle ? featured.heTitle : featured.title}`}
               >
@@ -145,6 +146,7 @@ export default function HomePage() {
                   <button
                     type="button"
                     className="work-card"
+                    data-slug={project.slug}
                     style={{ width: "100%", height: "100%" }}
                     onClick={() => handleCardClick(project.slug)}
                     aria-label={`View project: ${isHebrew && project.heTitle ? project.heTitle : project.title}`}
@@ -182,6 +184,7 @@ export default function HomePage() {
                   <button
                     type="button"
                     className="work-card"
+                    data-slug={project.slug}
                     style={{ width: "100%", height: "100%" }}
                     onClick={() => handleCardClick(project.slug)}
                     aria-label={`View project: ${isHebrew && project.heTitle ? project.heTitle : project.title}`}
