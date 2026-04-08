@@ -815,13 +815,14 @@ p {
 
 @media (max-width: 740px) {
   .hero-star-outline {
-    width: clamp(180px, 60vw, 280px);
-    right: -4vw;
+    width: clamp(120px, 35vw, 180px);
+    right: -2vw;
+    top: 30%;
   }
 
   [dir="rtl"] .hero-star-outline {
     right: auto;
-    left: -4vw;
+    left: -2vw;
   }
 }
 
@@ -2874,7 +2875,7 @@ p {
 
 @media (max-width: 740px) {
   [dir="rtl"] .hero-headline {
-    font-size: clamp(2rem, 9vw, 4rem);
+    font-size: clamp(3.2rem, 12vw, 4.5rem);
   }
 }
 
