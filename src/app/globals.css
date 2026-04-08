@@ -40,8 +40,10 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* `smooth` on the root can fight wheel/trackpad scrolling and restoration; in-page targets use explicit scrollIntoView where needed. */
+  scroll-behavior: auto;
   scrollbar-gutter: stable;
+  scroll-padding-top: 5.5rem;
 }
 
 html,

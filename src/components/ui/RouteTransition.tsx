@@ -32,7 +32,7 @@ export function RouteTransition({ children }: RouteTransitionProps) {
 
   return (
     <div className="route-shell">
-      <AnimatePresence mode="popLayout" initial={false}>
+      <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={pathname}
           className="route-content"

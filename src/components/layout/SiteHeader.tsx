@@ -68,17 +68,28 @@ export function SiteHeader() {
     const bar = progressRef.current;
     if (!bar) return;
 
-    let rafId = 0;
+    let ticking = false;
     const update = () => {
+      ticking = false;
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
       bar.style.width = `${progress * 100}%`;
-      rafId = requestAnimationFrame(update);
     };
 
-    rafId = requestAnimationFrame(update);
-    return () => cancelAnimationFrame(rafId);
+    const schedule = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
   }, []);
 
   useEffect(() => {

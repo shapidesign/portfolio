@@ -16,13 +16,29 @@ export function CtaButton({ href, variant = "primary", download, onClick, childr
 
   const className = `button button-${variant}`;
 
+  const handleSamePageAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    onClick?.(e);
+    if (e.defaultPrevented || download) return;
+    if (!href.startsWith("#") || href.length <= 1) return;
+    const id = href.slice(1);
+    const target = document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({
+      behavior: smooth ? "smooth" : "auto",
+      block: "start",
+    });
+    window.history.replaceState(null, "", href);
+  };
+
   if (download || href.startsWith("#")) {
     return (
       <a
         ref={ref as React.RefObject<HTMLAnchorElement>}
         className={className}
         href={href}
-        onClick={onClick}
+        onClick={href.startsWith("#") && !download ? handleSamePageAnchorClick : onClick}
         {...(download ? { download: true } : {})}
       >
         {children}

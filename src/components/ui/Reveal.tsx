@@ -54,8 +54,9 @@ export function Reveal({ children, className, delay = 0 }: RevealProps) {
         opacity: 1,
         transform: "translateY(0)",
         transition: `opacity 700ms ${delay}ms cubic-bezier(0.16, 1, 0.3, 1), transform 700ms ${delay}ms cubic-bezier(0.16, 1, 0.3, 1)`,
+        overflowAnchor: "none",
       }
-    : { opacity: 0, transform: "translateY(64px)" };
+    : { opacity: 0, transform: "translateY(64px)", overflowAnchor: "none" };
 
   return (
     <div ref={ref} className={className ?? ""} style={style}>

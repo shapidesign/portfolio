@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Rubik, Bricolage_Grotesque } from "next/font/google";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
+import { ScrollInstrumentation } from "@/components/debug/ScrollInstrumentation";
 import { IntroLoader } from "@/components/ui/IntroLoader";
 import { RouteTransition } from "@/components/ui/RouteTransition";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -110,6 +111,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify([personJsonLd, websiteJsonLd]) }}
         />
         <IntroLoader />
+        <ScrollInstrumentation />
         <AnimatedCursor />
         <LanguageProvider>
           <ProjectProvider>
