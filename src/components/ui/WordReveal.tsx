@@ -53,7 +53,12 @@ export function WordReveal({ text, className = "", delay = 0, stagger = 60, inli
   }
 
   return (
-    <span ref={containerRef} className={className} aria-label={text} style={{ display: inline ? "inline" : "block" }}>
+    <span
+      ref={containerRef}
+      className={className}
+      aria-label={text}
+      style={{ display: inline ? "inline" : "block", overflowAnchor: "none" }}
+    >
       {words.map((word, i) => (
         <span
           key={i}
