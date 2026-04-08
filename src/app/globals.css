@@ -1,37 +1,5 @@
 @import "../styles/tokens.css";
 
-@font-face {
-  font-family: "DavidLibre";
-  src: url("/fonts/DavidLibre-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "DavidLibre";
-  src: url("/fonts/DavidLibre-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Davidka";
-  src: url("/fonts/Davidka-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Davidka";
-  src: url("/fonts/Davidka-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 *,
 *::before,
 *::after {
@@ -1095,14 +1063,16 @@ p {
 }
 
 .davidka-tw-back {
-  font-family: "Davidka", serif;
+  font-family: var(--font-rubik), "Rubik", sans-serif;
+  font-weight: 400;
   color: #00e5ff;
   opacity: 0.55;
   transform: translate(-2px, 1px);
 }
 
 .davidka-tw-front {
-  font-family: "DavidLibre", serif;
+  font-family: var(--font-rubik), "Rubik", sans-serif;
+  font-weight: 700;
   color: var(--color-text);
   opacity: 1;
 }
@@ -1944,7 +1914,7 @@ p {
   color: var(--color-text);
   padding: 0.75rem 1rem;
   font-size: 1rem;
-  font-family: "DavidLibre", serif;
+  font-family: var(--font-rubik), "Rubik", sans-serif;
 }
 
 .davidka-textarea:focus {
@@ -1998,6 +1968,16 @@ p {
 .davidka-col-paper-alt {
   border-color: color-mix(in srgb, var(--color-accent-blue) 75%, white);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-accent-blue) 35%, transparent);
+}
+
+.davidka-col-paper--rubik-regular {
+  font-family: var(--font-rubik), "Rubik", sans-serif;
+  font-weight: 400;
+}
+
+.davidka-col-paper--rubik-bold {
+  font-family: var(--font-rubik), "Rubik", sans-serif;
+  font-weight: 700;
 }
 
 .davidka-col-paper p {
@@ -2828,7 +2808,9 @@ p {
 [dir="rtl"] .font-display,
 [dir="rtl"] .text-statement,
 [dir="rtl"] .text-display,
-[dir="rtl"] .work-card-title {
+[dir="rtl"] .work-card-title,
+[dir="rtl"] .project-detail h1,
+[dir="rtl"] .body-section-label {
   font-family: var(--font-rubik), "Rubik", sans-serif;
 }
 
@@ -2901,7 +2883,9 @@ p {
 
 @media (max-width: 740px) {
   [dir="rtl"] .hero-headline {
-    font-size: clamp(3.2rem, 12vw, 4.5rem);
+    font-size: clamp(1.85rem, 7.2vw, 2.85rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
   }
 }
 
