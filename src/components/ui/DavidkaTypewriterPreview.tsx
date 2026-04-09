@@ -125,7 +125,7 @@ export function DavidkaTypewriterPreview() {
       signal.aborted = true;
       clearTimeout(boot);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div

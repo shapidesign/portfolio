@@ -40,7 +40,7 @@ export function RouteTransition({ children }: RouteTransitionProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{
-            duration: 0.22,
+            duration: 0.3,
             ease: [0.2, 0.7, 0.2, 1]
           }}
         >

@@ -26,6 +26,8 @@ const strings = {
     ),
     heroTaglineText:
       "design is never my style. its your challenge and our solution.",
+    heroOrientationLine:
+      "Visual communication — branding · digital product · experimental type",
     viewWork: "View Work",
     letsCollaborate: "Let\u2019s Collaborate",
 
@@ -47,19 +49,15 @@ const strings = {
     aboutTitle: "About",
     aboutLead:
       "Good design starts with the right question, not the right aesthetic.",
-    aboutBelieveTitle: "What I Believe In?",
-    aboutBelieveBody: (
-      <>
-        design is never <em>my</em> style. its <em>your</em> challenge and{" "}
-        <em>our</em> solution.
-      </>
-    ),
-    aboutWhyTitle: "Why I Do?",
-    aboutWhyBody:
-      "Great design starts with asking the right questions. I love the process of untangling complex information and finding the core human need behind it.",
-    aboutHowTitle: "How I Do?",
+    aboutWhoHeading: "Who I am",
+    aboutWhoBody:
+      "I am Yehonatan Shapira, a visual communication designer based in Jaffa. I build identity systems and digital experiences that balance clarity with personality.",
+    aboutHowHeading: "How I work",
     aboutHowBody:
-      "Every project demands different tools. I learn what the work needs, not what my portfolio already has.",
+      "My process starts with the real constraint, not the visual trend. I map the problem, set hierarchy, and design the system so every choice supports the message.",
+    aboutNowHeading: "What I am doing now",
+    aboutNowBody:
+      "Right now I am focused on branding, product interfaces, and experimental typography projects that connect strategic thinking with strong visual execution.",
     downloadCV: "Download CV",
     contactMe: "Contact me",
 
@@ -80,6 +78,8 @@ const strings = {
     contactHero: "Let\u2019s talk",
     contactLead:
       "If you want to collaborate on branding, digital design, or creative direction, send\u00A0a\u00A0message.",
+    contactAvailability:
+      "Available for new projects — branding, digital product design, and experimental work.",
     contactSubtitle: "Or email directly\u00A0at",
     contactDownloadCV: "download my CV",
     formName: "Name",
@@ -135,6 +135,8 @@ const strings = {
     ),
     heroTaglineText:
       "עיצוב הוא אף פעם לא הסגנון שלי. זה האתגר שלך והפתרון שלנו.",
+    heroOrientationLine:
+      "תקשורת חזותית — מיתוג · מוצר דיגיטלי · טיפוגרפיה ניסיונית",
     viewWork: "צפו בעבודות",
     letsCollaborate: "בואו נעבוד",
 
@@ -152,24 +154,15 @@ const strings = {
     aboutTitle: "אודות",
     aboutLead:
       "עיצוב טוב מתחיל בשאלה הנכונה, לא באסתטיקה הנכונה.",
-    aboutBelieveTitle: "במה אני מאמין?",
-    aboutBelieveBody: (
-      <>
-        {"עיצוב הוא אף פעם לא הסגנון "}
-        <em>{"שלי"}</em>
-        {". זה האתגר "}
-        <em>{"שלך"}</em>
-        {" והפתרון "}
-        <em>{"שלנו"}</em>
-        {"."}
-      </>
-    ),
-    aboutWhyTitle: "למה אני עושה את זה?",
-    aboutWhyBody:
-      "עיצוב גדול מתחיל בשאלות הנכונות. אני אוהב את התהליך של פירוק מידע מורכב ומציאת הצורך האנושי האמיתי שמאחוריו.",
-    aboutHowTitle: "איך אני עושה את זה?",
+    aboutWhoHeading: "מי אני",
+    aboutWhoBody:
+      "אני יהונתן שפירא, מעצב תקשורת חזותית מיפו. אני בונה זהויות מותג וחוויות דיגיטליות שמאזנות בין בהירות לבין אופי.",
+    aboutHowHeading: "איך אני עובד",
     aboutHowBody:
-      "כל פרויקט דורש כלים שונים. אני לומד מה העבודה צריכה — לא מה שכבר יש לי בתיק העבודות.",
+      "התהליך שלי מתחיל מהאילוץ האמיתי ולא מהטרנד החזותי. אני ממפה את הבעיה, בונה היררכיה, ומעצב מערכת שבה כל בחירה משרתת את המסר.",
+    aboutNowHeading: "מה אני עושה עכשיו",
+    aboutNowBody:
+      "כיום אני מתמקד בפרויקטים של מיתוג, ממשקים דיגיטליים וטיפוגרפיה ניסיונית, שמחברים חשיבה אסטרטגית עם ביצוע חזותי מדויק.",
     downloadCV: "הורדת קורות חיים",
     contactMe: "צור קשר",
 
@@ -187,6 +180,8 @@ const strings = {
     contactHero: "בואו נדבר",
     contactLead:
       "אם אתם רוצים לשתף פעולה במיתוג, עיצוב דיגיטלי, או הנחייה קריאטיבית, שלחו\u00A0הודעה.",
+    contactAvailability:
+      "זמין לפרויקטים חדשים — מיתוג, עיצוב מוצר דיגיטלי, ועבודה ניסיונית.",
     contactSubtitle: "או שלחו מייל ישירות\u00A0ל",
     contactDownloadCV: "הורדת קורות חיים",
     formName: "שם",

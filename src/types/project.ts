@@ -26,4 +26,18 @@ export type Project = {
   heContext?: string;
   heDescription?: string;
   heTags?: string[];
+  status?: string;
+  heStatus?: string;
+  discipline?: string;
+  heDiscipline?: string;
+  descriptor?: string;
+  heDescriptor?: string;
+  opener?: string;
+  heOpener?: string;
+  narrativeChallenge?: string;
+  narrativeApproach?: string;
+  narrativeDecision?: string;
+  heNarrativeChallenge?: string;
+  heNarrativeApproach?: string;
+  heNarrativeDecision?: string;
 };

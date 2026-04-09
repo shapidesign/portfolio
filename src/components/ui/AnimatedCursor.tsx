@@ -22,10 +22,13 @@ export function AnimatedCursor() {
     let ringX = mouseX;
     let ringY = mouseY;
     let hovering = false;
+    let textHovering = false;
     let rafId = 0;
 
     const interactiveSelector =
       "a, button, input, textarea, select, [role='button'], .project-card, .menu-button";
+    const textHoverSelector =
+      "p.lead, p.subtitle, p.project-narrative-copy, p.project-opener-line, p.project-card-descriptor, .next-project-copy p, p.contact-availability, p.form-sent-copy";
 
     const onMove = (event: MouseEvent) => {
       mouseX = event.clientX;
@@ -37,6 +40,7 @@ export function AnimatedCursor() {
       const target = event.target;
       if (target instanceof Element) {
         hovering = Boolean(target.closest(interactiveSelector));
+        textHovering = Boolean(target.closest(textHoverSelector));
       }
     };
 
@@ -46,6 +50,8 @@ export function AnimatedCursor() {
       ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) scale(${hovering ? 1.65 : 1})`;
       dot.classList.toggle("hover", hovering);
       ring.classList.toggle("hover", hovering);
+      dot.classList.toggle("text", textHovering);
+      ring.classList.toggle("text", textHovering);
       rafId = window.requestAnimationFrame(animate);
     };
 

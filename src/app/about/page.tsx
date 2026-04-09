@@ -6,28 +6,9 @@ import { WordReveal } from "@/components/ui/WordReveal";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
 
-const SKILLS_EN = [
-  "Figma",
-  "Adobe CC",
-  "Web Design",
-  "Branding and Identity",
-  "Copywriting",
-  "Typography",
-];
-
-const SKILLS_HE = [
-  "Figma",
-  "Adobe CC",
-  "עיצוב אתרים",
-  "מיתוג וזהות",
-  "קופירייטינג",
-  "טיפוגרפיה",
-];
-
 export default function AboutPage() {
-  const { lang, isHebrew } = useLanguage();
+  const { lang } = useLanguage();
   const s = useTranslation(lang);
-  const skills = isHebrew ? SKILLS_HE : SKILLS_EN;
 
   return (
     <main className="about-page">
@@ -47,34 +28,27 @@ export default function AboutPage() {
         <Reveal className="about-block">
           <div className="detail-block">
             <h2 className="text-display font-display" style={{ marginBottom: "1.5rem" }}>
-              {s.aboutBelieveTitle}
+              {s.aboutWhoHeading}
             </h2>
-            <p className="lead">{s.aboutBelieveBody}</p>
+            <p className="lead">{s.aboutWhoBody}</p>
           </div>
         </Reveal>
 
         <Reveal className="about-block">
           <div className="detail-block">
             <h2 className="text-display font-display" style={{ marginBottom: "1.5rem" }}>
-              {s.aboutWhyTitle}
-            </h2>
-            <p className="lead">{s.aboutWhyBody}</p>
-          </div>
-        </Reveal>
-
-        <Reveal className="about-block">
-          <div className="detail-block">
-            <h2 className="text-display font-display" style={{ marginBottom: "1.5rem" }}>
-              {s.aboutHowTitle}
+              {s.aboutHowHeading}
             </h2>
             <p className="lead">{s.aboutHowBody}</p>
-            <div className="about-skills" style={{ marginTop: "2rem" }}>
-              {skills.map((skill) => (
-                <span key={skill} className="project-tag">
-                  {skill}
-                </span>
-              ))}
-            </div>
+          </div>
+        </Reveal>
+
+        <Reveal className="about-block">
+          <div className="detail-block">
+            <h2 className="text-display font-display" style={{ marginBottom: "1.5rem" }}>
+              {s.aboutNowHeading}
+            </h2>
+            <p className="lead">{s.aboutNowBody}</p>
           </div>
         </Reveal>
       </section>

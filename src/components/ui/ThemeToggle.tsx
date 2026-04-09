@@ -16,29 +16,29 @@ function isDaytime(): boolean {
   return hour >= 7 && hour < 18;
 }
 
+function getEffectiveTheme(): Theme {
+  if (typeof window === "undefined") return "dark";
+  const isManual = localStorage.getItem("theme-manual");
+  if (isManual) {
+    return (localStorage.getItem("theme") as Theme) || getTimeBasedTheme();
+  }
+  return getTimeBasedTheme();
+}
+
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(() =>
-    typeof window === "undefined" ? "light" : getTimeBasedTheme()
-  );
+  const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [hasConfirmedThisSession, setHasConfirmedThisSession] = useState(false);
   const iconRef = useRef<SVGSVGElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const { lang } = useLanguage();
   const s = useTranslation(lang);
 
   useEffect(() => {
-    try {
-      localStorage.removeItem("theme");
-      localStorage.removeItem("theme-manual");
-    } catch {}
-
-    const frameId = window.requestAnimationFrame(() => {
-      setMounted(true);
-    });
-
-    return () => window.cancelAnimationFrame(frameId);
+    const t = getEffectiveTheme();
+    setTheme(t);
+    document.documentElement.setAttribute("data-theme", t);
+    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -67,11 +67,14 @@ export function ThemeToggle() {
   function applyTheme(next: Theme) {
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+    localStorage.setItem("theme-manual", "true");
     animateIcon();
   }
 
   function handleClick() {
-    if (hasConfirmedThisSession) {
+    const isManual = localStorage.getItem("theme-manual");
+    if (isManual) {
       applyTheme(theme === "light" ? "dark" : "light");
     } else {
       setShowConfirm(true);
@@ -81,7 +84,6 @@ export function ThemeToggle() {
   function handleConfirm() {
     const next: Theme = theme === "light" ? "dark" : "light";
     applyTheme(next);
-    setHasConfirmedThisSession(true);
     setShowConfirm(false);
   }
 

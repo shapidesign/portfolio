@@ -103,7 +103,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
-      <head />
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var m=localStorage.getItem("theme-manual"),t;if(m){t=localStorage.getItem("theme")}else{var h=new Date().getHours();t=(h>=7&&h<18)?"light":"dark"}document.documentElement.setAttribute("data-theme",t||"dark")})()` }} />
+      </head>
       <body className={`${rubik.variable} ${bricolage.variable}`}>
         <script
           type="application/ld+json"

@@ -35,7 +35,7 @@ export function Reveal({ children, className, delay = 0 }: RevealProps) {
             doReveal();
           }
         },
-        { threshold: 0.01 }
+        { threshold: 0.08 }
       );
       io.observe(el);
 
@@ -53,10 +53,10 @@ export function Reveal({ children, className, delay = 0 }: RevealProps) {
     ? {
         opacity: 1,
         transform: "translateY(0)",
-        transition: `opacity 700ms ${delay}ms cubic-bezier(0.16, 1, 0.3, 1), transform 700ms ${delay}ms cubic-bezier(0.16, 1, 0.3, 1)`,
+        transition: `opacity 580ms ${delay}ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 580ms ${delay}ms cubic-bezier(0.25, 0.1, 0.25, 1)`,
         overflowAnchor: "none",
       }
-    : { opacity: 0, transform: "translateY(64px)", overflowAnchor: "none" };
+    : { opacity: 0, transform: "translateY(22px)", overflowAnchor: "none" };
 
   return (
     <div ref={ref} className={className ?? ""} style={style}>

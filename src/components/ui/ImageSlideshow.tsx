@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 
 interface ImageSlideshowProps {
@@ -24,13 +25,14 @@ export function ImageSlideshow({ images, interval = 3500 }: ImageSlideshowProps)
   return (
     <>
       {images.map((src, i) => (
-        <img
+        <Image
           key={src}
           src={src}
           alt=""
+          fill
           className="work-card-img"
           loading={i === 0 ? "eager" : "lazy"}
-          decoding="async"
+          sizes="(max-width: 900px) 100vw, 50vw"
           style={{
             opacity: i === current ? 1 : 0,
             transition: "opacity 800ms ease",

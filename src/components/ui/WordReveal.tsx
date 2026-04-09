@@ -18,17 +18,14 @@ interface WordRevealProps {
  */
 export function WordReveal({ text, className = "", delay = 0, stagger = 60, inline = false }: WordRevealProps) {
   const containerRef = useRef<HTMLSpanElement>(null);
-  const [visible, setVisible] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
+  const [visible, setVisible] = useState(reducedMotion);
 
   // Split preserving <em>-style markup tokens
   const words = text.split(/(\s+)/).filter((w) => w.trim().length > 0);
 
   useEffect(() => {
-    if (reducedMotion) {
-      setVisible(true);
-      return;
-    }
+    if (reducedMotion) return;
 
     const el = containerRef.current;
     if (!el) return;

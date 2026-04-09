@@ -1,19 +1,22 @@
-:root {
-  /* ─── Colors ─────────────────────────────────────────── */
-  --color-bg: #07080c;
-  --color-bg-elevated: #0f1118;
-  --color-surface: #151823;
-  --color-surface-2: #1c2030;
-  --color-text: #f3f6ff;
-  --color-text-soft: #6b7280;
+/* ─── Light mode (default) ────────────────────────────── */
+:root, [data-theme="light"] {
+  --color-bg: #F9F9F7;
+  --color-bg-elevated: #FFFFFF;
+  --color-surface: #F0EFF4;
+  --color-surface-2: #E8E6EF;
+  --color-text: #1a1a2e;
+  --color-text-soft: #6B6B80;
 
-  --color-primary: #7D53FA;
+  --color-primary: #7a56f2;
   --color-secondary: #7D53FA;
-  --color-accent-blue: #A78BFA;
-  --color-accent-green: #C4B5FD;
-  --color-accent-white: #F0EEFF;
+  --color-accent-blue: #7D53FA;
+  --color-accent-green: #7D53FA;
+  --color-accent-white: #1a1a2e;
 
-  --shadow-soft: 0 14px 42px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --ease-settle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-gentle: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --duration-reveal: 580ms;
 
   /* ─── Type Scale — 5 levels ──────────────────────────── */
   --type-statement: clamp(3.5rem, 14vw, 13rem);   /* hero headline */
@@ -31,4 +34,22 @@
   --radius-card: 6px;
   --radius-pill: 999px;
   --radius-soft: 4px;
+}
+
+/* ─── Dark mode ───────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-bg: #07080c;
+  --color-bg-elevated: #0f1118;
+  --color-surface: #151823;
+  --color-surface-2: #1c2030;
+  --color-text: #f3efff;
+  --color-text-soft: #b5a7dc;
+
+  --color-primary: #7a56f2;
+  --color-secondary: #8e6af6;
+  --color-accent-blue: #ab93f6;
+  --color-accent-green: #c1aff8;
+  --color-accent-white: #f0eaff;
+
+  --shadow-soft: 0 14px 36px rgba(10, 6, 19, 0.38);
 }

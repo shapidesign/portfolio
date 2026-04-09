@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProjectHeaderObserver } from "@/components/ui/ProjectHeaderObserver";
-import { ProjectNavBar } from "@/components/ui/ProjectNavBar";
-import { ProjectDetailContent, ProjectBodyBlock } from "@/components/ui/ProjectDetailContent";
+import { ProjectDetailContent, ProjectNarrativeSections } from "@/components/ui/ProjectDetailContent";
+import { ProjectHeroImage } from "@/components/ui/ProjectHeroImage";
+import { NextProjectCard } from "@/components/ui/NextProjectCard";
 import { getProjectBySlug, projects } from "@/data/projects";
 import { TetrisLoaderEmbed } from "@/components/ui/TetrisLoaderEmbed";
 import { DigitalHandprintEmbed } from "./DigitalHandprintEmbed";
@@ -67,6 +68,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const isDigitalHandprint = slug === "digital-handprint";
   const isDavidka = slug === "small-world-problems";
   const hasScrollImages = !isDigitalHandprint && !isDavidka && project.images.length > 0;
+  const currentIndex = projects.findIndex((entry) => entry.slug === slug);
+  const nextProject = projects[(currentIndex + 1) % projects.length];
 
   const embedNode = isDigitalHandprint ? (
     <DigitalHandprintEmbed />
@@ -80,6 +83,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       (src) =>
         !(slug === "animal-to-logo" && src.includes("alma + text.webp"))
     );
+
+  const leadImage = scrollGalleryImages[0] || project.images[0];
+  const editorialImages = scrollGalleryImages.slice(1);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -108,6 +114,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <ProjectDetailContent project={project} />
       </ProjectHeaderObserver>
 
+      {leadImage && (
+        <Reveal>
+          <ProjectHeroImage src={leadImage} alt={`${project.title} hero`} />
+        </Reveal>
+      )}
+
       {embedNode && (
         <Reveal>
           <section className="project-media-shell">
@@ -116,40 +128,24 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </Reveal>
       )}
 
-      <ProjectBodyBlock
-        bodyHtml={project.description || project.bodyText}
-        project={project}
-      />
+      <ProjectNarrativeSections project={project} />
 
       {hasScrollImages && (
-        <section
-          className={
-            slug === "animal-to-logo"
-              ? "project-scroll-gallery project-bento-gallery project-bento-gallery--alma"
-              : "project-scroll-gallery"
-          }
-        >
-          {scrollGalleryImages.map((src, index) => {
-            const isAlmaBento = slug === "animal-to-logo";
-            const isAlmaSvg = isAlmaBento && /\.svg(\?|$)/i.test(src);
-            return (
-              <Reveal key={`${src}-${index}`} delay={index === 0 ? 0 : 60}>
+        <section className="project-editorial-work">
+          {editorialImages.map((src, index) => (
+            <Reveal key={`${src}-${index}`} delay={index * 50}>
+              <figure className={`project-editorial-item ${index % 3 === 1 ? "project-editorial-item--half" : "project-editorial-item--full"}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={src}
-                  alt={`${project.title} - Image ${index + 1}`}
-                  className={[
-                    "project-scroll-image",
-                    isAlmaBento && "project-scroll-image--bento",
-                    isAlmaSvg && "project-scroll-image--bento-svg"
-                  ]
-                    .filter(Boolean)
-                    .join(" ")}
-                  loading={index === 0 ? "eager" : "lazy"}
+                  alt={`${project.title} - Image ${index + 2}`}
+                  className="project-editorial-image"
+                  loading="lazy"
+                  decoding="async"
                 />
-              </Reveal>
-            );
-          })}
+              </figure>
+            </Reveal>
+          ))}
 
           {slug === "no-gatekeeping" && (
             <Reveal>
@@ -159,7 +155,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </section>
       )}
 
-      <ProjectNavBar projects={projects} currentSlug={slug} />
+      <Reveal>
+        <NextProjectCard project={nextProject} />
+      </Reveal>
     </main>
   );
 }
