@@ -40,7 +40,11 @@ export const metadata: Metadata = {
     description: "Design is never my style. It's your problem and our solution. Portfolio of Yehonatan Shapira — branding, typography, and digital design.",
   },
   alternates: {
-    canonical: "https://www.shapidesign.com",
+    canonical: "https://www.shapidesign.com/",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }]
