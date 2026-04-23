@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Rubik, Bricolage_Grotesque } from "next/font/google";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
 import { IntroLoader } from "@/components/ui/IntroLoader";
@@ -109,6 +110,18 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `(function(){var m=localStorage.getItem("theme-manual"),t;if(m){t=localStorage.getItem("theme")}else{var h=new Date().getHours();t=(h>=7&&h<18)?"light":"dark"}document.documentElement.setAttribute("data-theme",t||"dark")})()` }} />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-KND8EK229Z"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-KND8EK229Z');
+          `}
+        </Script>
       </head>
       <body className={`${rubik.variable} ${bricolage.variable}`}>
         <script
