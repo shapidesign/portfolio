@@ -15,6 +15,7 @@
     "@chenglou/pretext": "^0.0.4",
     "@google/stitch-sdk": "^0.0.3",
     "@notionhq/client": "^5.9.0",
+    "@vercel/analytics": "^2.0.1",
     "motion": "^12.34.1",
     "next": "latest",
     "react": "latest",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Rubik, Bricolage_Grotesque } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
 import { IntroLoader } from "@/components/ui/IntroLoader";
 import { RouteTransition } from "@/components/ui/RouteTransition";
@@ -139,6 +140,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             </div>
           </ProjectProvider>
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );
