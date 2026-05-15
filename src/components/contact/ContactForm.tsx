@@ -6,31 +6,32 @@ import { AnimatePresence } from "motion/react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
+import { STAR_PATH_2D, STAR_VIEWBOX } from "@/components/solar/star-path";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 
-// Full-circle burst — 20 particles, deterministic for SSR safety
+// Star firework — 20 particles in a full ring, deterministic for SSR safety.
 const PARTICLES = [
-  { id:  0, x:   0, y: -90, color: "#7D53FA", size: 9,  round: false },
-  { id:  1, x:  44, y: -78, color: "#A78BFA", size: 7,  round: true  },
-  { id:  2, x:  78, y: -44, color: "#C4B5FD", size: 8,  round: false },
-  { id:  3, x:  90, y:   0, color: "#9B7AFF", size: 6,  round: true  },
-  { id:  4, x:  78, y:  44, color: "#A78BFA", size: 7,  round: false },
-  { id:  5, x:  44, y:  78, color: "#7D53FA", size: 8,  round: true  },
-  { id:  6, x:   0, y:  90, color: "#C4B5FD", size: 6,  round: false },
-  { id:  7, x: -44, y:  78, color: "#A78BFA", size: 9,  round: true  },
-  { id:  8, x: -78, y:  44, color: "#7D53FA", size: 7,  round: false },
-  { id:  9, x: -90, y:   0, color: "#C4B5FD", size: 8,  round: true  },
-  { id: 10, x: -78, y: -44, color: "#9B7AFF", size: 6,  round: false },
-  { id: 11, x: -44, y: -78, color: "#A78BFA", size: 7,  round: true  },
-  { id: 12, x:  22, y: -55, color: "#C4B5FD", size: 5,  round: false },
-  { id: 13, x: -22, y: -55, color: "#7D53FA", size: 5,  round: true  },
-  { id: 14, x:  55, y: -22, color: "#A78BFA", size: 5,  round: false },
-  { id: 15, x: -55, y: -22, color: "#9B7AFF", size: 5,  round: true  },
-  { id: 16, x:  55, y:  22, color: "#7D53FA", size: 4,  round: false },
-  { id: 17, x: -55, y:  22, color: "#A78BFA", size: 4,  round: true  },
-  { id: 18, x:  22, y:  55, color: "#C4B5FD", size: 4,  round: false },
-  { id: 19, x: -22, y:  55, color: "#9B7AFF", size: 4,  round: true  },
+  { id:  0, x:   0, y: -90, color: "#ffffff", size: 18, rot:  20 },
+  { id:  1, x:  44, y: -78, color: "#dac9ff", size: 14, rot: -30 },
+  { id:  2, x:  78, y: -44, color: "#a98bff", size: 16, rot:  90 },
+  { id:  3, x:  90, y:   0, color: "#9bd9ff", size: 12, rot:  10 },
+  { id:  4, x:  78, y:  44, color: "#dac9ff", size: 15, rot: -60 },
+  { id:  5, x:  44, y:  78, color: "#7a56f2", size: 16, rot: 120 },
+  { id:  6, x:   0, y:  90, color: "#ffffff", size: 12, rot:  45 },
+  { id:  7, x: -44, y:  78, color: "#a98bff", size: 18, rot: -90 },
+  { id:  8, x: -78, y:  44, color: "#7a56f2", size: 14, rot:  30 },
+  { id:  9, x: -90, y:   0, color: "#9bd9ff", size: 16, rot: 200 },
+  { id: 10, x: -78, y: -44, color: "#dac9ff", size: 12, rot: -45 },
+  { id: 11, x: -44, y: -78, color: "#a98bff", size: 14, rot:  60 },
+  { id: 12, x:  22, y: -55, color: "#ffffff", size: 10, rot: -20 },
+  { id: 13, x: -22, y: -55, color: "#7a56f2", size: 10, rot:  80 },
+  { id: 14, x:  55, y: -22, color: "#a98bff", size: 10, rot:  10 },
+  { id: 15, x: -55, y: -22, color: "#9bd9ff", size: 10, rot: -75 },
+  { id: 16, x:  55, y:  22, color: "#dac9ff", size:  8, rot:  35 },
+  { id: 17, x: -55, y:  22, color: "#a98bff", size:  8, rot: -15 },
+  { id: 18, x:  22, y:  55, color: "#ffffff", size:  8, rot: 110 },
+  { id: 19, x: -22, y:  55, color: "#9bd9ff", size:  8, rot: -55 },
 ];
 
 export function ContactForm() {
@@ -85,19 +86,22 @@ export function ContactForm() {
           {!reducedMotion && (
             <div key={burstKey} className="form-burst form-burst-center" aria-hidden>
               {PARTICLES.map((p) => (
-                <motion.span
+                <motion.svg
                   key={p.id}
                   className="form-burst-particle"
+                  viewBox={STAR_VIEWBOX}
                   style={{
                     width: p.size,
                     height: p.size,
-                    background: p.color,
-                    borderRadius: p.round ? "50%" : "2px",
+                    color: p.color,
+                    filter: `drop-shadow(0 0 6px ${p.color})`,
                   }}
-                  initial={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-                  animate={{ opacity: 0, x: p.x * 1.4, y: p.y * 1.4, scale: 0, rotate: 360 }}
+                  initial={{ opacity: 1, x: 0, y: 0, scale: 0.6, rotate: p.rot }}
+                  animate={{ opacity: 0, x: p.x * 1.4, y: p.y * 1.4, scale: 0.2, rotate: p.rot + 540 }}
                   transition={{ duration: 0.9, ease: "easeOut", delay: p.id * 0.018 }}
-                />
+                >
+                  <path d={STAR_PATH_2D} fill="currentColor" />
+                </motion.svg>
               ))}
             </div>
           )}

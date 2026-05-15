@@ -1,13 +1,18 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 export function AnimatedCursor() {
+  const pathname = usePathname();
   const dotRef = useRef<HTMLSpanElement>(null);
   const ringRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    // The solar homepage uses native pointer feedback; the custom cursor would
+    // fight the canvas hover state and is heavy to maintain at 60fps.
+    if (pathname === "/") return;
     const mediaQuery = window.matchMedia("(pointer: fine)");
     if (!mediaQuery.matches) return;
 
@@ -65,7 +70,9 @@ export function AnimatedCursor() {
       window.removeEventListener("mouseover", onOver, true);
       document.body.classList.remove("custom-cursor-enabled");
     };
-  }, []);
+  }, [pathname]);
+
+  if (pathname === "/") return null;
 
   return (
     <>

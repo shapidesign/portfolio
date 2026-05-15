@@ -15,16 +15,21 @@
     "@chenglou/pretext": "^0.0.4",
     "@google/stitch-sdk": "^0.0.3",
     "@notionhq/client": "^5.9.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.6.1",
+    "@react-three/postprocessing": "^3.0.4",
     "@vercel/analytics": "^2.0.1",
     "motion": "^12.34.1",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "@types/three": "^0.184.0",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "typescript": "latest"

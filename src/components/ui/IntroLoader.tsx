@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import * as motion from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 
@@ -58,18 +59,21 @@ function OutlineStar({ color, size }: { color: string; size: number }) {
 }
 
 export function IntroLoader() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(shouldShowLoader);
-
   const dismiss = useCallback(() => setVisible(false), []);
 
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || pathname === "/") return;
     window.sessionStorage.setItem(LOADER_KEY, "1");
 
     const timer = setTimeout(dismiss, 1000);
 
     return () => clearTimeout(timer);
-  }, [visible, dismiss]);
+  }, [visible, dismiss, pathname]);
+
+  // The solar homepage owns its own backdrop; skip the global intro loader there.
+  if (pathname === "/") return null;
 
   return (
     <AnimatePresence>

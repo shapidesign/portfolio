@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Rubik, Bricolage_Grotesque } from "next/font/google";
+import { Rubik, Bricolage_Grotesque, Roboto_Mono, Science_Gothic } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
 import { IntroLoader } from "@/components/ui/IntroLoader";
@@ -70,6 +70,17 @@ const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
 });
 
+const robotoMono = Roboto_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-roboto-mono",
+});
+
+const scienceGothic = Science_Gothic({
+  subsets: ["latin"],
+  variable: "--font-science-gothic",
+});
+
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
@@ -110,7 +121,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){var m=localStorage.getItem("theme-manual"),t;if(m){t=localStorage.getItem("theme")}else{var h=new Date().getHours();t=(h>=7&&h<18)?"light":"dark"}document.documentElement.setAttribute("data-theme",t||"dark")})()` }} />
+        <link
+          rel="preload"
+          href="/fonts/narkiss-yair-variable.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-KND8EK229Z"
           strategy="afterInteractive"
@@ -124,7 +141,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           `}
         </Script>
       </head>
-      <body className={`${rubik.variable} ${bricolage.variable}`}>
+      <body className={`${rubik.variable} ${bricolage.variable} ${robotoMono.variable} ${scienceGothic.variable}`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify([personJsonLd, websiteJsonLd]) }}

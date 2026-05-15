@@ -1,5 +1,19 @@
 @import "../styles/tokens.css";
 
+@font-face {
+  font-family: "narkiss-yair-variable";
+  src: url("/fonts/narkiss-yair-variable.woff2") format("woff2");
+  font-weight: 200 700;
+  font-style: normal;
+  font-stretch: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-hebrew-body: "narkiss-yair-variable", var(--font-rubik), "Rubik", sans-serif;
+  --font-hebrew-body-settings: "MONO" 0, "wght" 400;
+}
+
 /* David Libre / Davidka: loaded for the Small World Problems embed + card preview only */
 @font-face {
   font-family: "DavidLibre";
@@ -28,6 +42,60 @@
 @font-face {
   font-family: "Davidka";
   src: url("/fonts/Davidka-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Reisinger Neta — display/header face for the solar-system homepage */
+@font-face {
+  font-family: "Reisinger Neta";
+  src: url("/fonts/Reisinger-Neta-Light.woff2") format("woff2"),
+       url("/fonts/Reisinger-Neta-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Reisinger Neta";
+  src: url("/fonts/Reisinger-Neta-Regular.woff2") format("woff2"),
+       url("/fonts/Reisinger-Neta-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Reisinger Neta";
+  src: url("/fonts/Reisinger-Neta-Medium.woff2") format("woff2"),
+       url("/fonts/Reisinger-Neta-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Reisinger Neta";
+  src: url("/fonts/Reisinger-Neta-Bold.woff2") format("woff2"),
+       url("/fonts/Reisinger-Neta-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Shaliah Sans — Hebrew monospace body face for the solar homepage */
+@font-face {
+  font-family: "Shaliah Sans";
+  src: url("/fonts/shaliahsans/SHALSRG_.TTF") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Shaliah Sans";
+  src: url("/fonts/shaliahsans/SHALSB__.TTF") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -69,6 +137,10 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+img {
+  border-radius: var(--radius-image);
 }
 
 button,
@@ -1124,7 +1196,7 @@ p {
 }
 
 .davidka-tw-front {
-  font-family: "DavidLibre", serif;
+  font-family: "Davidka", serif;
   color: var(--color-text);
   opacity: 1;
 }
@@ -1437,6 +1509,8 @@ p {
   letter-spacing: -0.03em;
   color: var(--color-text);
   margin-top: 0.35rem;
+  text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 .meta-row {
@@ -1544,7 +1618,7 @@ p {
 
 .image-carousel {
   position: relative;
-  border-radius: var(--radius-soft);
+  border-radius: var(--radius-image);
   overflow: clip;
 }
 
@@ -1566,7 +1640,7 @@ p {
   scroll-snap-align: center;
   position: relative;
   background: var(--color-surface-2);
-  border-radius: var(--radius-soft);
+  border-radius: var(--radius-image);
   overflow: hidden;
   min-height: 200px;
   max-height: min(70vh, 640px);
@@ -1581,7 +1655,7 @@ p {
   height: auto;
   max-height: min(70vh, 640px);
   object-fit: contain;
-  border-radius: var(--radius-soft);
+  border-radius: var(--radius-image);
 }
 
 .carousel-btn {
@@ -1655,7 +1729,7 @@ p {
 .project-stack-image {
   width: 100%;
   height: auto;
-  border-radius: var(--radius-soft);
+  border-radius: var(--radius-image);
   background: var(--color-surface-2);
   display: block;
   transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -1679,7 +1753,7 @@ p {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: var(--radius-soft);
+  border-radius: var(--radius-image);
   background: var(--color-surface-2);
 }
 
@@ -1707,7 +1781,7 @@ p {
   position: relative;
   min-height: clamp(168px, 42vw, 240px);
   overflow: hidden;
-  border-radius: var(--radius-soft);
+  border-radius: var(--radius-image);
   background-color: #ecebe6;
 }
 
@@ -1901,7 +1975,7 @@ p {
   place-items: center;
   background: #ffffff;
   border: 1px solid color-mix(in srgb, var(--color-accent-blue) 30%, transparent);
-  border-radius: var(--radius-soft);
+  border-radius: var(--radius-image);
   padding: 2rem 1rem;
   cursor: pointer;
   overflow: hidden;
@@ -1962,12 +2036,12 @@ p {
   resize: vertical;
   min-height: 80px;
   border: 1px solid color-mix(in srgb, var(--color-accent-white) 18%, transparent);
-  border-radius: 10px;
+  border-radius: var(--radius-image);
   background: var(--color-surface);
   color: var(--color-text);
   padding: 0.75rem 1rem;
   font-size: 1rem;
-  font-family: "DavidLibre", serif;
+  font-family: "Davidka", serif;
 }
 
 .davidka-textarea:focus {
@@ -2011,7 +2085,7 @@ p {
 .davidka-col-paper {
   background: var(--color-surface);
   border: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
-  border-radius: 10px;
+  border-radius: var(--radius-image);
   padding: 1.5rem 1.2rem;
   min-height: 180px;
   font-size: 1.05rem;
@@ -2865,7 +2939,7 @@ p {
 }
 
 /* --- Hebrew font & typography tightening --- */
-/* Rubik for site Hebrew; David Libre / Davidka only under .davidka-embed & .davidka-typewriter-preview */
+/* Typekit body copy; David Libre / Davidka only under .davidka-embed & .davidka-typewriter-preview */
 
 [dir="rtl"] {
   font-kerning: auto;
@@ -2877,11 +2951,15 @@ p {
 [dir="rtl"] .work-card-title,
 [dir="rtl"] .project-detail h1,
 [dir="rtl"] .body-section-label {
-  font-family: var(--font-rubik), "Rubik", sans-serif;
+  font-family: var(--font-hebrew-body);
+  font-style: normal;
+  font-variation-settings: var(--font-hebrew-body-settings);
 }
 
 [dir="rtl"] .button {
-  font-family: var(--font-rubik), "Rubik", sans-serif;
+  font-family: var(--font-hebrew-body);
+  font-style: normal;
+  font-variation-settings: var(--font-hebrew-body-settings);
   letter-spacing: normal;
 }
 
@@ -2894,7 +2972,39 @@ p {
 }
 
 [dir="rtl"] body {
+  font-family: var(--font-hebrew-body) !important;
+  font-style: normal;
+  font-variation-settings: var(--font-hebrew-body-settings);
   line-height: 1.35;
+}
+
+[dir="rtl"] :where(
+  p,
+  li,
+  dd,
+  blockquote,
+  figcaption,
+  .lead,
+  .subtitle,
+  .hero-copy,
+  .project-context-detail,
+  .body-section-text,
+  .body-list,
+  .detail-block p,
+  .project-narrative-copy,
+  .project-opener-line,
+  .project-card-descriptor,
+  .next-project-copy,
+  .contact-availability,
+  .form-sent-copy,
+  .solar-info-text,
+  .solar-drawer-body,
+  .solar-voyage-hud,
+  .solar-list
+) {
+  font-family: var(--font-hebrew-body) !important;
+  font-style: normal !important;
+  font-variation-settings: var(--font-hebrew-body-settings) !important;
 }
 
 [dir="rtl"] .lead {
@@ -3586,6 +3696,8 @@ p.form-sent-copy:hover {
   max-width: 62ch;
   font-style: italic;
   color: var(--color-text);
+  text-wrap: pretty;
+  overflow-wrap: break-word;
 }
 
 .project-opener-meta {
@@ -3618,12 +3730,14 @@ p.form-sent-copy:hover {
   margin-inline: calc(50% - 50vw);
   overflow: hidden;
   max-height: 72vh;
+  border-radius: var(--radius-image);
 }
 
 .project-hero-image {
   width: 100%;
   display: block;
   object-fit: cover;
+  object-position: center;
   transform: translateY(0) scale(1.03);
   transition: transform 180ms linear;
 }
@@ -3637,7 +3751,7 @@ p.form-sent-copy:hover {
 .project-narrative-block {
   max-width: 62ch;
   transition: transform 240ms var(--ease-settle), background-color 240ms var(--ease-settle);
-  border-radius: 12px;
+  border-radius: var(--radius-image);
   padding: 0.45rem 0.65rem;
 }
 
@@ -3652,12 +3766,16 @@ p.form-sent-copy:hover {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-text-soft);
+  text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 .project-narrative-copy {
   color: var(--color-text);
   line-height: 1.7;
   white-space: pre-line;
+  text-wrap: pretty;
+  overflow-wrap: break-word;
 }
 
 .project-editorial-work {
@@ -3678,6 +3796,7 @@ p.form-sent-copy:hover {
   display: block;
   width: 100%;
   height: auto;
+  border-radius: var(--radius-image);
 }
 
 .next-project-section {
@@ -3695,7 +3814,7 @@ p.form-sent-copy:hover {
   color: var(--color-text);
   background: color-mix(in srgb, var(--color-primary) 11%, var(--color-surface));
   border: 1px solid color-mix(in srgb, var(--color-accent-blue) 36%, transparent);
-  border-radius: 12px;
+  border-radius: var(--radius-image);
   transition: transform 260ms var(--ease-settle), box-shadow 260ms var(--ease-settle);
 }
 
@@ -3709,11 +3828,15 @@ p.form-sent-copy:hover {
 .next-project-copy h2 {
   color: var(--color-accent-white);
   font-size: clamp(1.15rem, 2.5vw, 1.55rem);
+  text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 .next-project-copy p {
   color: var(--color-text-soft);
   font-size: 0.92rem;
+  text-wrap: pretty;
+  overflow-wrap: break-word;
 }
 
 .next-project-cta {
@@ -3850,6 +3973,16 @@ p.form-sent-copy:hover {
 
 [dir="rtl"] .work-section {
   padding-block-start: clamp(0.25rem, 0.9vw, 0.6rem);
+}
+
+/* Final RTL font guard: keep Hebrew copy on Narkiss, with Rubik only as fallback. */
+html[dir="rtl"] body,
+html[lang="he"] body,
+html[dir="rtl"] body :where(p, li, a, button, label, input, textarea, dd, blockquote, figcaption),
+html[lang="he"] body :where(p, li, a, button, label, input, textarea, dd, blockquote, figcaption) {
+  font-family: "narkiss-yair-variable", var(--font-rubik), "Rubik", sans-serif !important;
+  font-style: normal !important;
+  font-variation-settings: "MONO" 0, "wght" 400 !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

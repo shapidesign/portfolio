@@ -32,6 +32,7 @@
 
   /* ─── Shape ──────────────────────────────────────────── */
   --radius-card: 6px;
+  --radius-image: 12px;
   --radius-pill: 999px;
   --radius-soft: 4px;
 }

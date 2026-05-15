@@ -39,10 +39,7 @@ function applyDirAndLang(lang: Lang) {
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangRaw] = useState<Lang>(() => {
-    if (typeof window === "undefined") return "en";
-    return readStoredLang() ?? "en";
-  });
+  const [lang, setLangRaw] = useState<Lang>("en");
 
   const setLang = useCallback((next: Lang) => {
     setLangRaw(next);
@@ -55,15 +52,26 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const stored = readStoredLang();
     if (stored) {
-      applyDirAndLang(stored);
+      const timer = window.setTimeout(() => {
+        setLangRaw(stored);
+        applyDirAndLang(stored);
+      }, 0);
+      return () => window.clearTimeout(timer);
+    }
+
+    const initialTimer = window.setTimeout(() => {
+      applyDirAndLang(lang);
+    }, 0);
+
+    if (typeof AbortSignal === "undefined" || !("timeout" in AbortSignal)) {
+      window.clearTimeout(initialTimer);
       return;
     }
 
-    applyDirAndLang(lang);
-
     let cancelled = false;
+    const signal = AbortSignal.timeout(3000);
 
-    fetch("https://ipapi.co/json/", { signal: AbortSignal.timeout(3000) })
+    fetch("https://ipapi.co/json/", { signal })
       .then((res) => res.json())
       .then((data) => {
         if (cancelled) return;
@@ -75,6 +83,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
     return () => {
       cancelled = true;
+      window.clearTimeout(initialTimer);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
