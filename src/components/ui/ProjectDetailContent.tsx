@@ -3,6 +3,7 @@
 import { Reveal } from "@/components/ui/Reveal";
 import { StarMark } from "@/components/ui/StarMark";
 import { useLanguage } from "@/context/LanguageContext";
+import { preventOrphan } from "@/i18n/typography";
 import type { Project } from "@/types/project";
 
 type Props = {
@@ -20,12 +21,12 @@ export function ProjectDetailContent({ project }: Props) {
     <>
       <Reveal>
         <section className="project-cinematic-opener">
-          <h1>{title}</h1>
-          {opener && <p className="project-opener-line">{opener}</p>}
+          <h1>{preventOrphan(title)}</h1>
+          {opener && <p className="project-opener-line">{preventOrphan(opener)}</p>}
           <p className="project-opener-meta">
-            {status}
+            {status ? preventOrphan(status) : null}
             <StarMark className="project-meta-star" size={11} />
-            {discipline}
+            {discipline ? preventOrphan(discipline) : null}
             <StarMark className="project-meta-star" size={11} />
             {project.year}
           </p>
@@ -56,24 +57,24 @@ export function ProjectNarrativeSections({ project }: NarrativeProps) {
       {challenge && (
         <Reveal>
           <article className="project-narrative-block">
-            <h2 className="project-narrative-heading">{challengeHeading}</h2>
-            <p className="project-narrative-copy">{challenge}</p>
+            <h2 className="project-narrative-heading">{preventOrphan(challengeHeading)}</h2>
+            <p className="project-narrative-copy">{preventOrphan(challenge)}</p>
           </article>
         </Reveal>
       )}
       {approach && (
         <Reveal>
           <article className="project-narrative-block">
-            <h2 className="project-narrative-heading">{approachHeading}</h2>
-            <p className="project-narrative-copy">{approach}</p>
+            <h2 className="project-narrative-heading">{preventOrphan(approachHeading)}</h2>
+            <p className="project-narrative-copy">{preventOrphan(approach)}</p>
           </article>
         </Reveal>
       )}
       {decision && (
         <Reveal>
           <article className="project-narrative-block">
-            <h2 className="project-narrative-heading">{decisionHeading}</h2>
-            <p className="project-narrative-copy">{decision}</p>
+            <h2 className="project-narrative-heading">{preventOrphan(decisionHeading)}</h2>
+            <p className="project-narrative-copy">{preventOrphan(decision)}</p>
           </article>
         </Reveal>
       )}
