@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { SITE_HOST } from "@/lib/site";
 
 export const dynamic = "force-static";
 export const alt = "Yehonatan Shapira - Designer";
@@ -82,7 +83,7 @@ export default function OGImage() {
             fontWeight: 600,
           }}
         >
-          shapidesign.com
+          {SITE_HOST}
         </div>
       </div>
     ),

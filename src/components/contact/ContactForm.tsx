@@ -179,7 +179,7 @@ export function ContactForm() {
           )}
 
           <form className="contact-form" method="POST" aria-label="Contact form" onSubmit={handleSubmit}>
-            <input type="hidden" name="_subject" value="New portfolio inquiry from yehonatanshapira.com" />
+            <input type="hidden" name="_subject" value="New portfolio inquiry from alefsofit.com" />
 
             <label htmlFor="name">{s.formName}</label>
             <input id="name" name="name" type="text" required autoComplete="name" />

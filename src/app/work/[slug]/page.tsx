@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProjectCaseStudy } from "@/components/ui/ProjectCaseStudy";
 import { getProjectBySlug, projects } from "@/data/projects";
+import { SITE_NAME, SITE_ORIGIN } from "@/lib/site";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   const description = (project.description || project.summary || "")
     .replace(/<[^>]*>?/gm, "")
     .slice(0, 160);
-  const url = `https://www.shapidesign.com/work/${slug}`;
+  const url = `${SITE_ORIGIN}/work/${slug}/`;
   const images =
     project.images.length > 0
       ? [{ url: project.images[0], width: 1200, height: 630, alt: `${project.title} — project by Yehonatan Shapira` }]
@@ -32,14 +33,14 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return {
     title,
     description,
-    keywords: [...project.tags, "Yehonatan Shapira", "Shapi Design", "design project"],
+    keywords: [...project.tags, "Yehonatan Shapira", "Alef Sofit", "design project"],
     openGraph: {
       title,
       description,
       url,
       type: "article",
       images,
-      siteName: "Shapi Design — Yehonatan Shapira"
+      siteName: SITE_NAME
     },
     twitter: {
       card: "summary_large_image",
@@ -64,12 +65,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     "name": project.title,
     "description": (project.description || project.summary || "").replace(/<[^>]*>?/gm, "").slice(0, 300),
     "image": project.images[0] || "",
-    "url": `https://www.shapidesign.com/work/${project.slug}`,
-    "author": { "@id": "https://www.shapidesign.com/#person" },
-    "creator": { "@id": "https://www.shapidesign.com/#person" },
+    "url": `${SITE_ORIGIN}/work/${project.slug}/`,
+    "author": { "@id": `${SITE_ORIGIN}/#person` },
+    "creator": { "@id": `${SITE_ORIGIN}/#person` },
     "datePublished": project.year,
     "keywords": project.tags,
-    "isPartOf": { "@id": "https://www.shapidesign.com/#website" },
+    "isPartOf": { "@id": `${SITE_ORIGIN}/#website` },
   };
 
   return (

@@ -1,10 +1,11 @@
 import { MetadataRoute } from "next";
 import { projects } from "@/data/projects";
+import { SITE_ORIGIN } from "@/lib/site";
 
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.shapidesign.com";
+  const baseUrl = SITE_ORIGIN;
   /** Match `trailingSlash: true` and on-page canonicals (e.g. /work/). */
   const u = (path: string) =>
     path === "" || path === "/"

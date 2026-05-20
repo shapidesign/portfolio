@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { SITE_NAME, SITE_ORIGIN } from "@/lib/site";
 import { Rubik, Bricolage_Grotesque, Roboto_Mono, Science_Gothic } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
@@ -12,7 +13,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.shapidesign.com"),
+  metadataBase: new URL(SITE_ORIGIN),
   title: {
     default: "Yehonatan Shapira — Product & Visual Designer",
     template: "%s — Yehonatan Shapira"
@@ -20,19 +21,19 @@ export const metadata: Metadata = {
   description: "Yehonatan Shapira (Shapi) is a product and visual designer specializing in branding, typography, digital design, and creative direction. View selected work and get in touch.",
   keywords: [
     "Yehonatan Shapira", "Yehonatan Shapira designer", "Yehonatan Shapira portfolio",
-    "Shapi Design", "Shapi", "shapidesign",
+    "Alef Sofit", "alefsofit", "Shapi Design", "Shapi", "shapidesign",
     "visual designer", "graphic designer", "visual communication designer",
     "branding designer", "brand identity", "logo designer",
     "typography designer", "digital designer", "creative direction",
     "Israeli designer", "design portfolio", "freelance designer",
   ],
-  authors: [{ name: "Yehonatan Shapira", url: "https://www.shapidesign.com" }],
+  authors: [{ name: "Yehonatan Shapira", url: SITE_ORIGIN }],
   creator: "Yehonatan Shapira",
   openGraph: {
     title: "Yehonatan Shapira — Product & Visual Designer",
     description: "Design is never my style. It's your problem and our solution. Portfolio of Yehonatan Shapira — branding, typography, and digital design.",
-    url: "https://www.shapidesign.com",
-    siteName: "Shapi Design — Yehonatan Shapira",
+    url: SITE_ORIGIN,
+    siteName: SITE_NAME,
     locale: "en_US",
     type: "website",
   },
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
     description: "Design is never my style. It's your problem and our solution. Portfolio of Yehonatan Shapira — branding, typography, and digital design.",
   },
   alternates: {
-    canonical: "https://www.shapidesign.com/",
+    canonical: `${SITE_ORIGIN}/`,
   },
   robots: {
     index: true,
@@ -89,11 +90,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const personJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
-    "@id": "https://www.shapidesign.com/#person",
+    "@id": `${SITE_ORIGIN}/#person`,
     "name": "Yehonatan Shapira",
-    "alternateName": ["Shapi", "Shapi Design", "shapidesign"],
-    "url": "https://www.shapidesign.com",
-    "image": "https://www.shapidesign.com/opengraph-image",
+    "alternateName": ["Alef Sofit", "alefsofit", "Shapi", "Shapi Design", "shapidesign"],
+    "url": SITE_ORIGIN,
+    "image": `${SITE_ORIGIN}/opengraph-image`,
     "jobTitle": "Product & Visual Designer",
     "description": "Product and visual designer specializing in branding, typography, digital design, and creative direction.",
     "knowsAbout": [
@@ -110,12 +111,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "@id": "https://www.shapidesign.com/#website",
-    "name": "Shapi Design — Yehonatan Shapira",
-    "alternateName": ["Shapi Design", "Yehonatan Shapira Portfolio"],
-    "url": "https://www.shapidesign.com",
+    "@id": `${SITE_ORIGIN}/#website`,
+    "name": SITE_NAME,
+    "alternateName": ["Alef Sofit", "Shapi Design", "Yehonatan Shapira Portfolio"],
+    "url": SITE_ORIGIN,
     "description": "Portfolio of Yehonatan Shapira, visual communication and graphic designer.",
-    "publisher": { "@id": "https://www.shapidesign.com/#person" },
+    "publisher": { "@id": `${SITE_ORIGIN}/#person` },
   };
 
   return (
