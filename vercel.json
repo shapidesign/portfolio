@@ -1,0 +1,22 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "alefsofit.com" }],
+      "destination": "https://www.alefsofit.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "shapidesign.com" }],
+      "destination": "https://www.alefsofit.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.shapidesign.com" }],
+      "destination": "https://www.alefsofit.com/:path*",
+      "permanent": true
+    }
+  ]
+}

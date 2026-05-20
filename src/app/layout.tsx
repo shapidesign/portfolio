@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { SITE_NAME, SITE_ORIGIN } from "@/lib/site";
+import { LEGACY_DOMAIN_REDIRECT_SCRIPT, SITE_NAME, SITE_ORIGIN } from "@/lib/site";
 import { Rubik, Bricolage_Grotesque, Roboto_Mono, Science_Gothic } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
@@ -122,6 +122,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{ __html: LEGACY_DOMAIN_REDIRECT_SCRIPT }}
+        />
         <link
           rel="preload"
           href="/fonts/narkiss-yair-variable.woff2"
