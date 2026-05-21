@@ -91,7 +91,7 @@ const strings = {
     formSentBody: "Thanks for reaching out. I\u2019ll get back to you soon.",
     formSendAnother: "Send another",
     formError:
-      "Something went wrong. Please try again or email shapidesigns@gmail.com directly.",
+      "Something went wrong. Please try again or email itsalefsofit@gmail.com directly.",
 
     // Footer
     footerCopy: "Portfolio by Yehonatan Shapira.",
@@ -193,7 +193,7 @@ const strings = {
     formSentBody: "תודה שפניתם אליי. אחזור אליכם בהקדם.",
     formSendAnother: "שלחו עוד",
     formError:
-      "משהו השתבש. נסו שוב או שלחו מייל ל\u05be shapidesigns@gmail.com",
+      "משהו השתבש. נסו שוב או שלחו מייל ל\u05be itsalefsofit@gmail.com",
 
     footerCopy: "תיק עבודות של יהונתן שפירא.",
 

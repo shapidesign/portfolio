@@ -105,7 +105,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     "sameAs": [
       "https://www.linkedin.com/in/yehonatan-shapira"
     ],
-    "email": "mailto:shapidesigns@gmail.com",
+    "email": "mailto:itsalefsofit@gmail.com",
   };
 
   const websiteJsonLd = {

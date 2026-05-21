@@ -56,13 +56,14 @@ export function ContactForm() {
     }
 
     try {
-      const response = await fetch("https://formspree.io/f/meolqyap", {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         body: formData,
-        headers: { Accept: "application/json" }
       });
 
-      if (!response.ok) throw new Error("Failed to send message");
+      const data = (await response.json()) as { success?: boolean };
+
+      if (!response.ok || !data.success) throw new Error("Failed to send message");
 
       setStatus("success");
       setBurstKey((k) => k + 1);
@@ -179,7 +180,8 @@ export function ContactForm() {
           )}
 
           <form className="contact-form" method="POST" aria-label="Contact form" onSubmit={handleSubmit}>
-            <input type="hidden" name="_subject" value="New portfolio inquiry from alefsofit.com" />
+            <input type="hidden" name="access_key" value="37989257-76dd-42ba-b1b7-dc82662ace9a" />
+            <input type="hidden" name="subject" value="New portfolio inquiry from alefsofit.com" />
 
             <label htmlFor="name">{s.formName}</label>
             <input id="name" name="name" type="text" required autoComplete="name" />

@@ -25,8 +25,8 @@ export default function ContactPage() {
         <p className="subtitle" style={{ marginTop: "0.75rem" }}>
           {s.contactSubtitle}{" "}
           <bdi>
-            <a href="mailto:shapidesigns@gmail.com" className="text-link">
-              shapidesigns@gmail.com
+            <a href="mailto:itsalefsofit@gmail.com" className="text-link">
+              itsalefsofit@gmail.com
             </a>
           </bdi>
           <br />
