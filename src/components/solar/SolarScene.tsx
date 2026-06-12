@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import * as THREE from "three";
+import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import { Background } from "./Background";
 import { Sun } from "./Sun";
 import { Planet, type PlanetConfig } from "./Planet";
@@ -70,6 +71,20 @@ export function SolarScene({
         compact={compact}
       />
 
+      {/* Cinematic grade: emissives glow, edges fall into darkness.
+          Skipped on compact screens to keep mobile frame budget intact. */}
+      {!compact ? (
+        <EffectComposer multisampling={4}>
+          <Bloom
+            mipmapBlur
+            intensity={0.5}
+            luminanceThreshold={0.32}
+            luminanceSmoothing={0.85}
+            radius={0.7}
+          />
+          <Vignette eskil={false} offset={0.16} darkness={0.52} />
+        </EffectComposer>
+      ) : null}
     </Suspense>
   );
 }

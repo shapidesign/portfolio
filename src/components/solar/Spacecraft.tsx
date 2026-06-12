@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -14,10 +14,9 @@ type SpacecraftProps = {
   compact?: boolean;
 };
 
-const BODY = new THREE.Color("#f7f1ff");
-const BODY_SHADOW = new THREE.Color("#9f8cff");
+const HULL = new THREE.Color("#f7f1ff");
+const HULL_DARK = new THREE.Color("#6e5bc4");
 const GLASS = new THREE.Color("#66d9ef");
-const DETAIL = new THREE.Color("#21163f");
 
 // Flight duration tuned for "agile but smooth": fast enough to feel responsive,
 // long enough that the eye can read the arc and bank.
@@ -54,8 +53,7 @@ export function Spacecraft({
 }: SpacecraftProps) {
   const groupRef = useRef<THREE.Group>(null);
   const bodyRef = useRef<THREE.Group>(null);
-  const thrustRef = useRef<THREE.Mesh>(null);
-  const thrustMatRef = useRef<THREE.MeshBasicMaterial>(null);
+  const thrustRef = useRef<THREE.Group>(null);
   const lightRef = useRef<THREE.PointLight>(null);
 
   const desired = useRef(new THREE.Vector3());
@@ -86,6 +84,27 @@ export function Spacecraft({
   const bobPhase = useRef(0);
 
   const accentColor = useMemo(() => new THREE.Color(accent), [accent]);
+
+  // Shared exhaust material — both engine plumes flicker and fade together.
+  const exhaustMat = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        color: new THREE.Color(accent),
+        transparent: true,
+        opacity: 0.2,
+        toneMapped: false,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  useEffect(() => {
+    exhaustMat.color.copy(accentColor);
+  }, [accentColor, exhaustMat]);
+
+  useEffect(() => () => exhaustMat.dispose(), [exhaustMat]);
 
   useFrame((_state, deltaRaw) => {
     const craft = groupRef.current;
@@ -233,7 +252,9 @@ export function Spacecraft({
       bank.current = THREE.MathUtils.damp(bank.current, bankTarget, 4.5, delta); // ~0.22s
     }
 
-    craft.rotation.set(pitch.current, yaw.current, bank.current);
+    // YXZ = yaw, then pitch, then roll — proper aircraft convention for an
+    // elongated hull (the saucer never cared, the starship does).
+    craft.rotation.set(pitch.current, yaw.current, bank.current, "YXZ");
 
     // ---- Hover bob (applied to inner body so it doesn't fight flight Y) ----
     if (bodyRef.current) {
@@ -255,11 +276,11 @@ export function Spacecraft({
       ? targetThrust
       : THREE.MathUtils.damp(thrustLevel.current, targetThrust, 6, delta);
 
-    if (thrustRef.current && thrustMatRef.current) {
+    if (thrustRef.current) {
       const tl = thrustLevel.current;
       const flicker = reducedMotion ? 1 : 1 + Math.sin(bobPhase.current * 4.2) * 0.08 * tl;
-      thrustRef.current.scale.set(0.6 + tl * 0.8, 0.35 + tl * 0.9 * flicker, 0.6 + tl * 0.8);
-      thrustMatRef.current.opacity = 0.18 + tl * 0.7;
+      thrustRef.current.scale.set(0.7 + tl * 0.4, 0.7 + tl * 0.4, (0.45 + tl * 1.6) * flicker);
+      exhaustMat.opacity = 0.16 + tl * 0.72;
     }
     if (lightRef.current) {
       lightRef.current.intensity = 0.25 + thrustLevel.current * 0.9;
@@ -269,87 +290,275 @@ export function Spacecraft({
   });
 
   return (
-    <group ref={groupRef} visible={false} scale={compact ? 1.12 : 0.94}>
+    <>
+      <EngineTrail craftRef={groupRef} accent={accent} enabled={!reducedMotion} />
+      <group ref={groupRef} visible={false} scale={compact ? 1.25 : 1.08}>
       <group ref={bodyRef}>
-        <mesh scale={[1.28, 0.18, 1.28]}>
-          <sphereGeometry args={[0.78, 40, 14]} />
+        {/* ── Fuselage: elongated hull along +z ── */}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <capsuleGeometry args={[0.2, 0.85, 8, 20]} />
           <meshStandardMaterial
-            color={BODY}
-            emissive={BODY}
-            emissiveIntensity={0.24}
-            metalness={0.58}
+            color={HULL}
+            emissive={HULL}
+            emissiveIntensity={0.22}
+            metalness={0.72}
+            roughness={0.22}
+          />
+        </mesh>
+
+        {/* Nose cone */}
+        <mesh position={[0, 0, 0.78]} rotation={[Math.PI / 2, 0, 0]}>
+          <coneGeometry args={[0.165, 0.46, 20]} />
+          <meshStandardMaterial
+            color={HULL}
+            emissive={accentColor}
+            emissiveIntensity={0.3}
+            metalness={0.66}
             roughness={0.2}
           />
         </mesh>
 
-        <mesh position={[0, -0.08, 0]} scale={[1.08, 0.12, 1.08]}>
-          <sphereGeometry args={[0.72, 36, 10]} />
+        {/* Glass canopy */}
+        <mesh position={[0, 0.165, 0.3]} scale={[1, 0.72, 1.55]}>
+          <sphereGeometry args={[0.15, 24, 16]} />
           <meshStandardMaterial
-            color={BODY_SHADOW}
-            emissive={accentColor}
-            emissiveIntensity={0.2}
-            metalness={0.54}
-            roughness={0.24}
+            color={GLASS}
+            emissive={GLASS}
+            emissiveIntensity={0.7}
+            metalness={0.16}
+            roughness={0.1}
+            transparent
+            opacity={0.82}
           />
         </mesh>
 
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[0.74, 0.055, 10, 56]} />
+        {/* Accent ring around the hull */}
+        <mesh position={[0, 0, -0.06]}>
+          <torusGeometry args={[0.215, 0.022, 10, 40]} />
           <meshStandardMaterial
             color={accentColor}
             emissive={accentColor}
-            emissiveIntensity={0.86}
-            metalness={0.28}
+            emissiveIntensity={0.9}
+            metalness={0.3}
             roughness={0.18}
           />
         </mesh>
 
-        <mesh position={[0, 0.25, 0]} scale={[0.62, 0.34, 0.62]}>
-          <sphereGeometry args={[0.62, 32, 16]} />
-          <meshStandardMaterial
-            color={GLASS}
-            emissive={GLASS}
-            emissiveIntensity={0.72}
-            metalness={0.16}
-            roughness={0.12}
-            transparent
-            opacity={0.78}
-          />
-        </mesh>
-
-        {[0, Math.PI / 3, (Math.PI * 2) / 3, Math.PI, (Math.PI * 4) / 3, (Math.PI * 5) / 3].map(
-          (angle) => (
-            <mesh
-              key={angle}
-              position={[Math.cos(angle) * 0.7, 0.02, Math.sin(angle) * 0.7]}
-              scale={[1, 0.55, 1]}
-            >
-              <sphereGeometry args={[0.075, 14, 8]} />
+        {/* ── Swept delta wings: clean white silhouette, accent tips only ── */}
+        {([1, -1] as const).map((side) => (
+          <group key={side} position={[side * 0.42, -0.04, -0.22]} rotation={[0, side * -0.52, side * 0.08]}>
+            <mesh scale={[0.78, 0.045, 0.38]}>
+              <boxGeometry args={[1, 1, 1]} />
+              <meshStandardMaterial
+                color={HULL}
+                emissive={HULL}
+                emissiveIntensity={0.22}
+                metalness={0.68}
+                roughness={0.26}
+              />
+            </mesh>
+            {/* Wingtip light */}
+            <mesh position={[side * 0.4, 0, 0]}>
+              <sphereGeometry args={[0.05, 12, 8]} />
               <meshBasicMaterial color={accentColor} toneMapped={false} />
             </mesh>
-          ),
-        )}
+          </group>
+        ))}
 
-        <mesh position={[0, -0.24, 0]} scale={[0.52, 0.08, 0.52]}>
-          <sphereGeometry args={[0.58, 24, 8]} />
-          <meshBasicMaterial color={DETAIL} transparent opacity={0.82} />
-        </mesh>
-
-        {/* Thrust glow under the saucer — scales/fades with speed. */}
-        <mesh ref={thrustRef} position={[0, -0.36, 0]}>
-          <sphereGeometry args={[0.42, 20, 12]} />
-          <meshBasicMaterial
-            ref={thrustMatRef}
-            color={accentColor}
-            transparent
-            opacity={0.2}
-            toneMapped={false}
-            depthWrite={false}
+        {/* Tail fin */}
+        <mesh position={[0, 0.21, -0.5]} rotation={[-0.42, 0, 0]} scale={[0.04, 0.36, 0.4]}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial
+            color={HULL}
+            emissive={HULL}
+            emissiveIntensity={0.14}
+            metalness={0.66}
+            roughness={0.26}
           />
         </mesh>
+
+        {/* ── Twin engine nacelles ── */}
+        {([1, -1] as const).map((side) => (
+          <group key={side} position={[side * 0.24, -0.02, -0.5]}>
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.085, 0.105, 0.42, 16]} />
+              <meshStandardMaterial
+                color={HULL_DARK}
+                emissive={HULL_DARK}
+                emissiveIntensity={0.1}
+                metalness={0.7}
+                roughness={0.28}
+              />
+            </mesh>
+            {/* Engine glow disc */}
+            <mesh position={[0, 0, -0.215]} rotation={[Math.PI / 2, 0, 0]}>
+              <circleGeometry args={[0.085, 16]} />
+              <meshBasicMaterial color={accentColor} toneMapped={false} side={THREE.DoubleSide} />
+            </mesh>
+          </group>
+        ))}
+
+        {/* ── Exhaust plumes: scale/fade with thrust ── */}
+        <group ref={thrustRef} position={[0, -0.02, -0.72]}>
+          {([1, -1] as const).map((side) => (
+            <mesh
+              key={side}
+              position={[side * 0.24, 0, -0.22]}
+              rotation={[-Math.PI / 2, 0, 0]}
+              material={exhaustMat}
+            >
+              <coneGeometry args={[0.08, 0.6, 12, 1, true]} />
+            </mesh>
+          ))}
+        </group>
       </group>
 
-      <pointLight ref={lightRef} color={accentColor} intensity={0.35} distance={4} />
-    </group>
+        <pointLight ref={lightRef} color={accentColor} intensity={0.35} distance={4} />
+      </group>
+    </>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────
+ * Engine trail — world-space particle ribbon emitted from the
+ * craft's engines; spawn rate and brightness scale with speed.
+ * ────────────────────────────────────────────────────────── */
+
+const TRAIL_COUNT = 110;
+const TRAIL_TTL_S = 1.1;
+
+function makeGlowDotTexture() {
+  const size = 64;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  g.addColorStop(0, "rgba(255,255,255,1)");
+  g.addColorStop(0.4, "rgba(255,255,255,0.5)");
+  g.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, size, size);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+type EngineTrailProps = {
+  craftRef: React.RefObject<THREE.Group | null>;
+  accent: string;
+  enabled: boolean;
+};
+
+function EngineTrail({ craftRef, accent, enabled }: EngineTrailProps) {
+  const pointsRef = useRef<THREE.Points>(null);
+  const matRef = useRef<THREE.PointsMaterial>(null);
+  const cursor = useRef(0);
+  const emitCarry = useRef(0);
+  const prevCraftPos = useRef<THREE.Vector3 | null>(null);
+  const emitterLocal = useMemo(() => new THREE.Vector3(0, -0.02, -0.72), []);
+  const emitterWorld = useMemo(() => new THREE.Vector3(), []);
+
+  const positions = useMemo(() => new Float32Array(TRAIL_COUNT * 3).fill(99999), []);
+  const agesRef = useRef<Float32Array | null>(null);
+  if (agesRef.current === null) {
+    agesRef.current = new Float32Array(TRAIL_COUNT).fill(TRAIL_TTL_S);
+  }
+
+  const accentColor = useMemo(() => new THREE.Color(accent), [accent]);
+  const dotTexture = useMemo(() => makeGlowDotTexture(), []);
+
+  useEffect(() => {
+    matRef.current?.color.copy(accentColor);
+  }, [accentColor]);
+
+  useEffect(() => () => dotTexture?.dispose(), [dotTexture]);
+
+  useFrame((_state, deltaRaw) => {
+    const points = pointsRef.current;
+    const craft = craftRef.current;
+    if (!points || !craft) return;
+
+    const delta = Math.min(0.05, Math.max(0.0001, deltaRaw));
+    const geometry = points.geometry;
+    const posAttr = geometry.getAttribute("position") as THREE.BufferAttribute;
+    const ages = agesRef.current;
+    if (!ages) return;
+
+    if (!prevCraftPos.current) {
+      prevCraftPos.current = craft.position.clone();
+    }
+    const speed = craft.position.distanceTo(prevCraftPos.current) / delta;
+    prevCraftPos.current.copy(craft.position);
+
+    const visible = enabled && craft.visible;
+    points.visible = visible;
+
+    // Age existing particles; expired ones get parked far away.
+    let alive = 0;
+    for (let i = 0; i < TRAIL_COUNT; i++) {
+      if (ages[i] < TRAIL_TTL_S) {
+        ages[i] += delta;
+        if (ages[i] >= TRAIL_TTL_S) {
+          posAttr.setXYZ(i, 99999, 99999, 99999);
+        } else {
+          alive++;
+        }
+      }
+    }
+
+    // Emit from the engine position, rate proportional to speed.
+    if (visible && speed > 0.4) {
+      emitterWorld.copy(emitterLocal);
+      craft.localToWorld(emitterWorld);
+      const rate = THREE.MathUtils.clamp(speed * 9, 6, 90); // particles/sec
+      emitCarry.current += rate * delta;
+      while (emitCarry.current >= 1) {
+        emitCarry.current -= 1;
+        const i = cursor.current;
+        cursor.current = (cursor.current + 1) % TRAIL_COUNT;
+        posAttr.setXYZ(
+          i,
+          emitterWorld.x + (Math.random() - 0.5) * 0.08,
+          emitterWorld.y + (Math.random() - 0.5) * 0.08,
+          emitterWorld.z + (Math.random() - 0.5) * 0.08,
+        );
+        ages[i] = 0;
+      }
+    }
+
+    posAttr.needsUpdate = true;
+
+    // Overall fade follows speed so the ribbon vanishes when parked.
+    if (matRef.current) {
+      const targetOpacity = THREE.MathUtils.clamp(speed / 5, 0.12, 0.9);
+      matRef.current.opacity = THREE.MathUtils.damp(
+        matRef.current.opacity,
+        alive > 0 ? targetOpacity : 0,
+        5,
+        delta,
+      );
+    }
+  });
+
+  return (
+    <points ref={pointsRef} frustumCulled={false}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        ref={matRef}
+        color={accentColor}
+        map={dotTexture ?? undefined}
+        size={0.55}
+        sizeAttenuation
+        transparent
+        opacity={0}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+        toneMapped={false}
+      />
+    </points>
   );
 }

@@ -27,9 +27,16 @@ const SUN_LOOK = new THREE.Vector3(0, 0, 0);
 const DEFAULT_RADIAL = new THREE.Vector3(1, 0, 0);
 
 const TWEEN_MS = 1800;
+const BASE_FOV = 45;
 
-// ease-out cubic
-const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+// ease-in-out cubic — accelerate, cruise, brake: reads as actual travel
+// instead of an instant jump that slowly settles.
+const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+const applyFov = (cam: THREE.PerspectiveCamera, fov: number) => {
+  cam.fov = fov;
+  cam.updateProjectionMatrix();
+};
 
 export function CameraRig({
   target,
@@ -124,6 +131,18 @@ export function CameraRig({
     const ay =
       startPos.current.y + (desiredPos.current.y - startPos.current.y) * k + arcLift;
     camera.position.set(ax, ay, az);
+
+    // FOV speed kick: widen mid-flight in proportion to travel distance, then
+    // settle back to base — the lens itself communicates acceleration.
+    const cam = camera as THREE.PerspectiveCamera;
+    if (cam.isPerspectiveCamera) {
+      const travelDist = startPos.current.distanceTo(desiredPos.current);
+      const kick = reducedMotion ? 0 : Math.sin(raw * Math.PI) * Math.min(9, travelDist * 0.24);
+      const fovTarget = BASE_FOV + kick;
+      if (Math.abs(cam.fov - fovTarget) > 0.005) {
+        applyFov(cam, fovTarget);
+      }
+    }
 
     // LookAt smoothly slews from previous look to new desired look
     liveLook.current.lerpVectors(startLook.current, desiredLook.current, k);

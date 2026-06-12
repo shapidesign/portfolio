@@ -3,11 +3,12 @@ import generatedRaw from "./projects.generated.json";
 
 export type { Project, Accent, ShapeVariant };
 
+/** Projects hidden from the site even if they come back from the Notion sync. */
+const REMOVED_SLUGS = new Set(["the-misfit-market"]);
+
 const PROJECT_CONTEXT: Record<string, string> = {
   "small-world-problems":
     "A typographic experiment exploring how a single letter, scaled and repositioned, changes meaning. Made as a self-initiated study in visual impact (and a bit of humor).",
-  "the-misfit-market":
-    "Research and brand identity for a concept sustainable grocery that celebrates imperfect produce. Developed as a student project at HiT.",
   "animal-to-logo":
     "An exercise in reduction \u2014 taking complex animal forms and distilling them to their meaningful truth. Inspired by Paul Rand\u2019s and George Bokhua\u2019s approach to logo thinking. HiT.",
   "digital-handprint":
@@ -19,8 +20,6 @@ const PROJECT_CONTEXT: Record<string, string> = {
 };
 
 const HE_PROJECT_CONTEXT: Record<string, string> = {
-  "the-misfit-market":
-    "מחקר וזהות מותגית לסופרמרקט קונספט בר-קיימא שחוגג תוצרת לא-מושלמת. פותח כפרויקט לימודים בהיט.",
   "keeping-it-clean":
     "מערכת אריזות ל-The Clean Dot, בנויה סביב הרעיון שמוצרי ניקיון לא צריכים להיות פשרה מתחת לכיור — הם צריכים לעמוד על השיש!",
 };
@@ -29,7 +28,6 @@ const PROJECT_STATUS: Record<string, { en: string; he: string }> = {
   "digital-handprint": { en: "SELF-INITIATED", he: "יוזמה עצמית" },
   "no-gatekeeping": { en: "SELF-INITIATED", he: "יוזמה עצמית" },
   "keeping-it-clean": { en: "DELIVERED", he: "בוצע" },
-  "the-misfit-market": { en: "STUDENT WORK", he: "עבודת סטודנט" },
   "animal-to-logo": { en: "STUDENT WORK", he: "עבודת סטודנט" },
   "small-world-problems": { en: "SELF-INITIATED", he: "יוזמה עצמית" },
 };
@@ -38,7 +36,6 @@ const PROJECT_DISCIPLINE: Record<string, { en: string; he: string }> = {
   "digital-handprint": { en: "CREATIVE CODING", he: "קוד יצירתי" },
   "no-gatekeeping": { en: "DIGITAL PRODUCT", he: "מוצר דיגיטלי" },
   "keeping-it-clean": { en: "BRANDING", he: "מיתוג" },
-  "the-misfit-market": { en: "BRANDING", he: "מיתוג" },
   "animal-to-logo": { en: "TYPE", he: "טיפוגרפיה" },
   "small-world-problems": { en: "TYPE", he: "טיפוגרפיה" },
 };
@@ -47,10 +44,6 @@ const PROJECT_DESCRIPTOR: Record<string, { en: string; he: string }> = {
   "keeping-it-clean": {
     en: "Making cleaning products earn their place on the counter.",
     he: "להפוך מוצרי ניקוי למשהו שמגיע לו לעמוד על השיש.",
-  },
-  "the-misfit-market": {
-    en: "Reframing food waste as identity before it became fashionable.",
-    he: "למסגר בזבוז מזון כזהות מותגית לפני שזה הפך לטרנד.",
   },
   "animal-to-logo": {
     en: "From a living form to a mark that lasts.",
@@ -74,10 +67,6 @@ const PROJECT_OPENER: Record<string, { en: string; he: string }> = {
   "keeping-it-clean": {
     en: "The packaging had to make sustainable cleaning products feel premium enough to stay visible in the home.",
     he: "האריזה הייתה צריכה לגרום למוצרי ניקוי אקולוגיים להרגיש פרימיום מספיק כדי להישאר גלויים בבית.",
-  },
-  "the-misfit-market": {
-    en: "A retail identity that turns rejected produce from a flaw into the core message.",
-    he: "זהות מותגית שמסובבת תוצרת שנדחתה מ״פגם״ למסר המרכזי.",
   },
   "animal-to-logo": {
     en: "The challenge was to reduce a living form into a clear symbol without losing movement and meaning.",
@@ -120,20 +109,6 @@ const PROJECT_NARRATIVE: Record<string, Narrative> = {
       "התייחסתי לקו כולו כמשפחה אחת ולא כסדרה של תוויות נפרדות. בניתי היררכיה טיפוגרפית, גריד עקבי וקצב ריווחים שמאפשרים להבין הבדלים בין מוצרים במהירות בלי לפגוע באחידות המותג. במקום שכבות דקורטיביות, השתמשתי בפרופורציה ובסדר חזותי כדי לייצר תחושת איכות.",
     heDecision:
       "ההחלטה המרכזית הייתה לבחור באיפוק ולתת לבהירות להוביל. צמצום רעש גרפי והדגשת מבנה מדויק יוצרים אמון חזותי וגם תומכים בשימוש יומיומי. כך המוצרים מצליחים להיות נוכחים על השיש כחלק טבעי מהבית, ולא להיתפס כפתרון זמני שמסתירים.",
-  },
-  "the-misfit-market": {
-    challenge:
-      "A third of produce is rejected for cosmetic reasons even when it is fully usable. The challenge was to build a brand that reframes imperfection from a retail flaw into a cultural value people can identify with. The identity had to feel confident enough to challenge supermarket standards, not apologize for them.",
-    approach:
-      "I framed irregularity as character, not deficiency. The system combines direct verbal framing, raw material cues, and honest image treatment so the brand speaks with conviction instead of imitation. Every asset was designed to support one narrative: value is created by perspective, not by cosmetic uniformity.",
-    decision:
-      "The critical decision was to avoid visually \"fixing\" the produce. Keeping irregular forms visible in both naming and imagery transforms the so-called defect into the strongest differentiator of the brand. That decision keeps the story consistent from first impression to packaging moment.",
-    heChallenge:
-      "שליש מהתוצרת נזרק מסיבות אסתטיות למרות שהוא ראוי לחלוטין לשימוש. האתגר היה לבנות מותג שמזיז את התפיסה מ״פגם״ ל״ערך״, ובונה הזדהות במקום רחמים. הזהות הייתה צריכה לעמוד בביטחון מול שפת הסופרמרקט הרגילה, ולא להתנצל מולה.",
-    heApproach:
-      "בחרתי למסגר אי-אחידות כאופי מותגי. השפה משלבת ניסוח ישיר, טקסטורות גולמיות וטיפול דימוי כן כדי לייצר קול שלא מנסה להידמות לנורמות מדף. כל נכס נבנה כדי לחזק רעיון אחד: הערך נוצר מהסתכלות חדשה, לא מהחלקה של המציאות.",
-    heDecision:
-      "החלטת הליבה הייתה לא ״לתקן״ חזותית את התוצרת. שמירה על הצורות הלא אחידות בשם, בצילום ובאריזה הופכת את מה שנתפס כפגם למבדל המרכזי של המותג. כך הנרטיב נשמר עקבי מהמפגש הראשון ועד רגע הקנייה.",
   },
   "animal-to-logo": {
     challenge:
@@ -193,6 +168,74 @@ const PROJECT_NARRATIVE: Record<string, Narrative> = {
   },
 };
 
+/**
+ * Projects authored directly in code. They are defined fully (including the
+ * narrative fields) so the Notion sync can never overwrite or drop them.
+ */
+const LOCAL_PROJECTS: Project[] = [
+  {
+    slug: "rethinking-real-estate",
+    title: "Rethinking Real Estate",
+    subHeader:
+      "Real estate brands promise stability. This one promises a home worth building.",
+    context:
+      "Brand identity for Givat Hodaya, a company that manages self-build housing projects across Israel — guiding families from raw plot to finished home. Designed to bring warmth and motion into an industry of grey towers.",
+    description:
+      "Givat Hodaya manages self-build housing projects across Israel, guiding families from raw plot to finished home — and saving them hundreds of thousands of shekels along the way.<br /><br />The rebrand replaces the grey, corporate look of the industry with a hand-drawn swallow in mid-flight, a bold Hebrew logotype, and a warm three-color palette defined for both screen and print.<br /><br />Real estate that promises momentum, not just stability.",
+    bodyText:
+      "Givat Hodaya manages self-build housing projects across Israel, guiding families from raw plot to finished home — and saving them hundreds of thousands of shekels along the way.<br /><br />The rebrand replaces the grey, corporate look of the industry with a hand-drawn swallow in mid-flight, a bold Hebrew logotype, and a warm three-color palette defined for both screen and print.<br /><br />Real estate that promises momentum, not just stability.",
+    url: "https://www.givathodaya.com/",
+    images: [
+      "/images/rethinking-real-estate/orange-bird.png",
+      "/images/rethinking-real-estate/black-logo-v5.png",
+      "/images/rethinking-real-estate/mixed-logo.png",
+      "/images/rethinking-real-estate/black-logo-only.png",
+    ],
+    tags: ["Brand Identity", "Logo Design", "Real Estate"],
+    category:
+      "Real estate brands promise stability. This one promises a home worth building.",
+    summary:
+      "Brand identity for Givat Hodaya — a swallow in mid-flight, a bold Hebrew logotype, and a warm three-color palette for a company that helps families build their own homes.",
+    services: ["Brand Identity", "Logo Design", "Real Estate"],
+    year: "2026",
+    challenge: "",
+    process: "",
+    outcome: "",
+    accent: "blue",
+    thumbnailShape: "triangle",
+    thumbnailHoverShape: "square",
+    heTitle: "לחשוב נדל״ן מחדש",
+    heSubHeader: "מותגי נדל״ן מבטיחים יציבות. המותג הזה מבטיח בית ששווה לבנות.",
+    heContext:
+      "זהות מותגית לגבעת הודיה — חברה שמנהלת פרויקטים של בנייה עצמית בכל הארץ ומלווה משפחות מהמגרש ועד המפתח. עיצוב שמכניס חום ותנועה לתעשייה של מגדלים אפורים.",
+    heDescription:
+      "גבעת הודיה מנהלת פרויקטים של בנייה עצמית בכל הארץ ומלווה משפחות מהמגרש ועד הבית המוכן — וחוסכת להן מאות אלפי שקלים בדרך.<br /><br />המיתוג מחליף את המראה האפור והתאגידי של התעשייה בסנונית מצוירת ביד, לוגוטייפ עברי נועז ופלטה חמה של שלושה צבעים שהוגדרה למסך ולדפוס.<br /><br />נדל״ן שמבטיח תנועה, לא רק יציבות.",
+    heTags: ["מיתוג", "עיצוב לוגו", "נדל״ן"],
+    status: "DELIVERED",
+    heStatus: "בוצע",
+    discipline: "BRANDING",
+    heDiscipline: "מיתוג",
+    descriptor: "Bringing warmth and flight into an industry of concrete.",
+    heDescriptor: "להכניס חום ותנועה לתעשייה של בטון.",
+    opener:
+      "Real estate branding usually promises stability. Givat Hodaya needed to promise momentum — families building their own home.",
+    heOpener:
+      "מיתוג נדל״ן בדרך כלל מבטיח יציבות. גבעת הודיה הייתה צריכה להבטיח תנועה — משפחות שבונות בית במו ידיהן.",
+    narrativeChallenge:
+      "Israeli real estate speaks one visual language: navy blue, glass towers, and stock-photo families. Givat Hodaya does something different — it manages self-build projects where families construct their own homes and save hundreds of thousands of shekels along the way. The brand had to carry serious professional trust (the company handles planning, tenders, financing, and supervision) while still feeling personal, optimistic, and human. Looking like another developer would have buried exactly what makes the company worth choosing.",
+    narrativeApproach:
+      "The identity is built around a swallow in mid-flight — a bird that always finds its way home. Drawn as a single fluid gesture, it brings movement and freedom into a category obsessed with weight and stillness. Around it I built a bold Hebrew logotype with confident geometric letterforms, and a disciplined palette: one dominant orange for energy, a deep ink black for authority, and a warm off-white that keeps everything breathing. Every color was specified for both screen and print, down to Pantone references.",
+    narrativeDecision:
+      "The key decision was restraint: three colors, one bird, one typographic voice. The swallow is expressive enough to work alone — on a sign, a hard hat, or an app icon — so the rest of the system can stay calm and trustworthy. Orange leads, black grounds, and the warm off-white replaces sterile white so even empty space feels lived-in. The result is a real-estate brand that reads as both an engineer and a neighbor.",
+    heNarrativeChallenge:
+      "נדל״ן ישראלי מדבר בשפה חזותית אחת: כחול כהה, מגדלי זכוכית ומשפחות מצילומי סטוק. גבעת הודיה עושה משהו אחר — היא מנהלת פרויקטים של בנייה עצמית שבהם משפחות בונות את הבית של עצמן וחוסכות מאות אלפי שקלים בדרך. המותג היה צריך לשדר אמינות מקצועית רצינית (החברה מנהלת תכנון, מכרזים, מימון ופיקוח) ועדיין להרגיש אישי, אופטימי ואנושי. להיראות כמו עוד יזם היה קובר בדיוק את מה שמייחד את החברה.",
+    heNarrativeApproach:
+      "הזהות נבנתה סביב סנונית במעוף — ציפור שתמיד מוצאת את הדרך הביתה. הציפור צוירה כמחווה אחת זורמת, ומכניסה תנועה וחופש לקטגוריה שמקדשת כובד ויציבות. סביבה בניתי לוגוטייפ עברי נועז עם אותיות גאומטריות ובטוחות בעצמן, ופלטה ממושמעת: כתום דומיננטי לאנרגיה, שחור דיו עמוק לסמכות, ולבן חם ששומר על אוויר. כל צבע הוגדר למסך ולדפוס, עד לערכי פנטון.",
+    heNarrativeDecision:
+      "ההחלטה המרכזית הייתה איפוק: שלושה צבעים, ציפור אחת, קול טיפוגרפי אחד. הסנונית אקספרסיבית מספיק כדי לעבוד לבד — על שלט, על קסדה או כאייקון אפליקציה — וכך שאר המערכת נשארת רגועה ואמינה. הכתום מוביל, השחור מקרקע, והלבן החם מחליף לבן סטרילי כך שגם השטח הריק מרגיש חי. התוצאה היא מותג נדל״ן שנתפס גם כמהנדס וגם כשכן.",
+  },
+];
+
 function isValidProject(item: unknown): item is Project {
   if (typeof item !== "object" || item === null) return false;
   const p = item as Record<string, unknown>;
@@ -202,6 +245,7 @@ function isValidProject(item: unknown): item is Project {
 const generatedProjects: Project[] = Array.isArray(generatedRaw)
   ? (generatedRaw as unknown[])
     .filter(isValidProject)
+    .filter((p) => !REMOVED_SLUGS.has(p.slug))
     .map((p) => ({
       ...p,
       context: PROJECT_CONTEXT[p.slug] ?? "",
@@ -230,7 +274,11 @@ const generatedProjects: Project[] = Array.isArray(generatedRaw)
     })
   : [];
 
-export const projects: Project[] = generatedProjects;
+// Slot the local projects into the spot the removed project used to occupy.
+const mergedProjects: Project[] = [...generatedProjects];
+mergedProjects.splice(Math.min(3, mergedProjects.length), 0, ...LOCAL_PROJECTS);
+
+export const projects: Project[] = mergedProjects;
 
 export function getProjectBySlug(slug: string) {
   return projects.find((project) => project.slug === slug);

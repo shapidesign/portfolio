@@ -15,7 +15,6 @@ import { ProjectModal } from "./ProjectModal";
 import { AboutDrawer } from "./AboutDrawer";
 import { ContactDrawer } from "./ContactDrawer";
 import { ListView } from "./ListView";
-import { StarBurst, type BurstSeed } from "./StarBurst";
 import { VoyageHUD } from "./VoyageHUD";
 import { useLanguage } from "../../context/LanguageContext";
 import { preventOrphan } from "@/i18n/typography";
@@ -72,23 +71,9 @@ export function SolarSystem({ projects }: SolarSystemProps) {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [compactScene, setCompactScene] = useState(false);
   const [visited, setVisited] = useState<Set<string>>(new Set());
-  const [bursts, setBursts] = useState<BurstSeed[]>([]);
 
   const modalOpen = focusedSlug !== null;
   const overlayBlocked = modalOpen || aboutOpen || contactOpen || listMode;
-
-  const spawnBurst = (clientX: number, clientY: number) => {
-    if (overlayBlocked) return;
-    const id =
-      typeof crypto !== "undefined" && "randomUUID" in crypto
-        ? crypto.randomUUID()
-        : `${Date.now()}-${Math.random()}`;
-    setBursts((prev) => [...prev, { id, x: clientX, y: clientY }]);
-  };
-
-  const expireBurst = (id: string) => {
-    setBursts((prev) => prev.filter((b) => b.id !== id));
-  };
 
   // One-pager: hide global header + footer while the solar homepage is mounted
   useEffect(() => {
@@ -377,7 +362,6 @@ export function SolarSystem({ projects }: SolarSystemProps) {
             dpr={[1, 1.5]}
             camera={{ position: [0, 8, 32], fov: 45, near: 0.1, far: 200 }}
             gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
-            onPointerMissed={(e) => spawnBurst(e.clientX, e.clientY)}
           >
             <CameraExporter targetRef={cameraRef} />
             <SolarScene
@@ -403,8 +387,6 @@ export function SolarSystem({ projects }: SolarSystemProps) {
             cameraRef={cameraRef}
             isHebrew={isHebrew}
           />
-
-          <StarBurst bursts={bursts} onExpire={expireBurst} />
 
           {sunHovered && !aboutOpen && !focusedSlug ? (
             <div

@@ -5,8 +5,8 @@ const ACCENT_BY_SLUG: Record<string, string> = {
   "digital-handprint": "#f92672",
   "small-world-problems": "#66d9ef",
   "no-gatekeeping": "#a6e22e",
-  "keeping-it-clean": "#fd971f",
-  "the-misfit-market": "#e6db74",
+  "keeping-it-clean": "#e6db74",
+  "rethinking-real-estate": "#f4902d",
   "animal-to-logo": "#f8f8f2",
 };
 

@@ -3994,3 +3994,228 @@ html[lang="he"] body :where(p, li, a, button, label, input, textarea, dd, blockq
   }
 }
 
+/* ---------- Rethinking Real Estate (Givat Hodaya) ---------- */
+
+:root {
+  --gh-orange: #f4902d;
+  --gh-black: #101313;
+  --gh-white: #fbf8f2;
+}
+
+/* Hero: transparent logo assets sit on the brand off-white, contained not cropped */
+.project-hero-media--brand {
+  background: var(--gh-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2.5rem, 9vw, 5.5rem) clamp(1.5rem, 6vw, 4rem);
+}
+
+.project-hero-image--brand {
+  display: block;
+  width: auto;
+  max-width: min(100%, 420px);
+  height: auto;
+  max-height: min(52vh, 480px);
+}
+
+/* Editorial panels: brand off-white behind transparent logo images */
+.project-editorial-item--brand {
+  background: var(--gh-white);
+  border-radius: var(--radius-image);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2rem, 7vw, 4.5rem) clamp(1.25rem, 5vw, 3rem);
+}
+
+.project-editorial-item--brand .project-editorial-image {
+  width: auto;
+  max-width: min(100%, 420px);
+  height: auto;
+  max-height: min(46vh, 400px);
+  border-radius: 0;
+}
+
+.project-editorial-item--brand-dark {
+  background: var(--gh-black);
+}
+
+/* White logotype rendered from the black asset */
+.project-editorial-image--inverted {
+  filter: invert(1);
+}
+
+/* Logotype construction loop: multiply hides the video's pure-white background */
+.project-editorial-video {
+  display: block;
+  width: min(100%, 780px);
+  height: auto;
+  mix-blend-mode: multiply;
+}
+
+/* ---------- Givat Hodaya brand palette embed ---------- */
+
+.gh-palette {
+  display: grid;
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+}
+
+.gh-palette-heading {
+  font-size: var(--type-title);
+  margin: 0;
+}
+
+.gh-palette-stack {
+  display: grid;
+  border-radius: var(--radius-image);
+  overflow: hidden;
+}
+
+.gh-palette-row {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(1.4rem, 4vw, 2.5rem) clamp(1.25rem, 4vw, 2.5rem);
+  color: var(--gh-ink);
+}
+
+.gh-palette-fill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--gh-swatch);
+  transform: scaleX(0);
+  transform-origin: var(--gh-origin, left);
+  transition: transform 560ms var(--ease-settle);
+  transition-delay: var(--gh-delay, 0ms);
+}
+
+.gh-palette-row--bordered .gh-palette-fill {
+  box-shadow: inset 0 0 0 1px rgba(16, 19, 19, 0.14);
+}
+
+.gh-palette-content {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 0.5fr) 1fr 1fr;
+  align-items: start;
+  gap: 1rem clamp(1.5rem, 4vw, 3rem);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 420ms var(--ease-gentle), transform 420ms var(--ease-gentle);
+  transition-delay: calc(var(--gh-delay, 0ms) + 240ms);
+}
+
+.gh-palette--in .gh-palette-fill {
+  transform: scaleX(1);
+}
+
+.gh-palette--in .gh-palette-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gh-palette-row .gh-palette-name {
+  margin: 0;
+  font-size: var(--type-title);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--gh-ink);
+}
+
+.gh-palette-row .gh-palette-spec dt,
+.gh-palette-row .gh-palette-value {
+  color: var(--gh-ink);
+}
+
+/* The dl dissolves so each spec group becomes its own aligned grid column */
+.gh-palette-specs {
+  margin: 0;
+  display: contents;
+}
+
+.gh-palette-spec dt {
+  font-size: var(--type-label);
+  letter-spacing: 0.08em;
+  opacity: 0.72;
+  margin-block-end: 0.6rem;
+}
+
+.gh-palette-spec dd {
+  margin: 0;
+  display: grid;
+  justify-items: start;
+  gap: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .gh-palette-content {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .gh-palette-row .gh-palette-name {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Color specs are latin/numeric — keep them LTR even on the Hebrew page */
+.gh-palette-value,
+.gh-palette-hex {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.gh-palette-value {
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.gh-palette-hex {
+  appearance: none;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  padding: 0.3rem 0.8rem;
+  min-height: 2.25rem;
+  cursor: pointer;
+  transition: background-color 180ms var(--ease-gentle), color 180ms var(--ease-gentle);
+}
+
+.gh-palette-hex:hover {
+  background: var(--gh-ink);
+  color: var(--gh-swatch);
+}
+
+.gh-palette-hex:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.gh-palette-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gh-palette-fill,
+  .gh-palette-content {
+    transition: none;
+  }
+
+  .gh-palette .gh-palette-fill {
+    transform: scaleX(1);
+  }
+
+  .gh-palette .gh-palette-content {
+    opacity: 1;
+    transform: none;
+  }
+}
+
