@@ -102,20 +102,24 @@ export function CameraRig({
       desiredLook.current.copy(SUN_LOOK);
     } else {
       const planetPos = target.positionRef.current;
-      // Ride view: stay high and isometric so the active stop, craft, orbit,
-      // and nearby context are readable instead of feeling like a close fly-by.
-      const radial = arcOffset.current.copy(planetPos).normalize();
-      if (radial.lengthSq() < 0.01) radial.copy(DEFAULT_RADIAL);
-      const lateralDistance = target.offset * (compact ? 0.5 : 0.62);
-      const height = compact ? Math.max(10, target.offset * 0.62) : Math.max(14.5, target.offset * 0.76);
-      const depth = target.offset * (compact ? 1.05 : 0.72);
+      // Pull back in the orbital plane, then lift slightly — a low hero angle
+      // that keeps the stop readable without the old isometric bird's-eye view.
+      const horizLen = Math.hypot(planetPos.x, planetPos.z);
+      const radialHoriz =
+        horizLen < 0.01
+          ? arcOffset.current.copy(DEFAULT_RADIAL)
+          : arcOffset.current.set(planetPos.x / horizLen, 0, planetPos.z / horizLen);
+
+      const standoff = target.offset * (compact ? 0.98 : 1.18);
+      const elevation = standoff * (compact ? 0.28 : 0.36);
+
       desiredPos.current
         .copy(planetPos)
-        .addScaledVector(radial, lateralDistance)
-        .add(isoLift.current.set(0, height, depth));
+        .addScaledVector(radialHoriz, standoff)
+        .add(isoLift.current.set(0, elevation, 0));
+
       desiredLook.current.copy(planetPos);
-      desiredLook.current.y -= compact ? Math.max(2.2, target.offset * 0.16) : Math.max(0.9, target.offset * 0.08);
-      desiredLook.current.addScaledVector(radial, compact ? -target.offset * 0.08 : -target.offset * 0.12);
+      desiredLook.current.y += compact ? 0.55 : 0.85;
     }
 
     const now = performance.now();
@@ -127,7 +131,8 @@ export function CameraRig({
     // straight line so the camera "cranes up and over" before descending.
     const ax = startPos.current.x + (desiredPos.current.x - startPos.current.x) * k;
     const az = startPos.current.z + (desiredPos.current.z - startPos.current.z) * k;
-    const arcLift = reducedMotion ? 0 : Math.sin(raw * Math.PI) * 4.5; // rises in middle of tween
+    const arcLift =
+      reducedMotion ? 0 : Math.sin(raw * Math.PI) * (target.kind === "planet" ? 1.8 : 4.5);
     const ay =
       startPos.current.y + (desiredPos.current.y - startPos.current.y) * k + arcLift;
     camera.position.set(ax, ay, az);

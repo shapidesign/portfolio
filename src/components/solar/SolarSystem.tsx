@@ -261,7 +261,7 @@ export function SolarSystem({ projects }: SolarSystemProps) {
       return {
         kind: "planet",
         positionRef: planetPositions[activePlanet.slug],
-        offset: Math.max(18, activePlanet.size * 14),
+        offset: Math.max(24, activePlanet.size * 17),
       };
     }
     return voyageMode === "riding" ? { kind: "overview" } : { kind: "home" };
