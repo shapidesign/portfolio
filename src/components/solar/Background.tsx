@@ -26,10 +26,15 @@ function useReducedMotion() {
 
 /**
  * Deep-space backdrop: three parallax star shells with GPU twinkle, soft
- * nebula sprites in the brand palette, occasional shooting stars, and a
- * hyperspace warp-streak layer that fades in whenever the camera travels fast.
+ * nebula sprites in the brand palette, and hyperspace warp streaks during
+ * hyperspace warp-streak layer during guided voyage camera moves only.
  */
-export function Background() {
+type BackgroundProps = {
+  /** Hyperspace streaks during voyage hops — off on the idle home view. */
+  voyageMotion?: boolean;
+};
+
+export function Background({ voyageMotion = false }: BackgroundProps) {
   const reducedMotion = useReducedMotion();
 
   return (
@@ -75,8 +80,7 @@ export function Background() {
         reducedMotion={reducedMotion}
       />
 
-      <ShootingStars enabled={!reducedMotion} />
-      <WarpStreaks enabled={!reducedMotion} />
+      <WarpStreaks enabled={!reducedMotion && voyageMotion} />
     </>
   );
 }
@@ -386,105 +390,5 @@ function WarpStreaks({ enabled }: { enabled: boolean }) {
         />
       </instancedMesh>
     </group>
-  );
-}
-
-/* ──────────────────────────────────────────────────────────
- * Shooting stars — small pool of fast streaks across the sky
- * ────────────────────────────────────────────────────────── */
-
-const POOL_SIZE = 2;
-const TTL_S = 1.2;
-const SPAWN_RATE_PER_S = 1 / 7.5; // average one shooter every ~7.5s
-
-type Shooter = {
-  active: boolean;
-  life: number;
-  position: THREE.Vector3;
-  velocity: THREE.Vector3;
-};
-
-function ShootingStars({ enabled }: { enabled: boolean }) {
-  const firstMeshRef = useRef<THREE.Mesh | null>(null);
-  const secondMeshRef = useRef<THREE.Mesh | null>(null);
-  const shootersRef = useRef<Shooter[]>(
-    Array.from({ length: POOL_SIZE }, () => ({
-      active: false,
-      life: 0,
-      position: new THREE.Vector3(),
-      velocity: new THREE.Vector3(),
-    })),
-  );
-
-  const spawn = (s: Shooter) => {
-    // Random origin on the upper sphere shell so streaks read against the sky.
-    const r = 70;
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.random() * 0.6 + 0.1; // bias toward the top
-    s.position.set(
-      r * Math.sin(phi) * Math.cos(theta),
-      r * Math.cos(phi),
-      r * Math.sin(phi) * Math.sin(theta),
-    );
-    // Velocity tangent-ish to the sphere, mostly downward across the view.
-    s.velocity.set(
-      (Math.random() - 0.5) * 40,
-      -10 - Math.random() * 14,
-      (Math.random() - 0.5) * 40,
-    );
-    s.life = 0;
-    s.active = true;
-  };
-
-  useFrame((_state, delta) => {
-    if (!enabled) return;
-    let anyActive = false;
-    for (const [index, s] of shootersRef.current.entries()) {
-      const mesh = index === 0 ? firstMeshRef.current : secondMeshRef.current;
-      if (s.active) {
-        anyActive = true;
-        s.life += delta;
-        s.position.addScaledVector(s.velocity, delta);
-        if (s.life >= TTL_S) {
-          s.active = false;
-        }
-        if (mesh) {
-          mesh.visible = true;
-          mesh.position.copy(s.position);
-          // Orient the streak along its velocity vector.
-          const dir = s.velocity.clone().normalize();
-          const quat = new THREE.Quaternion().setFromUnitVectors(
-            new THREE.Vector3(1, 0, 0),
-            dir,
-          );
-          mesh.quaternion.copy(quat);
-          // Fade alpha as life progresses (peak in the middle).
-          const t = s.life / TTL_S;
-          const alpha = Math.sin(t * Math.PI);
-          const mat = mesh.material as THREE.MeshBasicMaterial;
-          mat.opacity = alpha * 0.95;
-        }
-      } else {
-        if (mesh) mesh.visible = false;
-      }
-    }
-    if (!anyActive && Math.random() < delta * SPAWN_RATE_PER_S) {
-      const idle = shootersRef.current.find((s) => !s.active);
-      if (idle) spawn(idle);
-    }
-  });
-
-  return (
-    <>
-      <mesh ref={firstMeshRef} visible={false}>
-        {/* Long thin streak; aligned to +x in local space and rotated each frame. */}
-        <boxGeometry args={[3.5, 0.06, 0.06]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0} toneMapped={false} />
-      </mesh>
-      <mesh ref={secondMeshRef} visible={false}>
-        <boxGeometry args={[3.5, 0.06, 0.06]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0} toneMapped={false} />
-      </mesh>
-    </>
   );
 }

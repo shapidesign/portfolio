@@ -17,6 +17,7 @@ type SolarSceneProps = {
   reducedMotion: boolean;
   spacecraftVisible: boolean;
   compact: boolean;
+  voyageMotion?: boolean;
   planetPositions: Record<string, React.MutableRefObject<THREE.Vector3>>;
   onPlanetHover: (slug: string | null) => void;
   onPlanetClick: (slug: string, evt: { clientX: number; clientY: number }) => void;
@@ -32,6 +33,7 @@ export function SolarScene({
   reducedMotion,
   spacecraftVisible,
   compact,
+  voyageMotion = false,
   planetPositions,
   onPlanetHover,
   onPlanetClick,
@@ -40,7 +42,7 @@ export function SolarScene({
 }: SolarSceneProps) {
   return (
     <Suspense fallback={null}>
-      <Background />
+      <Background voyageMotion={voyageMotion} />
       <CameraRig target={cameraTarget} parallax={4.5} reducedMotion={reducedMotion} compact={compact} />
 
       <Sun onHoverChange={onSunHover} onClick={onSunClick} />

@@ -372,6 +372,7 @@ export function SolarSystem({ projects }: SolarSystemProps) {
               reducedMotion={reducedMotion}
               spacecraftVisible={!modalOpen}
               compact={compactScene}
+              voyageMotion={voyageMode === "riding"}
               planetPositions={planetPositions}
               onPlanetHover={(slug) => setHoveredSlug(slug)}
               onPlanetClick={(slug) => openProject(slug)}
