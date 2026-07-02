@@ -293,11 +293,6 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
   };
 }
 
-export async function getCollectionProductHandles(handle: string): Promise<string[]> {
-  const collection = await getCollectionProducts(handle, 100);
-  return collection ? collection.products.map((product) => product.handle) : [];
-}
-
 export function getDefaultCollectionHandles() {
   const { shirtsCollectionHandle, merchCollectionHandle } = getStorefrontConfig();
   return { shirtsCollectionHandle, merchCollectionHandle };

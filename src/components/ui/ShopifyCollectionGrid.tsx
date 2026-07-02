@@ -75,7 +75,10 @@ export function ShopifyCollectionGrid({
     <div className="shirts-grid">
       {collection.products.map((product) => (
         <article className="shirts-card" key={product.id}>
-          <Link href={`${productPathPrefix}/${product.handle}`} className="shirts-card-link">
+          <Link
+            href={`${productPathPrefix}/product/?handle=${encodeURIComponent(product.handle)}`}
+            className="shirts-card-link"
+          >
             <div className="shirts-card-image-wrap">
               {product.featuredImage ? (
                 <img
