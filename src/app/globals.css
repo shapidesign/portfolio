@@ -2474,7 +2474,8 @@ p {
   top: 0;
   left: 0;
   pointer-events: none;
-  z-index: 120;
+  /* Above the cart drawer (z-index 1000) so the cursor stays visible over modals. */
+  z-index: 3000;
   opacity: 0;
   transform: translate3d(-200px, -200px, 0);
 }
@@ -4089,16 +4090,67 @@ p.form-sent-copy:hover {
 }
 
 .pdp-main-media {
+  position: relative;
   border-radius: var(--radius-image);
   overflow: hidden;
   background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface-2));
   aspect-ratio: 4 / 5;
+  touch-action: pan-y;
+}
+
+.pdp-main-media:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
+  outline-offset: 2px;
 }
 
 .pdp-main-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  user-select: none;
+}
+
+.pdp-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-bg-elevated) 88%, transparent);
+  color: var(--color-text);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  opacity: 0.85;
+  transition: opacity 160ms ease, background 160ms ease;
+}
+
+.pdp-nav:hover {
+  opacity: 1;
+  background: var(--color-bg-elevated);
+}
+
+.pdp-nav:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+.pdp-nav-prev {
+  inset-inline-start: 0.6rem;
+}
+
+.pdp-nav-next {
+  inset-inline-end: 0.6rem;
+}
+
+.pdp-nav span {
+  margin-top: -3px;
 }
 
 .pdp-main-fallback {
@@ -4163,10 +4215,105 @@ p.form-sent-copy:hover {
   color: var(--color-text);
 }
 
+.pdp-details {
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+}
+
+@media (min-width: 900px) {
+  .pdp-details {
+    grid-column: 1 / -1;
+    max-width: 70ch;
+  }
+}
+
 .pdp-description {
   color: var(--color-text-soft);
   line-height: 1.6;
-  max-width: 52ch;
+  max-width: 60ch;
+}
+
+.pdp-description.rich-text {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.pdp-description.rich-text p {
+  color: var(--color-text-soft);
+  line-height: 1.6;
+}
+
+.pdp-description.rich-text a {
+  color: var(--color-accent-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pdp-description.rich-text strong {
+  color: var(--color-text);
+}
+
+.pdp-description.rich-text ul,
+.pdp-description.rich-text ol {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-text-soft);
+}
+
+.pdp-description.rich-text h2,
+.pdp-description.rich-text h3,
+.pdp-description.rich-text h4 {
+  color: var(--color-text);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 0.4rem;
+}
+
+.pdp-description.rich-text img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-card);
+}
+
+/* Size chart / any table in the product description */
+.pdp-description.rich-text table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 14%, transparent);
+}
+
+.pdp-description.rich-text th,
+.pdp-description.rich-text td {
+  padding: 0.55rem 0.75rem;
+  text-align: start;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
+  border-inline-end: 1px solid color-mix(in srgb, var(--color-accent-white) 12%, transparent);
+  color: var(--color-text);
+}
+
+.pdp-description.rich-text th:last-child,
+.pdp-description.rich-text td:last-child {
+  border-inline-end: 0;
+}
+
+.pdp-description.rich-text tr:last-child td {
+  border-bottom: 0;
+}
+
+.pdp-description.rich-text thead th {
+  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-surface));
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+}
+
+.pdp-description.rich-text tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--color-accent-white) 4%, transparent);
 }
 
 .pdp-option {

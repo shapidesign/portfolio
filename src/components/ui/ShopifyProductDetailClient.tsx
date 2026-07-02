@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getProductByHandle } from "@/lib/shopify-storefront";
-import type { ShopifyProductDetail } from "@/lib/shopify-types";
+import type { ShopifyImage, ShopifyProductDetail } from "@/lib/shopify-types";
 import {
   defaultSelection,
   deriveOptions,
@@ -45,18 +45,19 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
   const [product, setProduct] = useState<ShopifyProductDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeImageUrl, setActiveImageUrl] = useState<string | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [selected, setSelected] = useState<SelectedOptions>({});
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const touchStartX = useRef<number | null>(null);
 
   const loadProduct = useCallback(async () => {
     setLoading(true);
     try {
-      const nextProduct = await getProductByHandle(handle);
+      const nextProduct = await getProductByHandle(handle, lang);
       setProduct(nextProduct);
-      setActiveImageUrl(nextProduct?.images[0]?.url ?? nextProduct?.featuredImage?.url ?? null);
+      setActiveIndex(0);
       setSelected(nextProduct ? defaultSelection(nextProduct.variants) : {});
       setError(null);
     } catch {
@@ -64,7 +65,7 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
     } finally {
       setLoading(false);
     }
-  }, [handle, s.shopProductError]);
+  }, [handle, lang, s.shopProductError]);
 
   useEffect(() => {
     void loadProduct();
@@ -77,10 +78,63 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
     [product, selected],
   );
 
+  const galleryImages = useMemo<ShopifyImage[]>(() => {
+    if (!product) return [];
+    if (product.images.length > 0) return product.images;
+    return product.featuredImage ? [product.featuredImage] : [];
+  }, [product]);
+
+  // Selecting a colour (or any variant with its own image) swaps the main mockup.
+  // ponytail: if the variant image isn't part of the gallery we keep the current
+  // image rather than appending an orphan; Shopify variant images are normally in the set.
+  const variantImageUrl = selectedVariant?.image?.url;
+  useEffect(() => {
+    if (!variantImageUrl) return;
+    const index = galleryImages.findIndex((image) => image.url === variantImageUrl);
+    if (index >= 0) setActiveIndex(index);
+  }, [variantImageUrl, galleryImages]);
+
   const chooseOption = useCallback((name: string, value: string) => {
     setSelected((prev) => ({ ...prev, [name]: value }));
     setStatusMessage(null);
   }, []);
+
+  const showImage = useCallback(
+    (index: number) => {
+      const count = galleryImages.length;
+      if (count === 0) return;
+      setActiveIndex(((index % count) + count) % count);
+    },
+    [galleryImages.length],
+  );
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (galleryImages.length < 2) return;
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showImage(activeIndex + 1);
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showImage(activeIndex - 1);
+      }
+    },
+    [activeIndex, galleryImages.length, showImage],
+  );
+
+  const handleTouchStart = useCallback((event: React.TouchEvent) => {
+    touchStartX.current = event.touches[0]?.clientX ?? null;
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (event: React.TouchEvent) => {
+      if (touchStartX.current === null) return;
+      const deltaX = (event.changedTouches[0]?.clientX ?? 0) - touchStartX.current;
+      if (Math.abs(deltaX) > 40) showImage(activeIndex + (deltaX < 0 ? 1 : -1));
+      touchStartX.current = null;
+    },
+    [activeIndex, showImage],
+  );
 
   const handleAddToCart = useCallback(async () => {
     if (!selectedVariant) return;
@@ -91,6 +145,8 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
   }, [addLines, quantity, s.shopAddedToCart, s.shopUpdateError, selectedVariant]);
 
   const soldOut = Boolean(selectedVariant && !selectedVariant.availableForSale);
+  const activeImage = galleryImages[activeIndex] ?? null;
+  const hasMultipleImages = galleryImages.length > 1;
 
   return (
     <main className="store-page store-pdp">
@@ -121,23 +177,60 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
         {product ? (
           <div className="pdp-layout">
             <div className="pdp-gallery">
-              <div className="pdp-main-media">
-                {activeImageUrl ? (
+              <div
+                className="pdp-main-media"
+                role="group"
+                aria-label={product.title}
+                aria-roledescription="carousel"
+                tabIndex={0}
+                onKeyDown={handleKeyDown}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
+                {activeImage ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={activeImageUrl} alt={product.title} className="pdp-main-image" />
+                  <img
+                    src={activeImage.url}
+                    alt={activeImage.altText || product.title}
+                    className="pdp-main-image"
+                    draggable={false}
+                  />
                 ) : (
                   <div className="pdp-main-image pdp-main-fallback" aria-hidden />
                 )}
+
+                {hasMultipleImages ? (
+                  <>
+                    <button
+                      type="button"
+                      className="pdp-nav pdp-nav-prev"
+                      aria-label={s.shopPrevImage}
+                      onClick={() => showImage(activeIndex - 1)}
+                    >
+                      <span aria-hidden>‹</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="pdp-nav pdp-nav-next"
+                      aria-label={s.shopNextImage}
+                      onClick={() => showImage(activeIndex + 1)}
+                    >
+                      <span aria-hidden>›</span>
+                    </button>
+                  </>
+                ) : null}
               </div>
-              {product.images.length > 1 ? (
+
+              {hasMultipleImages ? (
                 <div className="pdp-thumbs" role="list">
-                  {product.images.map((image) => (
+                  {galleryImages.map((image, index) => (
                     <button
                       type="button"
                       key={image.url}
-                      className={`pdp-thumb ${activeImageUrl === image.url ? "is-active" : ""}`}
-                      onClick={() => setActiveImageUrl(image.url)}
+                      className={`pdp-thumb ${index === activeIndex ? "is-active" : ""}`}
+                      onClick={() => setActiveIndex(index)}
                       aria-label={image.altText || product.title}
+                      aria-current={index === activeIndex}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={image.url} alt="" />
@@ -154,8 +247,6 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
                   {formatMoney(selectedVariant.price.amount, selectedVariant.price.currencyCode)}
                 </p>
               ) : null}
-
-              {product.description ? <p className="pdp-description">{product.description}</p> : null}
 
               {options.map((option) => {
                 const isColor = isColorOption(option.name);
@@ -208,11 +299,7 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
                     −
                   </button>
                   <span>{quantity}</span>
-                  <button
-                    type="button"
-                    onClick={() => setQuantity((q) => q + 1)}
-                    aria-label="+"
-                  >
+                  <button type="button" onClick={() => setQuantity((q) => q + 1)} aria-label="+">
                     +
                   </button>
                 </div>
@@ -232,6 +319,15 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
                 </p>
               ) : null}
             </div>
+
+            {product.descriptionHtml ? (
+              <div
+                className="pdp-details pdp-description rich-text"
+                dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+              />
+            ) : product.description ? (
+              <p className="pdp-details pdp-description">{product.description}</p>
+            ) : null}
           </div>
         ) : null}
       </section>

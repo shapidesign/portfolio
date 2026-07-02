@@ -21,6 +21,7 @@ export type ShopifyVariant = {
   availableForSale: boolean;
   price: ShopifyMoney;
   selectedOptions: ShopifySelectedOption[];
+  image: ShopifyImage | null;
 };
 
 export type ShopifyProductCard = {
@@ -33,6 +34,7 @@ export type ShopifyProductCard = {
 
 export type ShopifyProductDetail = ShopifyProductCard & {
   description: string;
+  descriptionHtml: string;
   images: ShopifyImage[];
   variants: ShopifyVariant[];
 };

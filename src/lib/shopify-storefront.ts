@@ -83,6 +83,7 @@ function mapVariant(variant: {
   availableForSale: boolean;
   price: { amount: string; currencyCode: string };
   selectedOptions: Array<{ name: string; value: string }>;
+  image: { url: string; altText: string | null; width: number | null; height: number | null } | null;
 }): ShopifyVariant {
   return {
     id: variant.id,
@@ -96,7 +97,13 @@ function mapVariant(variant: {
       name: option.name,
       value: option.value,
     })),
+    image: mapImage(variant.image),
   };
+}
+
+/** Map our app language to a Shopify Storefront LanguageCode. */
+function toLanguageCode(lang?: string): "EN" | "HE" {
+  return lang === "he" ? "HE" : "EN";
 }
 
 export async function queryStorefront<TData>(query: string, variables?: Record<string, unknown>): Promise<TData> {
@@ -161,12 +168,13 @@ const COLLECTION_PRODUCTS_QUERY = `
 `;
 
 const PRODUCT_BY_HANDLE_QUERY = `
-  query ProductByHandle($handle: String!) {
+  query ProductByHandle($handle: String!, $language: LanguageCode!) @inContext(language: $language) {
     product(handle: $handle) {
       id
       handle
       title
       description
+      descriptionHtml
       featuredImage {
         url
         altText
@@ -196,6 +204,12 @@ const PRODUCT_BY_HANDLE_QUERY = `
             selectedOptions {
               name
               value
+            }
+            image {
+              url
+              altText
+              width
+              height
             }
           }
         }
@@ -235,26 +249,24 @@ type CollectionProductsQueryResult = {
   } | null;
 };
 
+type ProductImageNode = {
+  url: string;
+  altText: string | null;
+  width: number | null;
+  height: number | null;
+};
+
 type ProductByHandleQueryResult = {
   product: {
     id: string;
     handle: string;
     title: string;
     description: string;
-    featuredImage: {
-      url: string;
-      altText: string | null;
-      width: number | null;
-      height: number | null;
-    } | null;
+    descriptionHtml: string;
+    featuredImage: ProductImageNode | null;
     images: {
       edges: Array<{
-        node: {
-          url: string;
-          altText: string | null;
-          width: number | null;
-          height: number | null;
-        };
+        node: ProductImageNode;
       }>;
     };
     variants: {
@@ -265,6 +277,7 @@ type ProductByHandleQueryResult = {
           availableForSale: boolean;
           price: { amount: string; currencyCode: string };
           selectedOptions: Array<{ name: string; value: string }>;
+          image: ProductImageNode | null;
         };
       }>;
     };
@@ -285,8 +298,11 @@ export async function getCollectionProducts(handle: string, limit = 24): Promise
   };
 }
 
-export async function getProductByHandle(handle: string): Promise<ShopifyProductDetail | null> {
-  const data = await queryStorefront<ProductByHandleQueryResult>(PRODUCT_BY_HANDLE_QUERY, { handle });
+export async function getProductByHandle(handle: string, lang?: string): Promise<ShopifyProductDetail | null> {
+  const data = await queryStorefront<ProductByHandleQueryResult>(PRODUCT_BY_HANDLE_QUERY, {
+    handle,
+    language: toLanguageCode(lang),
+  });
   const product = data.product;
   if (!product) return null;
 
@@ -295,6 +311,7 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
     handle: product.handle,
     title: product.title,
     description: product.description,
+    descriptionHtml: product.descriptionHtml,
     featuredImage: mapImage(product.featuredImage),
     images: product.images.edges.map(({ node }) => ({
       url: node.url,

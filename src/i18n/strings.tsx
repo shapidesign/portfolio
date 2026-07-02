@@ -107,6 +107,8 @@ const strings = {
     shopTaxNote: "Taxes and shipping calculated at checkout.",
     shopRemove: "Remove",
     shopShopAll: "Shop all on Shopify",
+    shopPrevImage: "Previous image",
+    shopNextImage: "Next image",
 
     // Project detail
     visitProject: "Visit project",
@@ -252,6 +254,8 @@ const strings = {
     shopTaxNote: "מסים ומשלוח יחושבו בתשלום.",
     shopRemove: "הסרה",
     shopShopAll: "לחנות המלאה ב-Shopify",
+    shopPrevImage: "תמונה קודמת",
+    shopNextImage: "תמונה הבאה",
 
     visitProject: "לאתר הפרויקט",
     backToWork: "חזרה לעבודות",

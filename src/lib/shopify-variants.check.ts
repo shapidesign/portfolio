@@ -14,6 +14,7 @@ function mk(size: string, color: string, availableForSale: boolean): ShopifyVari
       { name: "Size", value: size },
       { name: "Color", value: color },
     ],
+    image: null,
   };
 }
 
