@@ -118,6 +118,9 @@ export async function queryStorefront<TData>(query: string, variables?: Record<s
       "X-Shopify-Storefront-Access-Token": storefrontAccessToken,
     },
     body: JSON.stringify({ query, variables }),
+    // Always reflect the latest Shopify catalog (Printify -> Shopify -> site) on every
+    // page load; never serve a cached product list, price, or availability.
+    cache: "no-store",
   });
 
   if (!response.ok) {
