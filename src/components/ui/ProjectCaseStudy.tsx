@@ -56,9 +56,6 @@ export function ProjectCaseStudy({ project, onSelectNext }: ProjectCaseStudyProp
 
   const scrollGalleryImages = project.images
     .filter((src) => !src.includes("tetris animation"))
-    .filter(
-      (src) => !(slug === "animal-to-logo" && src.includes("alma + text.webp")),
-    )
     // The color guidelines are replaced by the animated palette embed, and the
     // logotype reveal asset is a flattened white-on-white image.
     .filter(

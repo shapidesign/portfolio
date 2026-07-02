@@ -1,7 +1,0 @@
-alma + text.webp
-logo2.svg
-Logo3.svg
-pattern.svg
-charger.webp
-tag.webp
-mask.webp

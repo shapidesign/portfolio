@@ -7,7 +7,6 @@ const ACCENT_BY_SLUG: Record<string, string> = {
   "no-gatekeeping": "#a6e22e",
   "keeping-it-clean": "#e6db74",
   "rethinking-real-estate": "#f4902d",
-  "animal-to-logo": "#f8f8f2",
 };
 
 const FALLBACK_ACCENTS = ["#f92672", "#66d9ef", "#a6e22e", "#fd971f", "#e6db74", "#f8f8f2"];

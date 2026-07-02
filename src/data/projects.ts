@@ -4,13 +4,11 @@ import generatedRaw from "./projects.generated.json";
 export type { Project, Accent, ShapeVariant };
 
 /** Projects hidden from the site even if they come back from the Notion sync. */
-const REMOVED_SLUGS = new Set(["the-misfit-market"]);
+const REMOVED_SLUGS = new Set(["the-misfit-market", "animal-to-logo"]);
 
 const PROJECT_CONTEXT: Record<string, string> = {
   "small-world-problems":
     "A typographic experiment exploring how a single letter, scaled and repositioned, changes meaning. Made as a self-initiated study in visual impact (and a bit of humor).",
-  "animal-to-logo":
-    "An exercise in reduction \u2014 taking complex animal forms and distilling them to their meaningful truth. Inspired by Paul Rand\u2019s and George Bokhua\u2019s approach to logo thinking. HiT.",
   "digital-handprint":
     "A self-portrait built in code, not pixels. An exploration of what it means to leave a mark in a digital space that remembers nothing, and a hint of self-criticism about my computer use habits.",
   "keeping-it-clean":
@@ -28,7 +26,6 @@ const PROJECT_STATUS: Record<string, { en: string; he: string }> = {
   "digital-handprint": { en: "SELF-INITIATED", he: "יוזמה עצמית" },
   "no-gatekeeping": { en: "SELF-INITIATED", he: "יוזמה עצמית" },
   "keeping-it-clean": { en: "DELIVERED", he: "בוצע" },
-  "animal-to-logo": { en: "STUDENT WORK", he: "עבודת סטודנט" },
   "small-world-problems": { en: "SELF-INITIATED", he: "יוזמה עצמית" },
 };
 
@@ -36,7 +33,6 @@ const PROJECT_DISCIPLINE: Record<string, { en: string; he: string }> = {
   "digital-handprint": { en: "CREATIVE CODING", he: "קוד יצירתי" },
   "no-gatekeeping": { en: "DIGITAL PRODUCT", he: "מוצר דיגיטלי" },
   "keeping-it-clean": { en: "BRANDING", he: "מיתוג" },
-  "animal-to-logo": { en: "TYPE", he: "טיפוגרפיה" },
   "small-world-problems": { en: "TYPE", he: "טיפוגרפיה" },
 };
 
@@ -44,10 +40,6 @@ const PROJECT_DESCRIPTOR: Record<string, { en: string; he: string }> = {
   "keeping-it-clean": {
     en: "Making cleaning products earn their place on the counter.",
     he: "להפוך מוצרי ניקוי למשהו שמגיע לו לעמוד על השיש.",
-  },
-  "animal-to-logo": {
-    en: "From a living form to a mark that lasts.",
-    he: "מצורה חיה לסימן גרפי שנשאר לאורך זמן.",
   },
   "no-gatekeeping": {
     en: "Design as a public service with zero gatekeepers.",
@@ -67,10 +59,6 @@ const PROJECT_OPENER: Record<string, { en: string; he: string }> = {
   "keeping-it-clean": {
     en: "The packaging had to make sustainable cleaning products feel premium enough to stay visible in the home.",
     he: "האריזה הייתה צריכה לגרום למוצרי ניקוי אקולוגיים להרגיש פרימיום מספיק כדי להישאר גלויים בבית.",
-  },
-  "animal-to-logo": {
-    en: "The challenge was to reduce a living form into a clear symbol without losing movement and meaning.",
-    he: "האתגר היה לצמצם צורה חיה לסמל ברור בלי לאבד תנועה ומשמעות.",
   },
   "no-gatekeeping": {
     en: "I needed to package scattered student knowledge into one practical interface people could use immediately.",
@@ -109,20 +97,6 @@ const PROJECT_NARRATIVE: Record<string, Narrative> = {
       "התייחסתי לקו כולו כמשפחה אחת ולא כסדרה של תוויות נפרדות. בניתי היררכיה טיפוגרפית, גריד עקבי וקצב ריווחים שמאפשרים להבין הבדלים בין מוצרים במהירות בלי לפגוע באחידות המותג. במקום שכבות דקורטיביות, השתמשתי בפרופורציה ובסדר חזותי כדי לייצר תחושת איכות.",
     heDecision:
       "ההחלטה המרכזית הייתה לבחור באיפוק ולתת לבהירות להוביל. צמצום רעש גרפי והדגשת מבנה מדויק יוצרים אמון חזותי וגם תומכים בשימוש יומיומי. כך המוצרים מצליחים להיות נוכחים על השיש כחלק טבעי מהבית, ולא להיתפס כפתרון זמני שמסתירים.",
-  },
-  "animal-to-logo": {
-    challenge:
-      "Translating a living creature into a logo creates a tension between detail and clarity. The challenge was to reduce the stork into a symbol that still carries migration, return, and academic growth without becoming illustrative. The mark needed to work as a concept first, then as a polished visual asset.",
-    approach:
-      "I ran an iterative reduction process from anatomical reference to abstract geometry. Each step removed visual noise while preserving three narrative anchors: movement, direction, and knowledge transfer. Negative space and balance between masses became the main tools for keeping symbolism readable at small and large scales.",
-    decision:
-      "The defining decision was shaping the wing gesture into an open-book form. That move ties the bird metaphor directly to the academic mission and gives the logo a second reading layer without added complexity. It also improves memorability because one silhouette now carries two ideas.",
-    heChallenge:
-      "כשמתרגמים יצור חי ללוגו נוצר מתח קבוע בין פירוט לקריאות. האתגר היה לצמצם את החסידה לסימן שמעביר נדידה, חזרה והתפתחות אקדמית בלי להיראות אילוסטרטיבי מדי. הסמל היה צריך לעבוד קודם כרעיון ורק אחר כך כאובייקט מעוצב.",
-    heApproach:
-      "ביצעתי תהליך צמצום איטרטיבי מצורה אנטומית לשפה גאומטרית. בכל שלב ירד רעש חזותי אבל נשמרו שלושה עוגנים רעיוניים: תנועה, כיוון והעברת ידע. העבודה עם חלל שלילי ואיזון בין מסות הייתה הכלי המרכזי לשמירה על קריאות בסקאלות שונות.",
-    heDecision:
-      "ההחלטה המכריעה הייתה לעצב את מחוות הכנף כספר נפתח. המהלך הזה קושר באופן ישיר בין מטאפורת החסידה למשימה האקדמית ומוסיף שכבת משמעות בלי להעמיס על הסמל. בנוסף, הוא מחזק זכירות כי אותה צללית מחזיקה שני רעיונות בו-זמנית.",
   },
   "no-gatekeeping": {
     challenge:
