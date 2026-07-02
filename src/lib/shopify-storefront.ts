@@ -1,6 +1,9 @@
 import type { ShopifyCollectionProducts, ShopifyImage, ShopifyMoney, ShopifyProductCard, ShopifyProductDetail, ShopifyVariant } from "@/lib/shopify-types";
 
-const DEFAULT_SHOPIFY_DOMAIN = "fj41vd-0q.myshopify.com";
+const DEFAULT_SHOPIFY_DOMAIN = "mundial-laundry.myshopify.com";
+// ponytail: public Storefront API token (safe to expose in the client bundle by design);
+// upgrade path is setting NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN in Vercel and rotating the token.
+const DEFAULT_SHOPIFY_STOREFRONT_TOKEN = "7a9042e0b5103720e527af98496f694b";
 const DEFAULT_SHIRTS_COLLECTION_HANDLE = "shirts";
 
 type ShopifyGraphQLError = {
@@ -14,7 +17,8 @@ type ShopifyGraphQLResponse<TData> = {
 
 function getStorefrontConfig() {
   const domain = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN ?? DEFAULT_SHOPIFY_DOMAIN;
-  const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN ?? "";
+  const storefrontAccessToken =
+    process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN ?? DEFAULT_SHOPIFY_STOREFRONT_TOKEN;
   const shirtsCollectionHandle =
     process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_COLLECTION_HANDLE ??
     process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_HANDLE ??
