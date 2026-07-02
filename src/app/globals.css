@@ -3901,6 +3901,11 @@ p.form-sent-copy:hover {
   min-height: 44px;
 }
 
+.shopify-collection-embed {
+  width: 100%;
+  min-height: 220px;
+}
+
 .shirts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));

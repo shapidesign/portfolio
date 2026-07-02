@@ -1,6 +1,7 @@
 "use client";
 
 import { Reveal } from "@/components/ui/Reveal";
+import { ShopifyCollectionEmbed } from "@/components/ui/ShopifyCollectionEmbed";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
 
@@ -17,7 +18,9 @@ export default function ShirtsPage() {
   const shirtsStoreUrl = normalizeStoreUrl(
     process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_URL ?? process.env.NEXT_PUBLIC_SHOPIFY_STORE_URL ?? "",
   );
+  const shirtsCollectionId = process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_COLLECTION_ID ?? "";
   const hasStoreLink = shirtsStoreUrl.length > 0;
+  const hasCollectionId = shirtsCollectionId.length > 0;
 
   return (
     <main className="shirts-page">
@@ -33,6 +36,7 @@ export default function ShirtsPage() {
           <Reveal>
             <div className="shirts-store-panel">
               <p className="subtitle">{s.shirtsStoreHint}</p>
+              {hasCollectionId ? <ShopifyCollectionEmbed collectionId={shirtsCollectionId} /> : null}
               <a
                 href={shirtsStoreUrl}
                 target="_blank"

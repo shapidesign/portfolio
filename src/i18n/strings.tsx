@@ -71,7 +71,7 @@ const strings = {
     shirtsTitle: "Shirts",
     shirtsLead:
       "Shop directly through my Shopify storefront (fulfilled with Printify).",
-    shirtsStoreHint: "Opens the Shopify shirts page in a new tab for checkout.",
+    shirtsStoreHint: "Embedded Shopify view below. If it is blocked, open in a new tab.",
     shirtsEmpty: "No shirts are published yet. Please check back soon.",
     shirtsError:
       "Store link is not configured yet. Add NEXT_PUBLIC_SHOPIFY_STORE_URL (or NEXT_PUBLIC_SHOPIFY_SHIRTS_URL) to .env.local.",
@@ -79,7 +79,7 @@ const strings = {
     merchTitle: "Merch",
     merchLead:
       "Shop merch through my Shopify storefront (fulfilled with Printify).",
-    merchStoreHint: "Opens the Shopify merch page in a new tab for checkout.",
+    merchStoreHint: "Embedded Shopify view below. If it is blocked, open in a new tab.",
     merchError:
       "Store link is not configured yet. Add NEXT_PUBLIC_SHOPIFY_STORE_URL (or NEXT_PUBLIC_SHOPIFY_MERCH_URL) to .env.local.",
     merchBuyNow: "Shop merch",
@@ -192,7 +192,7 @@ const strings = {
     shirtsTitle: "חולצות",
     shirtsLead:
       "קנו ישירות דרך חנות Shopify שלי (עם מילוי הזמנות דרך Printify).",
-    shirtsStoreHint: "דף החולצות ב-Shopify ייפתח בלשונית חדשה לתשלום.",
+    shirtsStoreHint: "תצוגת Shopify מוטמעת למטה. אם היא חסומה, פתחו בלשונית חדשה.",
     shirtsEmpty: "עדיין אין חולצות שפורסמו. נסו שוב בקרוב.",
     shirtsError:
       "קישור החנות עדיין לא מוגדר. הוסיפו NEXT_PUBLIC_SHOPIFY_STORE_URL (או NEXT_PUBLIC_SHOPIFY_SHIRTS_URL) לקובץ .env.local.",
@@ -200,7 +200,7 @@ const strings = {
     merchTitle: "מרצ׳",
     merchLead:
       "קנו מרצ׳ דרך חנות Shopify שלי (עם מילוי הזמנות דרך Printify).",
-    merchStoreHint: "דף המרצ׳ ב-Shopify ייפתח בלשונית חדשה לתשלום.",
+    merchStoreHint: "תצוגת Shopify מוטמעת למטה. אם היא חסומה, פתחו בלשונית חדשה.",
     merchError:
       "קישור החנות עדיין לא מוגדר. הוסיפו NEXT_PUBLIC_SHOPIFY_STORE_URL (או NEXT_PUBLIC_SHOPIFY_MERCH_URL) לקובץ .env.local.",
     merchBuyNow: "לקניית מרצ׳",
