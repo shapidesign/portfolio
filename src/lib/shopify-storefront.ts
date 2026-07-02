@@ -1,7 +1,6 @@
 import type { ShopifyCollectionProducts, ShopifyImage, ShopifyMoney, ShopifyProductCard, ShopifyProductDetail, ShopifyVariant } from "@/lib/shopify-types";
 
 const DEFAULT_SHOPIFY_DOMAIN = "fj41vd-0q.myshopify.com";
-const DEFAULT_SHOPIFY_STOREFRONT_TOKEN = "7a9042e0b5103720e527af98496f694b";
 const DEFAULT_SHIRTS_COLLECTION_HANDLE = "shirts";
 
 type ShopifyGraphQLError = {
@@ -15,7 +14,7 @@ type ShopifyGraphQLResponse<TData> = {
 
 function getStorefrontConfig() {
   const domain = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN ?? DEFAULT_SHOPIFY_DOMAIN;
-  const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN ?? DEFAULT_SHOPIFY_STOREFRONT_TOKEN;
+  const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN ?? "";
   const shirtsCollectionHandle =
     process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_COLLECTION_HANDLE ??
     process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_HANDLE ??
@@ -93,6 +92,9 @@ function mapVariant(variant: {
 
 export async function queryStorefront<TData>(query: string, variables?: Record<string, unknown>): Promise<TData> {
   const { domain, storefrontAccessToken } = getStorefrontConfig();
+  if (!storefrontAccessToken) {
+    throw new Error("Missing NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN. Add it to your environment variables.");
+  }
   const response = await fetch(`https://${domain}/api/2025-01/graphql.json`, {
     method: "POST",
     headers: {
