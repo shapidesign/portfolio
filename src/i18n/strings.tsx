@@ -71,7 +71,7 @@ const strings = {
     shirtsTitle: "Shirts",
     shirtsLead:
       "Shop directly through my Shopify storefront (fulfilled with Printify).",
-    shirtsStoreHint: "Embedded Shopify view below. If it is blocked, open in a new tab.",
+    shirtsStoreHint: "Browse products here and checkout on Shopify when ready.",
     shirtsEmpty: "No shirts are published yet. Please check back soon.",
     shirtsError:
       "Store link is not configured yet. Add NEXT_PUBLIC_SHOPIFY_STORE_URL (or NEXT_PUBLIC_SHOPIFY_SHIRTS_URL) to .env.local.",
@@ -79,10 +79,26 @@ const strings = {
     merchTitle: "Merch",
     merchLead:
       "Shop merch through my Shopify storefront (fulfilled with Printify).",
-    merchStoreHint: "Embedded Shopify view below. If it is blocked, open in a new tab.",
+    merchStoreHint: "Browse merch here and checkout on Shopify when ready.",
     merchError:
       "Store link is not configured yet. Add NEXT_PUBLIC_SHOPIFY_STORE_URL (or NEXT_PUBLIC_SHOPIFY_MERCH_URL) to .env.local.",
     merchBuyNow: "Shop merch",
+    shopLoading: "Loading products...",
+    shopCollectionError: "Could not load products right now. Please try again.",
+    shopRetry: "Try again",
+    shopViewDetails: "View details",
+    shopCartTitle: "Your cart",
+    shopCartEmpty: "Your cart is empty.",
+    shopCheckout: "Checkout on Shopify",
+    shopUpdateError: "Could not update cart. Please try again.",
+    shopProductError: "Could not load this product right now.",
+    shopProductNotFound: "Product not found.",
+    shopBackToCollection: "Back to collection",
+    shopVariant: "Variant",
+    shopQuantity: "Quantity",
+    shopAddToCart: "Add to cart",
+    shopAddingToCart: "Adding...",
+    shopAddedToCart: "Added to cart.",
 
     // Project detail
     visitProject: "Visit project",
@@ -192,7 +208,7 @@ const strings = {
     shirtsTitle: "חולצות",
     shirtsLead:
       "קנו ישירות דרך חנות Shopify שלי (עם מילוי הזמנות דרך Printify).",
-    shirtsStoreHint: "תצוגת Shopify מוטמעת למטה. אם היא חסומה, פתחו בלשונית חדשה.",
+    shirtsStoreHint: "עיינו במוצרים כאן ועברו לתשלום ב-Shopify כשתהיו מוכנים.",
     shirtsEmpty: "עדיין אין חולצות שפורסמו. נסו שוב בקרוב.",
     shirtsError:
       "קישור החנות עדיין לא מוגדר. הוסיפו NEXT_PUBLIC_SHOPIFY_STORE_URL (או NEXT_PUBLIC_SHOPIFY_SHIRTS_URL) לקובץ .env.local.",
@@ -200,10 +216,26 @@ const strings = {
     merchTitle: "מרצ׳",
     merchLead:
       "קנו מרצ׳ דרך חנות Shopify שלי (עם מילוי הזמנות דרך Printify).",
-    merchStoreHint: "תצוגת Shopify מוטמעת למטה. אם היא חסומה, פתחו בלשונית חדשה.",
+    merchStoreHint: "עיינו במרצ׳ כאן ועברו לתשלום ב-Shopify כשתהיו מוכנים.",
     merchError:
       "קישור החנות עדיין לא מוגדר. הוסיפו NEXT_PUBLIC_SHOPIFY_STORE_URL (או NEXT_PUBLIC_SHOPIFY_MERCH_URL) לקובץ .env.local.",
     merchBuyNow: "לקניית מרצ׳",
+    shopLoading: "טוען מוצרים...",
+    shopCollectionError: "לא ניתן לטעון מוצרים כרגע. נסו שוב.",
+    shopRetry: "נסו שוב",
+    shopViewDetails: "לפרטים",
+    shopCartTitle: "העגלה שלך",
+    shopCartEmpty: "העגלה ריקה.",
+    shopCheckout: "לתשלום ב-Shopify",
+    shopUpdateError: "לא ניתן לעדכן את העגלה. נסו שוב.",
+    shopProductError: "לא ניתן לטעון את המוצר כרגע.",
+    shopProductNotFound: "המוצר לא נמצא.",
+    shopBackToCollection: "חזרה לאוסף",
+    shopVariant: "וריאציה",
+    shopQuantity: "כמות",
+    shopAddToCart: "הוספה לעגלה",
+    shopAddingToCart: "מוסיף...",
+    shopAddedToCart: "נוסף לעגלה.",
 
     visitProject: "לאתר הפרויקט",
     backToWork: "חזרה לעבודות",

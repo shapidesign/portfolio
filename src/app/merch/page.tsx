@@ -1,12 +1,14 @@
 "use client";
 
 import { Reveal } from "@/components/ui/Reveal";
-import { ShopifyCollectionEmbed } from "@/components/ui/ShopifyCollectionEmbed";
+import { ShopifyCartPanel } from "@/components/ui/ShopifyCartPanel";
+import { ShopifyCollectionGrid } from "@/components/ui/ShopifyCollectionGrid";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
+import { getDefaultCollectionHandles } from "@/lib/shopify-storefront";
 
 const DEFAULT_STORE_URL = "https://mundial-laundry.myshopify.com/collections/shirts";
-const DEFAULT_COLLECTION_ID = "484456038640";
+const { merchCollectionHandle } = getDefaultCollectionHandles();
 
 function normalizeStoreUrl(rawUrl: string): string {
   const trimmed = rawUrl.trim();
@@ -24,12 +26,7 @@ export default function MerchPage() {
       process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_URL ??
       DEFAULT_STORE_URL,
   );
-  const merchCollectionId =
-    process.env.NEXT_PUBLIC_SHOPIFY_MERCH_COLLECTION_ID ??
-    process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_COLLECTION_ID ??
-    DEFAULT_COLLECTION_ID;
   const hasStoreLink = merchStoreUrl.length > 0;
-  const hasCollectionId = merchCollectionId.length > 0;
 
   return (
     <main className="shirts-page">
@@ -43,17 +40,34 @@ export default function MerchPage() {
       <section className="section content-wrap shirts-store-section" aria-live="polite">
         {hasStoreLink ? (
           <Reveal>
-            <div className="shirts-store-panel">
-              <p className="subtitle">{s.merchStoreHint}</p>
-              {hasCollectionId ? <ShopifyCollectionEmbed collectionId={merchCollectionId} /> : null}
-              <a
-                href={merchStoreUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="button button-primary shirts-store-button"
-              >
-                {s.merchBuyNow}
-              </a>
+            <div className="shopify-marketplace-layout">
+              <div className="shirts-store-panel">
+                <p className="subtitle">{s.merchStoreHint}</p>
+                <ShopifyCollectionGrid
+                  collectionHandle={merchCollectionHandle}
+                  productPathPrefix="/merch"
+                  loadingText={s.shopLoading}
+                  emptyText={s.shirtsEmpty}
+                  errorText={s.shopCollectionError}
+                  retryText={s.shopRetry}
+                  viewDetailsText={s.shopViewDetails}
+                />
+                <a
+                  href={merchStoreUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button button-primary shirts-store-button"
+                >
+                  {s.merchBuyNow}
+                </a>
+              </div>
+              <ShopifyCartPanel
+                title={s.shopCartTitle}
+                emptyText={s.shopCartEmpty}
+                checkoutLabel={s.shopCheckout}
+                loadingText={s.shopLoading}
+                updateErrorText={s.shopUpdateError}
+              />
             </div>
           </Reveal>
         ) : (

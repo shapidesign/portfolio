@@ -21,12 +21,12 @@ To connect `/shirts` and `/merch` to Shopify (with Printify fulfillment), set th
 - `NEXT_PUBLIC_SHOPIFY_STORE_URL=your-store.myshopify.com`
 - `NEXT_PUBLIC_SHOPIFY_SHIRTS_URL=your-store.myshopify.com/collections/shirts` (optional)
 - `NEXT_PUBLIC_SHOPIFY_MERCH_URL=your-store.myshopify.com/collections/merch` (optional)
-- `NEXT_PUBLIC_SHOPIFY_DOMAIN=your-store.myshopify.com` (for Shopify Buy Button embed)
-- `NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN=your-storefront-token` (for Shopify Buy Button embed)
-- `NEXT_PUBLIC_SHOPIFY_SHIRTS_COLLECTION_ID=1234567890` (for `/shirts` embed)
-- `NEXT_PUBLIC_SHOPIFY_MERCH_COLLECTION_ID=1234567890` (optional, `/merch` falls back to shirts ID)
+- `NEXT_PUBLIC_SHOPIFY_DOMAIN=your-store.myshopify.com`
+- `NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN=your-storefront-token`
+- `NEXT_PUBLIC_SHOPIFY_SHIRTS_COLLECTION_HANDLE=shirts` (optional)
+- `NEXT_PUBLIC_SHOPIFY_MERCH_COLLECTION_HANDLE=merch` (optional, falls back to shirts)
 
-If collection links are missing, each page falls back to `NEXT_PUBLIC_SHOPIFY_STORE_URL`.
+The storefront renders products directly on `/shirts` and `/merch`, but checkout always redirects to Shopify.
 
 ## Project Structure
 - `src/app/` page routes
