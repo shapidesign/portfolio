@@ -170,6 +170,32 @@ const COLLECTION_PRODUCTS_QUERY = `
   }
 `;
 
+const ALL_PRODUCTS_QUERY = `
+  query AllProducts($limit: Int!) {
+    products(first: $limit, sortKey: CREATED_AT, reverse: true) {
+      edges {
+        node {
+          id
+          handle
+          title
+          featuredImage {
+            url
+            altText
+            width
+            height
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 const PRODUCT_BY_HANDLE_QUERY = `
   query ProductByHandle($handle: String!, $language: LanguageCode!) @inContext(language: $language) {
     product(handle: $handle) {
@@ -252,6 +278,27 @@ type CollectionProductsQueryResult = {
   } | null;
 };
 
+type AllProductsQueryResult = {
+  products: {
+    edges: Array<{
+      node: {
+        id: string;
+        handle: string;
+        title: string;
+        featuredImage: {
+          url: string;
+          altText: string | null;
+          width: number | null;
+          height: number | null;
+        } | null;
+        priceRange: {
+          minVariantPrice: { amount: string; currencyCode: string } | null;
+        } | null;
+      };
+    }>;
+  };
+};
+
 type ProductImageNode = {
   url: string;
   altText: string | null;
@@ -290,15 +337,23 @@ type ProductByHandleQueryResult = {
   } | null;
 };
 
+export async function getAllProducts(limit = 24): Promise<ShopifyProductCard[]> {
+  const data = await queryStorefront<AllProductsQueryResult>(ALL_PRODUCTS_QUERY, { limit });
+  return data.products.edges.map(({ node }) => mapProductCard(node));
+}
+
 export async function getCollectionProducts(handle: string, limit = 24): Promise<ShopifyCollectionProducts | null> {
   const data = await queryStorefront<CollectionProductsQueryResult>(COLLECTION_PRODUCTS_QUERY, { handle, limit });
   const collection = data.collection;
-  if (!collection) return null;
-  return {
-    handle: collection.handle,
-    title: collection.title,
-    products: collection.products.edges.map(({ node }) => mapProductCard(node)),
-  };
+  const products = collection?.products.edges.map(({ node }) => mapProductCard(node)) ?? [];
+  if (products.length > 0) {
+    return { handle: collection!.handle, title: collection!.title, products };
+  }
+  // Fallback: the collection is missing or empty, but the shop may still have
+  // published products that just aren't collated. Never show an empty store when
+  // products exist (e.g. Printify items not yet added to a collection).
+  const allProducts = await getAllProducts(limit);
+  return { handle, title: collection?.title ?? "", products: allProducts };
 }
 
 export async function getProductByHandle(handle: string, lang?: string): Promise<ShopifyProductDetail | null> {

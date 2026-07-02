@@ -38,21 +38,43 @@ export function ShopifyCollectionGrid({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadProducts = useCallback(async () => {
-    setLoading(true);
-    try {
-      const nextCollection = await getCollectionProducts(collectionHandle);
-      setCollection(nextCollection);
-      setError(null);
-    } catch {
-      setError(errorText);
-    } finally {
-      setLoading(false);
-    }
-  }, [collectionHandle, errorText]);
+  const loadProducts = useCallback(
+    async (options?: { silent?: boolean }) => {
+      const silent = options?.silent ?? false;
+      if (!silent) setLoading(true);
+      try {
+        const nextCollection = await getCollectionProducts(collectionHandle);
+        setCollection(nextCollection);
+        setError(null);
+      } catch {
+        // On a silent background refresh, keep the products already on screen
+        // instead of replacing them with an error state.
+        if (!silent) setError(errorText);
+      } finally {
+        if (!silent) setLoading(false);
+      }
+    },
+    [collectionHandle, errorText],
+  );
 
   useEffect(() => {
     void loadProducts();
+  }, [loadProducts]);
+
+  // Keep the catalog fresh: re-fetch when the tab regains focus and poll while
+  // visible, so newly published Shopify/Printify products appear without a reload.
+  useEffect(() => {
+    const refresh = () => {
+      if (document.visibilityState === "visible") void loadProducts({ silent: true });
+    };
+    const intervalId = window.setInterval(refresh, 20000);
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", refresh);
+    return () => {
+      window.clearInterval(intervalId);
+      window.removeEventListener("focus", refresh);
+      document.removeEventListener("visibilitychange", refresh);
+    };
   }, [loadProducts]);
 
   if (loading) {
