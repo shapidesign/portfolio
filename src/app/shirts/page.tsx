@@ -5,6 +5,9 @@ import { ShopifyCollectionEmbed } from "@/components/ui/ShopifyCollectionEmbed";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
 
+const DEFAULT_SHIRTS_STORE_URL = "https://mundial-laundry.myshopify.com/collections/shirts";
+const DEFAULT_SHIRTS_COLLECTION_ID = "484456038640";
+
 function normalizeStoreUrl(rawUrl: string): string {
   const trimmed = rawUrl.trim();
   if (!trimmed) return "";
@@ -16,9 +19,11 @@ export default function ShirtsPage() {
   const { lang } = useLanguage();
   const s = useTranslation(lang);
   const shirtsStoreUrl = normalizeStoreUrl(
-    process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_URL ?? process.env.NEXT_PUBLIC_SHOPIFY_STORE_URL ?? "",
+    process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_URL ??
+      process.env.NEXT_PUBLIC_SHOPIFY_STORE_URL ??
+      DEFAULT_SHIRTS_STORE_URL,
   );
-  const shirtsCollectionId = process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_COLLECTION_ID ?? "";
+  const shirtsCollectionId = process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_COLLECTION_ID ?? DEFAULT_SHIRTS_COLLECTION_ID;
   const hasStoreLink = shirtsStoreUrl.length > 0;
   const hasCollectionId = shirtsCollectionId.length > 0;
 

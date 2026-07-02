@@ -24,6 +24,8 @@ declare global {
 }
 
 const SHOPIFY_BUY_BUTTON_SDK_URL = "https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js";
+const DEFAULT_SHOPIFY_DOMAIN = "fj41vd-0q.myshopify.com";
+const DEFAULT_SHOPIFY_STOREFRONT_TOKEN = "7a9042e0b5103720e527af98496f694b";
 
 const SHOPIFY_COLLECTION_OPTIONS = {
   product: {
@@ -160,8 +162,9 @@ export function ShopifyCollectionEmbed({ collectionId }: ShopifyCollectionEmbedP
   const containerId = `shopify-collection-${rawId.replaceAll(":", "")}`;
 
   useEffect(() => {
-    const domain = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN;
-    const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN;
+    const domain = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN ?? DEFAULT_SHOPIFY_DOMAIN;
+    const storefrontAccessToken =
+      process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN ?? DEFAULT_SHOPIFY_STOREFRONT_TOKEN;
     if (!domain || !storefrontAccessToken || !collectionId) return;
 
     let cancelled = false;
