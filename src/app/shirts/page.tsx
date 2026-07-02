@@ -31,7 +31,6 @@ export default function ShirtsPage() {
       <section className="section content-wrap store-hero">
         <Reveal>
           <h1 className="text-display font-display">{s.shirtsTitle}</h1>
-          <p className="lead store-lead">{s.shirtsLead}</p>
         </Reveal>
       </section>
 

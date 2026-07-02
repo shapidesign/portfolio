@@ -3879,10 +3879,6 @@ p.form-sent-copy:hover {
   padding-block-end: clamp(0.5rem, 2vw, 1.5rem);
 }
 
-.store-lead {
-  max-width: 60ch;
-}
-
 .store-section {
   padding-block-start: clamp(0.5rem, 2vw, 1.25rem);
 }

@@ -69,16 +69,12 @@ const strings = {
 
     // Shirts page
     shirtsTitle: "Shirts",
-    shirtsLead:
-      "Shop directly through my Shopify storefront (fulfilled with Printify).",
     shirtsStoreHint: "Browse products here and checkout on Shopify when ready.",
     shirtsEmpty: "No shirts are published yet. Please check back soon.",
     shirtsError:
       "Store link is not configured yet. Add NEXT_PUBLIC_SHOPIFY_STORE_URL (or NEXT_PUBLIC_SHOPIFY_SHIRTS_URL) to .env.local.",
     shirtsBuyNow: "Shop shirts",
     merchTitle: "Merch",
-    merchLead:
-      "Shop merch through my Shopify storefront (fulfilled with Printify).",
     merchStoreHint: "Browse merch here and checkout on Shopify when ready.",
     merchError:
       "Store link is not configured yet. Add NEXT_PUBLIC_SHOPIFY_STORE_URL (or NEXT_PUBLIC_SHOPIFY_MERCH_URL) to .env.local.",
@@ -216,16 +212,12 @@ const strings = {
       `${count} עבודות נבחרות בעיצוב ופיתוח.`,
 
     shirtsTitle: "חולצות",
-    shirtsLead:
-      "קנו ישירות דרך חנות Shopify שלי (עם מילוי הזמנות דרך Printify).",
     shirtsStoreHint: "עיינו במוצרים כאן ועברו לתשלום ב-Shopify כשתהיו מוכנים.",
     shirtsEmpty: "עדיין אין חולצות שפורסמו. נסו שוב בקרוב.",
     shirtsError:
       "קישור החנות עדיין לא מוגדר. הוסיפו NEXT_PUBLIC_SHOPIFY_STORE_URL (או NEXT_PUBLIC_SHOPIFY_SHIRTS_URL) לקובץ .env.local.",
     shirtsBuyNow: "לקניית חולצות",
     merchTitle: "מרצ׳",
-    merchLead:
-      "קנו מרצ׳ דרך חנות Shopify שלי (עם מילוי הזמנות דרך Printify).",
     merchStoreHint: "עיינו במרצ׳ כאן ועברו לתשלום ב-Shopify כשתהיו מוכנים.",
     merchError:
       "קישור החנות עדיין לא מוגדר. הוסיפו NEXT_PUBLIC_SHOPIFY_STORE_URL (או NEXT_PUBLIC_SHOPIFY_MERCH_URL) לקובץ .env.local.",

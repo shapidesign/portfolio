@@ -32,7 +32,6 @@ export default function MerchPage() {
       <section className="section content-wrap store-hero">
         <Reveal>
           <h1 className="text-display font-display">{s.merchTitle}</h1>
-          <p className="lead store-lead">{s.merchLead}</p>
         </Reveal>
       </section>
 
