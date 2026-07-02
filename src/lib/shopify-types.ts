@@ -10,11 +10,17 @@ export type ShopifyImage = {
   height: number | null;
 };
 
+export type ShopifySelectedOption = {
+  name: string;
+  value: string;
+};
+
 export type ShopifyVariant = {
   id: string;
   title: string;
   availableForSale: boolean;
   price: ShopifyMoney;
+  selectedOptions: ShopifySelectedOption[];
 };
 
 export type ShopifyProductCard = {

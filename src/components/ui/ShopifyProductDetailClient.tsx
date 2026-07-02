@@ -6,8 +6,23 @@ import { ShopifyCartPanel, SHOPIFY_CART_REFRESH_EVENT } from "@/components/ui/Sh
 import { cartCreate, cartLinesAdd, getStoredCartId, setStoredCartId } from "@/lib/shopify-cart";
 import { getProductByHandle } from "@/lib/shopify-storefront";
 import type { ShopifyProductDetail } from "@/lib/shopify-types";
+import {
+  defaultSelection,
+  deriveOptions,
+  isValueAvailable,
+  resolveVariant,
+  type SelectedOptions,
+} from "@/lib/shopify-variants";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
+
+function isColorOption(name: string) {
+  return /colou?r/i.test(name);
+}
+
+function toCssColor(value: string) {
+  return value.trim().toLowerCase().replace(/\s+/g, "");
+}
 
 type ShopifyProductDetailClientProps = {
   handle: string;
@@ -31,7 +46,7 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeImageUrl, setActiveImageUrl] = useState<string | null>(null);
-  const [selectedVariantId, setSelectedVariantId] = useState("");
+  const [selected, setSelected] = useState<SelectedOptions>({});
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
@@ -42,7 +57,7 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
       const nextProduct = await getProductByHandle(handle);
       setProduct(nextProduct);
       setActiveImageUrl(nextProduct?.images[0]?.url ?? nextProduct?.featuredImage?.url ?? null);
-      setSelectedVariantId(nextProduct?.variants[0]?.id ?? "");
+      setSelected(nextProduct ? defaultSelection(nextProduct.variants) : {});
       setError(null);
     } catch {
       setError(s.shopProductError);
@@ -55,10 +70,17 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
     void loadProduct();
   }, [loadProduct]);
 
+  const options = useMemo(() => (product ? deriveOptions(product.variants) : []), [product]);
+
   const selectedVariant = useMemo(
-    () => product?.variants.find((variant) => variant.id === selectedVariantId) ?? product?.variants[0] ?? null,
-    [product, selectedVariantId],
+    () => (product ? resolveVariant(product.variants, selected) : null),
+    [product, selected],
   );
+
+  const chooseOption = useCallback((name: string, value: string) => {
+    setSelected((prev) => ({ ...prev, [name]: value }));
+    setStatusMessage(null);
+  }, []);
 
   const handleAddToCart = useCallback(async () => {
     if (!selectedVariant) return;
@@ -124,21 +146,48 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
                 </p>
               ) : null}
 
-              {product.variants.length > 0 ? (
-                <label className="shopify-field">
-                  <span>{s.shopVariant}</span>
-                  <select
-                    className="input"
-                    value={selectedVariantId}
-                    onChange={(event) => setSelectedVariantId(event.target.value)}
-                  >
-                    {product.variants.map((variant) => (
-                      <option key={variant.id} value={variant.id} disabled={!variant.availableForSale}>
-                        {variant.title}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+              {options.map((option) => {
+                const isColor = isColorOption(option.name);
+                return (
+                  <div key={option.name} className="shopify-option-group">
+                    <span className="shopify-option-label">{option.name}</span>
+                    <div className="shopify-option-values" role="group" aria-label={option.name}>
+                      {option.values.map((value) => {
+                        const available = isValueAvailable(product.variants, selected, option.name, value);
+                        const isSelected = selected[option.name] === value;
+                        return (
+                          <button
+                            type="button"
+                            key={value}
+                            className={`shopify-option-pill ${isColor ? "is-swatch" : ""} ${
+                              isSelected ? "is-selected" : ""
+                            } ${available ? "" : "is-unavailable"}`}
+                            aria-pressed={isSelected}
+                            disabled={!available}
+                            title={available ? value : `${value} — ${s.shopOptionUnavailable}`}
+                            onClick={() => chooseOption(option.name, value)}
+                          >
+                            {isColor ? (
+                              <>
+                                <span
+                                  className="shopify-color-swatch"
+                                  style={{ backgroundColor: toCssColor(value) }}
+                                  aria-hidden="true"
+                                />
+                                <span className="shopify-option-text">{value}</span>
+                              </>
+                            ) : (
+                              value
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+              {selectedVariant && !selectedVariant.availableForSale ? (
+                <p className="subtitle">{s.shopOptionUnavailable}</p>
               ) : null}
 
               <label className="shopify-field">
@@ -155,7 +204,7 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
               <button
                 type="button"
                 className="button button-primary shirts-store-button"
-                disabled={!selectedVariant || isAdding}
+                disabled={!selectedVariant || !selectedVariant.availableForSale || isAdding}
                 onClick={() => void handleAddToCart()}
               >
                 {isAdding ? s.shopAddingToCart : s.shopAddToCart}

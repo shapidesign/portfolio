@@ -78,6 +78,7 @@ function mapVariant(variant: {
   title: string;
   availableForSale: boolean;
   price: { amount: string; currencyCode: string };
+  selectedOptions: Array<{ name: string; value: string }>;
 }): ShopifyVariant {
   return {
     id: variant.id,
@@ -87,6 +88,10 @@ function mapVariant(variant: {
       amount: variant.price.amount,
       currencyCode: variant.price.currencyCode,
     },
+    selectedOptions: variant.selectedOptions.map((option) => ({
+      name: option.name,
+      value: option.value,
+    })),
   };
 }
 
@@ -174,7 +179,7 @@ const PRODUCT_BY_HANDLE_QUERY = `
           }
         }
       }
-      variants(first: 20) {
+      variants(first: 100) {
         edges {
           node {
             id
@@ -183,6 +188,10 @@ const PRODUCT_BY_HANDLE_QUERY = `
             price {
               amount
               currencyCode
+            }
+            selectedOptions {
+              name
+              value
             }
           }
         }
@@ -251,6 +260,7 @@ type ProductByHandleQueryResult = {
           title: string;
           availableForSale: boolean;
           price: { amount: string; currencyCode: string };
+          selectedOptions: Array<{ name: string; value: string }>;
         };
       }>;
     };
