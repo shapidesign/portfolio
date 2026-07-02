@@ -344,6 +344,51 @@ body.solar-home {
   transform: translateY(-1px);
 }
 
+.solar-merch-ball {
+  position: fixed;
+  top: calc(max(1.5rem, env(safe-area-inset-top, 1.5rem)) + 3.35rem);
+  inset-inline-start: 1.5rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--solar-purple-soft);
+  background: rgba(11, 6, 19, 0.78);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  z-index: 30;
+  backdrop-filter: blur(12px);
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.solar-merch-ball:hover {
+  transform: translateY(-2px);
+  border-color: var(--solar-cyan);
+  box-shadow: 0 0 0 6px rgba(102, 217, 239, 0.12);
+}
+
+.solar-merch-ball:focus-visible {
+  outline: 2px solid var(--solar-cyan);
+  outline-offset: 3px;
+}
+
+.solar-merch-ball-icon {
+  font-size: 1.9rem;
+  line-height: 1;
+  display: inline-block;
+  animation: solar-ball-spin 6s linear infinite;
+}
+
+@keyframes solar-ball-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* ─── Mission Control (start side: bottom-left in LTR, bottom-right in RTL) ── */
 .solar-mission-control {
   position: absolute;
@@ -1182,6 +1227,15 @@ body.solar-home {
     flex: 0 0 auto;
     font-size: 0.62rem;
   }
+  .solar-merch-ball {
+    top: calc(max(0.75rem, env(safe-area-inset-top, 0.75rem)) + 3.2rem);
+    inset-inline-start: var(--mobile-edge);
+    width: 48px;
+    height: 48px;
+  }
+  .solar-merch-ball-icon {
+    font-size: 1.55rem;
+  }
   .solar-mission-control {
     bottom: max(0.75rem, env(safe-area-inset-bottom, 0.75rem));
     inset-inline-start: var(--mobile-edge);
@@ -1312,6 +1366,9 @@ body.solar-home {
     width: 44px;
     height: 44px;
   }
+  .solar-merch-ball {
+    top: calc(max(0.65rem, env(safe-area-inset-top, 0.65rem)) + 3rem);
+  }
   .solar-mission-control {
     padding: 0.62rem 0.7rem;
   }
@@ -1402,6 +1459,9 @@ body.solar-home {
 @media (prefers-reduced-motion: reduce) {
   .solar-voyage-hud,
   .solar-modal {
+    animation: none;
+  }
+  .solar-merch-ball-icon {
     animation: none;
   }
   .solar-btn,

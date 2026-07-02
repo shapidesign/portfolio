@@ -6,6 +6,7 @@ const strings = {
     navHome: "Home",
     navAbout: "About",
     navWork: "Work",
+    navShirts: "Shirts",
     navContact: "Contact",
     seeAllProjects: "See all projects",
 
@@ -66,6 +67,16 @@ const strings = {
     workSubtitle: (count: number) =>
       `${count} selected works showcasing design & development.`,
 
+    // Shirts page
+    shirtsTitle: "Shirts",
+    shirtsLead:
+      "Shop directly from my Printify Pop-Up Store.",
+    shirtsStoreHint: "The store opens in a new tab so you can complete checkout there.",
+    shirtsEmpty: "No shirts are published yet. Please check back soon.",
+    shirtsError:
+      "Store link is not configured yet. Add NEXT_PUBLIC_PRINTIFY_POPUP_STORE_URL to .env.local.",
+    shirtsBuyNow: "Open store",
+
     // Project detail
     visitProject: "Visit project",
     backToWork: "Back to work",
@@ -118,6 +129,7 @@ const strings = {
     navHome: "בית",
     navAbout: "אודות",
     navWork: "עבודות",
+    navShirts: "חולצות",
     navContact: "צור קשר",
     seeAllProjects: "צפו בכל הפרויקטים",
 
@@ -169,6 +181,15 @@ const strings = {
     workTitle: "עבודות",
     workSubtitle: (count: number) =>
       `${count} עבודות נבחרות בעיצוב ופיתוח.`,
+
+    shirtsTitle: "חולצות",
+    shirtsLead:
+      "קנו ישירות מחנות ה-Pop-Up שלי ב-Printify.",
+    shirtsStoreHint: "החנות תיפתח בלשונית חדשה להשלמת הקנייה.",
+    shirtsEmpty: "עדיין אין חולצות שפורסמו. נסו שוב בקרוב.",
+    shirtsError:
+      "קישור החנות עדיין לא מוגדר. הוסיפו NEXT_PUBLIC_PRINTIFY_POPUP_STORE_URL לקובץ .env.local.",
+    shirtsBuyNow: "למעבר לחנות",
 
     visitProject: "לאתר הפרויקט",
     backToWork: "חזרה לעבודות",

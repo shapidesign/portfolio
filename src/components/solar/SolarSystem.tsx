@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -483,6 +484,19 @@ export function SolarSystem({ projects }: SolarSystemProps) {
               />
             </svg>
           </button>
+        ) : null}
+
+        {!listMode ? (
+          <Link
+            href="/shirts"
+            className="solar-merch-ball"
+            aria-label={isHebrew ? "לחנות החולצות" : "Go to shirts store"}
+            title={isHebrew ? "חולצות" : "Shirts"}
+          >
+            <span className="solar-merch-ball-icon" aria-hidden>
+              ⚽
+            </span>
+          </Link>
         ) : null}
       </StarShapesProvider>
     </div>
