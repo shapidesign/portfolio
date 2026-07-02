@@ -100,6 +100,13 @@ const strings = {
     shopAddToCart: "Add to cart",
     shopAddingToCart: "Adding...",
     shopAddedToCart: "Added to cart.",
+    shopCart: "Cart",
+    shopCartClose: "Close cart",
+    shopContinueShopping: "Continue shopping",
+    shopSubtotal: "Subtotal",
+    shopTaxNote: "Taxes and shipping calculated at checkout.",
+    shopRemove: "Remove",
+    shopShopAll: "Shop all on Shopify",
 
     // Project detail
     visitProject: "Visit project",
@@ -238,6 +245,13 @@ const strings = {
     shopAddToCart: "הוספה לעגלה",
     shopAddingToCart: "מוסיף...",
     shopAddedToCart: "נוסף לעגלה.",
+    shopCart: "עגלה",
+    shopCartClose: "סגירת עגלה",
+    shopContinueShopping: "המשך קנייה",
+    shopSubtotal: "סכום ביניים",
+    shopTaxNote: "מסים ומשלוח יחושבו בתשלום.",
+    shopRemove: "הסרה",
+    shopShopAll: "לחנות המלאה ב-Shopify",
 
     visitProject: "לאתר הפרויקט",
     backToWork: "חזרה לעבודות",

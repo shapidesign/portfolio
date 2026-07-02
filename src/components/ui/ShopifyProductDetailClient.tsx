@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ShopifyCartPanel, SHOPIFY_CART_REFRESH_EVENT } from "@/components/ui/ShopifyCartPanel";
-import { cartCreate, cartLinesAdd, getStoredCartId, setStoredCartId } from "@/lib/shopify-cart";
 import { getProductByHandle } from "@/lib/shopify-storefront";
 import type { ShopifyProductDetail } from "@/lib/shopify-types";
 import {
@@ -13,6 +11,7 @@ import {
   resolveVariant,
   type SelectedOptions,
 } from "@/lib/shopify-variants";
+import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
 
@@ -42,6 +41,7 @@ function formatMoney(amount: string, currencyCode: string) {
 export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductDetailClientProps) {
   const { lang } = useLanguage();
   const s = useTranslation(lang);
+  const { addLines } = useCart();
   const [product, setProduct] = useState<ShopifyProductDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -84,74 +84,85 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
 
   const handleAddToCart = useCallback(async () => {
     if (!selectedVariant) return;
-
     setIsAdding(true);
-    try {
-      const existingCartId = getStoredCartId();
-      const line = { merchandiseId: selectedVariant.id, quantity };
-      const cart = existingCartId ? await cartLinesAdd(existingCartId, [line]) : await cartCreate([line]);
-      setStoredCartId(cart.id);
-      window.dispatchEvent(new Event(SHOPIFY_CART_REFRESH_EVENT));
-      setStatusMessage(s.shopAddedToCart);
-    } catch {
-      setStatusMessage(s.shopUpdateError);
-    } finally {
-      setIsAdding(false);
-    }
-  }, [quantity, s.shopAddedToCart, s.shopUpdateError, selectedVariant]);
+    const ok = await addLines([{ merchandiseId: selectedVariant.id, quantity }]);
+    setStatusMessage(ok ? s.shopAddedToCart : s.shopUpdateError);
+    setIsAdding(false);
+  }, [addLines, quantity, s.shopAddedToCart, s.shopUpdateError, selectedVariant]);
+
+  const soldOut = Boolean(selectedVariant && !selectedVariant.availableForSale);
 
   return (
-    <main className="shirts-page">
-      <section className="section content-wrap shirts-hero">
-        <Link href={backHref} className="button">
-          {s.shopBackToCollection}
+    <main className="store-page store-pdp">
+      <section className="section content-wrap" aria-live="polite">
+        <Link href={backHref} className="store-back">
+          <span aria-hidden>←</span> {s.shopBackToCollection}
         </Link>
-      </section>
-      <section className="section content-wrap shirts-store-section" aria-live="polite">
-        {loading ? <p className="subtitle">{s.shopLoading}</p> : null}
+
+        {loading ? <p className="store-state subtitle">{s.shopLoading}</p> : null}
+
         {error ? (
-          <div className="shirts-store-panel">
+          <div className="store-state">
             <p className="subtitle">{error}</p>
-            <button type="button" className="button button-primary shirts-store-button" onClick={() => void loadProduct()}>
+            <button
+              type="button"
+              className="button button-primary"
+              onClick={() => void loadProduct()}
+            >
               {s.shopRetry}
             </button>
           </div>
         ) : null}
-        {!loading && !error && !product ? <p className="subtitle">{s.shopProductNotFound}</p> : null}
+
+        {!loading && !error && !product ? (
+          <p className="store-state subtitle">{s.shopProductNotFound}</p>
+        ) : null}
+
         {product ? (
-          <div className="shopify-product-detail-wrap">
-            <article className="shirts-store-panel shopify-product-detail">
-              <h1 className="text-display font-display">{product.title}</h1>
-              {activeImageUrl ? (
-                <img src={activeImageUrl} alt={product.title} className="shopify-product-main-image" />
-              ) : null}
+          <div className="pdp-layout">
+            <div className="pdp-gallery">
+              <div className="pdp-main-media">
+                {activeImageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={activeImageUrl} alt={product.title} className="pdp-main-image" />
+                ) : (
+                  <div className="pdp-main-image pdp-main-fallback" aria-hidden />
+                )}
+              </div>
               {product.images.length > 1 ? (
-                <div className="shopify-product-thumbs" role="list">
+                <div className="pdp-thumbs" role="list">
                   {product.images.map((image) => (
                     <button
                       type="button"
                       key={image.url}
-                      className={`shopify-product-thumb ${activeImageUrl === image.url ? "is-active" : ""}`}
+                      className={`pdp-thumb ${activeImageUrl === image.url ? "is-active" : ""}`}
                       onClick={() => setActiveImageUrl(image.url)}
+                      aria-label={image.altText || product.title}
                     >
-                      <img src={image.url} alt={image.altText || product.title} />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={image.url} alt="" />
                     </button>
                   ))}
                 </div>
               ) : null}
-              <p>{product.description}</p>
+            </div>
+
+            <div className="pdp-buybox">
+              <h1 className="pdp-title font-display">{product.title}</h1>
               {selectedVariant?.price ? (
-                <p className="shirts-card-price">
+                <p className="pdp-price">
                   {formatMoney(selectedVariant.price.amount, selectedVariant.price.currencyCode)}
                 </p>
               ) : null}
 
+              {product.description ? <p className="pdp-description">{product.description}</p> : null}
+
               {options.map((option) => {
                 const isColor = isColorOption(option.name);
                 return (
-                  <div key={option.name} className="shopify-option-group">
-                    <span className="shopify-option-label">{option.name}</span>
-                    <div className="shopify-option-values" role="group" aria-label={option.name}>
+                  <div key={option.name} className="pdp-option">
+                    <span className="pdp-option-label">{option.name}</span>
+                    <div className="pdp-option-values" role="group" aria-label={option.name}>
                       {option.values.map((value) => {
                         const available = isValueAvailable(product.variants, selected, option.name, value);
                         const isSelected = selected[option.name] === value;
@@ -159,7 +170,7 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
                           <button
                             type="button"
                             key={value}
-                            className={`shopify-option-pill ${isColor ? "is-swatch" : ""} ${
+                            className={`pdp-option-pill ${isColor ? "is-swatch" : ""} ${
                               isSelected ? "is-selected" : ""
                             } ${available ? "" : "is-unavailable"}`}
                             aria-pressed={isSelected}
@@ -170,11 +181,11 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
                             {isColor ? (
                               <>
                                 <span
-                                  className="shopify-color-swatch"
+                                  className="pdp-swatch"
                                   style={{ backgroundColor: toCssColor(value) }}
                                   aria-hidden="true"
                                 />
-                                <span className="shopify-option-text">{value}</span>
+                                <span>{value}</span>
                               </>
                             ) : (
                               value
@@ -186,39 +197,41 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
                   </div>
                 );
               })}
-              {selectedVariant && !selectedVariant.availableForSale ? (
-                <p className="subtitle">{s.shopOptionUnavailable}</p>
+
+              <div className="pdp-buy-row">
+                <div className="qty-stepper" role="group" aria-label={s.shopQuantity}>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    aria-label="−"
+                  >
+                    −
+                  </button>
+                  <span>{quantity}</span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((q) => q + 1)}
+                    aria-label="+"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  className="button button-primary pdp-add"
+                  disabled={!selectedVariant || soldOut || isAdding}
+                  onClick={() => void handleAddToCart()}
+                >
+                  {soldOut ? s.shopOptionUnavailable : isAdding ? s.shopAddingToCart : s.shopAddToCart}
+                </button>
+              </div>
+
+              {statusMessage ? (
+                <p className="pdp-status" role="status">
+                  {statusMessage}
+                </p>
               ) : null}
-
-              <label className="shopify-field">
-                <span>{s.shopQuantity}</span>
-                <input
-                  className="input"
-                  type="number"
-                  min={1}
-                  value={quantity}
-                  onChange={(event) => setQuantity(Math.max(1, Number.parseInt(event.target.value, 10) || 1))}
-                />
-              </label>
-
-              <button
-                type="button"
-                className="button button-primary shirts-store-button"
-                disabled={!selectedVariant || !selectedVariant.availableForSale || isAdding}
-                onClick={() => void handleAddToCart()}
-              >
-                {isAdding ? s.shopAddingToCart : s.shopAddToCart}
-              </button>
-              {statusMessage ? <p className="subtitle">{statusMessage}</p> : null}
-            </article>
-
-            <ShopifyCartPanel
-              title={s.shopCartTitle}
-              emptyText={s.shopCartEmpty}
-              checkoutLabel={s.shopCheckout}
-              loadingText={s.shopLoading}
-              updateErrorText={s.shopUpdateError}
-            />
+            </div>
           </div>
         ) : null}
       </section>

@@ -55,12 +55,28 @@ export function ShopifyCollectionGrid({
     void loadProducts();
   }, [loadProducts]);
 
-  if (loading) return <p className="subtitle">{loadingText}</p>;
+  if (loading) {
+    return (
+      <div className="store-grid" aria-hidden>
+        {Array.from({ length: 6 }).map((_, index) => (
+          <div className="store-card store-card-skeleton" key={index}>
+            <div className="store-card-media" />
+            <div className="store-card-info">
+              <span className="store-skeleton-line" />
+              <span className="store-skeleton-line store-skeleton-line-short" />
+            </div>
+          </div>
+        ))}
+        <span className="sr-only">{loadingText}</span>
+      </div>
+    );
+  }
+
   if (error) {
     return (
-      <div className="shirts-store-panel">
+      <div className="store-state">
         <p className="subtitle">{error}</p>
-        <button type="button" className="button button-primary shirts-store-button" onClick={() => void loadProducts()}>
+        <button type="button" className="button button-primary" onClick={() => void loadProducts()}>
           {retryText}
         </button>
       </div>
@@ -68,35 +84,36 @@ export function ShopifyCollectionGrid({
   }
 
   if (!collection || collection.products.length === 0) {
-    return <p className="subtitle">{emptyText}</p>;
+    return <p className="store-state subtitle">{emptyText}</p>;
   }
 
   return (
-    <div className="shirts-grid">
+    <div className="store-grid">
       {collection.products.map((product) => (
-        <article className="shirts-card" key={product.id}>
+        <article className="store-card" key={product.id}>
           <Link
             href={`${productPathPrefix}/product/?handle=${encodeURIComponent(product.handle)}`}
-            className="shirts-card-link"
+            className="store-card-link"
           >
-            <div className="shirts-card-image-wrap">
+            <div className="store-card-media">
               {product.featuredImage ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={product.featuredImage.url}
                   alt={product.featuredImage.altText || product.title}
-                  className="shirts-card-image"
+                  className="store-card-image"
                   loading="lazy"
                 />
               ) : (
-                <div className="shirts-card-image shirts-card-image-fallback" aria-hidden />
+                <div className="store-card-image store-card-image-fallback" aria-hidden />
               )}
+              <span className="store-card-cta">{viewDetailsText}</span>
             </div>
-            <div className="shirts-card-copy">
-              <h3 className="shirts-card-title">{product.title}</h3>
-              <p className="shirts-card-price">
+            <div className="store-card-info">
+              <h3 className="store-card-title">{product.title}</h3>
+              <p className="store-card-price">
                 {product.minPrice ? formatMoney(product.minPrice.amount, product.minPrice.currencyCode) : ""}
               </p>
-              <span className="button shirts-card-cta">{viewDetailsText}</span>
             </div>
           </Link>
         </article>

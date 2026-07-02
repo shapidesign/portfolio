@@ -10,6 +10,8 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { ProjectProvider } from "@/context/ProjectContext";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { CartProvider } from "@/context/CartContext";
+import { CartDrawer } from "@/components/ui/CartDrawer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -154,11 +156,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <AnimatedCursor />
         <LanguageProvider>
           <ProjectProvider>
-            <div className="site-shell">
-              <SiteHeader />
-              <RouteTransition>{children}</RouteTransition>
-              <SiteFooter />
-            </div>
+            <CartProvider>
+              <div className="site-shell">
+                <SiteHeader />
+                <RouteTransition>{children}</RouteTransition>
+                <SiteFooter />
+              </div>
+              <CartDrawer />
+            </CartProvider>
           </ProjectProvider>
         </LanguageProvider>
         <Analytics />

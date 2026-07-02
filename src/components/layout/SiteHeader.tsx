@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useProjectTitle } from "@/context/ProjectContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useCart } from "@/context/CartContext";
 import { useTranslation } from "@/i18n/strings";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 
@@ -26,6 +27,7 @@ export function SiteHeader() {
   const { title: projectTitle } = useProjectTitle();
   const { lang } = useLanguage();
   const s = useTranslation(lang);
+  const { count, openCart } = useCart();
   const navItems = navItemDefs.map((d) => ({ href: d.href, label: s[d.key] }));
   const progressRef = useRef<HTMLDivElement>(null);
 
@@ -113,6 +115,29 @@ export function SiteHeader() {
           </nav>
 
           <LanguageToggle />
+
+          <button
+            type="button"
+            className="cart-button"
+            onClick={openCart}
+            aria-label={`${s.shopCart}${count > 0 ? ` (${count})` : ""}`}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path
+                d="M6 8h12l-1 12H7L6 8Z"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M9 8V6.5a3 3 0 0 1 6 0V8"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            </svg>
+            {count > 0 ? <span className="cart-button-badge">{count}</span> : null}
+          </button>
 
           <button
             className={`menu-button ${open ? "open" : ""}`}

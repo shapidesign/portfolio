@@ -1,7 +1,6 @@
 "use client";
 
 import { Reveal } from "@/components/ui/Reveal";
-import { ShopifyCartPanel } from "@/components/ui/ShopifyCartPanel";
 import { ShopifyCollectionGrid } from "@/components/ui/ShopifyCollectionGrid";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
@@ -29,51 +28,40 @@ export default function MerchPage() {
   const hasStoreLink = merchStoreUrl.length > 0;
 
   return (
-    <main className="shirts-page">
-      <section className="section content-wrap shirts-hero">
+    <main className="store-page">
+      <section className="section content-wrap store-hero">
         <Reveal>
           <h1 className="text-display font-display">{s.merchTitle}</h1>
-          <p className="lead shirts-lead">{s.merchLead}</p>
+          <p className="lead store-lead">{s.merchLead}</p>
         </Reveal>
       </section>
 
-      <section className="section content-wrap shirts-store-section" aria-live="polite">
+      <section className="section content-wrap store-section" aria-live="polite">
         {hasStoreLink ? (
-          <Reveal>
-            <div className="shopify-marketplace-layout">
-              <div className="shirts-store-panel">
-                <p className="subtitle">{s.merchStoreHint}</p>
-                <ShopifyCollectionGrid
-                  collectionHandle={merchCollectionHandle}
-                  productPathPrefix="/merch"
-                  loadingText={s.shopLoading}
-                  emptyText={s.shirtsEmpty}
-                  errorText={s.shopCollectionError}
-                  retryText={s.shopRetry}
-                  viewDetailsText={s.shopViewDetails}
-                />
-                <a
-                  href={merchStoreUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="button button-primary shirts-store-button"
-                >
-                  {s.merchBuyNow}
-                </a>
-              </div>
-              <ShopifyCartPanel
-                title={s.shopCartTitle}
-                emptyText={s.shopCartEmpty}
-                checkoutLabel={s.shopCheckout}
-                loadingText={s.shopLoading}
-                updateErrorText={s.shopUpdateError}
-              />
+          <>
+            <div className="store-toolbar">
+              <p className="store-hint">{s.merchStoreHint}</p>
+              <a
+                href={merchStoreUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-link store-shop-all"
+              >
+                {s.shopShopAll}
+              </a>
             </div>
-          </Reveal>
+            <ShopifyCollectionGrid
+              collectionHandle={merchCollectionHandle}
+              productPathPrefix="/merch"
+              loadingText={s.shopLoading}
+              emptyText={s.shirtsEmpty}
+              errorText={s.shopCollectionError}
+              retryText={s.shopRetry}
+              viewDetailsText={s.shopViewDetails}
+            />
+          </>
         ) : (
-          <div className="shirts-store-panel">
-            <p className="subtitle">{s.merchError}</p>
-          </div>
+          <p className="store-state subtitle">{s.merchError}</p>
         )}
       </section>
     </main>

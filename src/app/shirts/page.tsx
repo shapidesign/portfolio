@@ -1,7 +1,6 @@
 "use client";
 
 import { Reveal } from "@/components/ui/Reveal";
-import { ShopifyCartPanel } from "@/components/ui/ShopifyCartPanel";
 import { ShopifyCollectionGrid } from "@/components/ui/ShopifyCollectionGrid";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
@@ -28,51 +27,40 @@ export default function ShirtsPage() {
   const hasStoreLink = shirtsStoreUrl.length > 0;
 
   return (
-    <main className="shirts-page">
-      <section className="section content-wrap shirts-hero">
+    <main className="store-page">
+      <section className="section content-wrap store-hero">
         <Reveal>
           <h1 className="text-display font-display">{s.shirtsTitle}</h1>
-          <p className="lead shirts-lead">{s.shirtsLead}</p>
+          <p className="lead store-lead">{s.shirtsLead}</p>
         </Reveal>
       </section>
 
-      <section className="section content-wrap shirts-store-section" aria-live="polite">
+      <section className="section content-wrap store-section" aria-live="polite">
         {hasStoreLink ? (
-          <Reveal>
-            <div className="shopify-marketplace-layout">
-              <div className="shirts-store-panel">
-                <p className="subtitle">{s.shirtsStoreHint}</p>
-                <ShopifyCollectionGrid
-                  collectionHandle={shirtsCollectionHandle}
-                  productPathPrefix="/shirts"
-                  loadingText={s.shopLoading}
-                  emptyText={s.shirtsEmpty}
-                  errorText={s.shopCollectionError}
-                  retryText={s.shopRetry}
-                  viewDetailsText={s.shopViewDetails}
-                />
-                <a
-                  href={shirtsStoreUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="button button-primary shirts-store-button"
-                >
-                  {s.shirtsBuyNow}
-                </a>
-              </div>
-              <ShopifyCartPanel
-                title={s.shopCartTitle}
-                emptyText={s.shopCartEmpty}
-                checkoutLabel={s.shopCheckout}
-                loadingText={s.shopLoading}
-                updateErrorText={s.shopUpdateError}
-              />
+          <>
+            <div className="store-toolbar">
+              <p className="store-hint">{s.shirtsStoreHint}</p>
+              <a
+                href={shirtsStoreUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-link store-shop-all"
+              >
+                {s.shopShopAll}
+              </a>
             </div>
-          </Reveal>
+            <ShopifyCollectionGrid
+              collectionHandle={shirtsCollectionHandle}
+              productPathPrefix="/shirts"
+              loadingText={s.shopLoading}
+              emptyText={s.shirtsEmpty}
+              errorText={s.shopCollectionError}
+              retryText={s.shopRetry}
+              viewDetailsText={s.shopViewDetails}
+            />
+          </>
         ) : (
-          <div className="shirts-store-panel">
-            <p className="subtitle">{s.shirtsError}</p>
-          </div>
+          <p className="store-state subtitle">{s.shirtsError}</p>
         )}
       </section>
     </main>
