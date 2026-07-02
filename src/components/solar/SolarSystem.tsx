@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -60,6 +60,7 @@ export function SolarSystem({ projects }: SolarSystemProps) {
   const lastGestureAt = useRef(0);
 
   const { isHebrew } = useLanguage();
+  const router = useRouter();
 
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
   const [sunHovered, setSunHovered] = useState(false);
@@ -378,7 +379,7 @@ export function SolarSystem({ projects }: SolarSystemProps) {
               onPlanetHover={(slug) => setHoveredSlug(slug)}
               onPlanetClick={(slug) => openProject(slug)}
               onSunHover={(h) => setSunHovered(h)}
-              onSunClick={() => openAbout()}
+              onSunClick={() => router.push("/shirts")}
             />
           </Canvas>
 
@@ -396,9 +397,9 @@ export function SolarSystem({ projects }: SolarSystemProps) {
               dir={isHebrew ? "rtl" : "ltr"}
               style={{ left: "50%", top: "50%" }}
             >
-              <span className="solar-hud-label">{preventOrphan(isHebrew ? "טייס" : "Pilot")}</span>
+              <span className="solar-hud-label">{preventOrphan(isHebrew ? "חנות" : "Store")}</span>
               <span className="solar-hud-title">
-                {preventOrphan(isHebrew ? "עליי — יהונתן" : "About — Yehonatan")}
+                {preventOrphan(isHebrew ? "חולצות כדורגל" : "Football shirts")}
               </span>
             </div>
           ) : null}
@@ -484,19 +485,6 @@ export function SolarSystem({ projects }: SolarSystemProps) {
               />
             </svg>
           </button>
-        ) : null}
-
-        {!listMode ? (
-          <Link
-            href="/shirts"
-            className="solar-merch-ball"
-            aria-label={isHebrew ? "לחנות החולצות" : "Go to shirts store"}
-            title={isHebrew ? "חולצות" : "Shirts"}
-          >
-            <span className="solar-merch-ball-icon" aria-hidden>
-              ⚽
-            </span>
-          </Link>
         ) : null}
       </StarShapesProvider>
     </div>
