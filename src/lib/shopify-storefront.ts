@@ -123,7 +123,7 @@ export async function queryStorefront<TData>(query: string, variables?: Record<s
 
 const COLLECTION_PRODUCTS_QUERY = `
   query CollectionProducts($handle: String!, $limit: Int!) {
-    collectionByHandle(handle: $handle) {
+    collection(handle: $handle) {
       handle
       title
       products(first: $limit) {
@@ -153,7 +153,7 @@ const COLLECTION_PRODUCTS_QUERY = `
 
 const PRODUCT_BY_HANDLE_QUERY = `
   query ProductByHandle($handle: String!) {
-    productByHandle(handle: $handle) {
+    product(handle: $handle) {
       id
       handle
       title
@@ -198,7 +198,7 @@ const PRODUCT_BY_HANDLE_QUERY = `
 `;
 
 type CollectionProductsQueryResult = {
-  collectionByHandle: {
+  collection: {
     handle: string;
     title: string;
     products: {
@@ -223,7 +223,7 @@ type CollectionProductsQueryResult = {
 };
 
 type ProductByHandleQueryResult = {
-  productByHandle: {
+  product: {
     id: string;
     handle: string;
     title: string;
@@ -262,7 +262,7 @@ type ProductByHandleQueryResult = {
 
 export async function getCollectionProducts(handle: string, limit = 24): Promise<ShopifyCollectionProducts | null> {
   const data = await queryStorefront<CollectionProductsQueryResult>(COLLECTION_PRODUCTS_QUERY, { handle, limit });
-  const collection = data.collectionByHandle;
+  const collection = data.collection;
   if (!collection) return null;
   return {
     handle: collection.handle,
@@ -273,7 +273,7 @@ export async function getCollectionProducts(handle: string, limit = 24): Promise
 
 export async function getProductByHandle(handle: string): Promise<ShopifyProductDetail | null> {
   const data = await queryStorefront<ProductByHandleQueryResult>(PRODUCT_BY_HANDLE_QUERY, { handle });
-  const product = data.productByHandle;
+  const product = data.product;
   if (!product) return null;
 
   return {
