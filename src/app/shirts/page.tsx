@@ -14,8 +14,10 @@ function normalizeStoreUrl(rawUrl: string): string {
 export default function ShirtsPage() {
   const { lang } = useLanguage();
   const s = useTranslation(lang);
-  const popupStoreUrl = normalizeStoreUrl(process.env.NEXT_PUBLIC_PRINTIFY_POPUP_STORE_URL ?? "");
-  const hasStoreLink = popupStoreUrl.length > 0;
+  const shirtsStoreUrl = normalizeStoreUrl(
+    process.env.NEXT_PUBLIC_SHOPIFY_SHIRTS_URL ?? process.env.NEXT_PUBLIC_SHOPIFY_STORE_URL ?? "",
+  );
+  const hasStoreLink = shirtsStoreUrl.length > 0;
 
   return (
     <main className="shirts-page">
@@ -32,7 +34,7 @@ export default function ShirtsPage() {
             <div className="shirts-store-panel">
               <p className="subtitle">{s.shirtsStoreHint}</p>
               <a
-                href={popupStoreUrl}
+                href={shirtsStoreUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="button button-primary shirts-store-button"

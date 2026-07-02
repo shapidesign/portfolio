@@ -70,12 +70,19 @@ const strings = {
     // Shirts page
     shirtsTitle: "Shirts",
     shirtsLead:
-      "Shop directly from my Printify Pop-Up Store.",
-    shirtsStoreHint: "The store opens in a new tab so you can complete checkout there.",
+      "Shop directly through my Shopify storefront (fulfilled with Printify).",
+    shirtsStoreHint: "Opens the Shopify shirts page in a new tab for checkout.",
     shirtsEmpty: "No shirts are published yet. Please check back soon.",
     shirtsError:
-      "Store link is not configured yet. Add NEXT_PUBLIC_PRINTIFY_POPUP_STORE_URL to .env.local.",
-    shirtsBuyNow: "Open store",
+      "Store link is not configured yet. Add NEXT_PUBLIC_SHOPIFY_STORE_URL (or NEXT_PUBLIC_SHOPIFY_SHIRTS_URL) to .env.local.",
+    shirtsBuyNow: "Shop shirts",
+    merchTitle: "Merch",
+    merchLead:
+      "Shop merch through my Shopify storefront (fulfilled with Printify).",
+    merchStoreHint: "Opens the Shopify merch page in a new tab for checkout.",
+    merchError:
+      "Store link is not configured yet. Add NEXT_PUBLIC_SHOPIFY_STORE_URL (or NEXT_PUBLIC_SHOPIFY_MERCH_URL) to .env.local.",
+    merchBuyNow: "Shop merch",
 
     // Project detail
     visitProject: "Visit project",
@@ -184,12 +191,19 @@ const strings = {
 
     shirtsTitle: "חולצות",
     shirtsLead:
-      "קנו ישירות מחנות ה-Pop-Up שלי ב-Printify.",
-    shirtsStoreHint: "החנות תיפתח בלשונית חדשה להשלמת הקנייה.",
+      "קנו ישירות דרך חנות Shopify שלי (עם מילוי הזמנות דרך Printify).",
+    shirtsStoreHint: "דף החולצות ב-Shopify ייפתח בלשונית חדשה לתשלום.",
     shirtsEmpty: "עדיין אין חולצות שפורסמו. נסו שוב בקרוב.",
     shirtsError:
-      "קישור החנות עדיין לא מוגדר. הוסיפו NEXT_PUBLIC_PRINTIFY_POPUP_STORE_URL לקובץ .env.local.",
-    shirtsBuyNow: "למעבר לחנות",
+      "קישור החנות עדיין לא מוגדר. הוסיפו NEXT_PUBLIC_SHOPIFY_STORE_URL (או NEXT_PUBLIC_SHOPIFY_SHIRTS_URL) לקובץ .env.local.",
+    shirtsBuyNow: "לקניית חולצות",
+    merchTitle: "מרצ׳",
+    merchLead:
+      "קנו מרצ׳ דרך חנות Shopify שלי (עם מילוי הזמנות דרך Printify).",
+    merchStoreHint: "דף המרצ׳ ב-Shopify ייפתח בלשונית חדשה לתשלום.",
+    merchError:
+      "קישור החנות עדיין לא מוגדר. הוסיפו NEXT_PUBLIC_SHOPIFY_STORE_URL (או NEXT_PUBLIC_SHOPIFY_MERCH_URL) לקובץ .env.local.",
+    merchBuyNow: "לקניית מרצ׳",
 
     visitProject: "לאתר הפרויקט",
     backToWork: "חזרה לעבודות",

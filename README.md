@@ -15,12 +15,14 @@ Minimal multi-page portfolio built with Next.js for creative work presentation.
 3. Open:
    - `http://localhost:3000`
 
-## Printify Shirts Page
-To connect `/shirts` to your Printify Pop-Up Store, set this in `.env.local`:
+## Shopify + Printify Store Pages
+To connect `/shirts` and `/merch` to Shopify (with Printify fulfillment), set these in `.env.local`:
 
-- `NEXT_PUBLIC_PRINTIFY_POPUP_STORE_URL=your-store.printify.me`
+- `NEXT_PUBLIC_SHOPIFY_STORE_URL=your-store.myshopify.com`
+- `NEXT_PUBLIC_SHOPIFY_SHIRTS_URL=your-store.myshopify.com/collections/shirts` (optional)
+- `NEXT_PUBLIC_SHOPIFY_MERCH_URL=your-store.myshopify.com/collections/merch` (optional)
 
-The page shows a direct "Open store" action that links to your Printify store.
+If collection links are missing, each page falls back to `NEXT_PUBLIC_SHOPIFY_STORE_URL`.
 
 ## Project Structure
 - `src/app/` page routes
