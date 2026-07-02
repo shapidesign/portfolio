@@ -1114,13 +1114,7 @@ body.solar-home {
     --mobile-edge: max(0.75rem, env(safe-area-inset-left, 0.75rem));
   }
   .solar-info {
-    top: calc(max(0.75rem, env(safe-area-inset-top, 0.75rem)) + 3.55rem);
-    inset-inline-start: var(--mobile-edge);
-    inset-inline-end: var(--mobile-edge);
-    max-width: none;
-    padding: 0.85rem 0.9rem;
-    border-radius: 14px;
-    background: rgba(11, 6, 19, 0.58);
+    display: none;
   }
   .solar-info-eyebrow {
     font-size: 0.78rem;
