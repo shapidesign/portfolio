@@ -107,6 +107,11 @@ const strings = {
     shopNextImage: "Next image",
     shopCloseImage: "Close image",
     shopOpenImage: "Open image full screen",
+    storeFilterAll: "All",
+    catFrontOversize: "Front print · Oversized",
+    catBackOversize: "Back print · Oversized",
+    catFrontNormal: "Front print · Regular tee",
+    catToddler: "Toddler tee",
 
     // Project detail
     visitProject: "Visit project",
@@ -252,6 +257,11 @@ const strings = {
     shopNextImage: "תמונה הבאה",
     shopCloseImage: "סגירת תמונה",
     shopOpenImage: "פתיחת תמונה במסך מלא",
+    storeFilterAll: "הכול",
+    catFrontOversize: "הדפס קדמי · אוברסייז",
+    catBackOversize: "הדפס אחורי · אוברסייז",
+    catFrontNormal: "הדפס קדמי · טי רגיל",
+    catToddler: "טי לפעוטות",
 
     visitProject: "לאתר הפרויקט",
     backToWork: "חזרה לעבודות",

@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCollectionProducts } from "@/lib/shopify-storefront";
 import type { ShopifyCollectionProducts } from "@/lib/shopify-types";
+import { categoryOf, STORE_CATEGORY_ORDER, type StoreCategory } from "@/lib/shopify-category";
+import { useLanguage } from "@/context/LanguageContext";
+import { useTranslation } from "@/i18n/strings";
 
 type ShopifyCollectionGridProps = {
   collectionHandle: string;
@@ -14,6 +17,8 @@ type ShopifyCollectionGridProps = {
   retryText: string;
   viewDetailsText: string;
 };
+
+type FilterValue = StoreCategory | "all";
 
 function formatMoney(amount: string, currencyCode: string) {
   const numeric = Number.parseFloat(amount);
@@ -34,9 +39,12 @@ export function ShopifyCollectionGrid({
   retryText,
   viewDetailsText,
 }: ShopifyCollectionGridProps) {
+  const { lang } = useLanguage();
+  const s = useTranslation(lang);
   const [collection, setCollection] = useState<ShopifyCollectionProducts | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<FilterValue>("all");
 
   const loadProducts = useCallback(
     async (options?: { silent?: boolean }) => {
@@ -77,6 +85,41 @@ export function ShopifyCollectionGrid({
     };
   }, [loadProducts]);
 
+  const categoryLabels = useMemo<Record<StoreCategory, string>>(
+    () => ({
+      "front-oversize": s.catFrontOversize,
+      "back-oversize": s.catBackOversize,
+      "front-normal": s.catFrontNormal,
+      toddler: s.catToddler,
+    }),
+    [s.catFrontOversize, s.catBackOversize, s.catFrontNormal, s.catToddler],
+  );
+
+  const products = collection?.products ?? [];
+
+  // Count products per category so we only show filters that actually match.
+  const counts = useMemo(() => {
+    const map = new Map<StoreCategory, number>();
+    for (const product of products) {
+      const category = categoryOf(product.title);
+      map.set(category, (map.get(category) ?? 0) + 1);
+    }
+    return map;
+  }, [products]);
+
+  const availableCategories = useMemo(
+    () => STORE_CATEGORY_ORDER.filter((category) => (counts.get(category) ?? 0) > 0),
+    [counts],
+  );
+
+  const visibleProducts = useMemo(
+    () =>
+      activeFilter === "all"
+        ? products
+        : products.filter((product) => categoryOf(product.title) === activeFilter),
+    [products, activeFilter],
+  );
+
   if (loading) {
     return (
       <div className="store-grid" aria-hidden>
@@ -105,41 +148,69 @@ export function ShopifyCollectionGrid({
     );
   }
 
-  if (!collection || collection.products.length === 0) {
+  if (products.length === 0) {
     return <p className="store-state subtitle">{emptyText}</p>;
   }
 
   return (
-    <div className="store-grid">
-      {collection.products.map((product) => (
-        <article className="store-card" key={product.id}>
-          <Link
-            href={`${productPathPrefix}/product/?handle=${encodeURIComponent(product.handle)}`}
-            className="store-card-link"
+    <>
+      {availableCategories.length > 1 ? (
+        <div className="store-filters" role="group" aria-label={s.storeFilterAll}>
+          <button
+            type="button"
+            className={`store-filter ${activeFilter === "all" ? "is-active" : ""}`}
+            aria-pressed={activeFilter === "all"}
+            onClick={() => setActiveFilter("all")}
           >
-            <div className="store-card-media">
-              {product.featuredImage ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={product.featuredImage.url}
-                  alt={product.featuredImage.altText || product.title}
-                  className="store-card-image"
-                  loading="lazy"
-                />
-              ) : (
-                <div className="store-card-image store-card-image-fallback" aria-hidden />
-              )}
-              <span className="store-card-cta">{viewDetailsText}</span>
-            </div>
-            <div className="store-card-info">
-              <h3 className="store-card-title">{product.title}</h3>
-              <p className="store-card-price">
-                {product.minPrice ? formatMoney(product.minPrice.amount, product.minPrice.currencyCode) : ""}
-              </p>
-            </div>
-          </Link>
-        </article>
-      ))}
-    </div>
+            {s.storeFilterAll}
+            <span className="store-filter-count">{products.length}</span>
+          </button>
+          {availableCategories.map((category) => (
+            <button
+              key={category}
+              type="button"
+              className={`store-filter ${activeFilter === category ? "is-active" : ""}`}
+              aria-pressed={activeFilter === category}
+              onClick={() => setActiveFilter(category)}
+            >
+              {categoryLabels[category]}
+              <span className="store-filter-count">{counts.get(category)}</span>
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      <div className="store-grid">
+        {visibleProducts.map((product) => (
+          <article className="store-card" key={product.id}>
+            <Link
+              href={`${productPathPrefix}/product/?handle=${encodeURIComponent(product.handle)}`}
+              className="store-card-link"
+            >
+              <div className="store-card-media">
+                {product.featuredImage ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={product.featuredImage.url}
+                    alt={product.featuredImage.altText || product.title}
+                    className="store-card-image"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="store-card-image store-card-image-fallback" aria-hidden />
+                )}
+                <span className="store-card-cta">{viewDetailsText}</span>
+              </div>
+              <div className="store-card-info">
+                <h3 className="store-card-title">{product.title}</h3>
+                <p className="store-card-price">
+                  {product.minPrice ? formatMoney(product.minPrice.amount, product.minPrice.currencyCode) : ""}
+                </p>
+              </div>
+            </Link>
+          </article>
+        ))}
+      </div>
+    </>
   );
 }
