@@ -3942,7 +3942,7 @@ p.form-sent-copy:hover {
 .store-card-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 480ms var(--ease-settle);
 }
 
@@ -4094,7 +4094,17 @@ p.form-sent-copy:hover {
   touch-action: pan-y;
 }
 
-.pdp-main-media:focus-visible {
+.pdp-main-imagebtn {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.pdp-main-imagebtn:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
   outline-offset: 2px;
 }
@@ -4102,7 +4112,7 @@ p.form-sent-copy:hover {
 .pdp-main-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   user-select: none;
 }
 
@@ -4149,6 +4159,89 @@ p.form-sent-copy:hover {
   margin-top: -3px;
 }
 
+/* Full-screen image viewer (lightbox) */
+.pdp-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  animation: pdp-lightbox-in 180ms ease;
+}
+
+.pdp-lightbox-overlay {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(2, 2, 6, 0.9);
+  cursor: zoom-out;
+}
+
+.pdp-lightbox-inner {
+  position: relative;
+  z-index: 1;
+  max-width: min(1100px, 100%);
+  max-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pdp-lightbox-image {
+  max-width: 100%;
+  max-height: 86vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius-image);
+}
+
+.pdp-lightbox-close {
+  position: fixed;
+  top: clamp(0.75rem, 2vw, 1.35rem);
+  inset-inline-end: clamp(0.75rem, 2vw, 1.35rem);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition: background 150ms ease;
+}
+
+.pdp-lightbox-close:hover {
+  background: color-mix(in srgb, var(--color-accent-white) 12%, var(--color-bg-elevated));
+}
+
+.pdp-lightbox-close:focus-visible,
+.pdp-lightbox .pdp-nav:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent-blue) 70%, white);
+  outline-offset: 2px;
+}
+
+@keyframes pdp-lightbox-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp-lightbox {
+    animation: none;
+  }
+}
+
 .pdp-main-fallback {
   background: color-mix(in srgb, var(--color-primary) 26%, var(--color-surface-2));
 }
@@ -4173,7 +4266,7 @@ p.form-sent-copy:hover {
   display: block;
   width: 100%;
   height: 68px;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .pdp-thumb.is-active {
@@ -4634,7 +4727,7 @@ p.form-sent-copy:hover {
 .cart-drawer-thumb img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .cart-drawer-line-main {

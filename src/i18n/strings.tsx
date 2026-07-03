@@ -105,6 +105,8 @@ const strings = {
     shopShopAll: "Shop all on Shopify",
     shopPrevImage: "Previous image",
     shopNextImage: "Next image",
+    shopCloseImage: "Close image",
+    shopOpenImage: "Open image full screen",
 
     // Project detail
     visitProject: "Visit project",
@@ -248,6 +250,8 @@ const strings = {
     shopShopAll: "לחנות המלאה ב-Shopify",
     shopPrevImage: "תמונה קודמת",
     shopNextImage: "תמונה הבאה",
+    shopCloseImage: "סגירת תמונה",
+    shopOpenImage: "פתיחת תמונה במסך מלא",
 
     visitProject: "לאתר הפרויקט",
     backToWork: "חזרה לעבודות",

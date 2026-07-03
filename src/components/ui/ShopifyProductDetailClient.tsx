@@ -50,6 +50,7 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const touchStartX = useRef<number | null>(null);
 
   const loadProduct = useCallback(async () => {
@@ -108,6 +109,9 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
     [galleryImages.length],
   );
 
+  const openLightbox = useCallback(() => setLightboxOpen(true), []);
+  const closeLightbox = useCallback(() => setLightboxOpen(false), []);
+
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (galleryImages.length < 2) return;
@@ -121,6 +125,22 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
     },
     [activeIndex, galleryImages.length, showImage],
   );
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeLightbox();
+      else if (event.key === "ArrowRight") showImage(activeIndex + 1);
+      else if (event.key === "ArrowLeft") showImage(activeIndex - 1);
+    };
+    document.addEventListener("keydown", onKey);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [lightboxOpen, closeLightbox, showImage, activeIndex]);
 
   const handleTouchStart = useCallback((event: React.TouchEvent) => {
     touchStartX.current = event.touches[0]?.clientX ?? null;
@@ -175,6 +195,7 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
         ) : null}
 
         {product ? (
+          <>
           <div className="pdp-layout">
             <div className="pdp-gallery">
               <div
@@ -182,19 +203,25 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
                 role="group"
                 aria-label={product.title}
                 aria-roledescription="carousel"
-                tabIndex={0}
-                onKeyDown={handleKeyDown}
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
                 {activeImage ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={activeImage.url}
-                    alt={activeImage.altText || product.title}
-                    className="pdp-main-image"
-                    draggable={false}
-                  />
+                  <button
+                    type="button"
+                    className="pdp-main-imagebtn"
+                    aria-label={s.shopOpenImage}
+                    onClick={openLightbox}
+                    onKeyDown={handleKeyDown}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={activeImage.url}
+                      alt={activeImage.altText || product.title}
+                      className="pdp-main-image"
+                      draggable={false}
+                    />
+                  </button>
                 ) : (
                   <div className="pdp-main-image pdp-main-fallback" aria-hidden />
                 )}
@@ -329,6 +356,57 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
               <p className="pdp-details pdp-description">{product.description}</p>
             ) : null}
           </div>
+
+          {lightboxOpen && activeImage ? (
+            <div className="pdp-lightbox" role="dialog" aria-modal="true" aria-label={product.title}>
+              <button
+                type="button"
+                className="pdp-lightbox-overlay"
+                aria-label={s.shopCloseImage}
+                onClick={closeLightbox}
+              />
+              <button
+                type="button"
+                className="pdp-lightbox-close"
+                aria-label={s.shopCloseImage}
+                onClick={closeLightbox}
+                autoFocus
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </button>
+              <div className="pdp-lightbox-inner">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={activeImage.url}
+                  alt={activeImage.altText || product.title}
+                  className="pdp-lightbox-image"
+                />
+                {hasMultipleImages ? (
+                  <>
+                    <button
+                      type="button"
+                      className="pdp-nav pdp-nav-prev"
+                      aria-label={s.shopPrevImage}
+                      onClick={() => showImage(activeIndex - 1)}
+                    >
+                      <span aria-hidden>‹</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="pdp-nav pdp-nav-next"
+                      aria-label={s.shopNextImage}
+                      onClick={() => showImage(activeIndex + 1)}
+                    >
+                      <span aria-hidden>›</span>
+                    </button>
+                  </>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+          </>
         ) : null}
       </section>
     </main>
