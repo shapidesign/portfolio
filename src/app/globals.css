@@ -4278,6 +4278,18 @@ p.form-sent-copy:hover {
   outline-offset: 2px;
 }
 
+/* Smaller thumbnails on phones so more fit per row, like desktop. */
+@media (max-width: 640px) {
+  .pdp-thumbs {
+    grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+    gap: 0.4rem;
+  }
+
+  .pdp-thumb img {
+    height: 46px;
+  }
+}
+
 .pdp-buybox {
   display: grid;
   gap: 1.1rem;
