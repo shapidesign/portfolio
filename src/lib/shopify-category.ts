@@ -1,30 +1,24 @@
-// Client-side product categorization for the storefront filter bar.
-// The Shopify products are all productType "T-Shirt" with inconsistent tags, so
-// we derive the category from the title (the only reliable signal today).
-// ponytail: title-keyword classifier — if products later get real Shopify
-// product types/tags, switch categoryOf() to read those instead.
+// Storefront filter categories, sourced directly from Shopify collections so the
+// website stays in sync with whatever the merchant curates in Shopify admin.
 
 export type StoreCategory =
-  | "front-oversize"
-  | "back-oversize"
-  | "front-normal"
-  | "toddler";
+  | "oversized-front"
+  | "oversized-back"
+  | "shirts"
+  | "toddler-shirts";
 
-/** Display order for the filter bar. */
+/** Display order for the filter bar (matches the Shopify collection handles). */
 export const STORE_CATEGORY_ORDER: StoreCategory[] = [
-  "front-oversize",
-  "back-oversize",
-  "front-normal",
-  "toddler",
+  "oversized-front",
+  "oversized-back",
+  "shirts",
+  "toddler-shirts",
 ];
 
-export function categoryOf(title: string): StoreCategory {
-  const t = title.toLowerCase();
-  if (t.includes("toddler")) return "toddler";
-
-  const isBack = /\bback\b/.test(t); // "back print" / "back design"
-  const isOversize = t.includes("oversize") || t.includes("boxy");
-
-  if (isOversize) return isBack ? "back-oversize" : "front-oversize";
-  return "front-normal";
+/**
+ * Pick a product's category from its Shopify collection membership. A product can
+ * live in several collections, so we return the first one in display order.
+ */
+export function categoryOf(collectionHandles: string[]): StoreCategory | null {
+  return STORE_CATEGORY_ORDER.find((category) => collectionHandles.includes(category)) ?? null;
 }

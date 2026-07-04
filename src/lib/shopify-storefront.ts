@@ -67,6 +67,7 @@ function mapProductCard(product: {
   priceRange: {
     minVariantPrice: { amount: string; currencyCode: string } | null;
   } | null;
+  collections?: { edges: Array<{ node: { handle: string } }> };
 }): ShopifyProductCard {
   return {
     id: product.id,
@@ -74,6 +75,7 @@ function mapProductCard(product: {
     title: product.title,
     featuredImage: mapImage(product.featuredImage),
     minPrice: mapMoney(product.priceRange?.minVariantPrice ?? null),
+    collectionHandles: product.collections?.edges.map(({ node }) => node.handle) ?? [],
   };
 }
 
@@ -160,6 +162,13 @@ const ALL_PRODUCTS_QUERY = `
               currencyCode
             }
           }
+          collections(first: 10) {
+            edges {
+              node {
+                handle
+              }
+            }
+          }
         }
       }
     }
@@ -239,6 +248,7 @@ type AllProductsQueryResult = {
         priceRange: {
           minVariantPrice: { amount: string; currencyCode: string } | null;
         } | null;
+        collections: { edges: Array<{ node: { handle: string } }> };
       };
     }>;
   };
@@ -321,6 +331,7 @@ export async function getProductByHandle(handle: string, lang?: string): Promise
     })),
     variants: product.variants.edges.map(({ node }) => mapVariant(node)),
     minPrice: mapMoney(product.priceRange?.minVariantPrice ?? null),
+    collectionHandles: [],
   };
 }
 

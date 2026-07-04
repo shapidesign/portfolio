@@ -87,12 +87,12 @@ export function ShopifyCollectionGrid({
 
   const categoryLabels = useMemo<Record<StoreCategory, string>>(
     () => ({
-      "front-oversize": s.catFrontOversize,
-      "back-oversize": s.catBackOversize,
-      "front-normal": s.catFrontNormal,
-      toddler: s.catToddler,
+      "oversized-front": s.catOversizedFront,
+      "oversized-back": s.catOversizedBack,
+      shirts: s.catTshirts,
+      "toddler-shirts": s.catToddler,
     }),
-    [s.catFrontOversize, s.catBackOversize, s.catFrontNormal, s.catToddler],
+    [s.catOversizedFront, s.catOversizedBack, s.catTshirts, s.catToddler],
   );
 
   const products = collection?.products ?? [];
@@ -101,8 +101,8 @@ export function ShopifyCollectionGrid({
   const counts = useMemo(() => {
     const map = new Map<StoreCategory, number>();
     for (const product of products) {
-      const category = categoryOf(product.title);
-      map.set(category, (map.get(category) ?? 0) + 1);
+      const category = categoryOf(product.collectionHandles);
+      if (category) map.set(category, (map.get(category) ?? 0) + 1);
     }
     return map;
   }, [products]);
@@ -116,7 +116,7 @@ export function ShopifyCollectionGrid({
     () =>
       activeFilter === "all"
         ? products
-        : products.filter((product) => categoryOf(product.title) === activeFilter),
+        : products.filter((product) => categoryOf(product.collectionHandles) === activeFilter),
     [products, activeFilter],
   );
 

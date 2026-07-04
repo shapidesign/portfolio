@@ -30,6 +30,7 @@ export type ShopifyProductCard = {
   title: string;
   featuredImage: ShopifyImage | null;
   minPrice: ShopifyMoney | null;
+  collectionHandles: string[];
 };
 
 export type ShopifyProductDetail = ShopifyProductCard & {
