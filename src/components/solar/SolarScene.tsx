@@ -45,7 +45,7 @@ export function SolarScene({
       <Background voyageMotion={voyageMotion} />
       <CameraRig target={cameraTarget} parallax={4.5} reducedMotion={reducedMotion} compact={compact} />
 
-      <Sun onHoverChange={onSunHover} onClick={onSunClick} />
+      <Sun onHoverChange={onSunHover} onClick={onSunClick} reducedMotion={reducedMotion} />
 
       {planets.map((config) => (
         <Planet
@@ -54,6 +54,7 @@ export function SolarScene({
           paused={focusedSlug === config.slug}
           isHovered={hoveredSlug === config.slug}
           isActive={focusedSlug === config.slug}
+          compact={compact}
           onHoverChange={(h) => onPlanetHover(h ? config.slug : null)}
           onClick={(e) => onPlanetClick(config.slug, e)}
           onPositionUpdate={(pos) => {

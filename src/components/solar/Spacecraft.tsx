@@ -85,6 +85,28 @@ export function Spacecraft({
 
   const accentColor = useMemo(() => new THREE.Color(accent), [accent]);
 
+  // Port/starboard nav lights (aviation convention: red left, green right).
+  const navMats = useMemo(
+    () =>
+      [new THREE.Color("#ff5f6e"), new THREE.Color("#5fff9b")].map(
+        (color) => new THREE.MeshBasicMaterial({ color, toneMapped: false, transparent: true }),
+      ),
+    [],
+  );
+
+  // Tron-style running-light strips along the fuselage sides.
+  const stripMat = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        color: new THREE.Color(accent),
+        toneMapped: false,
+        transparent: true,
+        opacity: 0.85,
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   // Shared exhaust material — both engine plumes flicker and fade together.
   const exhaustMat = useMemo(
     () =>
@@ -102,9 +124,17 @@ export function Spacecraft({
 
   useEffect(() => {
     exhaustMat.color.copy(accentColor);
-  }, [accentColor, exhaustMat]);
+    stripMat.color.copy(accentColor);
+  }, [accentColor, exhaustMat, stripMat]);
 
-  useEffect(() => () => exhaustMat.dispose(), [exhaustMat]);
+  useEffect(
+    () => () => {
+      exhaustMat.dispose();
+      stripMat.dispose();
+      navMats.forEach((m) => m.dispose());
+    },
+    [exhaustMat, stripMat, navMats],
+  );
 
   useFrame((_state, deltaRaw) => {
     const craft = groupRef.current;
@@ -135,27 +165,30 @@ export function Spacecraft({
       }
     }
 
-    const orbitRadius = hasTarget
-      ? compact
-        ? Math.max(2.05, targetSize * 1.85)
-        : Math.max(3.15, targetSize * 2.7)
-      : 10.5;
+    const orbitRadius = 10.5;
     const orbitDepthScale = compact ? 0.68 : 0.82;
-    const targetHeight = hasTarget
-      ? compact
-        ? Math.max(2.25, targetSize + 1.8)
-        : Math.max(2.65, targetSize + 2.05)
-      : 3.4;
     const a = orbitAngle.current;
     orbitOffset.current.set(
       Math.cos(a) * orbitRadius,
-      targetHeight,
+      3.4,
       Math.sin(a) * orbitRadius * orbitDepthScale,
     );
     orbitTangent.current
       .set(-Math.sin(a) * orbitRadius, 0, Math.cos(a) * orbitRadius * orbitDepthScale)
       .normalize();
-    desired.current.copy(target).add(orbitOffset.current);
+
+    if (hasTarget) {
+      // Landing pad sits on top of the planet; the Bezier flight arrives at a
+      // hover point above it, then the settle phase descends vertically.
+      // The focused planet's orbit is paused, so the pad holds still.
+      const padHeight = targetSize + 0.34;
+      const hoverHeight = padHeight + (compact ? 1.8 : 2.6);
+      desired.current.copy(target);
+      desired.current.y += flying ? hoverHeight : padHeight;
+    } else {
+      // No station focused: cruise a wide orbit around the sun.
+      desired.current.copy(target).add(orbitOffset.current);
+    }
 
     // New target: capture a fresh Bezier arc.
     if (activeTargetKey.current !== targetKey) {
@@ -208,10 +241,12 @@ export function Spacecraft({
         t * t * flightTo.current.z;
       craft.position.set(x, y, z);
     } else {
-      // Frame-rate independent settle toward orbit position.
-      craft.position.x = THREE.MathUtils.damp(craft.position.x, desired.current.x, 6, delta);
-      craft.position.y = THREE.MathUtils.damp(craft.position.y, desired.current.y, 6, delta);
-      craft.position.z = THREE.MathUtils.damp(craft.position.z, desired.current.z, 6, delta);
+      // Frame-rate independent settle. With a target this is the vertical
+      // touchdown from hover point to pad, so it descends gently.
+      const lambda = hasTarget ? 2.4 : 6;
+      craft.position.x = THREE.MathUtils.damp(craft.position.x, desired.current.x, lambda, delta);
+      craft.position.y = THREE.MathUtils.damp(craft.position.y, desired.current.y, lambda, delta);
+      craft.position.z = THREE.MathUtils.damp(craft.position.z, desired.current.z, lambda, delta);
     }
 
     // ---- Orientation ----
@@ -223,18 +258,31 @@ export function Spacecraft({
     const cruiseYaw = Math.atan2(orbitTangent.current.x, orbitTangent.current.z);
     const flightYaw =
       horiz > 1e-4 ? Math.atan2(tangent.current.x, tangent.current.z) : cruiseYaw;
-    // Blend smoothly from flight heading to cruise tangent near the end of flight.
-    const headingBlend = flying ? THREE.MathUtils.smoothstep(flightProgress.current, 0.78, 1) : 1;
-    const yawTarget = wrapAngle(
-      flightYaw + wrapAngle(cruiseYaw - flightYaw) * headingBlend,
-    );
+    let yawTarget: number;
+    let pitchTarget: number;
+    if (hasTarget && !flying) {
+      // Descending / landed: hold heading and sit level like a lander.
+      yawTarget = yaw.current;
+      pitchTarget = 0;
+    } else {
+      // Blend smoothly from flight heading to cruise tangent near the end of
+      // flight — but only when returning to the sun cruise; a landing flight
+      // keeps its approach heading all the way in.
+      const headingBlend =
+        flying && !hasTarget
+          ? THREE.MathUtils.smoothstep(flightProgress.current, 0.78, 1)
+          : flying
+            ? 0
+            : 1;
+      yawTarget = wrapAngle(flightYaw + wrapAngle(cruiseYaw - flightYaw) * headingBlend);
 
-    // Pitch from vertical velocity component.
-    const pitchTarget = THREE.MathUtils.clamp(
-      -Math.atan2(tangent.current.y / Math.max(delta, 1e-3), Math.max(horiz / Math.max(delta, 1e-3), 1e-3)),
-      -Math.PI / 10,
-      Math.PI / 10,
-    );
+      // Pitch from vertical velocity component.
+      pitchTarget = THREE.MathUtils.clamp(
+        -Math.atan2(tangent.current.y / Math.max(delta, 1e-3), Math.max(horiz / Math.max(delta, 1e-3), 1e-3)),
+        -Math.PI / 10,
+        Math.PI / 10,
+      );
+    }
 
     // Bank from turn rate (delta yaw / dt), scaled and clamped.
     const yawDelta = wrapAngle(yawTarget - prevYawTarget.current);
@@ -263,8 +311,14 @@ export function Spacecraft({
       } else {
         bobPhase.current += delta * 1.6;
         const restFactor = 1 - THREE.MathUtils.clamp(speed / 1.2, 0, 1);
-        const bob = Math.sin(bobPhase.current) * 0.06 * restFactor;
-        bodyRef.current.position.y = bob;
+        // No hover bob while landed on a planet — the ship sits solidly.
+        const bob = hasTarget ? 0 : Math.sin(bobPhase.current) * 0.06 * restFactor;
+        bodyRef.current.position.y = THREE.MathUtils.damp(
+          bodyRef.current.position.y,
+          bob,
+          4,
+          delta,
+        );
       }
     }
 
@@ -284,6 +338,18 @@ export function Spacecraft({
     }
     if (lightRef.current) {
       lightRef.current.intensity = 0.25 + thrustLevel.current * 0.9;
+    }
+
+    // ---- Detail lighting: strips and nav blinkers ----
+    if (reducedMotion) {
+      stripMat.opacity = 0.8;
+      navMats[0].opacity = 1;
+      navMats[1].opacity = 1;
+    } else {
+      stripMat.opacity = 0.65 + Math.sin(bobPhase.current * 2.4) * 0.25;
+      // Alternating blink: sharp on/off gate, half a cycle apart.
+      navMats[0].opacity = Math.sin(bobPhase.current * 3.4) > 0.3 ? 1 : 0.08;
+      navMats[1].opacity = Math.sin(bobPhase.current * 3.4 + Math.PI) > 0.3 ? 1 : 0.08;
     }
 
     previousPos.current.copy(craft.position);
@@ -318,19 +384,26 @@ export function Spacecraft({
           />
         </mesh>
 
-        {/* Glass canopy */}
+        {/* Glass canopy — interior glow follows the destination accent */}
         <mesh position={[0, 0.165, 0.3]} scale={[1, 0.72, 1.55]}>
           <sphereGeometry args={[0.15, 24, 16]} />
           <meshStandardMaterial
             color={GLASS}
-            emissive={GLASS}
-            emissiveIntensity={0.7}
+            emissive={accentColor}
+            emissiveIntensity={0.9}
             metalness={0.16}
             roughness={0.1}
             transparent
             opacity={0.82}
           />
         </mesh>
+
+        {/* Running-light strips along the fuselage sides */}
+        {([1, -1] as const).map((side) => (
+          <mesh key={side} position={[side * 0.205, 0.02, 0.05]} material={stripMat}>
+            <boxGeometry args={[0.016, 0.035, 0.95]} />
+          </mesh>
+        ))}
 
         {/* Accent ring around the hull */}
         <mesh position={[0, 0, -0.06]}>
@@ -357,10 +430,9 @@ export function Spacecraft({
                 roughness={0.26}
               />
             </mesh>
-            {/* Wingtip light */}
-            <mesh position={[side * 0.4, 0, 0]}>
+            {/* Wingtip nav light — red port (+x is left when facing +z), green starboard */}
+            <mesh position={[side * 0.4, 0, 0]} material={navMats[side === 1 ? 0 : 1]}>
               <sphereGeometry args={[0.05, 12, 8]} />
-              <meshBasicMaterial color={accentColor} toneMapped={false} />
             </mesh>
           </group>
         ))}

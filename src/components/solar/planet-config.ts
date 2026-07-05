@@ -27,5 +27,7 @@ export function buildPlanetConfigs(projects: Project[]): PlanetConfig[] {
     startAngle: (i / 6) * Math.PI * 2,
     tilt: ORBIT_TILTS[i],
     size: PLANET_SIZES[i],
+    // The largest planet gets the Saturn treatment.
+    ringed: i === 3,
   }));
 }

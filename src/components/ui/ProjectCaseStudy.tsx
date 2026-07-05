@@ -102,6 +102,29 @@ export function ProjectCaseStudy({ project, onSelectNext }: ProjectCaseStudyProp
         </Reveal>
       )}
 
+      {/* Typography reveal loop — sits right under the brand colors. */}
+      {isGivatHodaya && (
+        <Reveal>
+          <figure className="project-editorial-item project-editorial-item--full project-editorial-item--brand project-editorial-item--video">
+            <video
+              ref={typeRevealRef}
+              className="project-editorial-video"
+              src="/videos/rethinking-real-estate/logotype-reveal.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              aria-label={
+                isHebrew
+                  ? `${title} - אנימציית בניית הלוגוטייפ`
+                  : `${title} - logotype construction animation`
+              }
+            />
+          </figure>
+        </Reveal>
+      )}
+
       <ProjectNarrativeSections project={project} />
 
       {hasScrollImages && (
@@ -127,27 +150,6 @@ export function ProjectCaseStudy({ project, onSelectNext }: ProjectCaseStudyProp
                 </figure>
               </Reveal>
 
-              {isGivatHodaya && index === 0 && (
-                <Reveal>
-                  <figure className="project-editorial-item project-editorial-item--full project-editorial-item--brand project-editorial-item--video">
-                    <video
-                      ref={typeRevealRef}
-                      className="project-editorial-video"
-                      src="/videos/rethinking-real-estate/logotype-reveal.mp4"
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="metadata"
-                      aria-label={
-                        isHebrew
-                          ? `${title} - אנימציית בניית הלוגוטייפ`
-                          : `${title} - logotype construction animation`
-                      }
-                    />
-                  </figure>
-                </Reveal>
-              )}
             </Fragment>
           ))}
 

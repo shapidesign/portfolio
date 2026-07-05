@@ -1,8 +1,12 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
+import { makeAtmosphereMaterial } from "./atmosphere-material";
+
+// Corona sprite diameter ≈ 2.2x the 2.6-radius ball.
+const CORONA_SIZE = 11.5;
 
 // The centre body reads as a spinning soccer ball and links to the shirts store.
 // It keeps a real point light so the orbiting planets stay illuminated.
@@ -10,7 +14,28 @@ import * as THREE from "three";
 type SunProps = {
   onClick?: (event: { clientX: number; clientY: number }) => void;
   onHoverChange?: (hovered: boolean) => void;
+  reducedMotion?: boolean;
 };
+
+// Radial corona gradient: warm white core fading through lavender to nothing.
+function makeCoronaTexture() {
+  const size = 256;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  g.addColorStop(0, "rgba(255, 250, 240, 0.9)");
+  g.addColorStop(0.32, "rgba(219, 199, 255, 0.42)");
+  g.addColorStop(0.62, "rgba(184, 155, 255, 0.14)");
+  g.addColorStop(1, "rgba(184, 155, 255, 0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, size, size);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
 
 // Black pentagons on white, placed at the 12 icosahedron vertices — the classic
 // minimal soccer-ball motif. Computed in 3D direction space so it maps cleanly
@@ -99,13 +124,32 @@ function makeSoccerTexture() {
   return texture;
 }
 
-export function Sun({ onClick, onHoverChange }: SunProps) {
+export function Sun({ onClick, onHoverChange, reducedMotion = false }: SunProps) {
   const groupRef = useRef<THREE.Group>(null);
+  const coronaRef = useRef<THREE.Sprite>(null);
+  const pulsePhase = useRef(0);
   const soccerTexture = useMemo(() => makeSoccerTexture(), []);
+  const coronaTexture = useMemo(() => makeCoronaTexture(), []);
+  const atmosphereMat = useMemo(() => makeAtmosphereMaterial("#b89bff", 0.8, 2.6), []);
 
-  useFrame(() => {
+  useEffect(
+    () => () => {
+      coronaTexture?.dispose();
+      atmosphereMat.dispose();
+    },
+    [coronaTexture, atmosphereMat],
+  );
+
+  useFrame((_state, delta) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y += 0.01;
+      // Slow, frame-rate-independent spin.
+      groupRef.current.rotation.y += delta * 0.12;
+    }
+    if (coronaRef.current && !reducedMotion) {
+      pulsePhase.current += delta * 0.7;
+      const pulse = 1 + Math.sin(pulsePhase.current) * 0.04;
+      coronaRef.current.scale.setScalar(CORONA_SIZE * pulse);
+      coronaRef.current.material.opacity = 0.85 + Math.sin(pulsePhase.current * 1.3) * 0.1;
     }
   });
 
@@ -139,6 +183,25 @@ export function Sun({ onClick, onHoverChange }: SunProps) {
           roughness={0.75}
         />
       </mesh>
+
+      {/* Fresnel shell — the ball hangs inside a lavender glow */}
+      <mesh scale={3.05} material={atmosphereMat} raycast={() => null}>
+        <sphereGeometry args={[1, 32, 32]} />
+      </mesh>
+
+      {/* Camera-facing corona, pulses gently */}
+      {coronaTexture ? (
+        <sprite ref={coronaRef} scale={CORONA_SIZE} raycast={() => null}>
+          <spriteMaterial
+            map={coronaTexture}
+            transparent
+            opacity={0.85}
+            depthWrite={false}
+            blending={THREE.AdditiveBlending}
+            toneMapped={false}
+          />
+        </sprite>
+      ) : null}
 
       {/* Real light source so orbiting planets stay illuminated from the centre */}
       <pointLight color="#b89bff" intensity={42} distance={80} decay={1.6} />

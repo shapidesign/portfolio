@@ -1637,10 +1637,12 @@ body.solar-home {
   text-align: right;
 }
 
+/* Flush the box to the right edge: in RTL, inline-start IS the right side,
+   so the zero margin goes on start and the auto margin on end (left). */
 .solar-modal[dir="rtl"] .project-opener-line,
 .solar-modal[dir="rtl"] .project-narrative-block {
-  margin-inline-start: auto;
-  margin-inline-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: auto;
 }
 
 /* ─── Contact drawer form overrides ─────────────────── */

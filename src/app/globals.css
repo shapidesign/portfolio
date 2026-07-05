@@ -3779,6 +3779,18 @@ p.form-sent-copy:hover {
   overflow-wrap: break-word;
 }
 
+/* Justified body copy. Spec asked for InDesign-style justification (word
+   spacing 70/100/120, letter spacing -2/0/2, glyph scaling 98/100/102);
+   CSS has no min/desired/max justification controls, so this is the closest
+   web equivalent: inter-word justify, last line to the text start (right in
+   RTL, matching the direction of the document). */
+.project-narrative-copy,
+.body-section-text {
+  text-align: justify;
+  text-justify: inter-word;
+  text-align-last: start;
+}
+
 .project-editorial-work {
   margin-top: 1.8rem;
   display: grid;
