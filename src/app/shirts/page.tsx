@@ -1,7 +1,7 @@
 "use client";
 
 import { Reveal } from "@/components/ui/Reveal";
-import { ShopifyCollectionGrid } from "@/components/ui/ShopifyCollectionGrid";
+import { ShopifyCollectionCarousels } from "@/components/ui/ShopifyCollectionCarousels";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
 import { getDefaultCollectionHandles } from "@/lib/shopify-storefront";
@@ -48,7 +48,7 @@ export default function ShirtsPage() {
                 {s.shopShopAll}
               </a>
             </div>
-            <ShopifyCollectionGrid
+            <ShopifyCollectionCarousels
               collectionHandle={shirtsCollectionHandle}
               productPathPrefix="/shirts"
               loadingText={s.shopLoading}

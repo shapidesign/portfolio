@@ -3976,6 +3976,103 @@ p.form-sent-copy:hover {
   }
 }
 
+/* Product carousels */
+.store-carousels {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.5rem);
+}
+
+.store-carousel-section {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.store-carousel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.store-carousel-title {
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--color-text);
+}
+
+.store-carousel-title-skeleton {
+  width: min(12rem, 40%);
+  height: 1.35rem;
+}
+
+.store-carousel-nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.store-carousel-btn {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--color-accent-white) 18%, transparent);
+  background: color-mix(in srgb, var(--color-accent-white) 5%, transparent);
+  color: var(--color-text);
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 200ms var(--ease-settle), background-color 200ms var(--ease-settle),
+    opacity 200ms var(--ease-settle);
+}
+
+.store-carousel-btn:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--color-accent-white) 36%, transparent);
+  background: color-mix(in srgb, var(--color-accent-white) 10%, transparent);
+}
+
+.store-carousel-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.store-carousel-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.store-carousel-track {
+  display: flex;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-block-end: 0.25rem;
+}
+
+.store-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.store-carousel-track:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}
+
+.store-carousel-card {
+  flex: 0 0 clamp(220px, 28vw, 280px);
+  scroll-snap-align: start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .store-carousel-btn {
+    transition: none;
+  }
+}
+
 /* Product grid */
 .store-grid {
   display: grid;
