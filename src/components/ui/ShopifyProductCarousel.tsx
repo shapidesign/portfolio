@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { formatShopifyMoney } from "@/lib/format-shopify-money";
 import type { ShopifyProductCard } from "@/lib/shopify-types";
+import { useLanguage } from "@/context/LanguageContext";
 
 type ShopifyProductCarouselProps = {
   id: string;
@@ -24,6 +25,8 @@ export function ShopifyProductCarousel({
   prevLabel,
   nextLabel,
 }: ShopifyProductCarouselProps) {
+  const { lang } = useLanguage();
+  const priceLocale = lang === "he" ? "he-IL" : "en-IL";
   const trackRef = useRef<HTMLDivElement>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -120,7 +123,7 @@ export function ShopifyProductCarousel({
                 <h3 className="store-card-title">{product.title}</h3>
                 <p className="store-card-price">
                   {product.minPrice
-                    ? formatShopifyMoney(product.minPrice.amount, product.minPrice.currencyCode)
+                    ? formatShopifyMoney(product.minPrice.amount, product.minPrice.currencyCode, priceLocale)
                     : ""}
                 </p>
               </div>

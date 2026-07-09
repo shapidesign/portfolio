@@ -12,6 +12,7 @@ import {
   type SelectedOptions,
 } from "@/lib/shopify-variants";
 import { useCart } from "@/context/CartContext";
+import { formatShopifyMoney } from "@/lib/format-shopify-money";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
 
@@ -28,18 +29,9 @@ type ShopifyProductDetailClientProps = {
   backHref: string;
 };
 
-function formatMoney(amount: string, currencyCode: string) {
-  const numeric = Number.parseFloat(amount);
-  if (!Number.isFinite(numeric)) return `${amount} ${currencyCode}`;
-  return new Intl.NumberFormat(undefined, {
-    style: "currency",
-    currency: currencyCode,
-    maximumFractionDigits: 2,
-  }).format(numeric);
-}
-
 export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductDetailClientProps) {
   const { lang } = useLanguage();
+  const priceLocale = lang === "he" ? "he-IL" : "en-IL";
   const s = useTranslation(lang);
   const { addLines } = useCart();
   const [product, setProduct] = useState<ShopifyProductDetail | null>(null);
@@ -271,7 +263,11 @@ export function ShopifyProductDetailClient({ handle, backHref }: ShopifyProductD
               <h1 className="pdp-title font-display">{product.title}</h1>
               {selectedVariant?.price ? (
                 <p className="pdp-price">
-                  {formatMoney(selectedVariant.price.amount, selectedVariant.price.currencyCode)}
+                  {formatShopifyMoney(
+                    selectedVariant.price.amount,
+                    selectedVariant.price.currencyCode,
+                    priceLocale,
+                  )}
                 </p>
               ) : null}
 

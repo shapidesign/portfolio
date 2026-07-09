@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCollectionProducts } from "@/lib/shopify-storefront";
 import type { ShopifyCollectionProducts } from "@/lib/shopify-types";
 import { categoryOf, STORE_CATEGORY_ORDER, type StoreCategory } from "@/lib/shopify-category";
+import { formatShopifyMoney } from "@/lib/format-shopify-money";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
 
@@ -19,16 +20,6 @@ type ShopifyCollectionGridProps = {
 };
 
 type FilterValue = StoreCategory | "all";
-
-function formatMoney(amount: string, currencyCode: string) {
-  const numeric = Number.parseFloat(amount);
-  if (!Number.isFinite(numeric)) return `${amount} ${currencyCode}`;
-  return new Intl.NumberFormat(undefined, {
-    style: "currency",
-    currency: currencyCode,
-    maximumFractionDigits: 2,
-  }).format(numeric);
-}
 
 export function ShopifyCollectionGrid({
   collectionHandle,
@@ -204,7 +195,13 @@ export function ShopifyCollectionGrid({
               <div className="store-card-info">
                 <h3 className="store-card-title">{product.title}</h3>
                 <p className="store-card-price">
-                  {product.minPrice ? formatMoney(product.minPrice.amount, product.minPrice.currencyCode) : ""}
+                  {product.minPrice
+                    ? formatShopifyMoney(
+                        product.minPrice.amount,
+                        product.minPrice.currencyCode,
+                        lang === "he" ? "he-IL" : "en-IL",
+                      )
+                    : ""}
                 </p>
               </div>
             </Link>

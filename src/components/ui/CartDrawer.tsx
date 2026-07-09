@@ -2,22 +2,14 @@
 
 import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
+import { formatShopifyMoney } from "@/lib/format-shopify-money";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTranslation } from "@/i18n/strings";
-
-function formatMoney(amount: string, currencyCode: string) {
-  const numeric = Number.parseFloat(amount);
-  if (!Number.isFinite(numeric)) return `${amount} ${currencyCode}`;
-  return new Intl.NumberFormat(undefined, {
-    style: "currency",
-    currency: currencyCode,
-    maximumFractionDigits: 2,
-  }).format(numeric);
-}
 
 export function CartDrawer() {
   const { cart, count, loading, error, isOpen, closeCart, updateLine, removeLine } = useCart();
   const { lang } = useLanguage();
+  const priceLocale = lang === "he" ? "he-IL" : "en-IL";
   const s = useTranslation(lang);
 
   useEffect(() => {
@@ -117,7 +109,7 @@ export function CartDrawer() {
                   </div>
                   <div className="cart-drawer-line-side">
                     <p className="cart-drawer-line-price">
-                      {formatMoney(line.price.amount, line.price.currencyCode)}
+                      {formatShopifyMoney(line.price.amount, line.price.currencyCode, priceLocale)}
                     </p>
                     <button
                       type="button"
@@ -139,7 +131,7 @@ export function CartDrawer() {
             <div className="cart-drawer-subtotal">
               <span>{s.shopSubtotal}</span>
               {cart?.subtotal ? (
-                <span>{formatMoney(cart.subtotal.amount, cart.subtotal.currencyCode)}</span>
+                <span>{formatShopifyMoney(cart.subtotal.amount, cart.subtotal.currencyCode, priceLocale)}</span>
               ) : null}
             </div>
             <p className="cart-drawer-tax">{s.shopTaxNote}</p>

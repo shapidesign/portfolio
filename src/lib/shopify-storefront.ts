@@ -1,4 +1,5 @@
 import type { ShopifyCollectionProducts, ShopifyImage, ShopifyMoney, ShopifyProductCard, ShopifyProductDetail, ShopifyVariant } from "@/lib/shopify-types";
+import { convertMoney, refreshFxRates } from "@/lib/shopify-display-currency";
 
 const DEFAULT_SHOPIFY_DOMAIN = "mundial-laundry.myshopify.com";
 // ponytail: public Storefront API token (safe to expose in the client bundle by design);
@@ -48,10 +49,10 @@ function mapImage(image: {
 
 function mapMoney(money: { amount: string; currencyCode: string } | null): ShopifyMoney | null {
   if (!money) return null;
-  return {
+  return convertMoney({
     amount: money.amount,
     currencyCode: money.currencyCode,
-  };
+  });
 }
 
 function mapProductCard(product: {
@@ -91,10 +92,7 @@ function mapVariant(variant: {
     id: variant.id,
     title: variant.title,
     availableForSale: variant.availableForSale,
-    price: {
-      amount: variant.price.amount,
-      currencyCode: variant.price.currencyCode,
-    },
+    price: mapMoney(variant.price) ?? { amount: "0", currencyCode: "ILS" },
     selectedOptions: variant.selectedOptions.map((option) => ({
       name: option.name,
       value: option.value,
@@ -293,6 +291,7 @@ type ProductByHandleQueryResult = {
 };
 
 export async function getAllProducts(limit = 100): Promise<ShopifyProductCard[]> {
+  await refreshFxRates();
   const data = await queryStorefront<AllProductsQueryResult>(ALL_PRODUCTS_QUERY, { limit });
   return data.products.edges.map(({ node }) => mapProductCard(node));
 }
@@ -309,6 +308,7 @@ export async function getCollectionProducts(handle: string, limit = 100): Promis
 }
 
 export async function getProductByHandle(handle: string, lang?: string): Promise<ShopifyProductDetail | null> {
+  await refreshFxRates();
   const data = await queryStorefront<ProductByHandleQueryResult>(PRODUCT_BY_HANDLE_QUERY, {
     handle,
     language: toLanguageCode(lang),
