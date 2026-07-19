@@ -5,6 +5,7 @@ export type StoreCategory =
   | "oversized-front"
   | "oversized-back"
   | "shirts"
+  | "kids-t-shirt"
   | "toddler-shirts";
 
 /** Display order for the filter bar (matches the Shopify collection handles). */
@@ -12,6 +13,7 @@ export const STORE_CATEGORY_ORDER: StoreCategory[] = [
   "oversized-front",
   "oversized-back",
   "shirts",
+  "kids-t-shirt",
   "toddler-shirts",
 ];
 

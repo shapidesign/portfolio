@@ -114,6 +114,7 @@ const strings = {
     catOversizedFront: "Oversized · Front",
     catOversizedBack: "Oversized · Back",
     catTshirts: "T-Shirts",
+    catKids: "Kids shirts",
     catToddler: "Toddler shirts",
 
     // Project detail
@@ -267,6 +268,7 @@ const strings = {
     catOversizedFront: "אוברסייז · קדמי",
     catOversizedBack: "אוברסייז · אחורי",
     catTshirts: "טי-שירטים",
+    catKids: "חולצות ילדים",
     catToddler: "חולצות פעוטות",
 
     visitProject: "לאתר הפרויקט",

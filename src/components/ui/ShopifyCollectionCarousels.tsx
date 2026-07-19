@@ -82,9 +82,10 @@ export function ShopifyCollectionCarousels({
       "oversized-front": s.catOversizedFront,
       "oversized-back": s.catOversizedBack,
       shirts: s.catTshirts,
+      "kids-t-shirt": s.catKids,
       "toddler-shirts": s.catToddler,
     }),
-    [s.catOversizedFront, s.catOversizedBack, s.catTshirts, s.catToddler],
+    [s.catOversizedFront, s.catOversizedBack, s.catTshirts, s.catKids, s.catToddler],
   );
 
   const products = collection?.products ?? [];
