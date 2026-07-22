@@ -37,6 +37,7 @@
   ],
   "exclude": [
     "node_modules",
+    "shopify-app",
     "src/lib/shopify-variants.check.ts",
     "src/lib/shopify-category.check.ts",
     "src/lib/project-overrides.check.ts"

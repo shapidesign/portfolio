@@ -10,6 +10,14 @@
 
 # misc
 .DS_Store
+.cursor/
+tsconfig.tsbuildinfo
+
+# too large for GitHub (>100MB)
+portfoliodesign.ai
+
+# separate app with its own git repo
+shopify-app/
 
 # logs
 npm-debug.log*
