@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
 import { baseProjects } from "@/data/projects";
+import { getBlobToken } from "@/lib/project-overrides";
 
 const KNOWN_SLUGS = new Set(baseProjects.map((p) => p.slug));
 
@@ -34,6 +35,7 @@ export async function POST(req: Request) {
   const blob = await put(`content/uploads/${slug}/${safeName(file.name)}`, file, {
     access: "public",
     addRandomSuffix: true,
+    token: getBlobToken(),
   });
 
   return NextResponse.json({ url: blob.url });

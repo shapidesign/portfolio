@@ -10,13 +10,33 @@ export type { ProjectOverrides };
 const OVERRIDES_PATH = "content/projects-overrides.json";
 
 /**
+ * Resolve the Blob read/write token from env, regardless of the prefix chosen
+ * when connecting the store. Defaults to BLOB_READ_WRITE_TOKEN; otherwise picks
+ * any `*_READ_WRITE_TOKEN` whose value looks like a Blob token (e.g. a store
+ * connected with the "admin" prefix -> admin_READ_WRITE_TOKEN).
+ */
+export function getBlobToken(): string | undefined {
+  if (process.env.BLOB_READ_WRITE_TOKEN) return process.env.BLOB_READ_WRITE_TOKEN;
+  for (const [key, value] of Object.entries(process.env)) {
+    if (
+      key.endsWith("READ_WRITE_TOKEN") &&
+      typeof value === "string" &&
+      value.startsWith("vercel_blob_rw_")
+    ) {
+      return value;
+    }
+  }
+  return undefined;
+}
+
+/**
  * Read the overrides document from Vercel Blob. Returns {} when the blob does
  * not exist yet or Blob is unreachable (e.g. local dev without a token), so the
  * site always falls back to the committed base content.
  */
 export async function readOverrides(): Promise<ProjectOverrides> {
   try {
-    const meta = await head(OVERRIDES_PATH);
+    const meta = await head(OVERRIDES_PATH, { token: getBlobToken() });
     const res = await fetch(meta.url, { cache: "no-store" });
     if (!res.ok) return {};
     return (await res.json()) as ProjectOverrides;
@@ -33,6 +53,7 @@ export async function writeOverrides(overrides: ProjectOverrides): Promise<void>
     addRandomSuffix: false,
     allowOverwrite: true,
     contentType: "application/json",
+    token: getBlobToken(),
   });
 }
 
