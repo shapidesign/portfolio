@@ -9,7 +9,9 @@ import { SESSION_COOKIE, isValidSession } from "@/lib/admin-auth";
  */
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  if (pathname === "/api/admin/login") return NextResponse.next();
+  // Normalize the trailingSlash redirect (/api/admin/login -> /api/admin/login/).
+  const path = pathname.replace(/\/+$/, "");
+  if (path === "/api/admin/login") return NextResponse.next();
 
   const token = req.cookies.get(SESSION_COOKIE)?.value;
   if (!isValidSession(token)) {

@@ -11,7 +11,7 @@ export function AdminDashboard({ projects }: { projects: Project[] }) {
   const selected = projects.find((p) => p.slug === selectedSlug);
 
   async function logout() {
-    await fetch("/api/admin/logout", { method: "POST" });
+    await fetch("/api/admin/logout/", { method: "POST" });
     router.refresh();
   }
 

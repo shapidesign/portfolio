@@ -72,7 +72,7 @@ export function ProjectEditor({ project }: { project: Project }) {
         const form = new FormData();
         form.append("slug", project.slug);
         form.append("file", file);
-        const res = await fetch("/api/admin/upload", {
+        const res = await fetch("/api/admin/upload/", {
           method: "POST",
           body: form,
         });
@@ -96,7 +96,7 @@ export function ProjectEditor({ project }: { project: Project }) {
     fields[TAG_FIELDS.he] = splitTags(text[TAG_FIELDS.he] ?? "");
     fields.images = images;
     try {
-      const res = await fetch("/api/admin/save", {
+      const res = await fetch("/api/admin/save/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ slug: project.slug, fields }),
