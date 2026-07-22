@@ -13,7 +13,7 @@ import { TetrisLoaderEmbed } from "@/components/ui/TetrisLoaderEmbed";
 import { GivatHodayaBrandPaletteEmbed } from "@/components/ui/GivatHodayaBrandPaletteEmbed";
 import { DigitalHandprintEmbed } from "@/app/work/[slug]/DigitalHandprintEmbed";
 import { DavidkaProjectEmbed } from "@/app/work/[slug]/DavidkaProjectEmbed";
-import { projects } from "@/data/projects";
+import { baseProjects } from "@/data/projects";
 import { useLanguage } from "@/context/LanguageContext";
 import type { Project } from "@/types/project";
 
@@ -42,8 +42,8 @@ export function ProjectCaseStudy({ project, onSelectNext }: ProjectCaseStudyProp
   const isDavidka = slug === "small-world-problems";
   const isGivatHodaya = slug === "rethinking-real-estate";
   const hasScrollImages = !isDigitalHandprint && !isDavidka && project.images.length > 0;
-  const currentIndex = projects.findIndex((entry) => entry.slug === slug);
-  const nextProject = projects[(currentIndex + 1) % projects.length];
+  const currentIndex = baseProjects.findIndex((entry) => entry.slug === slug);
+  const nextProject = baseProjects[(currentIndex + 1) % baseProjects.length];
   const leadImageAlt = isHebrew ? `${title} - תמונת פתיחה` : `${title} hero`;
 
   const embedNode = isDigitalHandprint ? (

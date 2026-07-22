@@ -1,7 +1,8 @@
 import { SolarSystemClient } from "@/components/solar/SolarSystemClient";
-import { projects } from "@/data/projects";
+import { getProjects } from "@/lib/project-overrides";
 import "@/styles/solar.css";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const projects = await getProjects();
   return <SolarSystemClient projects={projects} />;
 }

@@ -19,6 +19,7 @@
     "@react-three/fiber": "^9.6.1",
     "@react-three/postprocessing": "^3.0.4",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/blob": "^2.6.1",
     "motion": "^12.34.1",
     "next": "latest",
     "react": "latest",

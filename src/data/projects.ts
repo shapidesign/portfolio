@@ -252,8 +252,13 @@ const generatedProjects: Project[] = Array.isArray(generatedRaw)
 const mergedProjects: Project[] = [...generatedProjects];
 mergedProjects.splice(Math.min(3, mergedProjects.length), 0, ...LOCAL_PROJECTS);
 
-export const projects: Project[] = mergedProjects;
+/**
+ * Base projects assembled from the Notion sync + in-code overlays. This is the
+ * synchronous, client-safe source. Runtime admin edits are layered on top by
+ * `getProjects()` in `src/lib/project-overrides.ts` (server only).
+ */
+export const baseProjects: Project[] = mergedProjects;
 
-export function getProjectBySlug(slug: string) {
-  return projects.find((project) => project.slug === slug);
+export function getBaseProjectBySlug(slug: string) {
+  return baseProjects.find((project) => project.slug === slug);
 }
