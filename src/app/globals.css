@@ -166,7 +166,10 @@ textarea {
 .content-wrap {
   width: min(100%, var(--container-max));
   margin-inline: auto;
-  padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+  /* Physical left/right so iOS safe-area insets stay on the correct edges in RTL. */
+  padding-left: max(clamp(1.25rem, 4vw, 3.5rem), env(safe-area-inset-left, 0px));
+  padding-right: max(clamp(1.25rem, 4vw, 3.5rem), env(safe-area-inset-right, 0px));
+  box-sizing: border-box;
 }
 
 .section {
@@ -1503,14 +1506,15 @@ p {
 /* Large title on project pages */
 .project-detail h1 {
   font-family: var(--font-bricolage), "Bricolage Grotesque", var(--font-rubik), "Rubik", sans-serif;
-  font-size: clamp(2.25rem, 5.5vw, 4.5rem);
+  font-size: clamp(1.85rem, 8vw, 4.5rem);
   font-weight: 900;
-  line-height: 0.97;
-  letter-spacing: -0.03em;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
   color: var(--color-text);
   margin-top: 0.35rem;
   text-wrap: balance;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .meta-row {
@@ -3695,10 +3699,13 @@ p.form-sent-copy:hover {
 
 .project-opener-line {
   max-width: 62ch;
+  width: 100%;
+  box-sizing: border-box;
   font-style: italic;
   color: var(--color-text);
   text-wrap: pretty;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .project-opener-meta {
@@ -3727,8 +3734,11 @@ p.form-sent-copy:hover {
 }
 
 .project-hero-media {
-  width: min(100vw, 1280px);
-  margin-inline: calc(50% - 50vw);
+  /* ponytail: avoid 100vw breakout — it overflows the scrollport on iOS RTL
+     and overflow-x:hidden then clips the right (inline-start) edge of copy. */
+  width: 100%;
+  max-width: min(100%, 1280px);
+  margin-inline: auto;
   overflow: hidden;
   max-height: 72vh;
   border-radius: var(--radius-image);
@@ -3751,14 +3761,23 @@ p.form-sent-copy:hover {
 
 .project-narrative-block {
   max-width: 62ch;
+  width: 100%;
+  box-sizing: border-box;
   transition: transform 240ms var(--ease-settle), background-color 240ms var(--ease-settle);
   border-radius: var(--radius-image);
-  padding: 0.45rem 0.65rem;
+  padding: 0.55rem 0.85rem;
 }
 
 .project-narrative-block:hover {
   transform: translateX(2px);
   background: color-mix(in srgb, var(--color-primary) 9%, transparent);
+}
+
+@media (hover: none) {
+  .project-narrative-block:hover {
+    transform: none;
+    background: transparent;
+  }
 }
 
 .project-narrative-heading {
@@ -3776,7 +3795,9 @@ p.form-sent-copy:hover {
   line-height: 1.7;
   white-space: pre-line;
   text-wrap: pretty;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 /* Justified body copy. Spec asked for InDesign-style justification (word
