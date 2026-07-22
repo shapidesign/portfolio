@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { put } from "@vercel/blob";
 import { baseProjects } from "@/data/projects";
-import { getBlobToken } from "@/lib/project-overrides";
+import { putPublic } from "@/lib/project-overrides";
 
 const KNOWN_SLUGS = new Set(baseProjects.map((p) => p.slug));
 
@@ -32,10 +31,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "File must be an image" }, { status: 400 });
   }
 
-  const blob = await put(`content/uploads/${slug}/${safeName(file.name)}`, file, {
-    access: "public",
+  const blob = await putPublic(`content/uploads/${slug}/${safeName(file.name)}`, file, {
     addRandomSuffix: true,
-    token: getBlobToken(),
   });
 
   return NextResponse.json({ url: blob.url });
