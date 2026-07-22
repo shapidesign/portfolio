@@ -21,11 +21,21 @@ function splitTags(value: string): string[] {
     .filter(Boolean);
 }
 
+/** Stored HTML -> editor-friendly plain text (line breaks instead of <br />). */
+function htmlToPlain(value: string): string {
+  return value.replace(/<br\s*\/?>/gi, "\n");
+}
+
+/** Editor plain text -> stored HTML (<br /> line breaks). */
+function plainToHtml(value: string): string {
+  return value.replace(/\r?\n/g, "<br />");
+}
+
 function buildInitialText(project: Project): Record<string, string> {
   const text: Record<string, string> = {};
   for (const f of TEXT_FIELDS) {
-    text[f.en] = str(project, f.en);
-    text[f.he] = str(project, f.he);
+    text[f.en] = f.html ? htmlToPlain(str(project, f.en)) : str(project, f.en);
+    text[f.he] = f.html ? htmlToPlain(str(project, f.he)) : str(project, f.he);
   }
   for (const f of SINGLE_FIELDS) {
     text[f.key] = str(project, f.key);
@@ -77,7 +87,8 @@ export function ProjectEditor({ project }: { project: Project }) {
           body: form,
         });
         if (!res.ok) {
-          setMessage("Upload failed. Check the file and try again.");
+          const body = await res.json().catch(() => null);
+          setMessage(body?.error || "Upload failed. Check the file and try again.");
           continue;
         }
         const { url } = await res.json();
@@ -92,6 +103,12 @@ export function ProjectEditor({ project }: { project: Project }) {
     setSaving(true);
     setMessage("");
     const fields: Record<string, unknown> = { ...text };
+    for (const f of TEXT_FIELDS) {
+      if (f.html) {
+        fields[f.en] = plainToHtml(text[f.en] ?? "");
+        fields[f.he] = plainToHtml(text[f.he] ?? "");
+      }
+    }
     fields[TAG_FIELDS.en] = splitTags(text[TAG_FIELDS.en] ?? "");
     fields[TAG_FIELDS.he] = splitTags(text[TAG_FIELDS.he] ?? "");
     fields.images = images;
@@ -102,7 +119,8 @@ export function ProjectEditor({ project }: { project: Project }) {
         body: JSON.stringify({ slug: project.slug, fields }),
       });
       if (!res.ok) {
-        setMessage("Save failed.");
+        const body = await res.json().catch(() => null);
+        setMessage(body?.error || "Save failed.");
         return;
       }
       setMessage("Saved. Changes are live.");

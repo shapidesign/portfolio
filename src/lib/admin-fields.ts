@@ -12,6 +12,8 @@ export type TextFieldPair = {
   en: keyof Project;
   he: keyof Project;
   multiline?: boolean;
+  /** Stored as HTML with <br /> breaks; edited as plain text with newlines. */
+  html?: boolean;
 };
 
 export const TEXT_FIELDS: TextFieldPair[] = [
@@ -21,7 +23,7 @@ export const TEXT_FIELDS: TextFieldPair[] = [
   { label: "Status", en: "status", he: "heStatus" },
   { label: "Discipline", en: "discipline", he: "heDiscipline" },
   { label: "Opener", en: "opener", he: "heOpener", multiline: true },
-  { label: "Description (supports HTML)", en: "description", he: "heDescription", multiline: true },
+  { label: "Description", en: "description", he: "heDescription", multiline: true, html: true },
   { label: "Narrative — Challenge", en: "narrativeChallenge", he: "heNarrativeChallenge", multiline: true },
   { label: "Narrative — Approach", en: "narrativeApproach", he: "heNarrativeApproach", multiline: true },
   { label: "Narrative — Decision", en: "narrativeDecision", he: "heNarrativeDecision", multiline: true },

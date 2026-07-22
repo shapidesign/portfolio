@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { baseProjects } from "@/data/projects";
 import { sanitizeFields } from "@/lib/admin-fields";
-import { readOverrides, writeOverrides } from "@/lib/project-overrides";
+import { saveOverride } from "@/lib/project-overrides";
 
 const KNOWN_SLUGS = new Set(baseProjects.map((p) => p.slug));
 
@@ -22,11 +22,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unknown project" }, { status: 400 });
   }
 
-  const fields = sanitizeFields(rawFields);
-
-  const overrides = await readOverrides();
-  overrides[slug] = { ...overrides[slug], ...fields };
-  await writeOverrides(overrides);
+  try {
+    await saveOverride(slug, sanitizeFields(rawFields));
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Save failed";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 
   // Push edits live immediately.
   revalidatePath("/");
