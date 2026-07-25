@@ -2968,7 +2968,13 @@ p {
 [dir="rtl"] .text-statement,
 [dir="rtl"] .text-display,
 [dir="rtl"] .work-card-title,
-[dir="rtl"] .project-detail h1,
+[dir="rtl"] .project-detail h1 {
+  font-family: var(--font-hebrew-body);
+  font-style: normal;
+  font-weight: 700;
+  font-variation-settings: "MONO" 0, "wght" 700;
+}
+
 [dir="rtl"] .body-section-label {
   font-family: var(--font-hebrew-body);
   font-style: normal;
@@ -3902,11 +3908,25 @@ p.form-sent-copy:hover {
   margin-top: 0.55rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.45rem;
   min-height: 44px;
-  color: var(--color-accent-blue);
-  transition: transform 220ms var(--ease-settle);
+  padding: 0.55rem 1.15rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  border: 1px solid color-mix(in srgb, var(--color-accent-blue) 55%, var(--color-primary));
+  color: #fff;
   font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition:
+    background-color 200ms var(--ease-gentle),
+    box-shadow 200ms var(--ease-gentle),
+    transform 200ms var(--ease-settle);
+}
+
+.next-project-cta .next-project-cta-arrow {
+  display: inline-block;
+  transition: transform 220ms var(--ease-settle);
 }
 
 .next-project-card:hover {
@@ -3914,12 +3934,42 @@ p.form-sent-copy:hover {
   box-shadow: var(--shadow-soft);
 }
 
-.next-project-card:hover .next-project-cta {
-  transform: translateX(calc(var(--cta-nudge, 1) * 2px));
+.next-project-card:hover .next-project-cta,
+.next-project-card:focus-visible .next-project-cta {
+  background: color-mix(in srgb, var(--color-accent-blue) 30%, var(--color-primary));
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--color-primary) 42%, transparent);
+}
+
+/* Arrow travels toward the reading-end corner; text stays put. */
+.next-project-card:hover .next-project-cta-arrow,
+.next-project-card:focus-visible .next-project-cta-arrow {
+  transform: translate(calc(var(--cta-nudge, 1) * 2px), -2px);
+}
+
+/* Press feedback on the whole card action. */
+.next-project-card:active .next-project-cta {
+  transform: scale(0.97);
+}
+
+/* Keyboard users get a visible ring on the actual focusable (the card). */
+.next-project-card:focus-visible {
+  outline: 2px solid var(--color-accent-blue);
+  outline-offset: 3px;
 }
 
 [dir="rtl"] .next-project-cta {
   --cta-nudge: -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .next-project-cta,
+  .next-project-cta .next-project-cta-arrow {
+    transition: none;
+  }
+  .next-project-card:hover .next-project-cta-arrow,
+  .next-project-card:focus-visible .next-project-cta-arrow {
+    transform: none;
+  }
 }
 
 .about-blocks .detail-block {
