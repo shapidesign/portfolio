@@ -127,13 +127,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <script
           dangerouslySetInnerHTML={{ __html: LEGACY_DOMAIN_REDIRECT_SCRIPT }}
         />
-        <link
-          rel="preload"
-          href="/fonts/narkiss-yair-variable.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
+        <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="https://use.typekit.net/tmu4num.css" />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-KND8EK229Z"
           strategy="afterInteractive"

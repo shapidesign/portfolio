@@ -1576,7 +1576,8 @@ body.solar-home {
    (the case-study would otherwise inherit Courier from .solar-root). */
 .solar-modal,
 .solar-modal * {
-  font-family: var(--font-rubik), "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "narkiss-yair-variable", var(--font-rubik), "Rubik", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-variation-settings: "MONO" 0;
 }
 
 .solar-modal h1,
