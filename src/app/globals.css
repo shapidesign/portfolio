@@ -3794,6 +3794,7 @@ p.form-sent-copy:hover {
 
 .project-narrative-heading {
   font-size: 1.05rem;
+  font-weight: 700;
   margin-bottom: 0.4rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -3854,18 +3855,22 @@ p.form-sent-copy:hover {
   width: min(100%, 36rem);
   min-height: 0;
   overflow: visible;
+  padding: 0;
+  text-align: start;
   color: var(--color-text);
   background: color-mix(in srgb, var(--color-primary) 11%, var(--color-surface));
   border: 1px solid color-mix(in srgb, var(--color-accent-blue) 36%, transparent);
   border-radius: var(--radius-image);
+  cursor: pointer;
   transition: transform 260ms var(--ease-settle), box-shadow 260ms var(--ease-settle);
 }
 
 .next-project-copy {
-  padding: clamp(0.9rem, 2.3vw, 1.3rem);
+  padding: clamp(1.15rem, 2.8vw, 1.6rem);
   max-width: 54ch;
   display: grid;
-  gap: 0.3rem;
+  gap: 0.55rem;
+  text-align: start;
 }
 
 .next-project-copy h2 {
@@ -3873,18 +3878,30 @@ p.form-sent-copy:hover {
   font-size: clamp(1.15rem, 2.5vw, 1.55rem);
   text-wrap: balance;
   overflow-wrap: break-word;
+  margin: 0;
+}
+
+.next-project-copy > .text-label {
+  margin: 0;
 }
 
 .next-project-copy p {
   color: var(--color-text-soft);
   font-size: 0.92rem;
+  line-height: 1.55;
   text-wrap: pretty;
   overflow-wrap: break-word;
+  margin: 0;
 }
 
 .next-project-cta {
-  margin-top: 0.25rem;
+  /* Logical end: right in English (LTR), left in Hebrew (RTL). */
+  justify-self: end;
+  margin-top: 0.55rem;
   display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
   color: var(--color-accent-blue);
   transition: transform 220ms var(--ease-settle);
   font-size: 0.9rem;
@@ -3896,7 +3913,11 @@ p.form-sent-copy:hover {
 }
 
 .next-project-card:hover .next-project-cta {
-  transform: translate(1px, -1px);
+  transform: translateX(calc(var(--cta-nudge, 1) * 2px));
+}
+
+[dir="rtl"] .next-project-cta {
+  --cta-nudge: -1;
 }
 
 .about-blocks .detail-block {
