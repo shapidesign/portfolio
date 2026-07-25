@@ -207,7 +207,7 @@ h3 {
   font-family: var(--font-bricolage), "Bricolage Grotesque", var(--font-rubik), "Rubik", sans-serif;
   font-size: var(--type-statement);
   font-weight: 900;
-  line-height: 0.92;
+  line-height: 1.02;
   letter-spacing: -0.04em;
 }
 
@@ -1592,7 +1592,7 @@ p {
   color: var(--color-text);
   font-size: clamp(0.95rem, 1.2vw, 1.05rem);
   line-height: 1.75;
-  max-width: 100%;
+  max-width: 70ch;
   text-wrap: pretty;
 }
 
@@ -3796,16 +3796,13 @@ p.form-sent-copy:hover {
   hyphens: auto;
 }
 
-/* Justified body copy. Spec asked for InDesign-style justification (word
-   spacing 70/100/120, letter spacing -2/0/2, glyph scaling 98/100/102);
-   CSS has no min/desired/max justification controls, so this is the closest
-   web equivalent: inter-word justify, last line to the text start (right in
-   RTL, matching the direction of the document). */
+/* ponytail: dropped inter-word justify — browser justification creates
+   rivers (worse in Hebrew RTL); start-aligned text with a capped measure
+   reads better on the web. */
 .project-narrative-copy,
 .body-section-text {
-  text-align: justify;
-  text-justify: inter-word;
-  text-align-last: start;
+  text-align: start;
+  text-wrap: pretty;
 }
 
 .project-editorial-work {
