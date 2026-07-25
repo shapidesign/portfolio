@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { Project } from "../../types/project";
 import type { PlanetConfig } from "./Planet";
+import { getNarrativeBlocks } from "@/lib/project-narrative";
 
 type ProjectDrawerProps = {
   open: boolean;
@@ -15,17 +16,11 @@ type ProjectDrawerProps = {
 const STRINGS = {
   en: {
     eyebrow: "Mission Log",
-    challenge: "Challenge",
-    approach: "Approach",
-    decision: "Decision",
     cta: "Open full case study →",
     closeAria: "Close",
   },
   he: {
     eyebrow: "יומן משימה",
-    challenge: "אתגר",
-    approach: "גישה",
-    decision: "החלטה",
     cta: "פתח/י תיק עבודות מלא ←",
     closeAria: "סגור",
   },
@@ -38,21 +33,7 @@ export function ProjectDrawer({ open, project, planet, isHebrew, onClose }: Proj
 
   const title = (isHebrew && project?.heTitle) || project?.title;
   const descriptor = (isHebrew && project?.heDescriptor) || project?.descriptor;
-  const challenge =
-    (isHebrew && project?.heNarrativeChallenge) ||
-    project?.narrativeChallenge ||
-    project?.challenge ||
-    project?.context;
-  const approach =
-    (isHebrew && project?.heNarrativeApproach) ||
-    project?.narrativeApproach ||
-    project?.process ||
-    project?.summary;
-  const decision =
-    (isHebrew && project?.heNarrativeDecision) ||
-    project?.narrativeDecision ||
-    project?.outcome ||
-    project?.summary;
+  const blocks = project ? getNarrativeBlocks(project, isHebrew) : [];
   const tags = (isHebrew && project?.heTags?.length ? project.heTags : project?.tags) ?? [];
   const status = (isHebrew && project?.heStatus) || project?.status;
   const discipline = (isHebrew && project?.heDiscipline) || project?.discipline;
@@ -87,20 +68,18 @@ export function ProjectDrawer({ open, project, planet, isHebrew, onClose }: Proj
             </div>
           ) : null}
 
-          <div className="solar-drawer-grid">
-            <section className="solar-drawer-card">
-              <span className="solar-drawer-card-label">{t.challenge}</span>
-              <p>{challenge}</p>
-            </section>
-            <section className="solar-drawer-card">
-              <span className="solar-drawer-card-label">{t.approach}</span>
-              <p>{approach}</p>
-            </section>
-            <section className="solar-drawer-card">
-              <span className="solar-drawer-card-label">{t.decision}</span>
-              <p>{decision}</p>
-            </section>
-          </div>
+          {blocks.length ? (
+            <div className="solar-drawer-grid">
+              {blocks.map((block, index) => (
+                <section className="solar-drawer-card" key={`${block.label ?? "body"}-${index}`}>
+                  {block.label ? (
+                    <span className="solar-drawer-card-label">{block.label}</span>
+                  ) : null}
+                  <p>{block.body}</p>
+                </section>
+              ))}
+            </div>
+          ) : null}
 
           {tags.length ? (
             <div className="solar-drawer-tags">

@@ -3,8 +3,10 @@
 import type { PlanetConfig } from "./Planet";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
 import { preventOrphan } from "@/i18n/typography";
+import { SITE_COPY_DEFAULTS, type SiteCopy } from "@/lib/site-copy";
 
 type MissionControlProps = {
+  siteCopy?: SiteCopy;
   planets: PlanetConfig[];
   visited: Set<string>;
   hoveredSlug: string | null;
@@ -25,36 +27,22 @@ type MissionControlProps = {
 
 const STRINGS = {
   en: {
-    universe: "Selected work, in orbit",
-    title: "time to start exploring",
-    intro:
-      "Take the guided ride, tap a planet to open a project, or switch to the list when you want the quick version.",
     steps: ["Guided ride", "Project planets", "Quick list"],
     rideHint: "Next and Previous move between stops. Escape exits the ride.",
-    about: "About",
-    listView: "List View",
     threeView: "3D View",
     missionControl: "Mission Control",
     progress: (v: number, t: number) => `${v}/${t} missions explored`,
-    startRide: "Start the ride",
     next: "Next",
     previous: "Previous",
     exitRide: "Exit Ride",
     restartRide: "Restart Ride",
   },
   he: {
-    universe: "עבודות נבחרות במסלול",
-    title: "הגיע הזמן להתחיל לחקור",
-    intro:
-      "אפשר לצאת למסלול מודרך, לפתוח פרויקט דרך אחד הכוכבים, או לעבור לרשימה כשבא לך לראות הכול מהר.",
     steps: ["מסלול מודרך", "כוכבי פרויקטים", "רשימה מהירה"],
     rideHint: "הבא והקודם מעבירים בין תחנות. Escape מחזיר אותך החוצה.",
-    about: "אודות",
-    listView: "רשימה",
     threeView: "לתצוגה מרחבית",
     missionControl: "בקרת משימה",
     progress: (v: number, t: number) => `${v}/${t} משימות נחקרו`,
-    startRide: "להתחיל את המסלול",
     next: "הבא",
     previous: "הקודם",
     exitRide: "לצאת מהמסלול",
@@ -63,6 +51,7 @@ const STRINGS = {
 } as const;
 
 export function MissionControl({
+  siteCopy,
   planets,
   visited,
   hoveredSlug,
@@ -80,7 +69,22 @@ export function MissionControl({
   onNextStop,
   onExitRide,
 }: MissionControlProps) {
-  const t = isHebrew ? STRINGS.he : STRINGS.en;
+  const base = isHebrew ? STRINGS.he : STRINGS.en;
+  // Admin-editable copy: stored value wins, defaults otherwise.
+  const copy = (enKey: string, heKey: string) => {
+    const key = isHebrew ? heKey : enKey;
+    const value = siteCopy?.[key]?.trim();
+    return value || SITE_COPY_DEFAULTS[key];
+  };
+  const t = {
+    ...base,
+    universe: copy("homeEyebrow", "heHomeEyebrow"),
+    title: copy("homeTitle", "heHomeTitle"),
+    intro: copy("homeIntro", "heHomeIntro"),
+    startRide: copy("homeCtaStart", "heHomeCtaStart"),
+    about: copy("homeCtaAbout", "heHomeCtaAbout"),
+    listView: copy("homeCtaList", "heHomeCtaList"),
+  };
   const currentStop = rideComplete ? planets.length : activeIndex === null ? 0 : activeIndex + 1;
 
   return (

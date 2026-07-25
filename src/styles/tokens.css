@@ -23,7 +23,7 @@
   --type-display:   clamp(2.25rem, 6vw, 6.5rem);  /* section anchors, project titles */
   --type-title:     clamp(1.4rem, 2.4vw, 2rem);   /* card titles, sub-headings */
   --type-body:      1.0625rem;                      /* 17px body */
-  --type-label:     0.6875rem;                      /* 11px tags, nav, captions */
+  --type-label:     0.75rem;                        /* 12px tags, nav, captions */
 
   /* ─── Grid & Spacing ─────────────────────────────────── */
   --margin-fluid: clamp(1.25rem, 4vw, 4.5rem);

@@ -8,6 +8,7 @@ import { preventOrphan } from "@/i18n/typography";
 type ProjectModalProps = {
   open: boolean;
   project: Project | null;
+  allProjects?: Project[];
   isHebrew: boolean;
   onClose: () => void;
   onSelectProject: (slug: string) => void;
@@ -16,6 +17,7 @@ type ProjectModalProps = {
 export function ProjectModal({
   open,
   project,
+  allProjects,
   isHebrew,
   onClose,
   onSelectProject,
@@ -78,7 +80,7 @@ export function ProjectModal({
             className="section content-wrap project-detail project-detail-with-nav"
             data-project-slug={project.slug}
           >
-            <ProjectCaseStudy project={project} onSelectNext={onSelectProject} />
+            <ProjectCaseStudy project={project} allProjects={allProjects} onSelectNext={onSelectProject} />
           </main>
         </div>
       </div>

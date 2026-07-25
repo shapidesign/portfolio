@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { SESSION_COOKIE, isValidSession } from "@/lib/admin-auth";
-import { getProjects } from "@/lib/project-overrides";
+import { getProjects, getSiteCopy } from "@/lib/project-overrides";
 import { AdminLogin } from "./AdminLogin";
 import { AdminDashboard } from "./AdminDashboard";
 import "./admin.css";
@@ -14,6 +14,6 @@ export default async function AdminPage() {
 
   if (!authed) return <AdminLogin />;
 
-  const projects = await getProjects();
-  return <AdminDashboard projects={projects} />;
+  const [projects, siteCopy] = await Promise.all([getProjects(), getSiteCopy()]);
+  return <AdminDashboard projects={projects} siteCopy={siteCopy} />;
 }

@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import type { Project } from "../../types/project";
+import type { SiteCopy } from "@/lib/site-copy";
 
 const SolarSystem = dynamic(() => import("./SolarSystem").then((m) => m.SolarSystem), {
   ssr: false,
@@ -26,6 +27,12 @@ const SolarSystem = dynamic(() => import("./SolarSystem").then((m) => m.SolarSys
   ),
 });
 
-export function SolarSystemClient({ projects }: { projects: Project[] }) {
-  return <SolarSystem projects={projects} />;
+export function SolarSystemClient({
+  projects,
+  siteCopy,
+}: {
+  projects: Project[];
+  siteCopy?: SiteCopy;
+}) {
+  return <SolarSystem projects={projects} siteCopy={siteCopy} />;
 }

@@ -8,7 +8,7 @@
  * ponytail: single static session token, no expiry/rotation. Ceiling: fine for
  * a one-person portfolio admin; upgrade path is a signed/expiring JWT if needed.
  *
- * This module must stay edge-safe (no Node-only APIs) so `middleware.ts` can
+ * This module must stay edge-safe (no Node-only APIs) so `proxy.ts` can
  * import it.
  */
 export const ADMIN_USER = process.env.ADMIN_USER ?? "shapi";

@@ -59,6 +59,24 @@
   background: rgba(122, 86, 242, 0.18);
 }
 
+.admin-nav-divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 0.35rem 0;
+}
+
+.admin-nav-new {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: #a78bfa;
+}
+
+.admin-nav-new:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 /* Fields */
 .admin-field {
   display: flex;

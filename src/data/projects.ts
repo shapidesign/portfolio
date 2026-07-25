@@ -231,12 +231,13 @@ const generatedProjects: Project[] = Array.isArray(generatedRaw)
       heDescriptor: PROJECT_DESCRIPTOR[p.slug]?.he ?? p.heContext ?? p.summary,
       opener: PROJECT_OPENER[p.slug]?.en ?? p.context ?? p.summary,
       heOpener: PROJECT_OPENER[p.slug]?.he ?? p.heContext ?? p.summary,
-      narrativeChallenge: PROJECT_NARRATIVE[p.slug]?.challenge ?? p.challenge ?? p.summary,
-      narrativeApproach: PROJECT_NARRATIVE[p.slug]?.approach ?? p.process ?? p.summary,
-      narrativeDecision: PROJECT_NARRATIVE[p.slug]?.decision ?? p.outcome ?? p.summary,
-      heNarrativeChallenge: PROJECT_NARRATIVE[p.slug]?.heChallenge ?? p.heDescription ?? p.summary,
-      heNarrativeApproach: PROJECT_NARRATIVE[p.slug]?.heApproach ?? p.heDescription ?? p.summary,
-      heNarrativeDecision: PROJECT_NARRATIVE[p.slug]?.heDecision ?? p.heDescription ?? p.summary,
+      // Only real story copy — no summary padding into empty slots.
+      narrativeChallenge: PROJECT_NARRATIVE[p.slug]?.challenge ?? p.challenge ?? "",
+      narrativeApproach: PROJECT_NARRATIVE[p.slug]?.approach ?? p.process ?? "",
+      narrativeDecision: PROJECT_NARRATIVE[p.slug]?.decision ?? p.outcome ?? "",
+      heNarrativeChallenge: PROJECT_NARRATIVE[p.slug]?.heChallenge ?? "",
+      heNarrativeApproach: PROJECT_NARRATIVE[p.slug]?.heApproach ?? "",
+      heNarrativeDecision: PROJECT_NARRATIVE[p.slug]?.heDecision ?? "",
       ...(!p.heContext && HE_PROJECT_CONTEXT[p.slug]
         ? { heContext: HE_PROJECT_CONTEXT[p.slug] }
         : {}),

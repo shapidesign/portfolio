@@ -31,11 +31,23 @@ function plainToHtml(value: string): string {
   return value.replace(/\r?\n/g, "<br />");
 }
 
+function initialField(
+  project: Project,
+  key: keyof Project,
+  html?: boolean,
+  placeholder?: string,
+): string {
+  const raw = project[key];
+  // Explicit "" (e.g. cleared story heading) must stay empty — only prefill when unset.
+  if (typeof raw === "string") return html ? htmlToPlain(raw) : raw;
+  return placeholder ?? "";
+}
+
 function buildInitialText(project: Project): Record<string, string> {
   const text: Record<string, string> = {};
   for (const f of TEXT_FIELDS) {
-    text[f.en] = f.html ? htmlToPlain(str(project, f.en)) : str(project, f.en);
-    text[f.he] = f.html ? htmlToPlain(str(project, f.he)) : str(project, f.he);
+    text[f.en] = initialField(project, f.en, f.html, f.placeholderEn);
+    text[f.he] = initialField(project, f.he, f.html, f.placeholderHe);
   }
   for (const f of SINGLE_FIELDS) {
     text[f.key] = str(project, f.key);
@@ -162,12 +174,14 @@ export function ProjectEditor({ project }: { project: Project }) {
               className="admin-input admin-textarea"
               value={text[f.en] ?? ""}
               onChange={(e) => set(f.en as string, e.target.value)}
+              placeholder={f.placeholderEn}
             />
           ) : (
             <input
               className="admin-input"
               value={text[f.en] ?? ""}
               onChange={(e) => set(f.en as string, e.target.value)}
+              placeholder={f.placeholderEn}
             />
           )}
           {f.multiline ? (
@@ -176,6 +190,7 @@ export function ProjectEditor({ project }: { project: Project }) {
               dir="rtl"
               value={text[f.he] ?? ""}
               onChange={(e) => set(f.he as string, e.target.value)}
+              placeholder={f.placeholderHe}
             />
           ) : (
             <input
@@ -183,6 +198,7 @@ export function ProjectEditor({ project }: { project: Project }) {
               dir="rtl"
               value={text[f.he] ?? ""}
               onChange={(e) => set(f.he as string, e.target.value)}
+              placeholder={f.placeholderHe}
             />
           )}
         </div>

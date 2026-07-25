@@ -1,4 +1,5 @@
 import type { Project } from "@/types/project";
+import { DEFAULT_NARRATIVE_LABELS } from "@/lib/project-narrative";
 
 /**
  * Single source of truth for which project fields the admin editor exposes.
@@ -14,6 +15,9 @@ export type TextFieldPair = {
   multiline?: boolean;
   /** Stored as HTML with <br /> breaks; edited as plain text with newlines. */
   html?: boolean;
+  /** Shown in the editor when the stored value is empty (e.g. default headings). */
+  placeholderEn?: string;
+  placeholderHe?: string;
 };
 
 export const TEXT_FIELDS: TextFieldPair[] = [
@@ -24,9 +28,47 @@ export const TEXT_FIELDS: TextFieldPair[] = [
   { label: "Discipline", en: "discipline", he: "heDiscipline" },
   { label: "Opener", en: "opener", he: "heOpener", multiline: true },
   { label: "Description", en: "description", he: "heDescription", multiline: true, html: true },
-  { label: "Narrative — Challenge", en: "narrativeChallenge", he: "heNarrativeChallenge", multiline: true },
-  { label: "Narrative — Approach", en: "narrativeApproach", he: "heNarrativeApproach", multiline: true },
-  { label: "Narrative — Decision", en: "narrativeDecision", he: "heNarrativeDecision", multiline: true },
+  // ponytail: three optional slots beat a freeform block array until you need 4+.
+  // Clear a body to drop that block; clear a heading for a bare paragraph.
+  {
+    label: "Story 1 — heading",
+    en: "narrativeChallengeLabel",
+    he: "heNarrativeChallengeLabel",
+    placeholderEn: DEFAULT_NARRATIVE_LABELS.en[0],
+    placeholderHe: DEFAULT_NARRATIVE_LABELS.he[0],
+  },
+  {
+    label: "Story 1 — body",
+    en: "narrativeChallenge",
+    he: "heNarrativeChallenge",
+    multiline: true,
+  },
+  {
+    label: "Story 2 — heading",
+    en: "narrativeApproachLabel",
+    he: "heNarrativeApproachLabel",
+    placeholderEn: DEFAULT_NARRATIVE_LABELS.en[1],
+    placeholderHe: DEFAULT_NARRATIVE_LABELS.he[1],
+  },
+  {
+    label: "Story 2 — body",
+    en: "narrativeApproach",
+    he: "heNarrativeApproach",
+    multiline: true,
+  },
+  {
+    label: "Story 3 — heading",
+    en: "narrativeDecisionLabel",
+    he: "heNarrativeDecisionLabel",
+    placeholderEn: DEFAULT_NARRATIVE_LABELS.en[2],
+    placeholderHe: DEFAULT_NARRATIVE_LABELS.he[2],
+  },
+  {
+    label: "Story 3 — body",
+    en: "narrativeDecision",
+    he: "heNarrativeDecision",
+    multiline: true,
+  },
 ];
 
 /** Tags are stored as arrays; edited as comma-separated text in the UI. */

@@ -40,4 +40,11 @@ export type Project = {
   heNarrativeChallenge?: string;
   heNarrativeApproach?: string;
   heNarrativeDecision?: string;
+  /** Optional subheaders for the three story slots. Empty string = no heading. */
+  narrativeChallengeLabel?: string;
+  narrativeApproachLabel?: string;
+  narrativeDecisionLabel?: string;
+  heNarrativeChallengeLabel?: string;
+  heNarrativeApproachLabel?: string;
+  heNarrativeDecisionLabel?: string;
 };

@@ -2,6 +2,7 @@ import "server-only";
 import { baseProjects } from "@/data/projects";
 import type { Project } from "@/types/project";
 import { mergeOverrides, type ProjectOverrides } from "@/lib/merge-overrides";
+import { SITE_COPY_DEFAULTS, SITE_SLUG, type SiteCopy } from "@/lib/site-copy";
 
 export type { ProjectOverrides };
 
@@ -53,7 +54,7 @@ export async function readOverrides(): Promise<ProjectOverrides> {
 /** Merge `fields` into the stored override row for `slug` (upsert). */
 export async function saveOverride(
   slug: string,
-  fields: Partial<Project>,
+  fields: Record<string, unknown>,
 ): Promise<void> {
   const existing = (await readOverrides())[slug] ?? {};
   const res = await fetch(`${REST}/project_overrides?on_conflict=slug`, {
@@ -111,6 +112,12 @@ export async function readMedia(
     contentType: rows[0].content_type,
     data: Buffer.from(rows[0].data_base64, "base64"),
   };
+}
+
+/** Site-wide copy: stored "__site__" row merged over defaults. */
+export async function getSiteCopy(): Promise<SiteCopy> {
+  const stored = (await readOverrides())[SITE_SLUG] ?? {};
+  return { ...SITE_COPY_DEFAULTS, ...(stored as SiteCopy) };
 }
 
 /** Base projects with runtime admin overrides merged in. */

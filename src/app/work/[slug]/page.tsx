@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProjectCaseStudy } from "@/components/ui/ProjectCaseStudy";
 import { baseProjects } from "@/data/projects";
-import { getProjectBySlug } from "@/lib/project-overrides";
+import { getProjectBySlug, getProjects } from "@/lib/project-overrides";
 import { SITE_NAME, SITE_ORIGIN } from "@/lib/site";
 
 type ProjectPageProps = {
@@ -57,7 +57,8 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const project = await getProjectBySlug(slug);
+  const allProjects = await getProjects();
+  const project = allProjects.find((p) => p.slug === slug);
   if (!project) notFound();
 
   const jsonLd = {
@@ -83,7 +84,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ProjectCaseStudy project={project} />
+      <ProjectCaseStudy project={project} allProjects={allProjects} />
     </main>
   );
 }

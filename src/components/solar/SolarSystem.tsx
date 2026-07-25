@@ -19,9 +19,11 @@ import { ListView } from "./ListView";
 import { VoyageHUD } from "./VoyageHUD";
 import { useLanguage } from "../../context/LanguageContext";
 import { preventOrphan } from "@/i18n/typography";
+import type { SiteCopy } from "@/lib/site-copy";
 
 type SolarSystemProps = {
   projects: Project[];
+  siteCopy?: SiteCopy;
 };
 
 type VoyageMode = "idle" | "riding" | "complete";
@@ -42,7 +44,7 @@ function CameraExporter({ targetRef }: { targetRef: React.MutableRefObject<THREE
   return null;
 }
 
-export function SolarSystem({ projects }: SolarSystemProps) {
+export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   const planets = useMemo(() => buildPlanetConfigs(projects), [projects]);
 
   // Refs: live world position for each planet (updated each frame from Planet)
@@ -408,6 +410,7 @@ export function SolarSystem({ projects }: SolarSystemProps) {
         {!listMode ? (
           <>
             <MissionControl
+              siteCopy={siteCopy}
               planets={planets}
               visited={visited}
               hoveredSlug={hoveredSlug}
@@ -462,6 +465,7 @@ export function SolarSystem({ projects }: SolarSystemProps) {
         <ProjectModal
           open={modalOpen}
           project={focusedProject}
+          allProjects={projects}
           isHebrew={isHebrew}
           onClose={closeProject}
           onSelectProject={openProject}

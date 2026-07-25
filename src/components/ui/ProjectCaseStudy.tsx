@@ -19,10 +19,12 @@ import type { Project } from "@/types/project";
 
 type ProjectCaseStudyProps = {
   project: Project;
+  /** Merged project list (includes admin-created); falls back to baseProjects. */
+  allProjects?: Project[];
   onSelectNext?: (slug: string) => void;
 };
 
-export function ProjectCaseStudy({ project, onSelectNext }: ProjectCaseStudyProps) {
+export function ProjectCaseStudy({ project, allProjects, onSelectNext }: ProjectCaseStudyProps) {
   const { isHebrew } = useLanguage();
   const typeRevealRef = useRef<HTMLVideoElement>(null);
 
@@ -42,8 +44,9 @@ export function ProjectCaseStudy({ project, onSelectNext }: ProjectCaseStudyProp
   const isDavidka = slug === "small-world-problems";
   const isGivatHodaya = slug === "rethinking-real-estate";
   const hasScrollImages = !isDigitalHandprint && !isDavidka && project.images.length > 0;
-  const currentIndex = baseProjects.findIndex((entry) => entry.slug === slug);
-  const nextProject = baseProjects[(currentIndex + 1) % baseProjects.length];
+  const projectList = allProjects?.length ? allProjects : baseProjects;
+  const currentIndex = projectList.findIndex((entry) => entry.slug === slug);
+  const nextProject = projectList[(currentIndex + 1) % projectList.length];
   const leadImageAlt = isHebrew ? `${title} - תמונת פתיחה` : `${title} hero`;
 
   const embedNode = isDigitalHandprint ? (
