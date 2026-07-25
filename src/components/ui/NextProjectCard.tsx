@@ -26,7 +26,10 @@ export function NextProjectCard({ project, onSelect }: NextProjectCardProps) {
       </h2>
       <p>{preventOrphan(descriptor)}</p>
       <span className="next-project-cta">
-        {preventOrphan(cta)} <span aria-hidden>↗</span>
+        {preventOrphan(cta)}{" "}
+        <span className="next-project-cta-arrow" aria-hidden>
+          ↗
+        </span>
       </span>
     </div>
   );
