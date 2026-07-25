@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { LEGACY_DOMAIN_REDIRECT_SCRIPT, SITE_NAME, SITE_ORIGIN } from "@/lib/site";
-import { Rubik, Bricolage_Grotesque, Roboto_Mono, Science_Gothic } from "next/font/google";
+import { Bricolage_Grotesque, Roboto_Mono, Science_Gothic } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { AnimatedCursor } from "@/components/ui/AnimatedCursor";
 import { IntroLoader } from "@/components/ui/IntroLoader";
@@ -61,11 +61,6 @@ export const metadata: Metadata = {
     "google-site-verification": "U-2D1MkhvyQTAMMdWvbroor5m9lSgPmmMVrQtPW1fjA",
   },
 };
-
-const rubik = Rubik({
-  subsets: ["latin", "hebrew"],
-  variable: "--font-rubik",
-});
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -149,7 +144,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           `}
         </Script>
       </head>
-      <body className={`${rubik.variable} ${bricolage.variable} ${robotoMono.variable} ${scienceGothic.variable}`}>
+      <body className={`${bricolage.variable} ${robotoMono.variable} ${scienceGothic.variable}`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify([personJsonLd, websiteJsonLd]) }}
