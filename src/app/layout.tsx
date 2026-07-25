@@ -130,7 +130,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           crossOrigin="anonymous"
         />
         <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
-        <link rel="stylesheet" href="https://use.typekit.net/tmu4num.css" />
+        <link rel="stylesheet" href="https://use.typekit.net/tzt5vmd.css" />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-KND8EK229Z"
           strategy="afterInteractive"
