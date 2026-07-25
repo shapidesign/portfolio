@@ -5,6 +5,7 @@ import { StarMark } from "@/components/ui/StarMark";
 import { useLanguage } from "@/context/LanguageContext";
 import { preventOrphan } from "@/i18n/typography";
 import { getNarrativeBlocks } from "@/lib/project-narrative";
+import { useTranslation } from "@/i18n/strings";
 import type { Project } from "@/types/project";
 
 type Props = {
@@ -12,11 +13,13 @@ type Props = {
 };
 
 export function ProjectDetailContent({ project }: Props) {
-  const { isHebrew } = useLanguage();
+  const { lang, isHebrew } = useLanguage();
+  const s = useTranslation(lang);
   const title = (isHebrew && project.heTitle) || project.title;
   const opener = (isHebrew && project.heOpener) || project.opener || project.context;
   const status = (isHebrew && project.heStatus) || project.status;
   const discipline = (isHebrew && project.heDiscipline) || project.discipline || project.category;
+  const projectUrl = project.url?.trim();
 
   return (
     <>
@@ -31,6 +34,17 @@ export function ProjectDetailContent({ project }: Props) {
             <StarMark className="project-meta-star" size={11} />
             {project.year}
           </p>
+          {projectUrl ? (
+            <a
+              className="button button-ghost visit-project-link"
+              href={projectUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {preventOrphan(s.visitProject)}
+              <span aria-hidden> ↗</span>
+            </a>
+          ) : null}
         </section>
       </Reveal>
     </>
