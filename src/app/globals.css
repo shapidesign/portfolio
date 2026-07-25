@@ -3867,13 +3867,13 @@ p.form-sent-copy:hover {
 .next-project-section {
   margin-top: 2rem;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .next-project-card {
   position: relative;
   display: inline-block;
-  width: min(100%, 36rem);
+  width: min(100%, 44rem);
   min-height: 0;
   overflow: visible;
   padding: 0;
@@ -3886,12 +3886,20 @@ p.form-sent-copy:hover {
   transition: transform 260ms var(--ease-settle), box-shadow 260ms var(--ease-settle);
 }
 
+/* Banner layout: copy on the reading-start side, CTA pill on the other. */
 .next-project-copy {
-  padding: clamp(1.15rem, 2.8vw, 1.6rem);
-  max-width: 54ch;
+  padding: clamp(1.15rem, 2.8vw, 1.6rem) clamp(1.25rem, 3vw, 1.9rem);
   display: grid;
-  gap: 0.55rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.4rem;
   text-align: start;
+}
+
+.next-project-text {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 44ch;
 }
 
 .next-project-copy h2 {
@@ -3902,7 +3910,7 @@ p.form-sent-copy:hover {
   margin: 0;
 }
 
-.next-project-copy > .text-label {
+.next-project-copy .text-label {
   margin: 0;
 }
 
@@ -3916,14 +3924,15 @@ p.form-sent-copy:hover {
 }
 
 .next-project-cta {
-  /* Logical end: right in English (LTR), left in Hebrew (RTL). */
   justify-self: end;
-  margin-top: 0.55rem;
+  align-self: center;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.45rem;
   min-height: 44px;
-  padding: 0.55rem 1.15rem;
+  padding: 0 1.2rem;
+  white-space: nowrap;
   border-radius: var(--radius-pill);
   background: var(--color-primary);
   border: 1px solid color-mix(in srgb, var(--color-accent-blue) 55%, var(--color-primary));
@@ -3972,6 +3981,17 @@ p.form-sent-copy:hover {
 
 [dir="rtl"] .next-project-cta {
   --cta-nudge: -1;
+}
+
+/* Stack the banner on small screens; CTA hugs the reading-start edge. */
+@media (max-width: 620px) {
+  .next-project-copy {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .next-project-cta {
+    justify-self: start;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -19,12 +19,14 @@ export function NextProjectCard({ project, onSelect }: NextProjectCardProps) {
 
   const inner = (
     <div className="next-project-copy">
-      <p className="text-label">{preventOrphan(isHebrew ? "הפרויקט הבא" : "Next Project")}</p>
-      <h2 className="font-display">
-        <StarMark className="project-title-star" size={14} />
-        {preventOrphan(title)}
-      </h2>
-      <p>{preventOrphan(descriptor)}</p>
+      <div className="next-project-text">
+        <p className="text-label">{preventOrphan(isHebrew ? "הפרויקט הבא" : "Next Project")}</p>
+        <h2 className="font-display">
+          <StarMark className="project-title-star" size={14} />
+          {preventOrphan(title)}
+        </h2>
+        <p>{preventOrphan(descriptor)}</p>
+      </div>
       <span className="next-project-cta">
         {preventOrphan(cta)}{" "}
         <span className="next-project-cta-arrow" aria-hidden>
