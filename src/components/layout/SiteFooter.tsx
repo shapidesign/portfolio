@@ -14,7 +14,6 @@ export function SiteFooter() {
         <p className="footer-copy">{s.footerCopy}</p>
         <div className="footer-links">
           <Link href="/work">{s.navWork}</Link>
-          <Link href="/shirts">{s.navShirts}</Link>
           <Link href="/about">{s.navAbout}</Link>
           <Link href="/contact">{s.navContact}</Link>
           <a

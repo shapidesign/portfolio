@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -15,6 +14,7 @@ import { MissionControl } from "./MissionControl";
 import { ProjectModal } from "./ProjectModal";
 import { AboutDrawer } from "./AboutDrawer";
 import { ContactDrawer } from "./ContactDrawer";
+import { StoreNoticeModal } from "./StoreNoticeModal";
 import { ListView } from "./ListView";
 import { VoyageHUD } from "./VoyageHUD";
 import { useLanguage } from "../../context/LanguageContext";
@@ -62,13 +62,13 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   const lastGestureAt = useRef(0);
 
   const { isHebrew } = useLanguage();
-  const router = useRouter();
 
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
   const [sunHovered, setSunHovered] = useState(false);
   const [focusedSlug, setFocusedSlug] = useState<string | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const [storeNoticeOpen, setStoreNoticeOpen] = useState(false);
   const [listMode, setListMode] = useState(false);
   const [voyageMode, setVoyageMode] = useState<VoyageMode>("idle");
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -77,7 +77,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   const [visited, setVisited] = useState<Set<string>>(new Set());
 
   const modalOpen = focusedSlug !== null;
-  const overlayBlocked = modalOpen || aboutOpen || contactOpen || listMode;
+  const overlayBlocked = modalOpen || aboutOpen || contactOpen || storeNoticeOpen || listMode;
 
   // One-pager: hide global header + footer while the solar homepage is mounted
   useEffect(() => {
@@ -310,6 +310,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
 
       if (e.key === "Escape") {
         if (modalOpen || focusedSlug) closeProject();
+        else if (storeNoticeOpen) setStoreNoticeOpen(false);
         else if (aboutOpen) closeAbout();
         else if (contactOpen) closeContact();
         else if (listMode) setListMode(false);
@@ -343,6 +344,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
     modalOpen,
     openActiveProject,
     overlayBlocked,
+    storeNoticeOpen,
     voyageMode,
   ]);
 
@@ -381,19 +383,19 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
               onPlanetHover={(slug) => setHoveredSlug(slug)}
               onPlanetClick={(slug) => openProject(slug)}
               onSunHover={(h) => setSunHovered(h)}
-              onSunClick={() => router.push("/shirts")}
+              onSunClick={() => setStoreNoticeOpen(true)}
             />
           </Canvas>
 
           <PlanetHUD
-            visible={!!hoveredSlug && !modalOpen && !aboutOpen}
+            visible={!!hoveredSlug && !modalOpen && !aboutOpen && !storeNoticeOpen}
             planet={hoveredPlanet}
             positionRef={hoveredPositionRef}
             cameraRef={cameraRef}
             isHebrew={isHebrew}
           />
 
-          {sunHovered && !aboutOpen && !focusedSlug ? (
+          {sunHovered && !aboutOpen && !focusedSlug && !storeNoticeOpen ? (
             <div
               className="solar-hud solar-hud-sun"
               dir={isHebrew ? "rtl" : "ltr"}
@@ -473,6 +475,11 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
 
         <AboutDrawer open={aboutOpen} isHebrew={isHebrew} onClose={closeAbout} />
         <ContactDrawer open={contactOpen} isHebrew={isHebrew} onClose={closeContact} />
+        <StoreNoticeModal
+          open={storeNoticeOpen}
+          isHebrew={isHebrew}
+          onClose={() => setStoreNoticeOpen(false)}
+        />
 
         {!listMode ? (
           <button

@@ -2595,7 +2595,7 @@ p {
 .work-gate-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: 100;
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(6px);
   display: grid;
