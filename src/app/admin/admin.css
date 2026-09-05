@@ -297,6 +297,56 @@
   font-size: 0.85rem;
 }
 
+.admin-editor-note {
+  margin: 0 0 1.5rem;
+  color: rgba(243, 240, 255, 0.72);
+  font-size: 0.9rem;
+}
+
+.admin-settings-group {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.admin-color-field {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 0.65rem;
+}
+
+.admin-color-field input[type="color"] {
+  width: 48px;
+  height: 42px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.admin-media-field {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.admin-media-field .admin-label {
+  grid-column: 1 / -1;
+}
+
+.admin-media-preview {
+  width: 96px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
 @media (max-width: 720px) {
   .admin-body {
     grid-template-columns: 1fr;
@@ -311,5 +361,16 @@
   }
   .admin-row-label {
     padding-top: 0;
+  }
+  .admin-media-field {
+    grid-template-columns: 72px 1fr;
+  }
+  .admin-media-preview {
+    width: 72px;
+    height: 72px;
+  }
+  .admin-media-field .admin-btn {
+    grid-column: 1 / -1;
+    justify-content: center;
   }
 }

@@ -1,26 +1,31 @@
+import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
 import { FACES, type Face, type FaceId } from "./faces";
 
 type GlyphGridProps = Readonly<{
   face: Face;
+  settings: KibbutzTypeSettings;
   onFace: (id: FaceId) => void;
 }>;
 
 /** Exact ss01 substitutions from Meir-Dan.glyphs. */
 const DAN_ALTERNATES = [
-  { glyph: "א", name: "אלף" },
-  { glyph: "ג", name: "גימל" },
-  { glyph: "כ", name: "כף" },
-  { glyph: "ע", name: "עין" },
-  { glyph: "ף", name: "פא סופית" },
-  { glyph: "פ", name: "פא" },
-  { glyph: "צ", name: "צדי" },
-];
+  { glyph: "א", nameKey: "alternateNameAlef" },
+  { glyph: "ג", nameKey: "alternateNameGimel" },
+  { glyph: "כ", nameKey: "alternateNameKaf" },
+  { glyph: "ע", nameKey: "alternateNameAyin" },
+  { glyph: "ף", nameKey: "alternateNameFinalPe" },
+  { glyph: "פ", nameKey: "alternateNamePe" },
+  { glyph: "צ", nameKey: "alternateNameTsadi" },
+] as const satisfies ReadonlyArray<{
+  glyph: string;
+  nameKey: keyof KibbutzTypeSettings;
+}>;
 
-export function GlyphGrid({ face, onFace }: GlyphGridProps) {
+export function GlyphGrid({ face, settings, onFace }: GlyphGridProps) {
   const groups = [
-    { title: "אותיות", glyphs: face.letters },
-    { title: "ספרות", glyphs: face.digits },
-    { title: "סימנים", glyphs: face.punctuation },
+    { title: settings.lettersLabel, glyphs: face.letters },
+    { title: settings.digitsLabel, glyphs: face.digits },
+    { title: settings.punctuationLabel, glyphs: face.punctuation },
   ];
   return (
     <section
@@ -28,7 +33,7 @@ export function GlyphGrid({ face, onFace }: GlyphGridProps) {
       aria-labelledby="kt-glyphs-title"
     >
       <p className="kt-label" id="kt-glyphs-title">
-        מערכת הסימנים · {face.heName}
+        {settings.glyphsLabel} · {face.id === "dan" ? settings.danHeName : settings.keltaHeName}
       </p>
       <div className="kt-toggle" role="group" aria-label="בחירת גופן למערכת הסימנים">
         {FACES.map((item) => (
@@ -38,7 +43,7 @@ export function GlyphGrid({ face, onFace }: GlyphGridProps) {
             aria-pressed={item.id === face.id}
             onClick={() => onFace(item.id)}
           >
-            {item.heName}
+            {item.id === "dan" ? settings.danHeName : settings.keltaHeName}
           </button>
         ))}
       </div>
@@ -56,26 +61,29 @@ export function GlyphGrid({ face, onFace }: GlyphGridProps) {
         <section className="kt-alternates" aria-labelledby="kt-alternates-title">
           <div className="kt-alternates-head">
             <p className="kt-label" id="kt-alternates-title">
-              אותיות חלופיות · ss01
+              {settings.alternatesTitle}
             </p>
-            <p>השוואה בין הצורה הבסיסית לחלופה הסגנונית.</p>
+            <p>{settings.alternatesDescription}</p>
           </div>
           <ul className="kt-alternates-list">
-            {DAN_ALTERNATES.map(({ glyph, name }) => (
+            {DAN_ALTERNATES.map(({ glyph, nameKey }) => {
+              const name = String(settings[nameKey]);
+              return (
               <li className="kt-alternate-item" key={glyph} aria-label={`${name}: צורה בסיסית וחלופה`}>
                 <span className="kt-alternate-name">{name}</span>
                 <div className="kt-alternate-forms">
                   <div className="kt-alternate-form">
-                    <span>בסיס</span>
+                    <span>{settings.baseLabel}</span>
                     <span className="kt-alternate-glyph kt-alternate-glyph--base kt-face-dan">{glyph}</span>
                   </div>
                   <div className="kt-alternate-form">
-                    <span>חלופה</span>
+                    <span>{settings.alternateLabel}</span>
                     <span className="kt-alternate-glyph kt-alternate-glyph--ss01 kt-face-dan">{glyph}</span>
                   </div>
                 </div>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </section>
       ) : null}

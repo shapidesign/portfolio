@@ -3,6 +3,12 @@ import { baseProjects } from "@/data/projects";
 import type { Project } from "@/types/project";
 import { mergeOverrides, type ProjectOverrides } from "@/lib/merge-overrides";
 import { SITE_COPY_DEFAULTS, SITE_SLUG, type SiteCopy } from "@/lib/site-copy";
+import {
+  KIBBUTZ_TYPE_DEFAULTS,
+  KIBBUTZ_TYPE_SLUG,
+  sanitizeKibbutzTypeSettings,
+  type KibbutzTypeSettings,
+} from "@/lib/kibbutz-type-settings";
 
 export type { ProjectOverrides };
 
@@ -118,6 +124,15 @@ export async function readMedia(
 export async function getSiteCopy(): Promise<SiteCopy> {
   const stored = (await readOverrides())[SITE_SLUG] ?? {};
   return { ...SITE_COPY_DEFAULTS, ...(stored as SiteCopy) };
+}
+
+/** Kibbutz Type page settings merged over safe committed defaults. */
+export async function getKibbutzTypeSettings(): Promise<KibbutzTypeSettings> {
+  const stored = (await readOverrides())[KIBBUTZ_TYPE_SLUG] ?? {};
+  return {
+    ...KIBBUTZ_TYPE_DEFAULTS,
+    ...sanitizeKibbutzTypeSettings(stored as Record<string, unknown>),
+  };
 }
 
 /** Base projects with runtime admin overrides merged in. */

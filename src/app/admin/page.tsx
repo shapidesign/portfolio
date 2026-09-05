@@ -1,6 +1,10 @@
 import { cookies } from "next/headers";
 import { SESSION_COOKIE, isValidSession } from "@/lib/admin-auth";
-import { getProjects, getSiteCopy } from "@/lib/project-overrides";
+import {
+  getKibbutzTypeSettings,
+  getProjects,
+  getSiteCopy,
+} from "@/lib/project-overrides";
 import { AdminLogin } from "./AdminLogin";
 import { AdminDashboard } from "./AdminDashboard";
 import "./admin.css";
@@ -14,6 +18,16 @@ export default async function AdminPage() {
 
   if (!authed) return <AdminLogin />;
 
-  const [projects, siteCopy] = await Promise.all([getProjects(), getSiteCopy()]);
-  return <AdminDashboard projects={projects} siteCopy={siteCopy} />;
+  const [projects, siteCopy, kibbutzTypeSettings] = await Promise.all([
+    getProjects(),
+    getSiteCopy(),
+    getKibbutzTypeSettings(),
+  ]);
+  return (
+    <AdminDashboard
+      projects={projects}
+      siteCopy={siteCopy}
+      kibbutzTypeSettings={kibbutzTypeSettings}
+    />
+  );
 }

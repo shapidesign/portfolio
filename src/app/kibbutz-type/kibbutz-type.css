@@ -9,7 +9,7 @@ body.kibbutz-type .site-footer {
 
 body.kibbutz-type,
 body.kibbutz-type .site-shell {
-  background: #f3efe3;
+  background: var(--kt-page-bg, #f3efe3);
 }
 
 .kt {

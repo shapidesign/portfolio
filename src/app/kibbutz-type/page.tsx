@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { KibbutzType } from "@/components/kibbutz-type/KibbutzType";
+import { getKibbutzTypeSettings } from "@/lib/project-overrides";
 import { SITE_ORIGIN } from "@/lib/site";
 import "./kibbutz-type.css";
 
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function KibbutzTypePage() {
-  return <KibbutzType />;
+export default async function KibbutzTypePage() {
+  const settings = await getKibbutzTypeSettings();
+  return <KibbutzType settings={settings} />;
 }

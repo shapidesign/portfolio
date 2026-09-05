@@ -1,54 +1,45 @@
 import Image from "next/image";
+import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
 
-export function About() {
+export function About({ settings }: { settings: KibbutzTypeSettings }) {
   return (
     <section className="kt-section kt-section--about kt-wrap" aria-labelledby="kt-about-title">
       <p className="kt-label" id="kt-about-title">
-        על הפרויקט
+        {settings.aboutLabel}
       </p>
-      <p className="kt-about-lead">
-        קיבוץ חצרים נוסד ב-1946 בנגב. לכבוד שמונים שנותיו עוצבו שני גופנים עבריים: אחד מחייה גופן
-        טרנספר קלאסי שהודבק על כרזות הקיבוץ, והשני מתרגם את כתב היד של הכרזות עצמן לגופן חי.
-      </p>
+      <p className="kt-about-lead">{settings.aboutLead}</p>
       <div className="kt-about">
         <article className="kt-about-face kt-about-face--dan">
           <header className="kt-about-heading">
             <h2 className="kt-face-dan" lang="he">
-              דן מחודש
+              {settings.danHeading}
             </h2>
-            <p className="kt-label">Dan Revived · חידוש לגופן ״דן״ של דן תל ורדי</p>
+            <p className="kt-label">{settings.danSubtitle}</p>
           </header>
           <div className="kt-about-copy">
-            <p>
-              סביב שנות ה-70-80 עיצב דן תל ורדי את ״דן״ - גופן עברי גאומטרי שהופץ על גיליונות אותיות
-              טרנספר של לטרסט, והודבק אות-אות על כרזות, שלטים ועלוני חג בקיבוצים ברחבי הארץ. הגופן
-              שימש את הלוגו של סמל וחולצות ״קבוץ חצרים״ המוכרות לכולם.
-            </p>
-            <p>
-              דן מחודש מחזיר את האותיות האלה למסך: הצורות המקוריות נשמרו, המידות והריווח הותאמו
-              לטקסט דיגיטלי, והתוצאה היא גופן כותרות גאומטרי, עגלגל ופשוט.
-            </p>
+            <p>{settings.danParagraph1}</p>
+            <p>{settings.danParagraph2}</p>
           </div>
           <div className="kt-archive">
             <figure className="kt-archive-catalog">
               <Image
-                src="/images/kibbutz-type/dan-letraset-catalog.jpg"
+                src={settings.danCatalogSrc}
                 alt="קטלוג לטרסט המקורי של גופן דן"
                 width={750}
                 height={1024}
                 sizes="(min-width: 900px) 25rem, (min-width: 600px) 19rem, 15rem"
               />
-              <figcaption>קטלוג לטרסט · דן</figcaption>
+              <figcaption>{settings.danCatalogCaption}</figcaption>
             </figure>
             <figure className="kt-archive-textile">
               <Image
-                src="/images/kibbutz-type/kibbutz-hatzerim-textile.jpg"
+                src={settings.danTextileSrc}
                 alt="סמל קבוץ חצרים מודפס על חולצה בצבעי כחול, ירוק וכתום"
                 width={1024}
                 height={768}
                 sizes="(min-width: 1400px) 50rem, (min-width: 900px) 55vw, calc(100vw - 5rem)"
               />
-              <figcaption>סמל קבוץ חצרים על חולצה</figcaption>
+              <figcaption>{settings.danTextileCaption}</figcaption>
             </figure>
           </div>
         </article>
@@ -56,29 +47,23 @@ export function About() {
         <article className="kt-about-face kt-about-face--kelta">
           <header className="kt-about-heading">
             <h2 className="kt-face-kelta" lang="he">
-              קלטה 01
+              {settings.keltaHeading}
             </h2>
-            <p className="kt-label">Kelta 01 · גופן חדש שנולד מכתב היד של כרזות הקיבוץ</p>
+            <p className="kt-label">{settings.keltaSubtitle}</p>
           </header>
           <div className="kt-about-copy">
-            <p>
-              בארכיון הקיבוץ שמורות כרזות שנכתבו בטושים שחורים על בריסטול לחג, לאסיפה, לערב שירה.
-              הכתב הזה הוא הקול החזותי של חצרים במשך עשרות שנים.
-            </p>
-            <p>
-              קלטה 01 נולד מהכרזות האלה. הוא לא מעתיק כתב יד ספציפי אלא מזקק את הקצב, הקווים
-              המחוברים והחום שלו לגופן שאפשר להקליד בו — כדי שגם השנה, ההזמנה לחג תיראה כמו שלנו.
-            </p>
+            <p>{settings.keltaParagraph1}</p>
+            <p>{settings.keltaParagraph2}</p>
           </div>
           <figure className="kt-story-image kt-story-image--poster">
             <Image
-              src="/images/kibbutz-type/kelta-poster.jpg"
+              src={settings.keltaPosterSrc}
               alt="כרזה בכתב יד שחור עם טקסט עברי ואיור שיבולת מארכיון קיבוץ חצרים"
               width={768}
               height={1024}
               sizes="(min-width: 900px) 34rem, (min-width: 600px) 28rem, calc(100vw - 5rem)"
             />
-            <figcaption>כרזה כתובה ביד מארכיון קיבוץ חצרים</figcaption>
+            <figcaption>{settings.keltaPosterCaption}</figcaption>
           </figure>
         </article>
       </div>

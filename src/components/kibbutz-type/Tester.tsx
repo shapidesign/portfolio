@@ -1,12 +1,14 @@
 "use client";
 
 import { useId } from "react";
+import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
 import { FACES, type Face, type FaceId } from "./faces";
 
 type TesterProps = Readonly<{
   text: string;
   fontSize: number;
   face: Face;
+  settings: KibbutzTypeSettings;
   alternatesEnabled: boolean;
   onText: (value: string) => void;
   onFontSize: (value: number) => void;
@@ -49,6 +51,7 @@ export function Tester({
   text,
   fontSize,
   face,
+  settings,
   alternatesEnabled,
   onText,
   onFontSize,
@@ -62,7 +65,7 @@ export function Tester({
       aria-labelledby={`${textareaId}-title`}
     >
       <p className="kt-label" id={`${textareaId}-title`}>
-        נסו בעצמכם
+        {settings.testerLabel}
       </p>
 
       <div className="kt-toggle" role="group" aria-label="בחירת גופן">
@@ -73,7 +76,7 @@ export function Tester({
             aria-pressed={f.id === face.id}
             onClick={() => onFace(f.id)}
           >
-            {f.heName}
+            {f.id === "dan" ? settings.danHeName : settings.keltaHeName}
           </button>
         ))}
       </div>
@@ -95,7 +98,7 @@ export function Tester({
 
       <div className="kt-controls">
         <Range
-          label="גודל"
+          label={settings.fontSizeLabel}
           value={fontSize}
           display={`${fontSize}px`}
           min={24}
@@ -111,7 +114,7 @@ export function Tester({
             onClick={() => onAlternates(!alternatesEnabled)}
           >
             <span>
-              אותיות חלופיות <small>ss01</small>
+              {settings.alternatesLabel} <small>ss01</small>
             </span>
             <span className="kt-feature-sample kt-face-dan" aria-hidden>
               אגכעפףצ

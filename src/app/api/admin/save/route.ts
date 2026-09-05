@@ -4,6 +4,10 @@ import { baseProjects } from "@/data/projects";
 import { sanitizeFields } from "@/lib/admin-fields";
 import { saveOverride } from "@/lib/project-overrides";
 import { SITE_SLUG, sanitizeSiteCopy } from "@/lib/site-copy";
+import {
+  KIBBUTZ_TYPE_SLUG,
+  sanitizeKibbutzTypeSettings,
+} from "@/lib/kibbutz-type-settings";
 import { requireAdmin } from "@/lib/require-admin";
 
 const KNOWN_SLUGS = new Set(baseProjects.map((p) => p.slug));
@@ -28,14 +32,20 @@ export async function POST(req: Request) {
 
   // Reserved site-copy row, existing project, or a new valid slug (create).
   const isSiteCopy = slug === SITE_SLUG;
-  if (!isSiteCopy && !KNOWN_SLUGS.has(slug) && !SLUG_RE.test(slug)) {
+  const isKibbutzType = slug === KIBBUTZ_TYPE_SLUG;
+  if (!isSiteCopy && !isKibbutzType && !KNOWN_SLUGS.has(slug) && !SLUG_RE.test(slug)) {
     return NextResponse.json({ error: "Invalid project slug" }, { status: 400 });
   }
 
   try {
+    const fields = isSiteCopy
+      ? sanitizeSiteCopy(rawFields)
+      : isKibbutzType
+        ? sanitizeKibbutzTypeSettings(rawFields)
+        : sanitizeFields(rawFields);
     await saveOverride(
       slug,
-      isSiteCopy ? sanitizeSiteCopy(rawFields) : sanitizeFields(rawFields),
+      fields,
     );
   } catch (err) {
     const message = err instanceof Error ? err.message : "Save failed";
@@ -46,6 +56,7 @@ export async function POST(req: Request) {
   revalidatePath("/");
   revalidatePath("/work");
   revalidatePath(`/work/${slug}`);
+  if (isKibbutzType) revalidatePath("/kibbutz-type");
 
   return NextResponse.json({ ok: true });
 }
