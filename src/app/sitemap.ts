@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       : `${baseUrl}${path.endsWith("/") ? path : `${path}/`}`;
 
   const projectUrls = baseProjects.map((project) => ({
-    url: u(`/work/${project.slug}`),
+    url: u(project.href ?? `/work/${project.slug}`),
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.8,

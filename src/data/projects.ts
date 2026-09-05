@@ -208,6 +208,47 @@ const LOCAL_PROJECTS: Project[] = [
     heNarrativeDecision:
       "ההחלטה המרכזית הייתה איפוק: שלושה צבעים, ציפור אחת, קול טיפוגרפי אחד. הסנונית אקספרסיבית מספיק כדי לעבוד לבד — על שלט, על קסדה או כאייקון אפליקציה — וכך שאר המערכת נשארת רגועה ואמינה. הכתום מוביל, השחור מקרקע, והלבן החם מחליף לבן סטרילי כך שגם השטח הריק מרגיש חי. התוצאה היא מותג נדל״ן שנתפס גם כמהנדס וגם כשכן.",
   },
+  {
+    slug: "kibbutz-type",
+    title: "Kibbutz Type",
+    subHeader: "Two Hebrew typefaces for Kibbutz Hatzerim's 80th anniversary.",
+    context:
+      "A type family designed for the 80th anniversary of Kibbutz Hatzerim: Dan Revived, a revival of Asher Oron's Letraset dry-transfer face, and Kelta 01, drawn from the kibbutz's hand-lettered posters.",
+    description:
+      "Two Hebrew typefaces for Kibbutz Hatzerim's 80th anniversary. Dan Revived brings Asher Oron's Letraset ״דן״ back to the screen; Kelta 01 distills decades of hand-lettered kibbutz posters into a typeable font.",
+    bodyText:
+      "Two Hebrew typefaces for Kibbutz Hatzerim's 80th anniversary. Dan Revived brings Asher Oron's Letraset ״דן״ back to the screen; Kelta 01 distills decades of hand-lettered kibbutz posters into a typeable font.",
+    href: "/kibbutz-type/",
+    images: [],
+    tags: ["Type Design", "Hebrew", "Revival"],
+    category: "Type",
+    summary:
+      "Dan Revived and Kelta 01 — a Hebrew type family for Kibbutz Hatzerim's 80th anniversary, with a live specimen and tester.",
+    services: ["Type Design", "Lettering"],
+    year: "2026",
+    challenge: "",
+    process: "",
+    outcome: "",
+    accent: "primary",
+    thumbnailShape: "square",
+    thumbnailHoverShape: "circle",
+    heTitle: "גופני חצרים",
+    heSubHeader: "שני גופנים עבריים לשמונים שנה לקיבוץ חצרים.",
+    heContext:
+      "משפחת גופנים שעוצבה לחגיגות שמונים שנה לקיבוץ חצרים: דן ריווייבד, החייאה של גופן הטרנספר של אשר אורון, וקלטה 01, שנולד מכרזות כתובות ביד.",
+    heDescription:
+      "שני גופנים עבריים לשמונים שנה לקיבוץ חצרים. דן ריווייבד מחזיר את ״דן״ של אשר אורון למסך; קלטה 01 מזקק עשרות שנים של כרזות כתובות ביד לגופן שאפשר להקליד בו.",
+    heTags: ["עיצוב גופנים", "עברית", "החייאה"],
+    status: "IN PROGRESS",
+    heStatus: "בעבודה",
+    discipline: "TYPE",
+    heDiscipline: "טיפוגרפיה",
+    descriptor: "Two Hebrew typefaces for a kibbutz turning eighty.",
+    heDescriptor: "שני גופנים עבריים לקיבוץ שחוגג שמונים.",
+    opener:
+      "A kibbutz turning eighty deserves letters of its own. Two typefaces, one drawn from a transfer sheet, one from hand-lettered posters.",
+    heOpener: "קיבוץ שחוגג שמונים ראוי לאותיות משלו. שני גופנים — אחד מגיליון טרנספר, אחד מכרזות כתובות ביד.",
+  },
 ];
 
 function isValidProject(item: unknown): item is Project {

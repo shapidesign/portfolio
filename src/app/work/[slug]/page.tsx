@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ProjectCaseStudy } from "@/components/ui/ProjectCaseStudy";
 import { baseProjects } from "@/data/projects";
 import { getProjectBySlug, getProjects } from "@/lib/project-overrides";
@@ -60,6 +60,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const allProjects = await getProjects();
   const project = allProjects.find((p) => p.slug === slug);
   if (!project) notFound();
+  // Projects with their own page: every /work/<slug> link lands there.
+  if (project.href) redirect(project.href);
 
   const jsonLd = {
     "@context": "https://schema.org",

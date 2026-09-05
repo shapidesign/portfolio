@@ -1,0 +1,717 @@
+/* Kibbutz Type specimen — scoped styles. Loaded only by src/app/kibbutz-type/page.tsx.
+   Fonts are declared in globals.css ("Dan Revived", "Kelta 01"). */
+
+/* Hide global chrome; the page ships its own header. Same pattern as body.solar-home. */
+body.kibbutz-type .site-header,
+body.kibbutz-type .site-footer {
+  display: none !important;
+}
+
+body.kibbutz-type,
+body.kibbutz-type .site-shell {
+  background: #f3efe3;
+}
+
+.kt {
+  /* Archival palette sampled from the Hatzerim textile. */
+  --kt-cream: #f3efe3;
+  --kt-navy: #101d3b;
+  --kt-green: #08743f;
+  --kt-orange: #f15a24;
+  --kt-bg: var(--kt-cream);
+  --kt-ink: var(--kt-navy);
+  --kt-muted: #625f57;
+  --kt-line: rgba(16, 29, 59, 0.18);
+  --kt-accent: var(--kt-orange);
+  --kt-focus: var(--kt-orange);
+
+  --kt-dan: "Dan Revived", "narkiss-yair-local", sans-serif;
+  --kt-kelta: "Kelta 01", "narkiss-yair-local", sans-serif;
+
+  min-height: 100vh;
+  background: var(--kt-bg);
+  color: var(--kt-ink);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  text-align: start;
+}
+
+.kt p {
+  color: var(--kt-ink);
+}
+
+.kt a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--kt-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.kt :focus-visible {
+  outline: 3px solid var(--kt-focus);
+  outline-offset: 3px;
+}
+
+.kt-wrap {
+  width: min(100%, 1400px);
+  margin-inline: auto;
+  padding-left: max(clamp(1.25rem, 4vw, 3.5rem), env(safe-area-inset-left, 0px));
+  padding-right: max(clamp(1.25rem, 4vw, 3.5rem), env(safe-area-inset-right, 0px));
+}
+
+.kt-section {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(3rem, 7vw, 6.5rem);
+  border-top: 1px solid var(--kt-line);
+}
+
+.kt-label {
+  margin: 0 0 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--kt-muted);
+}
+
+.kt-face-dan {
+  font-family: var(--kt-dan);
+}
+
+.kt-face-kelta {
+  font-family: var(--kt-kelta);
+}
+
+/* globals.css deliberately pins Hebrew prose and controls to Narkiss with
+   !important. Specimen elements are the one exception: their descendants must
+   render in the face being demonstrated. */
+.kt .kt-face-dan,
+.kt .kt-face-dan :where(p, span, input, textarea) {
+  font-family: var(--kt-dan) !important;
+  font-variation-settings: normal !important;
+  font-synthesis: none;
+}
+
+.kt .kt-face-kelta,
+.kt .kt-face-kelta :where(p, span, input, textarea) {
+  font-family: var(--kt-kelta) !important;
+  font-variation-settings: normal !important;
+  font-synthesis: none;
+}
+
+/* Dan's shipped OTF exposes seven alternates through ss01. Kelta's current
+   export has no GSUB table, so no feature is synthesized for it. */
+.kt[data-alternates="off"] .kt-face-dan,
+.kt[data-alternates="off"] .kt-face-dan :where(p, span, input, textarea) {
+  font-feature-settings: "ss01" 0;
+}
+
+.kt[data-alternates="on"] .kt-face-dan,
+.kt[data-alternates="on"] .kt-face-dan :where(p, span, input, textarea) {
+  font-feature-settings: "ss01" 1;
+}
+
+/* ─── Header ─────────────────────────────────────────── */
+.kt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--kt-line);
+  font-size: 0.875rem;
+}
+
+.kt-header a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.kt-header a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--kt-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.kt-hero {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(2.5rem, 8vw, 7rem) clamp(2.5rem, 6vw, 5rem);
+}
+
+.kt-hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+}
+
+.kt-hero::before {
+  inset-block-start: clamp(2rem, 6vw, 5rem);
+  inset-inline-end: clamp(-3.5rem, -4vw, -1.25rem);
+  width: clamp(0.8rem, 2vw, 1.8rem);
+  height: min(52%, 21rem);
+  background: var(--kt-green);
+}
+
+.kt-hero h1 {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(3rem, 13vw, 11rem);
+  font-weight: 400;
+  line-height: 1.05;
+  max-width: 14ch;
+  text-wrap: balance;
+}
+
+.kt-hero p {
+  margin-top: 1.5rem;
+  max-width: 44ch;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: var(--kt-muted);
+  text-wrap: pretty;
+}
+
+/* ─── Tester ─────────────────────────────────────────── */
+.kt-section--tester {
+  --kt-bg: var(--kt-face-color);
+  --kt-ink: var(--kt-cream);
+  --kt-muted: rgba(243, 239, 227, 0.72);
+  --kt-line: rgba(243, 239, 227, 0.28);
+  --kt-accent: var(--kt-cream);
+  background: var(--kt-face-color);
+  box-shadow: 0 0 0 100vmax var(--kt-face-color);
+  clip-path: inset(0 -100vmax);
+  border-top: 0;
+}
+
+.kt-face-ui--dan {
+  --kt-face-color: var(--kt-navy);
+  --kt-focus: var(--kt-orange);
+}
+
+.kt-face-ui--kelta {
+  --kt-face-color: var(--kt-green);
+  --kt-focus: var(--kt-cream);
+}
+
+.kt-section--tester::after,
+.kt-section--glyphs::after {
+  position: absolute;
+  z-index: -1;
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  color: currentColor;
+  font-family: var(--font-roboto-mono), monospace;
+  font-size: clamp(7rem, 18vw, 16rem);
+  font-weight: 700;
+  line-height: 0.8;
+  opacity: 0.045;
+  pointer-events: none;
+}
+
+.kt-section--tester::after {
+  content: "01";
+}
+
+.kt-toggle {
+  display: inline-flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.kt-toggle button {
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid var(--kt-ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--kt-ink);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.kt-toggle button:hover {
+  background: color-mix(in srgb, var(--kt-ink) 10%, transparent);
+}
+
+.kt-toggle button[aria-pressed="true"],
+.kt-toggle button[aria-pressed="true"]:hover {
+  background: var(--kt-ink);
+  color: var(--kt-bg);
+  border-color: var(--kt-ink);
+}
+
+.kt-textarea {
+  /* The textarea IS the preview: type straight into the specimen. */
+  display: block;
+  width: 100%;
+  min-height: 1.4em;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--kt-line);
+  background: transparent;
+  color: var(--kt-ink);
+  resize: none;
+  overflow: hidden;
+  /* ponytail: field-sizing auto-grows the box; browsers without it get rows=2 + overflow-y auto below. */
+  field-sizing: content;
+}
+
+@supports not (field-sizing: content) {
+  .kt-textarea {
+    overflow-y: auto;
+    min-height: 3em;
+  }
+}
+
+.kt-textarea:focus-visible {
+  outline: none;
+  border-bottom-color: var(--kt-accent);
+}
+
+.kt-controls {
+  display: grid;
+  gap: 1.5rem 2.5rem;
+  margin-top: 2rem;
+  max-width: 24rem;
+}
+
+.kt-feature-toggle {
+  min-height: 52px;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--kt-line);
+  background: transparent;
+  color: var(--kt-ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: start;
+  cursor: pointer;
+}
+
+.kt-feature-toggle:hover {
+  background: color-mix(in srgb, var(--kt-ink) 10%, transparent);
+}
+
+.kt-feature-toggle[aria-pressed="true"] {
+  background: var(--kt-cream);
+  border-color: var(--kt-cream);
+  color: var(--kt-face-color);
+}
+
+.kt-feature-toggle small {
+  margin-inline-start: 0.35rem;
+  font-family: var(--font-roboto-mono), monospace;
+  font-size: 0.68rem;
+}
+
+.kt-feature-sample {
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+.kt-range {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.kt-range-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--kt-muted);
+}
+
+.kt-range-head output {
+  font-variant-numeric: tabular-nums;
+  color: var(--kt-ink);
+}
+
+.kt-range input[type="range"] {
+  width: 100%;
+  height: 44px; /* comfortable touch target; the visible track is thin */
+  margin: 0;
+  accent-color: var(--kt-accent);
+  cursor: pointer;
+}
+
+/* ─── Faces showcase ─────────────────────────────────── */
+.kt-faces {
+  display: grid;
+  gap: 3rem;
+}
+
+@media (min-width: 900px) {
+  .kt-faces {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4rem;
+  }
+}
+
+.kt-face-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--kt-line);
+}
+
+.kt-faces article {
+  min-width: 0;
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.kt-faces article:first-child {
+  --kt-ink: var(--kt-cream);
+  --kt-muted: rgba(243, 239, 227, 0.7);
+  --kt-line: rgba(243, 239, 227, 0.25);
+  background: var(--kt-navy);
+  color: var(--kt-cream);
+}
+
+.kt-faces article:last-child {
+  --kt-ink: var(--kt-cream);
+  --kt-muted: rgba(243, 239, 227, 0.76);
+  --kt-line: rgba(243, 239, 227, 0.3);
+  --kt-focus: var(--kt-cream);
+  background: var(--kt-green);
+  color: var(--kt-cream);
+}
+
+.kt-face-head button {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--kt-ink);
+  font-size: 1.1rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.kt-face-head button[aria-pressed="true"] {
+  text-decoration: underline;
+  text-decoration-color: var(--kt-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+
+.kt-faces article:last-child .kt-face-head button[aria-pressed="true"] {
+  text-decoration-color: var(--kt-cream);
+}
+
+.kt-face-head span {
+  font-size: 0.8rem;
+  color: var(--kt-muted);
+}
+
+.kt-waterfall {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.kt-waterfall p {
+  margin: 0;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.kt-source {
+  margin-top: 1rem;
+  color: var(--kt-muted);
+  font-size: 0.75rem;
+}
+
+/* ─── Glyph grid ─────────────────────────────────────── */
+.kt-section--glyphs {
+  --kt-bg: var(--kt-face-color);
+  --kt-ink: var(--kt-cream);
+  --kt-muted: rgba(243, 239, 227, 0.72);
+  --kt-line: rgba(243, 239, 227, 0.27);
+  background: var(--kt-face-color);
+  box-shadow: 0 0 0 100vmax var(--kt-face-color);
+  clip-path: inset(0 -100vmax);
+  border-top: 0;
+}
+
+.kt-section--glyphs::after {
+  content: "03";
+}
+
+.kt-glyph-group + .kt-glyph-group {
+  margin-top: 2.5rem;
+}
+
+.kt-glyphs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(3.25rem, 1fr));
+  border-top: 1px solid var(--kt-line);
+  border-inline-start: 1px solid var(--kt-line);
+}
+
+.kt-glyphs span {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  /* Per-cell rules on two sides only, so an incomplete last row leaves clean whitespace. */
+  border-bottom: 1px solid var(--kt-line);
+  border-inline-end: 1px solid var(--kt-line);
+  background: var(--kt-face-color);
+  color: var(--kt-cream);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1;
+}
+
+@media (min-width: 900px) {
+  .kt-glyphs {
+    grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+  }
+}
+
+.kt-alternates {
+  margin-top: clamp(3rem, 7vw, 6rem);
+  padding-top: 2rem;
+  border-top: 1px solid var(--kt-line);
+}
+
+.kt-alternates-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.kt-alternates-head .kt-label {
+  margin: 0;
+}
+
+.kt-alternates-head > p:last-child {
+  color: var(--kt-muted);
+  font-size: 0.85rem;
+}
+
+.kt-alternates-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.kt-alternate-item {
+  min-width: 0;
+  border: 1px solid var(--kt-line);
+  background: var(--kt-navy);
+  color: var(--kt-cream);
+}
+
+.kt-alternate-name {
+  display: block;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--kt-line);
+  color: var(--kt-muted);
+  font-size: 0.75rem;
+}
+
+.kt-alternate-forms {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.kt-alternate-form {
+  display: grid;
+  place-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 0.65rem;
+}
+
+.kt-alternate-form + .kt-alternate-form {
+  border-inline-start: 1px solid var(--kt-line);
+}
+
+.kt-alternate-form > span:first-child {
+  color: var(--kt-muted);
+  font-size: 0.68rem;
+}
+
+.kt-alternate-glyph {
+  font-size: clamp(2.75rem, 7vw, 5rem);
+  line-height: 1;
+}
+
+/* Keep this comparison stable even when the global tester toggle changes. */
+.kt .kt-alternate-glyph--base {
+  font-feature-settings: "ss01" 0 !important;
+}
+
+.kt .kt-alternate-glyph--ss01 {
+  font-feature-settings: "ss01" 1 !important;
+  /* Orange on Dan navy is 4.94:1; only the changed form gets the accent. */
+  color: var(--kt-orange);
+}
+
+/* ─── About ──────────────────────────────────────────── */
+.kt-about {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.kt-about-face {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  max-width: none;
+  padding: clamp(1.5rem, 5vw, 4.5rem);
+}
+
+.kt-about-face--dan {
+  --kt-ink: var(--kt-cream);
+  --kt-muted: rgba(243, 239, 227, 0.72);
+  background: var(--kt-navy);
+  color: var(--kt-cream);
+}
+
+.kt-about-face--kelta {
+  --kt-ink: var(--kt-cream);
+  --kt-muted: rgba(243, 239, 227, 0.76);
+  background: var(--kt-green);
+  color: var(--kt-cream);
+}
+
+.kt-about-heading {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.kt-about-face h2 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.kt-about-face p {
+  text-wrap: pretty;
+}
+
+.kt-about-copy {
+  display: grid;
+  align-content: start;
+  gap: 1.25rem;
+  max-width: 64ch;
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+}
+
+.kt-about-lead {
+  max-width: 68ch;
+  margin-bottom: 3rem;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  text-wrap: pretty;
+}
+
+.kt-archive {
+  display: grid;
+  gap: 1rem;
+}
+
+.kt-archive figure {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.kt-archive-catalog {
+  width: min(100%, 15rem);
+  justify-self: center;
+}
+
+.kt-archive-textile {
+  width: 100%;
+  max-width: 64rem;
+  justify-self: center;
+}
+
+.kt-archive img,
+.kt-story-image img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0;
+}
+
+.kt-archive figcaption,
+.kt-story-image figcaption {
+  color: var(--kt-muted);
+  font-size: 0.75rem;
+}
+
+.kt-story-image {
+  display: grid;
+  gap: 0.6rem;
+  width: min(100%, 22rem);
+  margin: 0;
+  justify-self: center;
+}
+
+@media (min-width: 600px) {
+  .kt-archive-catalog {
+    width: min(100%, 19rem);
+  }
+
+  .kt-story-image {
+    width: min(100%, 28rem);
+  }
+}
+
+@media (min-width: 900px) {
+  .kt-about-face {
+    grid-template-columns: minmax(15rem, 0.7fr) minmax(0, 1.3fr);
+    align-items: start;
+  }
+
+  .kt-archive {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(13rem, 0.54fr) minmax(0, 1.46fr);
+    align-items: end;
+  }
+
+  .kt-archive-catalog {
+    width: min(100%, 25rem);
+  }
+
+  .kt-story-image {
+    grid-column: 1 / -1;
+    width: min(100%, 34rem);
+  }
+}
+
+.kt-footer {
+  padding-block: 2rem 3rem;
+  font-size: 0.8rem;
+  color: var(--kt-navy);
+  border-top: 3px solid var(--kt-orange);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  justify-content: space-between;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kt * {
+    transition-duration: 0.01ms !important;
+  }
+}

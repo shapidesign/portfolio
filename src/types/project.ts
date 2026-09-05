@@ -9,6 +9,8 @@ export type Project = {
   description: string;
   bodyText: string;
   url?: string;
+  /** Project lives on its own page instead of /work/[slug] (planet click + /work links go there). */
+  href?: string;
   images: string[];
   tags: string[];
   category: string;

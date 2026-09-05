@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Canvas, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import type { Project } from "../../types/project";
@@ -45,6 +46,7 @@ function CameraExporter({ targetRef }: { targetRef: React.MutableRefObject<THREE
 }
 
 export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
+  const router = useRouter();
   const planets = useMemo(() => buildPlanetConfigs(projects), [projects]);
 
   // Refs: live world position for each planet (updated each frame from Planet)
@@ -273,8 +275,14 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
 
   const openProject = useCallback((slug: string) => {
     markVisited(slug);
+    // Projects with their own page (e.g. /kibbutz-type/) navigate instead of opening the modal.
+    const href = projects.find((p) => p.slug === slug)?.href;
+    if (href) {
+      router.push(href);
+      return;
+    }
     setFocusedSlug(slug);
-  }, [markVisited]);
+  }, [markVisited, projects, router]);
 
   const closeProject = useCallback(() => {
     setFocusedSlug(null);

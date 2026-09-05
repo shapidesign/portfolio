@@ -122,6 +122,25 @@
   font-display: swap;
 }
 
+/* Kibbutz Type — Hatzerim 80 typefaces (Hebrew + digits only, single weight).
+   Used by /kibbutz-type/; declared here with the other local fonts, only downloaded when used. */
+@font-face {
+  font-family: "Dan Revived";
+  src: url("/fonts/kibbutz-type/Dan3-try.woff") format("woff"),
+       url("/fonts/kibbutz-type/Dan3-try.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Kelta 01";
+  src: url("/fonts/kibbutz-type/Kibbutz_01-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
 *,
 *::before,
 *::after {
