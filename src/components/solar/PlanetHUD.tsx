@@ -11,9 +11,17 @@ type PlanetHUDProps = {
   positionRef: React.MutableRefObject<THREE.Vector3> | null;
   cameraRef: React.MutableRefObject<THREE.Camera | null>;
   isHebrew: boolean;
+  label?: string;
 };
 
-export function PlanetHUD({ visible, planet, positionRef, cameraRef, isHebrew }: PlanetHUDProps) {
+export function PlanetHUD({
+  visible,
+  planet,
+  positionRef,
+  cameraRef,
+  isHebrew,
+  label = isHebrew ? "משימה" : "Mission",
+}: PlanetHUDProps) {
   const [screen, setScreen] = useState<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
@@ -39,7 +47,6 @@ export function PlanetHUD({ visible, planet, positionRef, cameraRef, isHebrew }:
 
   if (!visible || !planet || !screen) return null;
 
-  const label = isHebrew ? "משימה" : "Mission";
   const title = (isHebrew && planet.heTitle) || planet.title;
 
   return (

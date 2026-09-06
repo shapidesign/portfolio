@@ -7,7 +7,7 @@ import * as THREE from "three";
 import type { Project } from "../../types/project";
 import { StarShapesProvider } from "./StarShapesProvider";
 import { SolarScene } from "./SolarScene";
-import { buildPlanetConfigs } from "./planet-config";
+import { buildPlanetConfigs, SHIRTS_PLANET } from "./planet-config";
 import type { CameraTarget } from "./CameraRig";
 import type { PlanetConfig } from "./Planet";
 import { PlanetHUD } from "./PlanetHUD";
@@ -59,6 +59,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   }, [planets]);
 
   const cameraRef = useRef<THREE.Camera | null>(null);
+  const shirtsPosition = useRef(new THREE.Vector3());
   const touchGesture = useRef<{ id: number; x: number; y: number } | null>(null);
   const wheelGesture = useRef({ deltaX: 0, deltaY: 0, timer: 0 });
   const lastGestureAt = useRef(0);
@@ -66,6 +67,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   const { isHebrew } = useLanguage();
 
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const [shirtsHovered, setShirtsHovered] = useState(false);
   const [sunHovered, setSunHovered] = useState(false);
   const [focusedSlug, setFocusedSlug] = useState<string | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -380,7 +382,9 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
             <CameraExporter targetRef={cameraRef} />
             <SolarScene
               planets={planets}
+              shirtsPlanet={SHIRTS_PLANET}
               hoveredSlug={hoveredSlug}
+              shirtsHovered={shirtsHovered}
               focusedSlug={focusedSlug ?? activeSlug}
               cameraTarget={cameraTarget}
               reducedMotion={reducedMotion}
@@ -388,10 +392,19 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
               compact={compactScene}
               voyageMotion={voyageMode === "riding"}
               planetPositions={planetPositions}
-              onPlanetHover={(slug) => setHoveredSlug(slug)}
+              shirtsPosition={shirtsPosition}
+              onPlanetHover={(slug) => {
+                setHoveredSlug(slug);
+                if (slug) setShirtsHovered(false);
+              }}
               onPlanetClick={(slug) => openProject(slug)}
+              onShirtsHover={(hovered) => {
+                setShirtsHovered(hovered);
+                if (hovered) setHoveredSlug(null);
+              }}
+              onShirtsClick={() => setStoreNoticeOpen(true)}
               onSunHover={(h) => setSunHovered(h)}
-              onSunClick={() => setStoreNoticeOpen(true)}
+              onSunClick={openAbout}
             />
           </Canvas>
 
@@ -403,15 +416,24 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
             isHebrew={isHebrew}
           />
 
+          <PlanetHUD
+            visible={shirtsHovered && !modalOpen && !aboutOpen && !storeNoticeOpen}
+            planet={SHIRTS_PLANET}
+            positionRef={shirtsPosition}
+            cameraRef={cameraRef}
+            isHebrew={isHebrew}
+            label={isHebrew ? "חנות" : "Store"}
+          />
+
           {sunHovered && !aboutOpen && !focusedSlug && !storeNoticeOpen ? (
             <div
               className="solar-hud solar-hud-sun"
               dir={isHebrew ? "rtl" : "ltr"}
               style={{ left: "50%", top: "50%" }}
             >
-              <span className="solar-hud-label">{preventOrphan(isHebrew ? "חנות" : "Store")}</span>
+              <span className="solar-hud-label">{preventOrphan(isHebrew ? "טייס" : "Pilot")}</span>
               <span className="solar-hud-title">
-                {preventOrphan(isHebrew ? "חולצות כדורגל" : "Football shirts")}
+                {preventOrphan(isHebrew ? "עליי — יהונתן" : "About — Yehonatan")}
               </span>
             </div>
           ) : null}
@@ -432,6 +454,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
               isHebrew={isHebrew}
               onPlanetSelect={selectMissionPlanet}
               onAboutSelect={openAbout}
+              onShirtsSelect={() => setStoreNoticeOpen(true)}
               onListToggle={() => setListMode((v) => !v)}
               onStartRide={startRide}
               onPreviousStop={goPrevious}

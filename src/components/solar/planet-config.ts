@@ -7,7 +7,7 @@ const ACCENT_BY_SLUG: Record<string, string> = {
   "no-gatekeeping": "#a6e22e",
   "keeping-it-clean": "#e6db74",
   "rethinking-real-estate": "#f4902d",
-  "kibbutz-type": "#c8641a",
+  "kibbutz-type": "#3b82f6",
 };
 
 const FALLBACK_ACCENTS = ["#f92672", "#66d9ef", "#a6e22e", "#fd971f", "#e6db74", "#f8f8f2"];
@@ -16,6 +16,19 @@ const ORBIT_RADII = [7.5, 10.5, 13.5, 16.5, 19.5, 22.5];
 const ORBIT_SPEEDS = [0.34, 0.28, 0.22, 0.18, 0.15, 0.12];
 const ORBIT_TILTS = [0.08, -0.06, 0.12, -0.1, 0.04, -0.14];
 const PLANET_SIZES = [0.95, 1.05, 1, 1.15, 1, 1.1];
+
+export const SHIRTS_PLANET: PlanetConfig = {
+  slug: "shirts",
+  title: "Football shirts",
+  heTitle: "חולצות כדורגל",
+  variant: "soccer",
+  accent: "#b89bff",
+  radius: 25.5,
+  speed: 0.1,
+  startAngle: -Math.PI * 0.25,
+  tilt: 0.1,
+  size: 0.92,
+};
 
 export function buildPlanetConfigs(projects: Project[]): PlanetConfig[] {
   return projects.slice(0, 6).map((project, i) => ({

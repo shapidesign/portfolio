@@ -18,6 +18,7 @@ type MissionControlProps = {
   isHebrew: boolean;
   onPlanetSelect: (slug: string) => void;
   onAboutSelect: () => void;
+  onShirtsSelect: () => void;
   onListToggle: () => void;
   onStartRide: () => void;
   onPreviousStop: () => void;
@@ -36,6 +37,7 @@ const STRINGS = {
     previous: "Previous",
     exitRide: "Exit Ride",
     restartRide: "Restart Ride",
+    shirts: "Shirts",
   },
   he: {
     steps: ["מסלול מודרך", "כוכבי פרויקטים", "רשימה מהירה"],
@@ -47,6 +49,7 @@ const STRINGS = {
     previous: "הקודם",
     exitRide: "לצאת מהמסלול",
     restartRide: "להתחיל שוב",
+    shirts: "חולצות",
   },
 } as const;
 
@@ -63,6 +66,7 @@ export function MissionControl({
   isHebrew,
   onPlanetSelect,
   onAboutSelect,
+  onShirtsSelect,
   onListToggle,
   onStartRide,
   onPreviousStop,
@@ -120,6 +124,16 @@ export function MissionControl({
         </button>
         <button type="button" className="solar-btn" onClick={onAboutSelect} aria-label={t.about}>
           {preventOrphan(t.about)}
+        </button>
+        <button
+          type="button"
+          className="solar-btn solar-btn-store"
+          onClick={onShirtsSelect}
+          aria-label={t.shirts}
+          title={t.shirts}
+        >
+          <span aria-hidden>⚽</span>
+          <span className="solar-btn-store-label">{preventOrphan(t.shirts)}</span>
         </button>
         <button
           type="button"

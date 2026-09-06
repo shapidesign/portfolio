@@ -11,7 +11,9 @@ import { Spacecraft } from "./Spacecraft";
 
 type SolarSceneProps = {
   planets: PlanetConfig[];
+  shirtsPlanet: PlanetConfig;
   hoveredSlug: string | null;
+  shirtsHovered: boolean;
   focusedSlug: string | null;
   cameraTarget: CameraTarget;
   reducedMotion: boolean;
@@ -19,15 +21,20 @@ type SolarSceneProps = {
   compact: boolean;
   voyageMotion?: boolean;
   planetPositions: Record<string, React.MutableRefObject<THREE.Vector3>>;
+  shirtsPosition: React.MutableRefObject<THREE.Vector3>;
   onPlanetHover: (slug: string | null) => void;
   onPlanetClick: (slug: string, evt: { clientX: number; clientY: number }) => void;
+  onShirtsHover: (hovered: boolean) => void;
+  onShirtsClick: () => void;
   onSunHover: (hovered: boolean) => void;
   onSunClick: (evt: { clientX: number; clientY: number }) => void;
 };
 
 export function SolarScene({
   planets,
+  shirtsPlanet,
   hoveredSlug,
+  shirtsHovered,
   focusedSlug,
   cameraTarget,
   reducedMotion,
@@ -35,8 +42,11 @@ export function SolarScene({
   compact,
   voyageMotion = false,
   planetPositions,
+  shirtsPosition,
   onPlanetHover,
   onPlanetClick,
+  onShirtsHover,
+  onShirtsClick,
   onSunHover,
   onSunClick,
 }: SolarSceneProps) {
@@ -51,10 +61,11 @@ export function SolarScene({
         <Planet
           key={config.slug}
           config={config}
-          paused={focusedSlug === config.slug}
+          paused={reducedMotion || focusedSlug === config.slug}
           isHovered={hoveredSlug === config.slug}
           isActive={focusedSlug === config.slug}
           compact={compact}
+          reducedMotion={reducedMotion}
           onHoverChange={(h) => onPlanetHover(h ? config.slug : null)}
           onClick={(e) => onPlanetClick(config.slug, e)}
           onPositionUpdate={(pos) => {
@@ -63,6 +74,17 @@ export function SolarScene({
           }}
         />
       ))}
+
+      <Planet
+        config={shirtsPlanet}
+        paused={reducedMotion}
+        isHovered={shirtsHovered}
+        compact={compact}
+        reducedMotion={reducedMotion}
+        onHoverChange={onShirtsHover}
+        onClick={onShirtsClick}
+        onPositionUpdate={(pos) => shirtsPosition.current.copy(pos)}
+      />
 
       <Spacecraft
         visible={spacecraftVisible}

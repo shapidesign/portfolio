@@ -4,11 +4,13 @@ import { useEffect, useMemo, useRef } from "react";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import { makeAtmosphereMaterial } from "./atmosphere-material";
+import { makeSoccerTexture } from "./soccer-texture";
 
 export type PlanetConfig = {
   slug: string;
   title: string;
   heTitle?: string;
+  variant?: "soccer";
   /** monokai accent — used as emissive tint */
   accent: string;
   /** orbit radius from sun, in scene units */
@@ -31,6 +33,7 @@ type PlanetProps = {
   isHovered?: boolean;
   isActive?: boolean;
   compact?: boolean;
+  reducedMotion?: boolean;
   onHoverChange?: (hovered: boolean) => void;
   onClick?: (event: { clientX: number; clientY: number }) => void;
   /** receives the live world position each frame, for HUD projection */
@@ -307,6 +310,7 @@ export function Planet({
   isHovered = false,
   isActive = false,
   compact = false,
+  reducedMotion = false,
   onHoverChange,
   onClick,
   onPositionUpdate,
@@ -315,16 +319,23 @@ export function Planet({
   const scaleRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const orbitRef = useRef<THREE.Mesh>(null);
+  const atmosphereRef = useRef<THREE.ShaderMaterial>(null);
   const angleRef = useRef(config.startAngle);
   const tmpVec = useRef(new THREE.Vector3()).current;
 
   const surfaceTexture = useMemo(
-    () => makePlanetTexture(config, compact ? 256 : 512),
+    () =>
+      config.variant === "soccer"
+        ? makeSoccerTexture(compact ? 512 : 1024)
+        : makePlanetTexture(config, compact ? 256 : 512),
     [config, compact],
   );
   const cityTexture = useMemo(
-    () => makeCityLightsTexture(config.slug, config.accent, compact ? 128 : 256),
-    [config.slug, config.accent, compact],
+    () =>
+      config.variant === "soccer"
+        ? null
+        : makeCityLightsTexture(config.slug, config.accent, compact ? 128 : 256),
+    [config.slug, config.accent, config.variant, compact],
   );
   const ringTexture = useMemo(
     () => (config.ringed ? makeRingTexture(config, RING_INNER / RING_OUTER) : null),
@@ -370,7 +381,7 @@ export function Planet({
       // gradients start at 12 o'clock; flipY mirrors it there), hence -PI/2.
       orbitRef.current.rotation.z = a - Math.PI / 2;
     }
-    if (meshRef.current) {
+    if (meshRef.current && !reducedMotion) {
       meshRef.current.rotation.y += delta * 0.4;
     }
     if (scaleRef.current) {
@@ -380,8 +391,10 @@ export function Planet({
     }
     // Atmosphere glow: brighter when hovered, brightest when active.
     const glowTarget = isActive ? 1.45 : isHovered ? 1.1 : 0.55;
-    const u = atmosphereMat.uniforms.uIntensity;
-    u.value = THREE.MathUtils.damp(u.value, glowTarget, 6, delta);
+    const intensity = atmosphereRef.current?.uniforms.uIntensity;
+    if (intensity) {
+      intensity.value = THREE.MathUtils.damp(intensity.value, glowTarget, 6, delta);
+    }
   });
 
   return (
@@ -420,19 +433,20 @@ export function Planet({
             <meshStandardMaterial
               color="#ffffff"
               map={surfaceTexture}
-              bumpMap={surfaceTexture}
-              bumpScale={0.075}
-              emissiveMap={cityTexture}
+              bumpMap={config.variant === "soccer" ? undefined : surfaceTexture}
+              bumpScale={config.variant === "soccer" ? 0 : 0.075}
+              emissiveMap={config.variant === "soccer" ? surfaceTexture : cityTexture}
               emissive="#ffffff"
-              emissiveIntensity={1.1}
-              metalness={0.12}
-              roughness={0.72}
+              emissiveIntensity={config.variant === "soccer" ? 0.55 : 1.1}
+              metalness={config.variant === "soccer" ? 0.05 : 0.12}
+              roughness={config.variant === "soccer" ? 0.75 : 0.72}
             />
           </mesh>
 
           {/* Fresnel rim glow — the accent-colored atmosphere halo */}
-          <mesh scale={1.22} material={atmosphereMat} raycast={() => null}>
+          <mesh scale={1.22} raycast={() => null}>
             <sphereGeometry args={[1, 24, 24]} />
+            <primitive ref={atmosphereRef} object={atmosphereMat} attach="material" />
           </mesh>
 
           {config.ringed && ringTexture ? (

@@ -315,6 +315,17 @@ body.solar-home {
   box-shadow: 0 0 0 5px rgba(102, 217, 239, 0.08);
 }
 
+.solar-btn-store {
+  gap: 0.4rem;
+  border-color: var(--solar-lavender);
+  color: var(--solar-lavender);
+}
+
+.solar-btn-store:hover {
+  border-color: var(--solar-lavender);
+  background: rgba(174, 129, 255, 0.18);
+}
+
 .solar-btn:focus-visible,
 .solar-info-cta:focus-visible,
 .solar-mission-dot:focus-visible,
@@ -1154,7 +1165,7 @@ body.solar-home {
     inset-inline-end: var(--mobile-edge);
     inset-inline-start: var(--mobile-edge);
     display: grid;
-    grid-template-columns: minmax(96px, 1fr) auto auto 44px;
+    grid-template-columns: minmax(86px, 1fr) auto auto auto 44px;
     gap: 0.38rem;
     align-items: center;
   }
@@ -1291,8 +1302,18 @@ body.solar-home {
     display: none;
   }
   .solar-actions {
-    grid-template-columns: 1fr 1fr 1fr 44px;
+    grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr) 44px;
     gap: 0.3rem;
+  }
+  .solar-actions .solar-btn-primary {
+    display: none;
+  }
+  .solar-btn-store {
+    width: 44px;
+    padding-inline: 0;
+  }
+  .solar-btn-store-label {
+    display: none;
   }
   .solar-btn {
     min-height: 44px;
