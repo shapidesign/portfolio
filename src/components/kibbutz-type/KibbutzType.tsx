@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
+import { useRouter } from "next/navigation";
 import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
 import { About } from "./About";
 import { Fade } from "./Fade";
@@ -10,12 +11,22 @@ import { Header } from "./Header";
 import { Tester } from "./Tester";
 import { getFace, type FaceId } from "./faces";
 
+type Gate = "checking" | "ask" | "open";
+
 export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
   // Central specimen state — the tester writes it, every section reads it.
   const [text, setText] = useState(settings.testerDefaultText);
-  const [fontSize, setFontSize] = useState(settings.testerDefaultFontSize);
+  const [fontSize, setFontSize] = useState(() =>
+    typeof window !== "undefined" && window.matchMedia("(max-width: 600px)").matches
+      ? 60
+      : settings.testerDefaultFontSize,
+  );
   const [faceId, setFaceId] = useState<FaceId>("dan");
   const [alternatesEnabled, setAlternatesEnabled] = useState(false);
+  const [gate, setGate] = useState<Gate>("checking");
+  const router = useRouter();
+  const titleId = useId();
+  const leaveRef = useRef<HTMLButtonElement>(null);
   const face = getFace(faceId);
 
   // Hide global header/footer while mounted (see kibbutz-type.css).
@@ -28,12 +39,57 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
     };
   }, [settings.colorCream]);
 
+  // ponytail: wide + mouse = computer. Phones (coarse or narrow) skip the nag.
+  useEffect(() => {
+    const isComputer = window.matchMedia("(min-width: 768px) and (pointer: fine)").matches;
+    setGate(isComputer ? "ask" : "open");
+  }, []);
+
+  useEffect(() => {
+    if (gate === "ask") leaveRef.current?.focus();
+  }, [gate]);
+
   const colorVariables = {
     "--kt-cream": settings.colorCream,
     "--kt-navy": settings.colorNavy,
     "--kt-green": settings.colorGreen,
     "--kt-orange": settings.colorOrange,
   } as CSSProperties;
+
+  if (gate !== "open") {
+    return (
+      <div className="kt" dir="rtl" lang="he" style={colorVariables}>
+        {gate === "ask" ? (
+          <div
+            className="kt-desktop-gate"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") router.push("/");
+            }}
+          >
+            <p id={titleId} className="kt-desktop-gate-copy">
+              עדיף לפתוח את זה בטלפון. את/ה בטוח שתרצה/י לפתוח את זה במחשב.
+            </p>
+            <div className="kt-desktop-gate-actions">
+              <button type="button" onClick={() => setGate("open")}>
+                כן, אני עקשן ואני רוצה במחשב
+              </button>
+              <button
+                ref={leaveRef}
+                type="button"
+                className="kt-desktop-gate-leave"
+                onClick={() => router.push("/")}
+              >
+                לא, אתה צודק ועדיף בטלפון
+              </button>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
 
   return (
     <div
