@@ -167,6 +167,14 @@ body.kibbutz-type .site-shell {
   text-wrap: balance;
 }
 
+@media (max-width: 600px) {
+  .kt-hero h1 {
+    /* Keep the opening statement visibly above the 72px default tester size. */
+    font-size: clamp(4.75rem, 20vw, 5.5rem);
+    line-height: 0.92;
+  }
+}
+
 .kt-hero p {
   margin-top: 1.5rem;
   max-width: 44ch;
@@ -387,26 +395,14 @@ body.kibbutz-type .site-shell {
   color: var(--kt-cream);
 }
 
-.kt-face-head button {
+.kt-face-heading {
+  display: flex;
+  align-items: center;
   min-height: 44px;
-  padding: 0;
-  border: 0;
-  background: none;
+  margin: 0;
   color: var(--kt-ink);
   font-size: 1.1rem;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.kt-face-head button[aria-pressed="true"] {
-  text-decoration: underline;
-  text-decoration-color: var(--kt-accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.25em;
-}
-
-.kt-faces article:last-child .kt-face-head button[aria-pressed="true"] {
-  text-decoration-color: var(--kt-cream);
+  font-weight: inherit;
 }
 
 .kt-face-head span {

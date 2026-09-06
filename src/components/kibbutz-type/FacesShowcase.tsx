@@ -1,17 +1,15 @@
 "use client";
 
 import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
-import { FACES, type Face, type FaceId } from "./faces";
+import { FACES } from "./faces";
 
 type FacesShowcaseProps = Readonly<{
-  face: Face;
   settings: KibbutzTypeSettings;
-  onFace: (id: FaceId) => void;
 }>;
 
 /* Size waterfall: display → text. Both faces are single-weight, so size is the axis. */
 const SIZES = ["clamp(3rem, 8vw, 6.5rem)", "clamp(2rem, 4.5vw, 3.5rem)", "1.75rem", "1.125rem"];
-export function FacesShowcase({ face, settings, onFace }: FacesShowcaseProps) {
+export function FacesShowcase({ settings }: FacesShowcaseProps) {
   const samples = [
     settings.waterfallLine1,
     settings.waterfallLine2,
@@ -27,9 +25,9 @@ export function FacesShowcase({ face, settings, onFace }: FacesShowcaseProps) {
         {FACES.map((f) => (
           <article key={f.id}>
             <div className="kt-face-head">
-              <button type="button" aria-pressed={f.id === face.id} onClick={() => onFace(f.id)}>
+              <h2 className="kt-face-heading">
                 {f.id === "dan" ? settings.danHeName : settings.keltaHeName}
-              </button>
+              </h2>
               <span>{f.id === "dan" ? settings.danName : settings.keltaName}</span>
             </div>
             <div className={`kt-waterfall ${f.className}`} lang="he">

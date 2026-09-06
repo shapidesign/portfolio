@@ -59,7 +59,7 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
           />
         </Fade>
         <Fade>
-          <FacesShowcase face={face} settings={settings} onFace={setFaceId} />
+          <FacesShowcase settings={settings} />
         </Fade>
         <Fade>
           <GlyphGrid face={face} settings={settings} onFace={setFaceId} />
