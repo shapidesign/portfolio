@@ -265,6 +265,7 @@ body.kibbutz-type .site-shell {
   border-bottom: 1px solid var(--kt-line);
   background: transparent;
   color: var(--kt-ink);
+  line-height: 1.1;
   resize: none;
   overflow: hidden;
   /* ponytail: field-sizing auto-grows the box; browsers without it get rows=2 + overflow-y auto below. */
