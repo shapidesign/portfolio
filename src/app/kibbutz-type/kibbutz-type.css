@@ -279,6 +279,15 @@ body.kibbutz-type .site-shell {
   }
 }
 
+@media (max-width: 600px) {
+  .kt-textarea {
+    height: clamp(12rem, 42svh, 22rem);
+    min-height: 0;
+    overflow-y: auto;
+    field-sizing: fixed;
+  }
+}
+
 .kt-textarea:focus-visible {
   outline: none;
   border-bottom-color: var(--kt-accent);
