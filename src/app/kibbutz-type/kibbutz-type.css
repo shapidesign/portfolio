@@ -53,6 +53,59 @@ body.kibbutz-type .site-shell {
   outline-offset: 3px;
 }
 
+/* ─── Local text editor ──────────────────────────────── */
+.kt-local-editor {
+  position: fixed;
+  z-index: 20;
+  inset-inline-end: max(1rem, env(safe-area-inset-left, 0px));
+  inset-block-end: max(1rem, env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+.kt-local-editor span {
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: var(--kt-navy);
+  color: var(--kt-cream);
+  font-size: 0.72rem;
+}
+
+.kt-local-editor button {
+  min-height: 44px;
+  padding-inline: 1rem;
+  border: 1px solid var(--kt-navy);
+  border-radius: 999px;
+  background: var(--kt-cream);
+  color: var(--kt-navy);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.kt-local-editor button[aria-pressed="true"] {
+  border-color: var(--kt-orange);
+  background: var(--kt-orange);
+  color: var(--kt-navy);
+}
+
+.kt-editable-surface:focus {
+  outline: none;
+}
+
+.kt[data-editing="true"] .kt-editable-surface {
+  caret-color: var(--kt-orange);
+  cursor: text;
+}
+
+.kt[data-editing="true"]
+  .kt-editable-surface
+  :is(h1, h2, p, a, button, label, output, figcaption, span):hover {
+  outline: 1px dashed currentColor;
+  outline-offset: 2px;
+}
+
 /* ─── Desktop gate ───────────────────────────────────── */
 .kt-desktop-gate {
   min-height: 100vh;
@@ -778,6 +831,233 @@ body.kibbutz-type .site-shell {
   flex-wrap: wrap;
   gap: 1rem 2rem;
   justify-content: space-between;
+}
+
+/* ─── Wall form ──────────────────────────────────────── */
+.kt-section--wall {
+  border-top: 0;
+  padding-block-start: 0;
+}
+
+.kt-wall-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.2;
+  max-width: 24ch;
+  text-wrap: balance;
+}
+
+.kt-wall-title::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 0.35rem;
+  margin-block-end: 1rem;
+  background: var(--kt-orange);
+}
+
+.kt-wall-hint {
+  margin: 0.75rem 0 1.75rem;
+  max-width: 44ch;
+  color: var(--kt-muted);
+  text-wrap: pretty;
+}
+
+.kt-wall-form {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 52rem;
+}
+
+.kt-wall-form .kt-toggle {
+  margin-bottom: 0;
+}
+
+.kt-swatches {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.kt-swatches .kt-label {
+  margin: 0;
+  padding: 0;
+  float: inline-start; /* legend sits inline with the swatches */
+}
+
+.kt-swatch {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+
+.kt-swatch input {
+  appearance: none;
+  margin: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: var(--kt-swatch);
+  cursor: pointer;
+  transition: transform 160ms ease-out, box-shadow 160ms ease-out;
+}
+
+.kt-swatch input:checked {
+  box-shadow: 0 0 0 2px var(--kt-cream), 0 0 0 4px var(--kt-swatch);
+  transform: scale(1.08);
+}
+
+.kt-swatch input:focus-visible {
+  outline: 3px solid var(--kt-focus);
+  outline-offset: 5px;
+}
+
+.kt-wall-textarea {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  border-bottom-color: var(--kt-line);
+}
+
+/* The form textarea must not inherit the mobile tester's fixed height. */
+@media (max-width: 600px) {
+  .kt-wall-textarea {
+    height: auto;
+    min-height: 2.4em;
+    field-sizing: content;
+    overflow: hidden;
+  }
+}
+
+.kt-wall-textarea::placeholder {
+  color: var(--kt-muted);
+  opacity: 0.55;
+}
+
+.kt-wall-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.kt-wall-count {
+  font-family: var(--font-roboto-mono), monospace;
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--kt-muted);
+}
+
+.kt-wall-submit {
+  min-height: 48px;
+  padding: 0.75rem 1.75rem;
+  border: 1px solid var(--kt-navy);
+  border-radius: 999px;
+  background: var(--kt-navy);
+  color: var(--kt-cream);
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 160ms ease-out, opacity 160ms ease-out;
+}
+
+.kt-wall-submit:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--kt-navy) 88%, white);
+}
+
+.kt-wall-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.kt-wall-status {
+  margin: 0;
+  min-height: 1.5em;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.kt-wall-status[data-status="sent"] {
+  color: var(--kt-green);
+}
+
+.kt-wall-status[data-status="blocked"],
+.kt-wall-status[data-status="invalid"],
+.kt-wall-status[data-status="failed"] {
+  color: var(--kt-orange);
+}
+
+/* ─── Wall canvas (/kibbutz-type/canvas) ─────────────── */
+.kt-wall {
+  position: fixed;
+  inset: 0;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.kt-wall-main {
+  position: absolute;
+  inset: 0;
+}
+
+.kt-wall-list {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kt-wall-word {
+  position: absolute;
+  inset-inline-start: var(--x);
+  top: var(--y);
+  max-width: 70vw;
+  transform: rotate(var(--rot));
+  transform-origin: center;
+  /* Short words shout, long ones whisper. */
+  font-size: clamp(2.25rem, calc(44vw / (var(--len) + 2)), 9rem);
+  line-height: 1.05;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.kt-wall-ghost {
+  visibility: hidden;
+}
+
+.kt-wall-ink {
+  position: absolute;
+  inset: 0;
+}
+
+.kt-wall-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  margin: 0;
+  color: var(--kt-muted);
+  font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+}
+
+.kt-wall-address {
+  position: absolute;
+  inset-block-end: max(1rem, env(safe-area-inset-bottom, 0px));
+  inset-inline: clamp(1rem, 3vw, 2.5rem);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 3px solid var(--kt-orange);
+  font-size: 0.9rem;
+  color: var(--kt-navy);
 }
 
 @media (prefers-reduced-motion: reduce) {

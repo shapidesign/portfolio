@@ -9,6 +9,7 @@ import { FacesShowcase } from "./FacesShowcase";
 import { GlyphGrid } from "./GlyphGrid";
 import { Header } from "./Header";
 import { Tester } from "./Tester";
+import { WallForm } from "./WallForm";
 import { getFace, type FaceId } from "./faces";
 
 type Gate = "checking" | "ask" | "open";
@@ -23,6 +24,7 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
   );
   const [faceId, setFaceId] = useState<FaceId>("dan");
   const [alternatesEnabled, setAlternatesEnabled] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [gate, setGate] = useState<Gate>("checking");
   const router = useRouter();
   const titleId = useId();
@@ -42,7 +44,8 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
   // ponytail: wide + mouse = computer. Phones (coarse or narrow) skip the nag.
   useEffect(() => {
     const isComputer = window.matchMedia("(min-width: 768px) and (pointer: fine)").matches;
-    setGate(isComputer ? "ask" : "open");
+    const frame = requestAnimationFrame(() => setGate(isComputer ? "ask" : "open"));
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
@@ -97,37 +100,63 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
       dir="rtl"
       lang="he"
       data-alternates={alternatesEnabled ? "on" : "off"}
+      data-editing={isEditing ? "true" : "false"}
       style={colorVariables}
     >
-      <Header face={face} settings={settings} />
-      <main>
-        <Fade>
-          <Tester
-            text={text}
-            fontSize={fontSize}
-            face={face}
-            settings={settings}
-            alternatesEnabled={alternatesEnabled}
-            onText={setText}
-            onFontSize={setFontSize}
-            onFace={setFaceId}
-            onAlternates={setAlternatesEnabled}
-          />
-        </Fade>
-        <Fade>
-          <FacesShowcase settings={settings} />
-        </Fade>
-        <Fade>
-          <GlyphGrid face={face} settings={settings} onFace={setFaceId} />
-        </Fade>
-        <Fade>
-          <About settings={settings} />
-        </Fade>
-      </main>
-      <footer className="kt-wrap kt-footer">
-        <span>{settings.footerCredit}</span>
-        <span>{settings.footerTagline}</span>
-      </footer>
+      <div className="kt-local-editor">
+        {isEditing ? <span>השינויים יתאפסו ברענון</span> : null}
+        <button
+          type="button"
+          aria-pressed={isEditing}
+          onClick={() => setIsEditing((editing) => !editing)}
+        >
+          {isEditing ? "סיום עריכה" : "עריכת טקסט"}
+        </button>
+      </div>
+
+      <div
+        className="kt-editable-surface"
+        contentEditable={isEditing ? "plaintext-only" : false}
+        suppressContentEditableWarning
+        spellCheck={isEditing}
+        aria-label={isEditing ? "תוכן העמוד לעריכה" : undefined}
+        onClickCapture={(event) => {
+          if (isEditing && (event.target as HTMLElement).closest("a")) event.preventDefault();
+        }}
+      >
+        <Header face={face} settings={settings} />
+        <main>
+          <Fade>
+            <WallForm settings={settings} />
+          </Fade>
+          <Fade>
+            <Tester
+              text={text}
+              fontSize={fontSize}
+              face={face}
+              settings={settings}
+              alternatesEnabled={alternatesEnabled}
+              onText={setText}
+              onFontSize={setFontSize}
+              onFace={setFaceId}
+              onAlternates={setAlternatesEnabled}
+            />
+          </Fade>
+          <Fade>
+            <FacesShowcase settings={settings} />
+          </Fade>
+          <Fade>
+            <GlyphGrid face={face} settings={settings} onFace={setFaceId} />
+          </Fade>
+          <Fade>
+            <About settings={settings} />
+          </Fade>
+        </main>
+        <footer className="kt-wrap kt-footer">
+          <span>{settings.footerCredit}</span>
+          <span>{settings.footerTagline}</span>
+        </footer>
+      </div>
     </div>
   );
 }

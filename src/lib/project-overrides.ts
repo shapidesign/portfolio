@@ -31,9 +31,9 @@ const SUPABASE_ANON_KEY =
 const WRITE_SECRET =
   process.env.CONTENT_WRITE_SECRET ?? "sp_content_write_7Kq2mXv9pLwR4tZ8";
 
-const REST = `${SUPABASE_URL}/rest/v1`;
+export const REST = `${SUPABASE_URL}/rest/v1`;
 
-function baseHeaders(write = false): Record<string, string> {
+export function baseHeaders(write = false): Record<string, string> {
   return {
     apikey: SUPABASE_ANON_KEY,
     Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
