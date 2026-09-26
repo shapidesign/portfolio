@@ -3,6 +3,7 @@
 import { useId } from "react";
 import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
 import { FACES, type Face, type FaceId } from "./faces";
+import { SpecimenText } from "./SpecimenText";
 
 type TesterProps = Readonly<{
   text: string;
@@ -31,7 +32,9 @@ function Range({ label, value, display, min, max, step, onChange }: RangeProps) 
   return (
     <div className="kt-range">
       <div className="kt-range-head">
-        <label htmlFor={id}>{label}</label>
+        <label htmlFor={id}>
+          <SpecimenText>{label}</SpecimenText>
+        </label>
         <output htmlFor={id}>{display}</output>
       </div>
       <input
@@ -65,7 +68,7 @@ export function Tester({
       aria-labelledby={`${textareaId}-title`}
     >
       <p className="kt-label" id={`${textareaId}-title`}>
-        {settings.testerLabel}
+        <SpecimenText>{settings.testerLabel}</SpecimenText>
       </p>
 
       <div className="kt-toggle" role="group" aria-label="בחירת גופן">

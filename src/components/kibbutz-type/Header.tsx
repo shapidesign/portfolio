@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
 import type { Face } from "./faces";
+import { SpecimenText } from "./SpecimenText";
 
 type HeaderProps = Readonly<{
   face: Face;
@@ -14,15 +15,17 @@ export function Header({ face, settings }: HeaderProps) {
         <Link href="/" prefetch={false}>
           {settings.backLabel}
         </Link>
-        <span>{settings.navBadge}</span>
+        <SpecimenText>{settings.navBadge}</SpecimenText>
       </nav>
       <div className="kt-hero">
         <h1 className={face.className}>
-          {settings.heroTitleLine1}
+          <SpecimenText>{settings.heroTitleLine1}</SpecimenText>
           <br />
-          {settings.heroTitleLine2}
+          <SpecimenText>{settings.heroTitleLine2}</SpecimenText>
         </h1>
-        <p>{settings.heroDescription}</p>
+        <SpecimenText as="p" multiline>
+          {settings.heroDescription}
+        </SpecimenText>
       </div>
     </header>
   );

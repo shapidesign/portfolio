@@ -1,24 +1,33 @@
 import Image from "next/image";
 import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
+import { SpecimenText } from "./SpecimenText";
 
 export function About({ settings }: { settings: KibbutzTypeSettings }) {
   return (
     <section className="kt-section kt-section--about kt-wrap" aria-labelledby="kt-about-title">
       <p className="kt-label" id="kt-about-title">
-        {settings.aboutLabel}
+        <SpecimenText>{settings.aboutLabel}</SpecimenText>
       </p>
-      <p className="kt-about-lead">{settings.aboutLead}</p>
+      <SpecimenText as="p" className="kt-about-lead" multiline>
+        {settings.aboutLead}
+      </SpecimenText>
       <div className="kt-about">
         <article className="kt-about-face kt-about-face--dan">
           <header className="kt-about-heading">
-            <h2 className="kt-face-dan" lang="he">
+            <SpecimenText as="h2" className="kt-face-dan">
               {settings.danHeading}
-            </h2>
-            <p className="kt-label">{settings.danSubtitle}</p>
+            </SpecimenText>
+            <p className="kt-label">
+              <SpecimenText>{settings.danSubtitle}</SpecimenText>
+            </p>
           </header>
           <div className="kt-about-copy">
-            <p>{settings.danParagraph1}</p>
-            <p>{settings.danParagraph2}</p>
+            <SpecimenText as="p" multiline>
+              {settings.danParagraph1}
+            </SpecimenText>
+            <SpecimenText as="p" multiline>
+              {settings.danParagraph2}
+            </SpecimenText>
           </div>
           <div className="kt-archive">
             <figure className="kt-archive-catalog">
@@ -29,7 +38,9 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
                 height={1024}
                 sizes="(min-width: 900px) 25rem, (min-width: 600px) 19rem, 15rem"
               />
-              <figcaption>{settings.danCatalogCaption}</figcaption>
+              <figcaption>
+                <SpecimenText multiline>{settings.danCatalogCaption}</SpecimenText>
+              </figcaption>
             </figure>
             <figure className="kt-archive-textile">
               <Image
@@ -39,21 +50,29 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
                 height={768}
                 sizes="(min-width: 1400px) 50rem, (min-width: 900px) 55vw, calc(100vw - 5rem)"
               />
-              <figcaption>{settings.danTextileCaption}</figcaption>
+              <figcaption>
+                <SpecimenText multiline>{settings.danTextileCaption}</SpecimenText>
+              </figcaption>
             </figure>
           </div>
         </article>
 
         <article className="kt-about-face kt-about-face--kelta">
           <header className="kt-about-heading">
-            <h2 className="kt-face-kelta" lang="he">
+            <SpecimenText as="h2" className="kt-face-kelta">
               {settings.keltaHeading}
-            </h2>
-            <p className="kt-label">{settings.keltaSubtitle}</p>
+            </SpecimenText>
+            <p className="kt-label">
+              <SpecimenText>{settings.keltaSubtitle}</SpecimenText>
+            </p>
           </header>
           <div className="kt-about-copy">
-            <p>{settings.keltaParagraph1}</p>
-            <p>{settings.keltaParagraph2}</p>
+            <SpecimenText as="p" multiline>
+              {settings.keltaParagraph1}
+            </SpecimenText>
+            <SpecimenText as="p" multiline>
+              {settings.keltaParagraph2}
+            </SpecimenText>
           </div>
           <figure className="kt-story-image kt-story-image--poster">
             <Image
@@ -63,7 +82,9 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
               height={1024}
               sizes="(min-width: 900px) 34rem, (min-width: 600px) 28rem, calc(100vw - 5rem)"
             />
-            <figcaption>{settings.keltaPosterCaption}</figcaption>
+            <figcaption>
+              <SpecimenText multiline>{settings.keltaPosterCaption}</SpecimenText>
+            </figcaption>
           </figure>
         </article>
       </div>

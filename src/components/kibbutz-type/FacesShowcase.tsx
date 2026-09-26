@@ -2,6 +2,7 @@
 
 import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
 import { FACES } from "./faces";
+import { SpecimenText } from "./SpecimenText";
 
 type FacesShowcaseProps = Readonly<{
   settings: KibbutzTypeSettings;
@@ -19,21 +20,21 @@ export function FacesShowcase({ settings }: FacesShowcaseProps) {
   return (
     <section className="kt-section kt-section--faces kt-wrap" aria-labelledby="kt-faces-title">
       <p className="kt-label" id="kt-faces-title">
-        {settings.facesLabel}
+        <SpecimenText>{settings.facesLabel}</SpecimenText>
       </p>
       <div className="kt-faces">
         {FACES.map((f) => (
           <article key={f.id}>
             <div className="kt-face-head">
               <h2 className="kt-face-heading">
-                {f.id === "dan" ? settings.danHeName : settings.keltaHeName}
+                <SpecimenText>{f.id === "dan" ? settings.danHeName : settings.keltaHeName}</SpecimenText>
               </h2>
-              <span>{f.id === "dan" ? settings.danName : settings.keltaName}</span>
+              <SpecimenText>{f.id === "dan" ? settings.danName : settings.keltaName}</SpecimenText>
             </div>
             <div className={`kt-waterfall ${f.className}`} lang="he">
               {SIZES.map((size, index) => (
                 <p key={size} style={{ fontSize: size }}>
-                  {samples[index]}
+                  <SpecimenText>{samples[index]}</SpecimenText>
                 </p>
               ))}
             </div>
@@ -41,7 +42,7 @@ export function FacesShowcase({ settings }: FacesShowcaseProps) {
         ))}
       </div>
       <p className="kt-source">
-        {settings.sourcePrefix}{" "}
+        <SpecimenText>{settings.sourcePrefix}</SpecimenText>{" "}
         <a href={settings.sourceUrl}>
           {settings.sourceLabel}
         </a>

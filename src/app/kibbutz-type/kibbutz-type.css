@@ -53,57 +53,16 @@ body.kibbutz-type .site-shell {
   outline-offset: 3px;
 }
 
-/* ─── Local text editor ──────────────────────────────── */
-.kt-local-editor {
-  position: fixed;
-  z-index: 20;
-  inset-inline-end: max(1rem, env(safe-area-inset-left, 0px));
-  inset-block-end: max(1rem, env(safe-area-inset-bottom, 0px));
-  display: flex;
-  align-items: flex-end;
-  gap: 0.5rem;
-  flex-direction: column;
-}
-
-.kt-local-editor span {
-  padding: 0.3rem 0.65rem;
-  border-radius: 999px;
-  background: var(--kt-navy);
-  color: var(--kt-cream);
-  font-size: 0.72rem;
-}
-
-.kt-local-editor button {
-  min-height: 44px;
-  padding-inline: 1rem;
-  border: 1px solid var(--kt-navy);
-  border-radius: 999px;
-  background: var(--kt-cream);
-  color: var(--kt-navy);
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.kt-local-editor button[aria-pressed="true"] {
-  border-color: var(--kt-orange);
-  background: var(--kt-orange);
-  color: var(--kt-navy);
-}
-
-.kt-editable-surface:focus {
-  outline: none;
-}
-
-.kt[data-editing="true"] .kt-editable-surface {
+/* Display copy is the specimen: click it and type. Refresh restores the original. */
+.kt-live {
   caret-color: var(--kt-orange);
   cursor: text;
 }
 
-.kt[data-editing="true"]
-  .kt-editable-surface
-  :is(h1, h2, p, a, button, label, output, figcaption, span):hover {
-  outline: 1px dashed currentColor;
-  outline-offset: 2px;
+.kt-live:empty {
+  display: inline-block;
+  min-width: 1ch;
+  min-height: 1em;
 }
 
 /* ─── Desktop gate ───────────────────────────────────── */
