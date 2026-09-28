@@ -81,7 +81,9 @@ export type WallValidation =
 
 export function validateWallInput(body: unknown): WallValidation {
   const b = (body ?? {}) as Record<string, unknown>;
-  const text = typeof b.text === "string" ? b.text.trim().replace(/\s+/g, " ") : "";
+  // Dan kerns ן/ל against a period but has no pair for the ellipsis glyph, so wall copy never uses "…".
+  const text =
+    typeof b.text === "string" ? b.text.trim().replace(/\s+/g, " ").replace(/…/g, "...") : "";
   if (
     text.length === 0 ||
     text.length > WALL_MAX_LEN ||

@@ -106,7 +106,7 @@ export function WallForm({ settings }: { settings: KibbutzTypeSettings }) {
           rows={2}
           maxLength={WALL_MAX_LEN}
           spellCheck={false}
-          placeholder="כתבו כאן…"
+          placeholder="כתבו כאן..."
           value={text}
           onChange={(e) => {
             setText(e.target.value);
@@ -124,7 +124,7 @@ export function WallForm({ settings }: { settings: KibbutzTypeSettings }) {
             className="kt-wall-submit"
             disabled={status === "sending" || text.trim().length === 0}
           >
-            {status === "sending" ? "שולח…" : "שלחו לקיר"}
+            {status === "sending" ? "שולח..." : "שלחו לקיר"}
           </button>
         </div>
 

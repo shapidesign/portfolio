@@ -25,7 +25,7 @@ export const FACES: Face[] = [
     heSource: "חידוש לגופן ״דן״ של דן תל ורדי",
     letters: HEBREW_LETTERS,
     digits: DIGITS,
-    punctuation: "!#'()*,-./:;?[]_{}·–—‘’“”•…׳״",
+    punctuation: "!#'()*,-./:;?[]_{}·–—‘’“”•׳״",
   },
   {
     id: "kelta",
