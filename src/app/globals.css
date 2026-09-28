@@ -126,7 +126,7 @@
    Used by /kibbutz-type/; declared here with the other local fonts, only downloaded when used. */
 @font-face {
   font-family: "Dan Revived";
-  src: url("/fonts/kibbutz-type/Dan3-try.woff") format("woff");
+  src: url("/fonts/kibbutz-type/Dan3-ver03.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: block;
