@@ -1,15 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   SITE_COPY_FIELDS,
   SITE_SLUG,
   type SiteCopy,
+  type SiteCopyFieldPair,
 } from "@/lib/site-copy";
 
-/** EN/HE editor for site-wide copy (home hero + main CTAs). */
-export function SiteCopyEditor({ siteCopy }: { siteCopy: SiteCopy }) {
+/** EN/HE editor for a slice of site-wide copy. */
+export function SiteCopyEditor({
+  siteCopy,
+  fields = SITE_COPY_FIELDS,
+  title = "Site content",
+}: {
+  siteCopy: SiteCopy;
+  fields?: SiteCopyFieldPair[];
+  title?: string;
+}) {
   const router = useRouter();
   const [text, setText] = useState<SiteCopy>(siteCopy);
   const [saving, setSaving] = useState(false);
@@ -23,10 +32,15 @@ export function SiteCopyEditor({ siteCopy }: { siteCopy: SiteCopy }) {
     setSaving(true);
     setMessage("");
     try {
+      const payload: SiteCopy = {};
+      for (const field of fields) {
+        payload[field.en] = text[field.en] ?? "";
+        payload[field.he] = text[field.he] ?? "";
+      }
       const res = await fetch("/api/admin/save/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug: SITE_SLUG, fields: text }),
+        body: JSON.stringify({ slug: SITE_SLUG, fields: payload }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => null);
@@ -45,7 +59,7 @@ export function SiteCopyEditor({ siteCopy }: { siteCopy: SiteCopy }) {
   return (
     <div className="admin-editor">
       <div className="admin-savebar">
-        <h2 className="admin-subtitle">Site content</h2>
+        <h2 className="admin-subtitle">{title}</h2>
         <div className="admin-savebar-actions">
           {message && <span className="admin-savemsg">{message}</span>}
           <button
@@ -64,9 +78,13 @@ export function SiteCopyEditor({ siteCopy }: { siteCopy: SiteCopy }) {
         <span className="admin-col-head">עברית</span>
       </div>
 
-      {SITE_COPY_FIELDS.map((f) => (
-        <div className="admin-row" key={f.en}>
-          <span className="admin-row-label">{f.label}</span>
+      {fields.map((f, i) => (
+        <Fragment key={f.en}>
+          {f.section && f.section !== fields[i - 1]?.section ? (
+            <h3 className="admin-section">{f.section}</h3>
+          ) : null}
+          <div className="admin-row">
+            <span className="admin-row-label">{f.label}</span>
           {f.multiline ? (
             <textarea
               className="admin-input admin-textarea"
@@ -95,7 +113,8 @@ export function SiteCopyEditor({ siteCopy }: { siteCopy: SiteCopy }) {
               onChange={(e) => set(f.he, e.target.value)}
             />
           )}
-        </div>
+          </div>
+        </Fragment>
       ))}
     </div>
   );

@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Project } from "@/types/project";
-import type { SiteCopy } from "@/lib/site-copy";
+import { ABOUT_COPY_FIELDS, type SiteCopy } from "@/lib/site-copy";
 import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
 import { ProjectEditor } from "./ProjectEditor";
 import { SiteCopyEditor } from "./SiteCopyEditor";
 import { KibbutzTypeEditor } from "./KibbutzTypeEditor";
 
 const SITE_CONTENT = "__site-content__";
+const ABOUT_CONTENT = "__about-content__";
 const KIBBUTZ_TYPE_CONTENT = "__kibbutz-type-content__";
 
 function slugify(title: string): string {
@@ -89,6 +90,12 @@ export function AdminDashboard({
             Site content
           </button>
           <button
+            className={`admin-nav-item${selectedSlug === ABOUT_CONTENT ? " is-active" : ""}`}
+            onClick={() => setSelectedSlug(ABOUT_CONTENT)}
+          >
+            About
+          </button>
+          <button
             className={`admin-nav-item${selectedSlug === KIBBUTZ_TYPE_CONTENT ? " is-active" : ""}`}
             onClick={() => setSelectedSlug(KIBBUTZ_TYPE_CONTENT)}
           >
@@ -115,7 +122,14 @@ export function AdminDashboard({
 
         <section className="admin-content">
           {selectedSlug === SITE_CONTENT ? (
-            <SiteCopyEditor siteCopy={siteCopy} />
+            <SiteCopyEditor key={SITE_CONTENT} siteCopy={siteCopy} />
+          ) : selectedSlug === ABOUT_CONTENT ? (
+            <SiteCopyEditor
+              key={ABOUT_CONTENT}
+              siteCopy={siteCopy}
+              fields={ABOUT_COPY_FIELDS}
+              title="About"
+            />
           ) : selectedSlug === KIBBUTZ_TYPE_CONTENT ? (
             <KibbutzTypeEditor initialSettings={kibbutzTypeSettings} />
           ) : selected ? (

@@ -46,22 +46,6 @@ const strings = {
     workGateLetMeSee: "Let me see",
     workGateConfident: "I\u2019m confident I want to collaborate",
 
-    // About page
-    aboutTitle: "About",
-    aboutLead:
-      "Good design starts with the right question, not the right aesthetic.",
-    aboutWhoHeading: "Who I am",
-    aboutWhoBody:
-      "I am Yehonatan Shapira, a visual communication designer based in Jaffa. I build identity systems and digital experiences that balance clarity with personality.",
-    aboutHowHeading: "How I work",
-    aboutHowBody:
-      "My process starts with the real constraint, not the visual trend. I map the problem, set hierarchy, and design the system so every choice supports the message.",
-    aboutNowHeading: "What I am doing now",
-    aboutNowBody:
-      "Right now I am focused on branding, product interfaces, and experimental typography projects that connect strategic thinking with strong visual execution.",
-    downloadCV: "Download CV",
-    contactMe: "Contact me",
-
     // Work page
     workTitle: "Work",
     workSubtitle: (count: number) =>
@@ -202,21 +186,6 @@ const strings = {
     workGateTitle: "עוד לא ראיתם את העבודות שלי",
     workGateLetMeSee: "אני רוצה לראות",
     workGateConfident: "אני בטוח שאני רוצה לעבוד איתך",
-
-    aboutTitle: "אודות",
-    aboutLead:
-      "עיצוב טוב מתחיל בשאלה הנכונה, לא באסתטיקה הנכונה.",
-    aboutWhoHeading: "מי אני",
-    aboutWhoBody:
-      "אני יהונתן שפירא, מעצב תקשורת חזותית מיפו. אני בונה זהויות מותג וחוויות דיגיטליות שמאזנות בין בהירות לבין אופי.",
-    aboutHowHeading: "איך אני עובד",
-    aboutHowBody:
-      "התהליך שלי מתחיל מהאילוץ האמיתי ולא מהטרנד החזותי. אני ממפה את הבעיה, בונה היררכיה, ומעצב מערכת שבה כל בחירה משרתת את המסר.",
-    aboutNowHeading: "מה אני עושה עכשיו",
-    aboutNowBody:
-      "כיום אני מתמקד בפרויקטים של מיתוג, ממשקים דיגיטליים וטיפוגרפיה ניסיונית, שמחברים חשיבה אסטרטגית עם ביצוע חזותי מדויק.",
-    downloadCV: "הורדת קורות חיים",
-    contactMe: "צור קשר",
 
     workTitle: "עבודות",
     workSubtitle: (count: number) =>

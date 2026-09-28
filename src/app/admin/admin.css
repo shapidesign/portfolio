@@ -134,6 +134,14 @@
   opacity: 0.6;
 }
 
+.admin-section {
+  margin: 1.5rem 0 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 .admin-row--single {
   grid-template-columns: 160px 1fr;
 }

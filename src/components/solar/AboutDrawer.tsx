@@ -1,50 +1,17 @@
 "use client";
 
 import { preventOrphan } from "@/i18n/typography";
+import { siteCopyText, type SiteCopy } from "@/lib/site-copy";
 
 type AboutDrawerProps = {
   open: boolean;
   isHebrew: boolean;
+  siteCopy?: SiteCopy;
   onClose: () => void;
 };
 
-const STRINGS = {
-  en: {
-    eyebrow: "Pilot Profile",
-    name: "Yehonatan Shapira",
-    descriptor: "Visual designer working at the intersection of brand, type, and digital craft.",
-    classLabel: "Class",
-    classValue: "Visual Designer",
-    originLabel: "Origin",
-    originValue: "Earth · Israel",
-    statusLabel: "Status",
-    statusValue: "Available for thoughtful briefs",
-    bio1:
-      "I build visual systems, stories, and identities with care. Curiosity keeps the work moving: asking better questions, testing early, and shaping clear solutions.",
-    bio2:
-      "The practice moves between branding, typography, packaging, interfaces, and creative code. The medium follows the brief, not the other way around.",
-    closeAria: "Close",
-  },
-  he: {
-    eyebrow: "פרופיל טייס",
-    name: "יהונתן שפירא",
-    descriptor: "מעצב חזותי שעובד בין מותג, טיפוגרפיה ומלאכה דיגיטלית.",
-    classLabel: "סוג",
-    classValue: "מעצב חזותי",
-    originLabel: "מוצא",
-    originValue: "כדור הארץ · ישראל",
-    statusLabel: "סטטוס",
-    statusValue: "פנוי לבריפים מעניינים",
-    bio1:
-      "אני בונה מערכות חזותיות, סיפורים וזהויות עם מחשבה. הסקרנות מזיזה את העבודה קדימה: לשאול טוב יותר, לבדוק מוקדם, ולדייק את הפתרון.",
-    bio2:
-      "העבודה נעה בין מיתוג, טיפוגרפיה, אריזה, ממשקים וקוד יצירתי. הבריף בוחר את המדיום, לא להפך.",
-    closeAria: "סגור",
-  },
-} as const;
-
-export function AboutDrawer({ open, isHebrew, onClose }: AboutDrawerProps) {
-  const t = isHebrew ? STRINGS.he : STRINGS.en;
+export function AboutDrawer({ open, isHebrew, siteCopy, onClose }: AboutDrawerProps) {
+  const text = (en: string, he: string) => siteCopyText(siteCopy, isHebrew, en, he);
 
   if (!open) return null;
 
@@ -57,35 +24,48 @@ export function AboutDrawer({ open, isHebrew, onClose }: AboutDrawerProps) {
       <header className="solar-drawer-header">
         <div className="solar-drawer-eyebrow">
           <span className="solar-drawer-dot" />
-          {preventOrphan(t.eyebrow)}
+          {preventOrphan(text("aboutPopupEyebrow", "heAboutPopupEyebrow"))}
         </div>
-        <button type="button" className="solar-drawer-close" onClick={onClose} aria-label={t.closeAria}>
+        <button
+          type="button"
+          className="solar-drawer-close"
+          onClick={onClose}
+          aria-label={isHebrew ? "סגור" : "Close"}
+        >
           <span aria-hidden>×</span>
         </button>
       </header>
 
       <div className="solar-drawer-body">
-        <h2 className="solar-drawer-title">{preventOrphan(t.name)}</h2>
-        <p className="solar-drawer-descriptor">{preventOrphan(t.descriptor)}</p>
+        <h2 className="solar-drawer-title">{preventOrphan(text("aboutPopupName", "heAboutPopupName"))}</h2>
+        <p className="solar-drawer-descriptor">
+          {preventOrphan(text("aboutPopupDescriptor", "heAboutPopupDescriptor"))}
+        </p>
 
         <div className="solar-drawer-grid">
           <section className="solar-drawer-card">
-            <span className="solar-drawer-card-label">{preventOrphan(t.classLabel)}</span>
-            <p>{preventOrphan(t.classValue)}</p>
+            <span className="solar-drawer-card-label">
+              {preventOrphan(text("aboutPopupClassLabel", "heAboutPopupClassLabel"))}
+            </span>
+            <p>{preventOrphan(text("aboutPopupClass", "heAboutPopupClass"))}</p>
           </section>
           <section className="solar-drawer-card">
-            <span className="solar-drawer-card-label">{preventOrphan(t.originLabel)}</span>
-            <p>{preventOrphan(t.originValue)}</p>
+            <span className="solar-drawer-card-label">
+              {preventOrphan(text("aboutPopupOriginLabel", "heAboutPopupOriginLabel"))}
+            </span>
+            <p>{preventOrphan(text("aboutPopupOrigin", "heAboutPopupOrigin"))}</p>
           </section>
           <section className="solar-drawer-card">
-            <span className="solar-drawer-card-label">{preventOrphan(t.statusLabel)}</span>
-            <p>{preventOrphan(t.statusValue)}</p>
+            <span className="solar-drawer-card-label">
+              {preventOrphan(text("aboutPopupStatusLabel", "heAboutPopupStatusLabel"))}
+            </span>
+            <p>{preventOrphan(text("aboutPopupStatus", "heAboutPopupStatus"))}</p>
           </section>
         </div>
 
         <div className="solar-drawer-prose">
-          <p>{preventOrphan(t.bio1)}</p>
-          <p>{preventOrphan(t.bio2)}</p>
+          <p>{preventOrphan(text("aboutPopupBio1", "heAboutPopupBio1"))}</p>
+          <p>{preventOrphan(text("aboutPopupBio2", "heAboutPopupBio2"))}</p>
         </div>
       </div>
     </aside>

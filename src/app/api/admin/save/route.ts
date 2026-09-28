@@ -56,6 +56,7 @@ export async function POST(req: Request) {
   revalidatePath("/");
   revalidatePath("/work");
   revalidatePath(`/work/${slug}`);
+  if (isSiteCopy) revalidatePath("/about");
   if (isKibbutzType) revalidatePath("/kibbutz-type");
 
   return NextResponse.json({ ok: true });

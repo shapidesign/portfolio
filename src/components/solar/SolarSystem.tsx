@@ -504,7 +504,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
           onSelectProject={openProject}
         />
 
-        <AboutDrawer open={aboutOpen} isHebrew={isHebrew} onClose={closeAbout} />
+        <AboutDrawer open={aboutOpen} isHebrew={isHebrew} siteCopy={siteCopy} onClose={closeAbout} />
         <ContactDrawer open={contactOpen} isHebrew={isHebrew} onClose={closeContact} />
         <StoreNoticeModal
           open={storeNoticeOpen}
