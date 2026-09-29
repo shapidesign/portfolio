@@ -8,7 +8,6 @@ import { Fade } from "./Fade";
 import { FacesShowcase } from "./FacesShowcase";
 import { GlyphGrid } from "./GlyphGrid";
 import { Header } from "./Header";
-import { SpecimenText } from "./SpecimenText";
 import { Tester } from "./Tester";
 import { WallForm } from "./WallForm";
 import { getFace, type FaceId } from "./faces";
@@ -128,8 +127,8 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
             </Fade>
           </main>
           <footer className="kt-wrap kt-footer">
-            <SpecimenText>{settings.footerCredit}</SpecimenText>
-            <SpecimenText>{settings.footerTagline}</SpecimenText>
+            <span>{settings.footerCredit}</span>
+            <span>{settings.footerTagline}</span>
           </footer>
         </>
       )}

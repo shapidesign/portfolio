@@ -6,26 +6,24 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
   return (
     <section className="kt-section kt-section--about kt-wrap" aria-labelledby="kt-about-title">
       <p className="kt-label" id="kt-about-title">
-        <SpecimenText>{settings.aboutLabel}</SpecimenText>
+        {settings.aboutLabel}
       </p>
-      <SpecimenText as="p" className="kt-about-lead" multiline>
-        {settings.aboutLead}
-      </SpecimenText>
+      <p className="kt-about-lead">{settings.aboutLead}</p>
       <div className="kt-about">
         <article className="kt-about-face kt-about-face--dan">
           <header className="kt-about-heading">
-            <SpecimenText as="h2" className="kt-face-dan">
+            <SpecimenText as="h2" className="kt-face-dan" editable>
               {settings.danHeading}
             </SpecimenText>
             <p className="kt-label">
-              <SpecimenText>{settings.danSubtitle}</SpecimenText>
+              <SpecimenText editable>{settings.danSubtitle}</SpecimenText>
             </p>
           </header>
           <div className="kt-about-copy">
-            <SpecimenText as="p" multiline>
+            <SpecimenText as="p" multiline editable>
               {settings.danParagraph1}
             </SpecimenText>
-            <SpecimenText as="p" multiline>
+            <SpecimenText as="p" multiline editable>
               {settings.danParagraph2}
             </SpecimenText>
           </div>
@@ -38,9 +36,7 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
                 height={1024}
                 sizes="(min-width: 900px) 25rem, (min-width: 600px) 19rem, 15rem"
               />
-              <figcaption>
-                <SpecimenText multiline>{settings.danCatalogCaption}</SpecimenText>
-              </figcaption>
+              <figcaption>{settings.danCatalogCaption}</figcaption>
             </figure>
             <figure className="kt-archive-textile">
               <Image
@@ -50,27 +46,25 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
                 height={768}
                 sizes="(min-width: 1400px) 50rem, (min-width: 900px) 55vw, calc(100vw - 5rem)"
               />
-              <figcaption>
-                <SpecimenText multiline>{settings.danTextileCaption}</SpecimenText>
-              </figcaption>
+              <figcaption>{settings.danTextileCaption}</figcaption>
             </figure>
           </div>
         </article>
 
         <article className="kt-about-face kt-about-face--kelta">
           <header className="kt-about-heading">
-            <SpecimenText as="h2" className="kt-face-kelta">
+            <SpecimenText as="h2" className="kt-face-kelta" editable>
               {settings.keltaHeading}
             </SpecimenText>
             <p className="kt-label">
-              <SpecimenText>{settings.keltaSubtitle}</SpecimenText>
+              <SpecimenText editable>{settings.keltaSubtitle}</SpecimenText>
             </p>
           </header>
           <div className="kt-about-copy">
-            <SpecimenText as="p" multiline>
+            <SpecimenText as="p" multiline editable>
               {settings.keltaParagraph1}
             </SpecimenText>
-            <SpecimenText as="p" multiline>
+            <SpecimenText as="p" multiline editable>
               {settings.keltaParagraph2}
             </SpecimenText>
           </div>
@@ -82,26 +76,24 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
               height={1024}
               sizes="(min-width: 900px) 34rem, (min-width: 600px) 28rem, calc(100vw - 5rem)"
             />
-            <figcaption>
-              <SpecimenText multiline>{settings.keltaPosterCaption}</SpecimenText>
-            </figcaption>
+            <figcaption>{settings.keltaPosterCaption}</figcaption>
           </figure>
         </article>
 
         <article className="kt-about-face kt-about-face--babayit">
           <header className="kt-about-heading">
-            <SpecimenText as="h2" className="kt-face-babayit">
+            <SpecimenText as="h2" className="kt-face-babayit" editable>
               {settings.babayitHeading}
             </SpecimenText>
             <p className="kt-label">
-              <SpecimenText>{settings.babayitSubtitle}</SpecimenText>
+              <SpecimenText editable>{settings.babayitSubtitle}</SpecimenText>
             </p>
           </header>
           <div className="kt-about-copy">
-            <SpecimenText as="p" multiline>
+            <SpecimenText as="p" multiline editable>
               {settings.babayitParagraph1}
             </SpecimenText>
-            <SpecimenText as="p" multiline>
+            <SpecimenText as="p" multiline editable>
               {settings.babayitParagraph2}
             </SpecimenText>
           </div>
@@ -113,9 +105,7 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
               height={343}
               sizes="(min-width: 900px) 34rem, (min-width: 600px) 28rem, calc(100vw - 5rem)"
             />
-            <figcaption>
-              <SpecimenText multiline>{settings.babayitMastheadCaption}</SpecimenText>
-            </figcaption>
+            <figcaption>{settings.babayitMastheadCaption}</figcaption>
           </figure>
         </article>
       </div>
