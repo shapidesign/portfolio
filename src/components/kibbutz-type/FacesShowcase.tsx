@@ -9,9 +9,8 @@ type FacesShowcaseProps = Readonly<{
   settings: KibbutzTypeSettings;
 }>;
 
-/* Size waterfall: display → text. Dan/Kelta are single-weight; Babayit shows wdth. */
+/* Size waterfall: display → text. */
 const SIZES = ["clamp(3rem, 8vw, 6.5rem)", "clamp(2rem, 4.5vw, 3.5rem)", "1.75rem", "1.125rem"];
-const BABAYIT_WIDTHS = [100, 350, 650, 1000] as const;
 
 export function FacesShowcase({ settings }: FacesShowcaseProps) {
   const samples = [
@@ -34,33 +33,18 @@ export function FacesShowcase({ settings }: FacesShowcaseProps) {
               </h2>
               <SpecimenText>{faceEnName(f.id, settings)}</SpecimenText>
             </div>
-            {f.id === "babayit" ? (
-              <div className={`kt-waterfall ${f.className}`} lang="he">
-                {BABAYIT_WIDTHS.map((wdth, index) => (
-                  <div key={wdth}>
-                    <p className="kt-waterfall-meta">wdth {wdth}</p>
-                    <p
-                      style={
-                        {
-                          fontSize: SIZES[Math.min(index, 1)],
-                          "--kt-wdth": String(wdth),
-                        } as CSSProperties
-                      }
-                    >
-                      <SpecimenText>{samples[index]}</SpecimenText>
-                    </p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className={`kt-waterfall ${f.className}`} lang="he">
-                {SIZES.map((size, index) => (
-                  <p key={size} style={{ fontSize: size }}>
-                    <SpecimenText>{samples[index]}</SpecimenText>
-                  </p>
-                ))}
-              </div>
-            )}
+            {/* Babayit pinned to its regular width; the wdth axis is demoed by the page slider */}
+            <div
+              className={`kt-waterfall ${f.className}`}
+              lang="he"
+              style={f.id === "babayit" ? ({ "--kt-wdth": "500" } as CSSProperties) : undefined}
+            >
+              {SIZES.map((size, index) => (
+                <p key={size} style={{ fontSize: size }}>
+                  <SpecimenText>{samples[index]}</SpecimenText>
+                </p>
+              ))}
+            </div>
           </article>
         ))}
       </div>

@@ -508,14 +508,6 @@ body.kibbutz-type .site-shell {
   background: var(--kt-orange);
 }
 
-.kt-waterfall-meta {
-  margin: 0 0 0.35rem;
-  font-family: var(--font-roboto-mono), monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  color: var(--kt-muted);
-}
-
 .kt-face-heading {
   display: flex;
   align-items: center;
