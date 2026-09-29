@@ -9,7 +9,6 @@ import {
   type WallColor,
 } from "@/lib/kibbutz-wall";
 import { FACES, faceHeName, getFace, type FaceId } from "./faces";
-import { SpecimenText } from "./SpecimenText";
 
 type Status = "idle" | "sending" | "sent" | "blocked" | "invalid" | "failed";
 
@@ -56,9 +55,9 @@ export function WallForm({ settings }: { settings: KibbutzTypeSettings }) {
 
   return (
     <section className="kt-section kt-section--wall kt-wrap" aria-labelledby={`${id}-title`}>
-      <SpecimenText as="h2" id={`${id}-title`} className="kt-wall-title" editable>
+      <h2 id={`${id}-title`} className="kt-wall-title">
         הוסיפו מילים משלכם לקיר
-      </SpecimenText>
+      </h2>
       <p className="kt-wall-hint">בחרו גופן וצבע, כתבו, ושלחו. המילים יופיעו על הקיר בהרצאה.</p>
 
       <form className="kt-wall-form" onSubmit={submit}>

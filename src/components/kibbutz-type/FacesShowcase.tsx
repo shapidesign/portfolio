@@ -31,7 +31,7 @@ export function FacesShowcase({ settings }: FacesShowcaseProps) {
               <h2 className="kt-face-heading">
                 <SpecimenText editable>{faceHeName(f.id, settings)}</SpecimenText>
               </h2>
-              <SpecimenText editable>{faceEnName(f.id, settings)}</SpecimenText>
+              <span>{faceEnName(f.id, settings)}</span>
             </div>
             {/* Babayit pinned to its regular width; the wdth axis is demoed by the page slider */}
             <div

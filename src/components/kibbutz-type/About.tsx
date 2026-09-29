@@ -15,9 +15,7 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
             <SpecimenText as="h2" className="kt-face-dan" editable>
               {settings.danHeading}
             </SpecimenText>
-            <p className="kt-label">
-              <SpecimenText editable>{settings.danSubtitle}</SpecimenText>
-            </p>
+            <p className="kt-label">{settings.danSubtitle}</p>
           </header>
           <div className="kt-about-copy">
             <SpecimenText as="p" multiline editable>
@@ -56,9 +54,7 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
             <SpecimenText as="h2" className="kt-face-kelta" editable>
               {settings.keltaHeading}
             </SpecimenText>
-            <p className="kt-label">
-              <SpecimenText editable>{settings.keltaSubtitle}</SpecimenText>
-            </p>
+            <p className="kt-label">{settings.keltaSubtitle}</p>
           </header>
           <div className="kt-about-copy">
             <SpecimenText as="p" multiline editable>
@@ -85,9 +81,7 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
             <SpecimenText as="h2" className="kt-face-babayit" editable>
               {settings.babayitHeading}
             </SpecimenText>
-            <p className="kt-label">
-              <SpecimenText editable>{settings.babayitSubtitle}</SpecimenText>
-            </p>
+            <p className="kt-label">{settings.babayitSubtitle}</p>
           </header>
           <div className="kt-about-copy">
             <SpecimenText as="p" multiline editable>
