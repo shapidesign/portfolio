@@ -15,17 +15,15 @@ export function Header({ face, settings }: HeaderProps) {
         <Link href="/" prefetch={false}>
           {settings.backLabel}
         </Link>
-        <SpecimenText>{settings.navBadge}</SpecimenText>
+        <span>{settings.navBadge}</span>
       </nav>
       <div className="kt-hero">
         <h1 className={face.className}>
-          <SpecimenText>{settings.heroTitleLine1}</SpecimenText>
+          <SpecimenText editable>{settings.heroTitleLine1}</SpecimenText>
           <br />
-          <SpecimenText>{settings.heroTitleLine2}</SpecimenText>
+          <SpecimenText editable>{settings.heroTitleLine2}</SpecimenText>
         </h1>
-        <SpecimenText as="p" multiline>
-          {settings.heroDescription}
-        </SpecimenText>
+        <p>{settings.heroDescription}</p>
       </div>
     </header>
   );

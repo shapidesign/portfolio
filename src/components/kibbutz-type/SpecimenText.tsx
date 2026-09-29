@@ -7,6 +7,8 @@ type SpecimenTextProps = Readonly<{
   id?: string;
   className?: string;
   multiline?: boolean;
+  /** Headers and colored-box specimen copy only — not explanatory UI. */
+  editable?: boolean;
   children: ReactNode;
 }>;
 
@@ -15,8 +17,17 @@ function SpecimenTextBase({
   id,
   className,
   multiline = false,
+  editable = false,
   children,
 }: SpecimenTextProps) {
+  if (!editable) {
+    return (
+      <Tag id={id} className={className}>
+        {children}
+      </Tag>
+    );
+  }
+
   return (
     <Tag
       id={id}

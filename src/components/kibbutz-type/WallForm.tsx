@@ -9,7 +9,6 @@ import {
   type WallColor,
 } from "@/lib/kibbutz-wall";
 import { FACES, faceHeName, getFace, type FaceId } from "./faces";
-import { SpecimenText } from "./SpecimenText";
 
 type Status = "idle" | "sending" | "sent" | "blocked" | "invalid" | "failed";
 
@@ -56,12 +55,10 @@ export function WallForm({ settings }: { settings: KibbutzTypeSettings }) {
 
   return (
     <section className="kt-section kt-section--wall kt-wrap" aria-labelledby={`${id}-title`}>
-      <SpecimenText as="h2" id={`${id}-title`} className="kt-wall-title">
+      <h2 id={`${id}-title`} className="kt-wall-title">
         הוסיפו מילים משלכם לקיר
-      </SpecimenText>
-      <SpecimenText as="p" className="kt-wall-hint" multiline>
-        בחרו גופן וצבע, כתבו, ושלחו. המילים יופיעו על הקיר בהרצאה.
-      </SpecimenText>
+      </h2>
+      <p className="kt-wall-hint">בחרו גופן וצבע, כתבו, ושלחו. המילים יופיעו על הקיר בהרצאה.</p>
 
       <form className="kt-wall-form" onSubmit={submit}>
         <div className="kt-toggle" role="group" aria-label="בחירת גופן">
@@ -78,9 +75,7 @@ export function WallForm({ settings }: { settings: KibbutzTypeSettings }) {
         </div>
 
         <fieldset className="kt-swatches">
-          <legend className="kt-label">
-            <SpecimenText>צבע</SpecimenText>
-          </legend>
+          <legend className="kt-label">צבע</legend>
           {WALL_COLORS.map((c) => (
             <label key={c.key} className="kt-swatch" style={{ "--kt-swatch": `var(--kt-${c.key})` } as React.CSSProperties}>
               <input

@@ -189,6 +189,11 @@ body.kibbutz-type .site-shell {
   font-synthesis: none;
 }
 
+/* Keep VF width reshaping inside the tester preview — cheaper while dragging. */
+.kt-section--tester .kt-textarea.kt-face-babayit {
+  contain: layout style;
+}
+
 /* Dan's shipped OTF exposes seven alternates through ss01. Kelta's current
    export has no GSUB table, so no feature is synthesized for it. */
 .kt[data-alternates="off"] .kt-face-dan,

@@ -1,20 +1,19 @@
 "use client";
 
-import { useId } from "react";
+import { useEffect, useId, useRef, type RefObject } from "react";
 import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
 import { FACES, faceHeName, type Face, type FaceId } from "./faces";
-import { SpecimenText } from "./SpecimenText";
+
+const DEFAULT_WIDTH = 500;
 
 type TesterProps = Readonly<{
   text: string;
   fontSize: number;
-  width: number;
   face: Face;
   settings: KibbutzTypeSettings;
   alternatesEnabled: boolean;
   onText: (value: string) => void;
   onFontSize: (value: number) => void;
-  onWidth: (value: number) => void;
   onFace: (id: FaceId) => void;
   onAlternates: (enabled: boolean) => void;
 }>;
@@ -34,9 +33,7 @@ function Range({ label, value, display, min, max, step, onChange }: RangeProps) 
   return (
     <div className="kt-range">
       <div className="kt-range-head">
-        <label htmlFor={id}>
-          <SpecimenText>{label}</SpecimenText>
-        </label>
+        <label htmlFor={id}>{label}</label>
         <output htmlFor={id}>{display}</output>
       </div>
       <input
@@ -52,27 +49,81 @@ function Range({ label, value, display, min, max, step, onChange }: RangeProps) 
   );
 }
 
+/** Uncontrolled + rAF: drag only paints --kt-wdth, no React re-renders mid-slide. */
+function WidthRange({
+  label,
+  min,
+  max,
+  step,
+  defaultValue,
+  targetRef,
+}: Readonly<{
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+  defaultValue: number;
+  targetRef: RefObject<HTMLElement | null>;
+}>) {
+  const id = useId();
+  const outputRef = useRef<HTMLOutputElement>(null);
+  const rafRef = useRef(0);
+
+  useEffect(() => {
+    targetRef.current?.style.setProperty("--kt-wdth", String(defaultValue));
+    if (outputRef.current) outputRef.current.textContent = String(defaultValue);
+  }, [defaultValue, targetRef]);
+
+  return (
+    <div className="kt-range">
+      <div className="kt-range-head">
+        <label htmlFor={id}>{label}</label>
+        <output ref={outputRef} htmlFor={id}>
+          {defaultValue}
+        </output>
+      </div>
+      <input
+        id={id}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        defaultValue={defaultValue}
+        onInput={(e) => {
+          const next = Number(e.currentTarget.value);
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = requestAnimationFrame(() => {
+            if (outputRef.current) outputRef.current.textContent = String(next);
+            targetRef.current?.style.setProperty("--kt-wdth", String(next));
+          });
+        }}
+      />
+    </div>
+  );
+}
+
 export function Tester({
   text,
   fontSize,
-  width,
   face,
   settings,
   alternatesEnabled,
   onText,
   onFontSize,
-  onWidth,
   onFace,
   onAlternates,
 }: TesterProps) {
   const textareaId = useId();
+  const sectionRef = useRef<HTMLElement>(null);
+
   return (
     <section
+      ref={sectionRef}
       className={`kt-section kt-section--tester kt-face-ui--${face.id} kt-wrap`}
       aria-labelledby={`${textareaId}-title`}
     >
       <p className="kt-label" id={`${textareaId}-title`}>
-        <SpecimenText>{settings.testerLabel}</SpecimenText>
+        {settings.testerLabel}
       </p>
 
       <div className="kt-toggle" role="group" aria-label="בחירת גופן">
@@ -114,14 +165,14 @@ export function Tester({
           onChange={onFontSize}
         />
         {face.id === "babayit" ? (
-          <Range
+          <WidthRange
+            key="babayit-width"
             label={settings.widthLabel}
-            value={width}
-            display={`${width}`}
             min={100}
             max={1000}
-            step={1}
-            onChange={onWidth}
+            step={10}
+            defaultValue={DEFAULT_WIDTH}
+            targetRef={sectionRef}
           />
         ) : null}
         {face.id === "dan" ? (

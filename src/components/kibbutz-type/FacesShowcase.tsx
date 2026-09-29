@@ -22,16 +22,16 @@ export function FacesShowcase({ settings }: FacesShowcaseProps) {
   return (
     <section className="kt-section kt-section--faces kt-wrap" aria-labelledby="kt-faces-title">
       <p className="kt-label" id="kt-faces-title">
-        <SpecimenText>{settings.facesLabel}</SpecimenText>
+        {settings.facesLabel}
       </p>
       <div className="kt-faces">
         {FACES.map((f) => (
           <article key={f.id} className={`kt-face-panel--${f.id}`}>
             <div className="kt-face-head">
               <h2 className="kt-face-heading">
-                <SpecimenText>{faceHeName(f.id, settings)}</SpecimenText>
+                <SpecimenText editable>{faceHeName(f.id, settings)}</SpecimenText>
               </h2>
-              <SpecimenText>{faceEnName(f.id, settings)}</SpecimenText>
+              <span>{faceEnName(f.id, settings)}</span>
             </div>
             {/* Babayit pinned to its regular width; the wdth axis is demoed by the page slider */}
             <div
@@ -41,7 +41,7 @@ export function FacesShowcase({ settings }: FacesShowcaseProps) {
             >
               {SIZES.map((size, index) => (
                 <p key={size} style={{ fontSize: size }}>
-                  <SpecimenText>{samples[index]}</SpecimenText>
+                  <SpecimenText editable>{samples[index]}</SpecimenText>
                 </p>
               ))}
             </div>
@@ -49,10 +49,8 @@ export function FacesShowcase({ settings }: FacesShowcaseProps) {
         ))}
       </div>
       <p className="kt-source">
-        <SpecimenText>{settings.sourcePrefix}</SpecimenText>{" "}
-        <a href={settings.sourceUrl}>
-          {settings.sourceLabel}
-        </a>
+        {settings.sourcePrefix}{" "}
+        <a href={settings.sourceUrl}>{settings.sourceLabel}</a>
       </p>
     </section>
   );
