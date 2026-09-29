@@ -1,5 +1,5 @@
 /* Kibbutz Type specimen — scoped styles. Loaded only by src/app/kibbutz-type/page.tsx.
-   Fonts are declared in globals.css ("Dan Revived", "Kelta 01"). */
+   Fonts are declared in globals.css ("Dan Revived", "Kelta 01", "Babayit"). */
 
 /* Hide global chrome; the page ships its own header. Same pattern as body.solar-home. */
 body.kibbutz-type .site-header,
@@ -27,6 +27,8 @@ body.kibbutz-type .site-shell {
 
   --kt-dan: "Dan Revived", "narkiss-yair-local", sans-serif;
   --kt-kelta: "Kelta 01", "narkiss-yair-local", sans-serif;
+  --kt-babayit: "Babayit", "narkiss-yair-local", sans-serif;
+  --kt-wdth: 500;
 
   min-height: 100vh;
   background: var(--kt-bg);
@@ -159,6 +161,10 @@ body.kibbutz-type .site-shell {
   font-family: var(--kt-kelta);
 }
 
+.kt-face-babayit {
+  font-family: var(--kt-babayit);
+}
+
 /* globals.css deliberately pins Hebrew prose and controls to Narkiss with
    !important. Specimen elements are the one exception: their descendants must
    render in the face being demonstrated. */
@@ -173,6 +179,13 @@ body.kibbutz-type .site-shell {
 .kt .kt-face-kelta :where(p, span, input, textarea) {
   font-family: var(--kt-kelta) !important;
   font-variation-settings: normal !important;
+  font-synthesis: none;
+}
+
+.kt .kt-face-babayit,
+.kt .kt-face-babayit :where(p, span, input, textarea) {
+  font-family: var(--kt-babayit) !important;
+  font-variation-settings: "wdth" var(--kt-wdth, 500) !important;
   font-synthesis: none;
 }
 
@@ -279,6 +292,11 @@ body.kibbutz-type .site-shell {
 
 .kt-face-ui--kelta {
   --kt-face-color: var(--kt-green);
+  --kt-focus: var(--kt-cream);
+}
+
+.kt-face-ui--babayit {
+  --kt-face-color: var(--kt-orange);
   --kt-focus: var(--kt-cream);
 }
 
@@ -444,8 +462,8 @@ body.kibbutz-type .site-shell {
 
 @media (min-width: 900px) {
   .kt-faces {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4rem;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 2rem;
   }
 }
 
@@ -464,21 +482,38 @@ body.kibbutz-type .site-shell {
   padding: clamp(1.5rem, 4vw, 3rem);
 }
 
-.kt-faces article:first-child {
+.kt-face-panel--dan,
+.kt-face-panel--kelta,
+.kt-face-panel--babayit {
   --kt-ink: var(--kt-cream);
   --kt-muted: rgba(243, 239, 227, 0.7);
   --kt-line: rgba(243, 239, 227, 0.25);
-  background: var(--kt-navy);
+  --kt-focus: var(--kt-cream);
   color: var(--kt-cream);
 }
 
-.kt-faces article:last-child {
-  --kt-ink: var(--kt-cream);
+.kt-face-panel--dan {
+  background: var(--kt-navy);
+}
+
+.kt-face-panel--kelta {
   --kt-muted: rgba(243, 239, 227, 0.76);
   --kt-line: rgba(243, 239, 227, 0.3);
-  --kt-focus: var(--kt-cream);
   background: var(--kt-green);
-  color: var(--kt-cream);
+}
+
+.kt-face-panel--babayit {
+  --kt-muted: rgba(243, 239, 227, 0.8);
+  --kt-line: rgba(243, 239, 227, 0.35);
+  background: var(--kt-orange);
+}
+
+.kt-waterfall-meta {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-roboto-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--kt-muted);
 }
 
 .kt-face-heading {
@@ -669,6 +704,13 @@ body.kibbutz-type .site-shell {
   --kt-ink: var(--kt-cream);
   --kt-muted: rgba(243, 239, 227, 0.76);
   background: var(--kt-green);
+  color: var(--kt-cream);
+}
+
+.kt-about-face--babayit {
+  --kt-ink: var(--kt-cream);
+  --kt-muted: rgba(243, 239, 227, 0.8);
+  background: var(--kt-orange);
   color: var(--kt-cream);
 }
 

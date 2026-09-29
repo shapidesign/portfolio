@@ -87,6 +87,37 @@ export function About({ settings }: { settings: KibbutzTypeSettings }) {
             </figcaption>
           </figure>
         </article>
+
+        <article className="kt-about-face kt-about-face--babayit">
+          <header className="kt-about-heading">
+            <SpecimenText as="h2" className="kt-face-babayit">
+              {settings.babayitHeading}
+            </SpecimenText>
+            <p className="kt-label">
+              <SpecimenText>{settings.babayitSubtitle}</SpecimenText>
+            </p>
+          </header>
+          <div className="kt-about-copy">
+            <SpecimenText as="p" multiline>
+              {settings.babayitParagraph1}
+            </SpecimenText>
+            <SpecimenText as="p" multiline>
+              {settings.babayitParagraph2}
+            </SpecimenText>
+          </div>
+          <figure className="kt-story-image kt-story-image--masthead">
+            <Image
+              src={settings.babayitMastheadSrc}
+              alt="כותרת עלון בבית עם לוגו גאומטרי ומספר גיליון"
+              width={457}
+              height={343}
+              sizes="(min-width: 900px) 34rem, (min-width: 600px) 28rem, calc(100vw - 5rem)"
+            />
+            <figcaption>
+              <SpecimenText multiline>{settings.babayitMastheadCaption}</SpecimenText>
+            </figcaption>
+          </figure>
+        </article>
       </div>
     </section>
   );

@@ -2,17 +2,19 @@
 
 import { useId } from "react";
 import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
-import { FACES, type Face, type FaceId } from "./faces";
+import { FACES, faceHeName, type Face, type FaceId } from "./faces";
 import { SpecimenText } from "./SpecimenText";
 
 type TesterProps = Readonly<{
   text: string;
   fontSize: number;
+  width: number;
   face: Face;
   settings: KibbutzTypeSettings;
   alternatesEnabled: boolean;
   onText: (value: string) => void;
   onFontSize: (value: number) => void;
+  onWidth: (value: number) => void;
   onFace: (id: FaceId) => void;
   onAlternates: (enabled: boolean) => void;
 }>;
@@ -53,11 +55,13 @@ function Range({ label, value, display, min, max, step, onChange }: RangeProps) 
 export function Tester({
   text,
   fontSize,
+  width,
   face,
   settings,
   alternatesEnabled,
   onText,
   onFontSize,
+  onWidth,
   onFace,
   onAlternates,
 }: TesterProps) {
@@ -79,7 +83,7 @@ export function Tester({
             aria-pressed={f.id === face.id}
             onClick={() => onFace(f.id)}
           >
-            {f.id === "dan" ? settings.danHeName : settings.keltaHeName}
+            {faceHeName(f.id, settings)}
           </button>
         ))}
       </div>
@@ -109,6 +113,17 @@ export function Tester({
           step={1}
           onChange={onFontSize}
         />
+        {face.id === "babayit" ? (
+          <Range
+            label={settings.widthLabel}
+            value={width}
+            display={`${width}`}
+            min={100}
+            max={1000}
+            step={1}
+            onChange={onWidth}
+          />
+        ) : null}
         {face.id === "dan" ? (
           <button
             type="button"

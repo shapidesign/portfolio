@@ -54,6 +54,7 @@ assert(ok.ok && ok.entry.text === "שמונים שנה", "trims + collapses whit
 assert(!validateWallInput({ text: "hello", face: "dan", color: "navy" }).ok, "rejects latin");
 assert(!validateWallInput({ text: "א".repeat(41), face: "dan", color: "navy" }).ok, "rejects >40");
 assert(!validateWallInput({ text: "שלום", face: "x", color: "navy" }).ok, "rejects unknown face");
+assert(validateWallInput({ text: "בבית", face: "babayit", color: "orange" }).ok, "accepts babayit face");
 assert(!validateWallInput({ text: "שלום", face: "dan", color: "#fff" }).ok, "rejects unknown color");
 assert(!validateWallInput({ text: "", face: "dan", color: "navy" }).ok, "rejects empty");
 const bl = validateWallInput({ text: "בן זונה", face: "dan", color: "navy" });
