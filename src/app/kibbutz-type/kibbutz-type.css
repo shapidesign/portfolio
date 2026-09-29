@@ -28,7 +28,7 @@ body.kibbutz-type .site-shell {
   --kt-dan: "Dan Revived", "narkiss-yair-local", sans-serif;
   --kt-kelta: "Kelta 01", "narkiss-yair-local", sans-serif;
   --kt-babayit: "Babayit", "narkiss-yair-local", sans-serif;
-  --kt-wdth: 100;
+  --kt-wdth: 500;
 
   min-height: 100vh;
   background: var(--kt-bg);
@@ -185,7 +185,7 @@ body.kibbutz-type .site-shell {
 .kt .kt-face-babayit,
 .kt .kt-face-babayit :where(p, span, input, textarea) {
   font-family: var(--kt-babayit) !important;
-  font-variation-settings: "wdth" var(--kt-wdth, 100) !important;
+  font-variation-settings: "wdth" var(--kt-wdth, 500) !important;
   font-synthesis: none;
 }
 

@@ -21,7 +21,7 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
   // ponytail: SSR + first paint share one size so hydration matches; phones
   // shrink after mount.
   const [fontSize, setFontSize] = useState(settings.testerDefaultFontSize);
-  const [width, setWidth] = useState(100);
+  const [width, setWidth] = useState(500);
   const [faceId, setFaceId] = useState<FaceId>("dan");
   const [alternatesEnabled, setAlternatesEnabled] = useState(false);
   // Start open so SSR/client HTML match; desktop nag overlays after mount.
