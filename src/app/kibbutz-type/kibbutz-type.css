@@ -189,13 +189,6 @@ body.kibbutz-type .site-shell {
   font-synthesis: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .kt .kt-face-babayit,
-  .kt .kt-face-babayit :where(p, span, input, textarea) {
-    transition: font-variation-settings 200ms ease-out;
-  }
-}
-
 /* Dan's shipped OTF exposes seven alternates through ss01. Kelta's current
    export has no GSUB table, so no feature is synthesized for it. */
 .kt[data-alternates="off"] .kt-face-dan,

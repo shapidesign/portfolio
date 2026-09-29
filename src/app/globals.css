@@ -147,7 +147,8 @@
        url("/fonts/kibbutz-type/BabayitVF.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: block;
+  /* swap: block was freezing first paint while the VF decoded in some browsers */
+  font-display: swap;
 }
 
 *,
