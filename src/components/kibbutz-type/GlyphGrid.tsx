@@ -1,5 +1,5 @@
 import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
-import { FACES, type Face, type FaceId } from "./faces";
+import { FACES, faceHeName, type Face, type FaceId } from "./faces";
 import { SpecimenText } from "./SpecimenText";
 
 type GlyphGridProps = Readonly<{
@@ -36,9 +36,7 @@ export function GlyphGrid({ face, settings, onFace }: GlyphGridProps) {
       <p className="kt-label" id="kt-glyphs-title">
         <SpecimenText>{settings.glyphsLabel}</SpecimenText>
         {" · "}
-        <SpecimenText key={face.id}>
-          {face.id === "dan" ? settings.danHeName : settings.keltaHeName}
-        </SpecimenText>
+        <SpecimenText key={face.id}>{faceHeName(face.id, settings)}</SpecimenText>
       </p>
       <div className="kt-toggle" role="group" aria-label="בחירת גופן למערכת הסימנים">
         {FACES.map((item) => (
@@ -48,7 +46,7 @@ export function GlyphGrid({ face, settings, onFace }: GlyphGridProps) {
             aria-pressed={item.id === face.id}
             onClick={() => onFace(item.id)}
           >
-            {item.id === "dan" ? settings.danHeName : settings.keltaHeName}
+            {faceHeName(item.id, settings)}
           </button>
         ))}
       </div>

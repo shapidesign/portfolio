@@ -26,7 +26,7 @@ export type WallEntry = {
 export type WallInput = Pick<WallEntry, "text" | "face" | "color">;
 
 // ponytail: type-only import above keeps this file runnable by node --experimental-strip-types.
-const FACE_IDS = new Set<string>(["dan", "kelta"] satisfies FaceId[]);
+const FACE_IDS = new Set<string>(["dan", "kelta", "babayit"] satisfies FaceId[]);
 const COLOR_KEYS = new Set<string>(WALL_COLORS.map((c) => c.key));
 
 /** Hebrew letters, digits, whitespace, and punctuation both faces cover. */

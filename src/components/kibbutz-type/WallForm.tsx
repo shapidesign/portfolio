@@ -8,7 +8,7 @@ import {
   validateWallInput,
   type WallColor,
 } from "@/lib/kibbutz-wall";
-import { FACES, getFace, type FaceId } from "./faces";
+import { FACES, faceHeName, getFace, type FaceId } from "./faces";
 import { SpecimenText } from "./SpecimenText";
 
 type Status = "idle" | "sending" | "sent" | "blocked" | "invalid" | "failed";
@@ -72,7 +72,7 @@ export function WallForm({ settings }: { settings: KibbutzTypeSettings }) {
               aria-pressed={f.id === faceId}
               onClick={() => setFaceId(f.id)}
             >
-              {f.id === "dan" ? settings.danHeName : settings.keltaHeName}
+              {faceHeName(f.id, settings)}
             </button>
           ))}
         </div>

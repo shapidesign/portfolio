@@ -211,19 +211,19 @@ const LOCAL_PROJECTS: Project[] = [
   {
     slug: "kibbutz-type",
     title: "Kibbutz Type",
-    subHeader: "Two Hebrew typefaces for Kibbutz Hatzerim's 80th anniversary.",
+    subHeader: "Three Hebrew typefaces for Kibbutz Hatzerim's 80th anniversary.",
     context:
-      "A type family designed for the 80th anniversary of Kibbutz Hatzerim: Dan Revived, a revival of Asher Oron's Letraset dry-transfer face, and Kelta 01, drawn from the kibbutz's hand-lettered posters.",
+      "A type family designed for the 80th anniversary of Kibbutz Hatzerim: Dan Revived, a revival of a Letraset dry-transfer face; Kelta 01, drawn from the kibbutz's hand-lettered posters; and Babayit, a variable-width face from the geometric logo of the kibbutz newsletter עלון בבית.",
     description:
-      "Two Hebrew typefaces for Kibbutz Hatzerim's 80th anniversary. Dan Revived brings Asher Oron's Letraset ״דן״ back to the screen; Kelta 01 distills decades of hand-lettered kibbutz posters into a typeable font.",
+      "Three Hebrew typefaces for Kibbutz Hatzerim's 80th anniversary. Dan Revived brings a classic Letraset face back to the screen; Kelta 01 distills decades of hand-lettered kibbutz posters; Babayit stretches the עלון בבית masthead logo across a width axis.",
     bodyText:
-      "Two Hebrew typefaces for Kibbutz Hatzerim's 80th anniversary. Dan Revived brings Asher Oron's Letraset ״דן״ back to the screen; Kelta 01 distills decades of hand-lettered kibbutz posters into a typeable font.",
+      "Three Hebrew typefaces for Kibbutz Hatzerim's 80th anniversary. Dan Revived brings a classic Letraset face back to the screen; Kelta 01 distills decades of hand-lettered kibbutz posters; Babayit stretches the עלון בבית masthead logo across a width axis.",
     href: "/kibbutz-type/",
     images: [],
     tags: ["Type Design", "Hebrew", "Revival"],
     category: "Type",
     summary:
-      "Dan Revived and Kelta 01 — a Hebrew type family for Kibbutz Hatzerim's 80th anniversary, with a live specimen and tester.",
+      "Dan Revived, Kelta 01, and Babayit — a Hebrew type family for Kibbutz Hatzerim's 80th anniversary, with a live specimen and width tester.",
     services: ["Type Design", "Lettering"],
     year: "2026",
     challenge: "",
@@ -233,21 +233,21 @@ const LOCAL_PROJECTS: Project[] = [
     thumbnailShape: "square",
     thumbnailHoverShape: "circle",
     heTitle: "גופני חצרים",
-    heSubHeader: "שני גופנים עבריים לשמונים שנה לקיבוץ חצרים.",
+    heSubHeader: "שלושה גופנים עבריים לשמונים שנה לקיבוץ חצרים.",
     heContext:
-      "משפחת גופנים שעוצבה לחגיגות שמונים שנה לקיבוץ חצרים: דן ריווייבד, החייאה של גופן הטרנספר של אשר אורון, וקלטה 01, שנולד מכרזות כתובות ביד.",
+      "משפחת גופנים שעוצבה לחגיגות שמונים שנה לקיבוץ חצרים: דן מחודש, החייאה של גופן טרנספר; קלטה 01, שנולד מכרזות כתובות ביד; ובבית, גופן משתנה מלוגו עלון ״בבית״.",
     heDescription:
-      "שני גופנים עבריים לשמונים שנה לקיבוץ חצרים. דן ריווייבד מחזיר את ״דן״ של אשר אורון למסך; קלטה 01 מזקק עשרות שנים של כרזות כתובות ביד לגופן שאפשר להקליד בו.",
+      "שלושה גופנים עבריים לשמונים שנה לקיבוץ חצרים. דן מחודש מחזיר גופן לטרסט למסך; קלטה 01 מזקק כרזות כתובות ביד; בבית מושך את לוגו העלון על ציר רוחב.",
     heTags: ["עיצוב גופנים", "עברית", "החייאה"],
     status: "IN PROGRESS",
     heStatus: "בעבודה",
     discipline: "TYPE",
     heDiscipline: "טיפוגרפיה",
-    descriptor: "Two Hebrew typefaces for a kibbutz turning eighty.",
-    heDescriptor: "שני גופנים עבריים לקיבוץ שחוגג שמונים.",
+    descriptor: "Three Hebrew typefaces for a kibbutz turning eighty.",
+    heDescriptor: "שלושה גופנים עבריים לקיבוץ שחוגג שמונים.",
     opener:
-      "A kibbutz turning eighty deserves letters of its own. Two typefaces, one drawn from a transfer sheet, one from hand-lettered posters.",
-    heOpener: "קיבוץ שחוגג שמונים ראוי לאותיות משלו. שני גופנים — אחד מגיליון טרנספר, אחד מכרזות כתובות ביד.",
+      "A kibbutz turning eighty deserves letters of its own. Three typefaces — transfer sheet, hand-lettered posters, and a newsletter masthead.",
+    heOpener: "קיבוץ שחוגג שמונים ראוי לאותיות משלו. שלושה גופנים — טרנספר, כרזות כתובות ביד, ולוגו עלון.",
   },
 ];
 

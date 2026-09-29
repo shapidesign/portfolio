@@ -1,15 +1,18 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
-import { FACES } from "./faces";
+import { FACES, faceEnName, faceHeName } from "./faces";
 import { SpecimenText } from "./SpecimenText";
 
 type FacesShowcaseProps = Readonly<{
   settings: KibbutzTypeSettings;
 }>;
 
-/* Size waterfall: display → text. Both faces are single-weight, so size is the axis. */
+/* Size waterfall: display → text. Dan/Kelta are single-weight; Babayit shows wdth. */
 const SIZES = ["clamp(3rem, 8vw, 6.5rem)", "clamp(2rem, 4.5vw, 3.5rem)", "1.75rem", "1.125rem"];
+const BABAYIT_WIDTHS = [100, 350, 650, 1000] as const;
+
 export function FacesShowcase({ settings }: FacesShowcaseProps) {
   const samples = [
     settings.waterfallLine1,
@@ -24,20 +27,40 @@ export function FacesShowcase({ settings }: FacesShowcaseProps) {
       </p>
       <div className="kt-faces">
         {FACES.map((f) => (
-          <article key={f.id}>
+          <article key={f.id} className={`kt-face-panel--${f.id}`}>
             <div className="kt-face-head">
               <h2 className="kt-face-heading">
-                <SpecimenText>{f.id === "dan" ? settings.danHeName : settings.keltaHeName}</SpecimenText>
+                <SpecimenText>{faceHeName(f.id, settings)}</SpecimenText>
               </h2>
-              <SpecimenText>{f.id === "dan" ? settings.danName : settings.keltaName}</SpecimenText>
+              <SpecimenText>{faceEnName(f.id, settings)}</SpecimenText>
             </div>
-            <div className={`kt-waterfall ${f.className}`} lang="he">
-              {SIZES.map((size, index) => (
-                <p key={size} style={{ fontSize: size }}>
-                  <SpecimenText>{samples[index]}</SpecimenText>
-                </p>
-              ))}
-            </div>
+            {f.id === "babayit" ? (
+              <div className={`kt-waterfall ${f.className}`} lang="he">
+                {BABAYIT_WIDTHS.map((wdth, index) => (
+                  <div key={wdth}>
+                    <p className="kt-waterfall-meta">wdth {wdth}</p>
+                    <p
+                      style={
+                        {
+                          fontSize: SIZES[Math.min(index, 1)],
+                          "--kt-wdth": String(wdth),
+                        } as CSSProperties
+                      }
+                    >
+                      <SpecimenText>{samples[index]}</SpecimenText>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className={`kt-waterfall ${f.className}`} lang="he">
+                {SIZES.map((size, index) => (
+                  <p key={size} style={{ fontSize: size }}>
+                    <SpecimenText>{samples[index]}</SpecimenText>
+                  </p>
+                ))}
+              </div>
+            )}
           </article>
         ))}
       </div>

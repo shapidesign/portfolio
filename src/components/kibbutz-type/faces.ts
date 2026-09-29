@@ -1,4 +1,6 @@
-export type FaceId = "dan" | "kelta";
+import type { KibbutzTypeSettings } from "@/lib/kibbutz-type-settings";
+
+export type FaceId = "dan" | "kelta" | "babayit";
 
 export type Face = {
   id: FaceId;
@@ -37,8 +39,30 @@ export const FACES: Face[] = [
     digits: DIGITS,
     punctuation: "(),-.׳״",
   },
+  {
+    id: "babayit",
+    name: "Babayit",
+    heName: "בבית",
+    className: "kt-face-babayit",
+    heSource: "גופן משתנה שנולד מלוגו עלון ״בבית״",
+    letters: HEBREW_LETTERS,
+    digits: DIGITS,
+    punctuation: " !\"'(),-./:;?[]{}׳״",
+  },
 ];
 
 export function getFace(id: FaceId): Face {
   return FACES.find((face) => face.id === id) ?? FACES[0];
+}
+
+export function faceHeName(id: FaceId, settings: KibbutzTypeSettings): string {
+  if (id === "dan") return settings.danHeName;
+  if (id === "kelta") return settings.keltaHeName;
+  return settings.babayitHeName;
+}
+
+export function faceEnName(id: FaceId, settings: KibbutzTypeSettings): string {
+  if (id === "dan") return settings.danName;
+  if (id === "kelta") return settings.keltaName;
+  return settings.babayitName;
 }

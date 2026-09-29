@@ -23,6 +23,7 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
       ? 60
       : settings.testerDefaultFontSize,
   );
+  const [width, setWidth] = useState(100);
   const [faceId, setFaceId] = useState<FaceId>("dan");
   const [alternatesEnabled, setAlternatesEnabled] = useState(false);
   const [gate, setGate] = useState<Gate>("checking");
@@ -57,6 +58,7 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
     "--kt-navy": settings.colorNavy,
     "--kt-green": settings.colorGreen,
     "--kt-orange": settings.colorOrange,
+    "--kt-wdth": String(width),
   } as CSSProperties;
 
   if (gate !== "open") {
@@ -111,11 +113,13 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
           <Tester
             text={text}
             fontSize={fontSize}
+            width={width}
             face={face}
             settings={settings}
             alternatesEnabled={alternatesEnabled}
             onText={setText}
             onFontSize={setFontSize}
+            onWidth={setWidth}
             onFace={setFaceId}
             onAlternates={setAlternatesEnabled}
           />

@@ -17,12 +17,15 @@ export type KibbutzTypeSettings = {
   testerDefaultText: string;
   testerDefaultFontSize: number;
   fontSizeLabel: string;
+  widthLabel: string;
   alternatesLabel: string;
   facesLabel: string;
   danName: string;
   danHeName: string;
   keltaName: string;
   keltaHeName: string;
+  babayitName: string;
+  babayitHeName: string;
   waterfallLine1: string;
   waterfallLine2: string;
   waterfallLine3: string;
@@ -61,6 +64,12 @@ export type KibbutzTypeSettings = {
   keltaParagraph2: string;
   keltaPosterSrc: string;
   keltaPosterCaption: string;
+  babayitHeading: string;
+  babayitSubtitle: string;
+  babayitParagraph1: string;
+  babayitParagraph2: string;
+  babayitMastheadSrc: string;
+  babayitMastheadCaption: string;
   footerCredit: string;
   footerTagline: string;
   colorCream: string;
@@ -75,17 +84,20 @@ export const KIBBUTZ_TYPE_DEFAULTS: KibbutzTypeSettings = {
   heroTitleLine1: "גופנים חדשים",
   heroTitleLine2: "שמונים לחצרים",
   heroDescription:
-    "משפחת גופנים עבריים שעוצבה לחגיגות שמונים שנה לקיבוץ חצרים. דן מחודש וקלטה 01.",
+    "משפחת גופנים עבריים שעוצבה לחגיגות שמונים שנה לקיבוץ חצרים. דן מחודש, קלטה 01 ובבית.",
   testerLabel: "נסו בעצמכם",
   testerDefaultText: "שמונים שנה לחצרים",
   testerDefaultFontSize: 72,
   fontSizeLabel: "גודל",
+  widthLabel: "רוחב",
   alternatesLabel: "אותיות חלופיות",
   facesLabel: "הגופנים",
   danName: "Dan Revived",
   danHeName: "דן מחודש",
   keltaName: "Kelta 01",
   keltaHeName: "קלטה 01",
+  babayitName: "Babayit",
+  babayitHeName: "בבית",
   waterfallLine1: "חצרים הוא קיבוץ הנמצא מערבית לבאר שבע.",
   waterfallLine2: "הקיבוץ הוקם במוצאי יום כיפור בשנת 1946.",
   waterfallLine3: "במרכז הקיבוץ נמצא בית הביטחון.",
@@ -110,7 +122,7 @@ export const KIBBUTZ_TYPE_DEFAULTS: KibbutzTypeSettings = {
   alternateNameTsadi: "צדי",
   aboutLabel: "על הפרויקט",
   aboutLead:
-    "קיבוץ חצרים נוסד ב-1946 בנגב. לכבוד שמונים שנותיו עוצבו שני גופנים עבריים: אחד מחייה גופן טרנספר קלאסי שהודבק על כרזות הקיבוץ, והשני מתרגם את כתב היד של הכרזות עצמן לגופן חי.",
+    "קיבוץ חצרים נוסד ב-1946 בנגב. לכבוד שמונים שנותיו עוצבו שלושה גופנים עבריים: אחד מחייה גופן טרנספר קלאסי, השני מתרגם את כתב היד של הכרזות, והשלישי נולד מלוגו עלון ״בבית״.",
   danHeading: "דן מחודש",
   danSubtitle: "Dan Revived · חידוש לגופן ״דן״ של דן תל ורדי",
   danParagraph1:
@@ -129,6 +141,14 @@ export const KIBBUTZ_TYPE_DEFAULTS: KibbutzTypeSettings = {
     "קלטה 01 נולד מהכרזות האלה. הוא לא מעתיק כתב יד ספציפי אלא מזקק את הקצב, הקווים המחוברים והחום שלו לגופן שאפשר להקליד בו — כדי שגם השנה, ההזמנה לחג תיראה כמו שלנו.",
   keltaPosterSrc: "/images/kibbutz-type/kelta-poster.jpg",
   keltaPosterCaption: "כרזה כתובה ביד מארכיון קיבוץ חצרים",
+  babayitHeading: "בבית",
+  babayitSubtitle: "Babayit · גופן משתנה מלוגו עלון הקיבוץ",
+  babayitParagraph1:
+    "״בבית״ היה שמו של עלון קיבוץ חצרים. בכותרת הופיע לוגו גאומטרי בלוקים — אותיות בנויות מקווים עבים ודקים, בסגנון שמזכיר טיפוגרפיה ניסיונית מאמצע המאה.",
+  babayitParagraph2:
+    "בבית הוא גופן משתנה עם ציר רוחב (wdth). הקווים האנכיים נשארים עבים והאופקיים דקים, והרוחב נמתח מצר לרחב — רטרו, ארט־נובו, ועדיין קריא על מסך.",
+  babayitMastheadSrc: "/images/kibbutz-type/babayit-alon-masthead.jpg",
+  babayitMastheadCaption: "כותרת עלון ״בבית״ · ארכיון חצרים",
   footerCredit: "עיצוב: יהונתן שפירא",
   footerTagline: "Kibbutz Type · Hatzerim 80",
   colorCream: "#f3efe3",
@@ -167,6 +187,7 @@ export const KIBBUTZ_TYPE_FIELD_GROUPS: KibbutzTypeFieldGroup[] = [
       { key: "testerDefaultText", label: "Default text", type: "textarea", dir: "rtl" },
       { key: "testerDefaultFontSize", label: "Default font size", type: "number" },
       { key: "fontSizeLabel", label: "Size control label", dir: "rtl" },
+      { key: "widthLabel", label: "Width control label", dir: "rtl" },
       { key: "alternatesLabel", label: "Alternates control label", dir: "rtl" },
     ],
   },
@@ -178,6 +199,8 @@ export const KIBBUTZ_TYPE_FIELD_GROUPS: KibbutzTypeFieldGroup[] = [
       { key: "danHeName", label: "Dan — Hebrew name", dir: "rtl" },
       { key: "keltaName", label: "Kelta — English name" },
       { key: "keltaHeName", label: "Kelta — Hebrew name", dir: "rtl" },
+      { key: "babayitName", label: "Babayit — English name" },
+      { key: "babayitHeName", label: "Babayit — Hebrew name", dir: "rtl" },
       { key: "waterfallLine1", label: "Large sample", type: "textarea", dir: "rtl" },
       { key: "waterfallLine2", label: "Medium sample", type: "textarea", dir: "rtl" },
       { key: "waterfallLine3", label: "Small sample", type: "textarea", dir: "rtl" },
@@ -223,6 +246,11 @@ export const KIBBUTZ_TYPE_FIELD_GROUPS: KibbutzTypeFieldGroup[] = [
       { key: "keltaParagraph1", label: "Kelta paragraph 1", type: "textarea", dir: "rtl" },
       { key: "keltaParagraph2", label: "Kelta paragraph 2", type: "textarea", dir: "rtl" },
       { key: "keltaPosterCaption", label: "Poster caption", dir: "rtl" },
+      { key: "babayitHeading", label: "Babayit heading", dir: "rtl" },
+      { key: "babayitSubtitle", label: "Babayit subtitle", type: "textarea", dir: "rtl" },
+      { key: "babayitParagraph1", label: "Babayit paragraph 1", type: "textarea", dir: "rtl" },
+      { key: "babayitParagraph2", label: "Babayit paragraph 2", type: "textarea", dir: "rtl" },
+      { key: "babayitMastheadCaption", label: "Masthead caption", dir: "rtl" },
     ],
   },
   {
@@ -238,7 +266,7 @@ export const KIBBUTZ_TYPE_FIELD_GROUPS: KibbutzTypeFieldGroup[] = [
       { key: "colorCream", label: "Cream", type: "color" },
       { key: "colorNavy", label: "Dan navy", type: "color" },
       { key: "colorGreen", label: "Kelta green", type: "color" },
-      { key: "colorOrange", label: "UI accent", type: "color" },
+      { key: "colorOrange", label: "UI / Babayit accent", type: "color" },
     ],
   },
 ];
@@ -247,6 +275,7 @@ export const KIBBUTZ_TYPE_MEDIA_FIELDS = [
   { key: "danCatalogSrc", label: "Dan — Letraset catalog" },
   { key: "danTextileSrc", label: "Dan — Hatzerim textile" },
   { key: "keltaPosterSrc", label: "Kelta — archive poster" },
+  { key: "babayitMastheadSrc", label: "Babayit — alon masthead" },
 ] as const satisfies ReadonlyArray<{
   key: keyof KibbutzTypeSettings;
   label: string;
@@ -267,6 +296,7 @@ const MEDIA_KEYS = new Set<keyof KibbutzTypeSettings>([
   "danCatalogSrc",
   "danTextileSrc",
   "keltaPosterSrc",
+  "babayitMastheadSrc",
 ]);
 const HEX_COLOR_RE = /^#[0-9a-f]{6}$/i;
 
