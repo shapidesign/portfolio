@@ -484,9 +484,13 @@ body.kibbutz-type .site-shell {
 
 .kt-faces article {
   min-width: 0;
-  /* Display faces paint past their advance; keep ink off the panel edges. */
-  padding-block: clamp(2rem, 4.5vw, 3.5rem);
-  padding-inline: clamp(2.75rem, 7vw, 5.5rem);
+  /*
+   * Display faces paint past their advance width. Keep a wide physical-left
+   * inset (inline-end in RTL) so line ends and labels clear the panel edge.
+   */
+  padding-block: clamp(2rem, 5vw, 4rem);
+  padding-inline-start: clamp(3rem, 8vw, 6rem);
+  padding-inline-end: clamp(4.5rem, 12vw, 9rem);
 }
 
 .kt-face-panel--dan,
@@ -533,12 +537,26 @@ body.kibbutz-type .site-shell {
 .kt-waterfall {
   display: grid;
   gap: 1.25rem;
+  min-width: 0;
+  /* Optical side-bearing room for the largest waterfall size. */
+  padding-inline: 0.15em;
 }
 
 .kt-waterfall p {
   margin: 0;
+  min-width: 0;
+  max-width: 100%;
   line-height: 1.1;
   overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.kt-waterfall .kt-live {
+  /* contentEditable spans can inflate grid min-content and spill past padding */
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .kt-source {
