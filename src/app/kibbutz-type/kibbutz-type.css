@@ -484,7 +484,9 @@ body.kibbutz-type .site-shell {
 
 .kt-faces article {
   min-width: 0;
-  padding: clamp(1.5rem, 4vw, 3rem);
+  /* Display faces paint past their advance; keep ink off the panel edges. */
+  padding-block: clamp(1.75rem, 4vw, 3.25rem);
+  padding-inline: clamp(2.25rem, 6vw, 4.5rem);
 }
 
 .kt-face-panel--dan,
