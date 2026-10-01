@@ -484,13 +484,28 @@ body.kibbutz-type .site-shell {
 
 .kt-faces article {
   min-width: 0;
-  /*
-   * Display faces paint past their advance width. Keep a wide physical-left
-   * inset (inline-end in RTL) so line ends and labels clear the panel edge.
-   */
-  padding-block: clamp(2rem, 5vw, 4rem);
-  padding-inline-start: clamp(3rem, 8vw, 6rem);
-  padding-inline-end: clamp(4.5rem, 12vw, 9rem);
+  container-type: inline-size;
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+/* Desktop columns are ~1/3 of the viewport, but the waterfall sizes are vw-based,
+   so the longest words overrun the left padding. Scale those sizes to the column
+   and keep a physical-left inset. Mobile keeps the inline sizes. */
+@media (min-width: 900px) {
+  .kt-faces article {
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+    padding-right: clamp(2rem, 3vw, 3.25rem);
+    padding-left: clamp(3.5rem, 4.5vw, 5rem);
+  }
+
+  /* Longest sample word is ~3.6em. 24cqi keeps it inside the column with a left gap. */
+  .kt-faces .kt-waterfall p:nth-child(1) {
+    font-size: min(6.5rem, 24cqi) !important;
+  }
+
+  .kt-faces .kt-waterfall p:nth-child(2) {
+    font-size: min(3.5rem, 14cqi) !important;
+  }
 }
 
 .kt-face-panel--dan,
@@ -538,8 +553,6 @@ body.kibbutz-type .site-shell {
   display: grid;
   gap: 1.25rem;
   min-width: 0;
-  /* Optical side-bearing room for the largest waterfall size. */
-  padding-inline: 0.15em;
 }
 
 .kt-waterfall p {
@@ -547,16 +560,6 @@ body.kibbutz-type .site-shell {
   min-width: 0;
   max-width: 100%;
   line-height: 1.1;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-.kt-waterfall .kt-live {
-  /* contentEditable spans can inflate grid min-content and spill past padding */
-  display: inline-block;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  word-break: break-word;
 }
 
 .kt-source {
