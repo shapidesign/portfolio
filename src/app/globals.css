@@ -143,8 +143,8 @@
 
 @font-face {
   font-family: "Babayit";
-  src: url("/fonts/kibbutz-type/BabayitVF.woff") format("woff"),
-       url("/fonts/kibbutz-type/BabayitVF.ttf") format("truetype");
+  src: url("/fonts/kibbutz-type/BabayitVF.woff?v=20261001") format("woff"),
+       url("/fonts/kibbutz-type/BabayitVF.ttf?v=20261001") format("truetype");
   font-weight: 400;
   font-style: normal;
   /* swap: block was freezing first paint while the VF decoded in some browsers */
