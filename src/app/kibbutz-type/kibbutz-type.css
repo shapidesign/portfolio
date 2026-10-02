@@ -29,7 +29,8 @@ body.kibbutz-type .site-shell {
 
   --kt-dan: "Dan Revived", "narkiss-yair-local", sans-serif;
   --kt-kelta: "Kelta 01", "narkiss-yair-local", sans-serif;
-  --kt-babayit: "Babayit", "narkiss-yair-local", sans-serif;
+  /* BabayitVF hangs Chromium 148's renderer; quarantine it until the font is regenerated. */
+  --kt-babayit: var(--font-hebrew-body);
   --kt-wdth: 500;
 
   min-height: 100vh;
