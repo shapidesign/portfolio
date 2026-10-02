@@ -29,8 +29,7 @@ body.kibbutz-type .site-shell {
 
   --kt-dan: "Dan Revived", "narkiss-yair-local", sans-serif;
   --kt-kelta: "Kelta 01", "narkiss-yair-local", sans-serif;
-  /* BabayitVF hangs Chromium 148's renderer; quarantine it until the font is regenerated. */
-  --kt-babayit: var(--font-hebrew-body);
+  --kt-babayit: "Babayit", "narkiss-yair-local", sans-serif;
   --kt-wdth: 500;
 
   min-height: 100vh;
@@ -1021,6 +1020,8 @@ body.kibbutz-type .site-shell {
   position: fixed;
   inset: 0;
   z-index: 20;
+  /* Same Babayit outlines, flattened to a safe static instance for Chromium. */
+  --kt-babayit: "Babayit Wall", "narkiss-yair-local", sans-serif;
   min-height: 100dvh;
   overflow: hidden;
   touch-action: none;

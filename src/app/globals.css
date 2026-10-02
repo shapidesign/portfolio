@@ -151,6 +151,16 @@
   font-display: swap;
 }
 
+/* Static wall instance generated from the supplied Babayit VF at wdth 500.
+   Chrome 148 loops while shaping the variable file on the presentation wall. */
+@font-face {
+  font-family: "Babayit Wall";
+  src: url("/fonts/kibbutz-type/BabayitWall-500.woff2?v=20261002") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 *,
 *::before,
 *::after {
