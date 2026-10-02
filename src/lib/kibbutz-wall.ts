@@ -25,6 +25,22 @@ export type WallEntry = {
 
 export type WallInput = Pick<WallEntry, "text" | "face" | "color">;
 
+/**
+ * `kibbutz_wall_face_check` only allows dan and kelta. Babayit rows are stored
+ * as kelta with this prefix, then restored on read. Invisible to visitors.
+ */
+export const BABAYIT_WALL_MARK = "\u2060";
+
+export function encodeBabayitForLegacyWall(entry: WallInput): WallInput {
+  if (entry.face !== "babayit") return entry;
+  return { ...entry, face: "kelta", text: `${BABAYIT_WALL_MARK}${entry.text}` };
+}
+
+export function decodeWallEntry<T extends { text: string; face: FaceId }>(entry: T): T {
+  if (!entry.text.startsWith(BABAYIT_WALL_MARK)) return entry;
+  return { ...entry, face: "babayit", text: entry.text.slice(BABAYIT_WALL_MARK.length) };
+}
+
 // ponytail: type-only import above keeps this file runnable by node --experimental-strip-types.
 const FACE_IDS = new Set<string>(["dan", "kelta", "babayit"] satisfies FaceId[]);
 const COLOR_KEYS = new Set<string>(WALL_COLORS.map((c) => c.key));

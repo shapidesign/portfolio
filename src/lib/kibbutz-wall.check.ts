@@ -1,7 +1,7 @@
 // Runnable self-check for the wall profanity filter + validation.
 // Not imported by the app. Run with:
 //   node --experimental-strip-types src/lib/kibbutz-wall.check.ts
-import { isBlocked, validateWallInput } from "./kibbutz-wall.ts";
+import { decodeWallEntry, encodeBabayitForLegacyWall, isBlocked, validateWallInput } from "./kibbutz-wall.ts";
 
 const assert = (cond: boolean, msg: string) => {
   if (!cond) throw new Error(`kibbutz-wall self-check failed: ${msg}`);
@@ -59,5 +59,17 @@ assert(!validateWallInput({ text: "שלום", face: "dan", color: "#fff" }).ok, 
 assert(!validateWallInput({ text: "", face: "dan", color: "navy" }).ok, "rejects empty");
 const bl = validateWallInput({ text: "בן זונה", face: "dan", color: "navy" });
 assert(!bl.ok && bl.error === "blocked", "reports blocked");
+
+const stored = encodeBabayitForLegacyWall({ text: "בבית", face: "babayit", color: "orange" });
+assert(stored.face === "kelta" && stored.text !== "בבית", "stores babayit as marked kelta");
+const restored = decodeWallEntry({
+  id: "x",
+  text: stored.text,
+  face: stored.face,
+  color: stored.color,
+  created_at: "",
+});
+assert(restored.face === "babayit" && restored.text === "בבית", "restores babayit on read");
+assert(decodeWallEntry({ text: "שלום", face: "dan" }).face === "dan", "leaves other faces alone");
 
 console.log("kibbutz-wall.check.ts passed");
