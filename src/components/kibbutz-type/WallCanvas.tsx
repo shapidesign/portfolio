@@ -108,7 +108,9 @@ function WallWord({
       style={wordStyle(entry, point)}
       aria-label={entry.text}
       aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight"
+      draggable={false}
       tabIndex={0}
+      onDragStart={(e) => e.preventDefault()}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}

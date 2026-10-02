@@ -1052,6 +1052,8 @@ body.kibbutz-type .site-shell {
   overflow-wrap: anywhere;
   cursor: grab;
   touch-action: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -1071,11 +1073,13 @@ body.kibbutz-type .site-shell {
 
 .kt-wall-ghost {
   visibility: hidden;
+  pointer-events: none;
 }
 
 .kt-wall-ink {
   position: absolute;
   inset: 0;
+  pointer-events: none;
   touch-action: none;
 }
 
