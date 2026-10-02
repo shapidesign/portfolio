@@ -139,7 +139,6 @@ export function WallCanvas({ settings, address }: WallCanvasProps) {
   const listRef = useRef<HTMLUListElement>(null);
   const dragRef = useRef<Drag | null>(null);
   const positionsRef = useRef(positions);
-  positionsRef.current = positions;
 
   useEffect(() => {
     document.body.classList.add("kibbutz-type");
@@ -151,8 +150,13 @@ export function WallCanvas({ settings, address }: WallCanvasProps) {
   }, [settings.colorCream]);
 
   useEffect(() => {
-    setPositions(loadPositions());
-    setPosReady(true);
+    // ponytail: deferred so the saved layout is read after hydration without a render-time ref write.
+    queueMicrotask(() => {
+      const loaded = loadPositions();
+      positionsRef.current = loaded;
+      setPositions(loaded);
+      setPosReady(true);
+    });
   }, []);
 
   useEffect(() => {
