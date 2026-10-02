@@ -181,6 +181,7 @@ export function WallCanvas({ settings, address }: WallCanvasProps) {
 
   function onPointerDown(entry: WallEntry, e: PointerEvent<HTMLLIElement>) {
     if (e.button !== 0) return;
+    e.preventDefault();
     const origin = positionsRef.current[entry.id] ?? seedPoint(entry.id);
     dragRef.current = {
       id: entry.id,
