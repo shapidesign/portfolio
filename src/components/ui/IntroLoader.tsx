@@ -7,6 +7,14 @@ import { AnimatePresence } from "motion/react";
 
 const LOADER_KEY = "portfolio-intro-seen";
 
+function hidesIntro(pathname: string | null): boolean {
+  return (
+    pathname === "/" ||
+    pathname === "/kibbutz-type/canvas" ||
+    pathname === "/kibbutz-type/canvas/"
+  );
+}
+
 function shouldShowLoader(): boolean {
   if (typeof window === "undefined") return false;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
@@ -64,7 +72,7 @@ export function IntroLoader() {
   const dismiss = useCallback(() => setVisible(false), []);
 
   useEffect(() => {
-    if (!visible || pathname === "/") return;
+    if (!visible || hidesIntro(pathname)) return;
     window.sessionStorage.setItem(LOADER_KEY, "1");
 
     const timer = setTimeout(dismiss, 1000);
@@ -72,8 +80,9 @@ export function IntroLoader() {
     return () => clearTimeout(timer);
   }, [visible, dismiss, pathname]);
 
-  // The solar homepage owns its own backdrop; skip the global intro loader there.
-  if (pathname === "/") return null;
+  // The solar homepage owns its own backdrop. The wall canvas must stay
+  // draggable, so the intro never covers it.
+  if (hidesIntro(pathname)) return null;
 
   return (
     <AnimatePresence>

@@ -3,7 +3,9 @@
 
 /* Hide global chrome; the page ships its own header. Same pattern as body.solar-home. */
 body.kibbutz-type .site-header,
-body.kibbutz-type .site-footer {
+body.kibbutz-type .site-footer,
+body:has(.kt-wall) .site-header,
+body:has(.kt-wall) .site-footer {
   display: none !important;
 }
 
@@ -1017,8 +1019,10 @@ body.kibbutz-type .site-shell {
 .kt-wall {
   position: fixed;
   inset: 0;
+  z-index: 20;
   min-height: 100dvh;
   overflow: hidden;
+  touch-action: none;
 }
 
 .kt-wall-main {
@@ -1046,15 +1050,37 @@ body.kibbutz-type .site-shell {
   line-height: 1.05;
   text-wrap: balance;
   overflow-wrap: anywhere;
+  cursor: grab;
+  touch-action: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.kt-wall-word:focus-visible {
+  outline: 3px solid var(--kt-orange);
+  outline-offset: 0.15em;
+}
+
+.kt-wall-word.is-front {
+  z-index: 2;
+}
+
+.kt-wall-word.is-dragging {
+  z-index: 3;
+  cursor: grabbing;
 }
 
 .kt-wall-ghost {
   visibility: hidden;
+  pointer-events: none;
 }
 
 .kt-wall-ink {
   position: absolute;
   inset: 0;
+  pointer-events: none;
+  touch-action: none;
 }
 
 .kt-wall-empty {
