@@ -1046,6 +1046,23 @@ body.kibbutz-type .site-shell {
   line-height: 1.05;
   text-wrap: balance;
   overflow-wrap: anywhere;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.kt-wall-word:focus-visible {
+  outline: 3px solid var(--kt-orange);
+  outline-offset: 0.15em;
+}
+
+.kt-wall-word.is-front {
+  z-index: 2;
+}
+
+.kt-wall-word.is-dragging {
+  z-index: 3;
+  cursor: grabbing;
 }
 
 .kt-wall-ghost {
