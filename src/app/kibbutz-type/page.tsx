@@ -5,14 +5,14 @@ import { SITE_ORIGIN } from "@/lib/site";
 import "./kibbutz-type.css";
 
 export const metadata: Metadata = {
-  title: "Kibbutz Type — גופני חצרים 80",
+  title: "Kibbutz Type — Dan Revived, Kelta 01, Babayit",
   description:
-    "Two Hebrew typefaces designed for Kibbutz Hatzerim's 80th anniversary: Dan Revived and Kelta 01. Type specimen and live tester.",
+    "Three Hebrew typefaces designed for Kibbutz Hatzerim's 80th anniversary: Dan Revived, Kelta 01, and Babayit. Type specimen and live tester.",
   alternates: { canonical: `${SITE_ORIGIN}/kibbutz-type/` },
   openGraph: {
-    title: "Kibbutz Type — גופני חצרים 80",
+    title: "Kibbutz Type — Dan Revived, Kelta 01, Babayit",
     description:
-      "Two Hebrew typefaces designed for Kibbutz Hatzerim's 80th anniversary: Dan Revived and Kelta 01.",
+      "Three Hebrew typefaces designed for Kibbutz Hatzerim's 80th anniversary: Dan Revived, Kelta 01, and Babayit.",
     url: `${SITE_ORIGIN}/kibbutz-type/`,
     type: "website",
   },
