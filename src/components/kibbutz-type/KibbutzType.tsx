@@ -9,7 +9,6 @@ import { FacesShowcase } from "./FacesShowcase";
 import { GlyphGrid } from "./GlyphGrid";
 import { Header } from "./Header";
 import { Tester } from "./Tester";
-import { WallForm } from "./WallForm";
 import { getFace, type FaceId } from "./faces";
 
 type Gate = "ask" | "open";
@@ -96,9 +95,15 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
         <>
           <Header face={face} settings={settings} />
           <main>
-            <Fade>
-              <WallForm settings={settings} />
-            </Fade>
+            <section className="kt-promo kt-wrap">
+              <video
+                controls
+                playsInline
+                preload="metadata"
+                src="/videos/hatzerim-80-type-promo.mp4"
+                aria-label="פרומו קיבוץ טייפ"
+              />
+            </section>
             <Fade>
               <Tester
                 text={text}

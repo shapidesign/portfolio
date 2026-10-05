@@ -6,7 +6,6 @@ const strings = {
     navHome: "Home",
     navAbout: "About",
     navWork: "Work",
-    navShirts: "Shirts",
     navContact: "Contact",
     seeAllProjects: "See all projects",
 
@@ -51,13 +50,7 @@ const strings = {
     workSubtitle: (count: number) =>
       `${count} selected works showcasing design & development.`,
 
-    // Shirts page
-    shirtsTitle: "Shirts",
-    shirtsStoreHint: "Browse products here and checkout on Shopify when ready.",
     shirtsEmpty: "No shirts are published yet. Please check back soon.",
-    shirtsError:
-      "Store link is not configured yet. Add NEXT_PUBLIC_SHOPIFY_STORE_URL (or NEXT_PUBLIC_SHOPIFY_SHIRTS_URL) to .env.local.",
-    shirtsBuyNow: "Shop shirts",
     merchTitle: "Merch",
     merchStoreHint: "Browse merch here and checkout on Shopify when ready.",
     merchError:
@@ -153,7 +146,6 @@ const strings = {
     navHome: "בית",
     navAbout: "אודות",
     navWork: "עבודות",
-    navShirts: "חולצות",
     navContact: "צור קשר",
     seeAllProjects: "צפו בכל הפרויקטים",
 
@@ -191,12 +183,7 @@ const strings = {
     workSubtitle: (count: number) =>
       `${count} עבודות נבחרות בעיצוב ופיתוח.`,
 
-    shirtsTitle: "חולצות",
-    shirtsStoreHint: "עיינו במוצרים כאן ועברו לתשלום ב-Shopify כשתהיו מוכנים.",
     shirtsEmpty: "עדיין אין חולצות שפורסמו. נסו שוב בקרוב.",
-    shirtsError:
-      "קישור החנות עדיין לא מוגדר. הוסיפו NEXT_PUBLIC_SHOPIFY_STORE_URL (או NEXT_PUBLIC_SHOPIFY_SHIRTS_URL) לקובץ .env.local.",
-    shirtsBuyNow: "לקניית חולצות",
     merchTitle: "מרצ׳",
     merchStoreHint: "עיינו במרצ׳ כאן ועברו לתשלום ב-Shopify כשתהיו מוכנים.",
     merchError:

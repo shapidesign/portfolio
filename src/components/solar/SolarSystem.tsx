@@ -7,7 +7,7 @@ import * as THREE from "three";
 import type { Project } from "../../types/project";
 import { StarShapesProvider } from "./StarShapesProvider";
 import { SolarScene } from "./SolarScene";
-import { buildPlanetConfigs, SHIRTS_PLANET } from "./planet-config";
+import { buildPlanetConfigs } from "./planet-config";
 import type { CameraTarget } from "./CameraRig";
 import type { PlanetConfig } from "./Planet";
 import { PlanetHUD } from "./PlanetHUD";
@@ -15,7 +15,6 @@ import { MissionControl } from "./MissionControl";
 import { ProjectModal } from "./ProjectModal";
 import { AboutDrawer } from "./AboutDrawer";
 import { ContactDrawer } from "./ContactDrawer";
-import { StoreNoticeModal } from "./StoreNoticeModal";
 import { ListView } from "./ListView";
 import { VoyageHUD } from "./VoyageHUD";
 import { useLanguage } from "../../context/LanguageContext";
@@ -59,7 +58,6 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   }, [planets]);
 
   const cameraRef = useRef<THREE.Camera | null>(null);
-  const shirtsPosition = useRef(new THREE.Vector3());
   const touchGesture = useRef<{ id: number; x: number; y: number } | null>(null);
   const wheelGesture = useRef({ deltaX: 0, deltaY: 0, timer: 0 });
   const lastGestureAt = useRef(0);
@@ -67,12 +65,10 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   const { isHebrew } = useLanguage();
 
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
-  const [shirtsHovered, setShirtsHovered] = useState(false);
   const [sunHovered, setSunHovered] = useState(false);
   const [focusedSlug, setFocusedSlug] = useState<string | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
-  const [storeNoticeOpen, setStoreNoticeOpen] = useState(false);
   const [listMode, setListMode] = useState(false);
   const [voyageMode, setVoyageMode] = useState<VoyageMode>("idle");
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -81,7 +77,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   const [visited, setVisited] = useState<Set<string>>(new Set());
 
   const modalOpen = focusedSlug !== null;
-  const overlayBlocked = modalOpen || aboutOpen || contactOpen || storeNoticeOpen || listMode;
+  const overlayBlocked = modalOpen || aboutOpen || contactOpen || listMode;
 
   // One-pager: hide global header + footer while the solar homepage is mounted
   useEffect(() => {
@@ -320,7 +316,6 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
 
       if (e.key === "Escape") {
         if (modalOpen || focusedSlug) closeProject();
-        else if (storeNoticeOpen) setStoreNoticeOpen(false);
         else if (aboutOpen) closeAbout();
         else if (contactOpen) closeContact();
         else if (listMode) setListMode(false);
@@ -354,7 +349,6 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
     modalOpen,
     openActiveProject,
     overlayBlocked,
-    storeNoticeOpen,
     voyageMode,
   ]);
 
@@ -382,9 +376,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
             <CameraExporter targetRef={cameraRef} />
             <SolarScene
               planets={planets}
-              shirtsPlanet={SHIRTS_PLANET}
               hoveredSlug={hoveredSlug}
-              shirtsHovered={shirtsHovered}
               focusedSlug={focusedSlug ?? activeSlug}
               cameraTarget={cameraTarget}
               reducedMotion={reducedMotion}
@@ -392,40 +384,22 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
               compact={compactScene}
               voyageMotion={voyageMode === "riding"}
               planetPositions={planetPositions}
-              shirtsPosition={shirtsPosition}
-              onPlanetHover={(slug) => {
-                setHoveredSlug(slug);
-                if (slug) setShirtsHovered(false);
-              }}
+              onPlanetHover={setHoveredSlug}
               onPlanetClick={(slug) => openProject(slug)}
-              onShirtsHover={(hovered) => {
-                setShirtsHovered(hovered);
-                if (hovered) setHoveredSlug(null);
-              }}
-              onShirtsClick={() => setStoreNoticeOpen(true)}
               onSunHover={(h) => setSunHovered(h)}
               onSunClick={openAbout}
             />
           </Canvas>
 
           <PlanetHUD
-            visible={!!hoveredSlug && !modalOpen && !aboutOpen && !storeNoticeOpen}
+            visible={!!hoveredSlug && !modalOpen && !aboutOpen}
             planet={hoveredPlanet}
             positionRef={hoveredPositionRef}
             cameraRef={cameraRef}
             isHebrew={isHebrew}
           />
 
-          <PlanetHUD
-            visible={shirtsHovered && !modalOpen && !aboutOpen && !storeNoticeOpen}
-            planet={SHIRTS_PLANET}
-            positionRef={shirtsPosition}
-            cameraRef={cameraRef}
-            isHebrew={isHebrew}
-            label={isHebrew ? "חנות" : "Store"}
-          />
-
-          {sunHovered && !aboutOpen && !focusedSlug && !storeNoticeOpen ? (
+          {sunHovered && !aboutOpen && !focusedSlug ? (
             <div
               className="solar-hud solar-hud-sun"
               dir={isHebrew ? "rtl" : "ltr"}
@@ -454,7 +428,6 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
               isHebrew={isHebrew}
               onPlanetSelect={selectMissionPlanet}
               onAboutSelect={openAbout}
-              onShirtsSelect={() => setStoreNoticeOpen(true)}
               onListToggle={() => setListMode((v) => !v)}
               onStartRide={startRide}
               onPreviousStop={goPrevious}
@@ -506,11 +479,6 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
 
         <AboutDrawer open={aboutOpen} isHebrew={isHebrew} siteCopy={siteCopy} onClose={closeAbout} />
         <ContactDrawer open={contactOpen} isHebrew={isHebrew} onClose={closeContact} />
-        <StoreNoticeModal
-          open={storeNoticeOpen}
-          isHebrew={isHebrew}
-          onClose={() => setStoreNoticeOpen(false)}
-        />
 
         {!listMode ? (
           <button
