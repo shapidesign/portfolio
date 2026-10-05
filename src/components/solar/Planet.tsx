@@ -4,13 +4,11 @@ import { useEffect, useMemo, useRef } from "react";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import { makeAtmosphereMaterial } from "./atmosphere-material";
-import { makeSoccerTexture } from "./soccer-texture";
 
 export type PlanetConfig = {
   slug: string;
   title: string;
   heTitle?: string;
-  variant?: "soccer";
   /** monokai accent — used as emissive tint */
   accent: string;
   /** orbit radius from sun, in scene units */
@@ -324,18 +322,12 @@ export function Planet({
   const tmpVec = useRef(new THREE.Vector3()).current;
 
   const surfaceTexture = useMemo(
-    () =>
-      config.variant === "soccer"
-        ? makeSoccerTexture(compact ? 512 : 1024)
-        : makePlanetTexture(config, compact ? 256 : 512),
+    () => makePlanetTexture(config, compact ? 256 : 512),
     [config, compact],
   );
   const cityTexture = useMemo(
-    () =>
-      config.variant === "soccer"
-        ? null
-        : makeCityLightsTexture(config.slug, config.accent, compact ? 128 : 256),
-    [config.slug, config.accent, config.variant, compact],
+    () => makeCityLightsTexture(config.slug, config.accent, compact ? 128 : 256),
+    [config.slug, config.accent, compact],
   );
   const ringTexture = useMemo(
     () => (config.ringed ? makeRingTexture(config, RING_INNER / RING_OUTER) : null),
@@ -433,13 +425,13 @@ export function Planet({
             <meshStandardMaterial
               color="#ffffff"
               map={surfaceTexture}
-              bumpMap={config.variant === "soccer" ? undefined : surfaceTexture}
-              bumpScale={config.variant === "soccer" ? 0 : 0.075}
-              emissiveMap={config.variant === "soccer" ? surfaceTexture : cityTexture}
+              bumpMap={surfaceTexture}
+              bumpScale={0.075}
+              emissiveMap={cityTexture}
               emissive="#ffffff"
-              emissiveIntensity={config.variant === "soccer" ? 0.55 : 1.1}
-              metalness={config.variant === "soccer" ? 0.05 : 0.12}
-              roughness={config.variant === "soccer" ? 0.75 : 0.72}
+              emissiveIntensity={1.1}
+              metalness={0.12}
+              roughness={0.72}
             />
           </mesh>
 

@@ -10,10 +10,7 @@ import { GlyphGrid } from "./GlyphGrid";
 import { Header } from "./Header";
 import { SpecimenText } from "./SpecimenText";
 import { Tester } from "./Tester";
-import { WallForm } from "./WallForm";
 import { getFace, type FaceId } from "./faces";
-
-type Gate = "ask" | "open";
 
 export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
   // Central specimen state — the tester writes it, every section reads it.
@@ -24,8 +21,7 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
   const [width, setWidth] = useState(500);
   const [faceId, setFaceId] = useState<FaceId>("dan");
   const [alternatesEnabled, setAlternatesEnabled] = useState(false);
-  // Start open so SSR/client HTML match; desktop nag overlays after mount.
-  const [gate, setGate] = useState<Gate>("open");
+  const [gateDismissed, setGateDismissed] = useState(false);
   const router = useRouter();
   const titleId = useId();
   const leaveRef = useRef<HTMLButtonElement>(null);
@@ -41,16 +37,22 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
     };
   }, [settings.colorCream]);
 
-  // ponytail: wide + mouse = computer. Phones (coarse or narrow) skip the nag.
+  // The desktop gate is CSS-controlled before hydration; only the phone's
+  // smaller default tester size needs a post-mount adjustment.
   useEffect(() => {
-    const isComputer = window.matchMedia("(min-width: 768px) and (pointer: fine)").matches;
-    if (isComputer) setGate("ask");
-    if (window.matchMedia("(max-width: 600px)").matches) setFontSize(60);
+    if (!window.matchMedia("(max-width: 600px)").matches) return;
+    const frame = window.requestAnimationFrame(() => setFontSize(60));
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
-    if (gate === "ask") leaveRef.current?.focus();
-  }, [gate]);
+    if (
+      !gateDismissed &&
+      window.matchMedia("(min-width: 768px) and (pointer: fine)").matches
+    ) {
+      leaveRef.current?.focus();
+    }
+  }, [gateDismissed]);
 
   const colorVariables = {
     "--kt-cream": settings.colorCream,
@@ -66,73 +68,77 @@ export function KibbutzType({ settings }: { settings: KibbutzTypeSettings }) {
       dir="rtl"
       lang="he"
       data-alternates={alternatesEnabled ? "on" : "off"}
+      data-desktop-gate={gateDismissed ? "dismissed" : "pending"}
       style={colorVariables}
     >
-      {gate === "ask" ? (
-        <div
-          className="kt-desktop-gate"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={titleId}
-          onKeyDown={(e) => {
-            if (e.key === "Escape") router.push("/");
-          }}
-        >
-          <p id={titleId} className="kt-desktop-gate-copy">
-            עדיף לפתוח את זה בטלפון. את/ה בטוח שתרצה/י לפתוח את זה במחשב.
-          </p>
-          <div className="kt-desktop-gate-actions">
-            <button type="button" onClick={() => setGate("open")}>
-              כן, אני עקשן ואני רוצה במחשב
-            </button>
-            <button
-              ref={leaveRef}
-              type="button"
-              className="kt-desktop-gate-leave"
-              onClick={() => router.push("/")}
-            >
-              לא, אתה צודק ועדיף בטלפון
-            </button>
-          </div>
+      <div
+        className="kt-desktop-gate"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") router.push("/");
+        }}
+      >
+        <p id={titleId} className="kt-desktop-gate-copy">
+          עדיף לפתוח את זה בטלפון. את/ה בטוח שתרצה/י לפתוח את זה במחשב.
+        </p>
+        <div className="kt-desktop-gate-actions">
+          <button type="button" onClick={() => setGateDismissed(true)}>
+            כן, אני עקשן ואני רוצה במחשב
+          </button>
+          <button
+            ref={leaveRef}
+            type="button"
+            className="kt-desktop-gate-leave"
+            onClick={() => router.push("/")}
+          >
+            לא, אתה צודק ועדיף בטלפון
+          </button>
         </div>
-      ) : (
-        <>
-          <Header face={face} settings={settings} />
-          <main>
-            <Fade>
-              <WallForm settings={settings} />
-            </Fade>
-            <Fade>
-              <Tester
-                text={text}
-                fontSize={fontSize}
-                width={width}
-                face={face}
-                settings={settings}
-                alternatesEnabled={alternatesEnabled}
-                onText={setText}
-                onFontSize={setFontSize}
-                onWidth={setWidth}
-                onFace={setFaceId}
-                onAlternates={setAlternatesEnabled}
-              />
-            </Fade>
-            <Fade>
-              <FacesShowcase settings={settings} />
-            </Fade>
-            <Fade>
-              <GlyphGrid face={face} settings={settings} onFace={setFaceId} />
-            </Fade>
-            <Fade>
-              <About settings={settings} />
-            </Fade>
-          </main>
-          <footer className="kt-wrap kt-footer">
-            <SpecimenText>{settings.footerCredit}</SpecimenText>
-            <SpecimenText>{settings.footerTagline}</SpecimenText>
-          </footer>
-        </>
-      )}
+      </div>
+      <div className="kt-page-content">
+        <Header face={face} settings={settings} />
+        <main>
+          <section className="kt-promo kt-wrap">
+            <video
+              controls
+              playsInline
+              preload="metadata"
+              src="/videos/hatzerim-80-type-promo.mp4"
+              aria-label="פרומו קיבוץ טייפ"
+            />
+          </section>
+          <Fade>
+            <Tester
+              text={text}
+              fontSize={fontSize}
+              width={width}
+              face={face}
+              settings={settings}
+              alternatesEnabled={alternatesEnabled}
+              onText={setText}
+              onFontSize={setFontSize}
+              onWidth={setWidth}
+              onFace={setFaceId}
+              onAlternates={setAlternatesEnabled}
+            />
+          </Fade>
+          <Fade>
+            <FacesShowcase settings={settings} />
+          </Fade>
+          <Fade>
+            <GlyphGrid face={face} settings={settings} onFace={setFaceId} />
+          </Fade>
+          <Fade>
+            <About settings={settings} />
+          </Fade>
+        </main>
+        <footer className="kt-wrap kt-footer">
+          <SpecimenText>{settings.footerCredit}</SpecimenText>
+          <SpecimenText>{settings.footerTagline}</SpecimenText>
+        </footer>
+      </div>
     </div>
   );
 }
