@@ -1,12 +1,10 @@
 "use client";
 
-import type { Project } from "../../types/project";
 import type { PlanetConfig } from "./Planet";
 import { preventOrphan } from "@/i18n/typography";
 
 type VoyageHUDProps = {
   mode: "idle" | "riding" | "complete";
-  project: Project | null;
   planet: PlanetConfig | null;
   activeIndex: number | null;
   total: number;
@@ -14,7 +12,7 @@ type VoyageHUDProps = {
   modalOpen: boolean;
   onPrevious: () => void;
   onNext: () => void;
-  onOpenProject: () => void;
+  onOpenProject: (slug: string) => void;
   onExit: () => void;
   onContact: () => void;
 };
@@ -25,33 +23,30 @@ const STRINGS = {
     completeEyebrow: "Route complete",
     completeTitle: "You made the loop",
     completeCopy:
-      "That is the full route through the selected projects. You can keep exploring, open the archive, or get in touch.",
+      "That is the full route through every subject. You can keep exploring, open the archive, or get in touch.",
     previous: "Previous",
     next: "Continue voyage",
     finish: "Finish route",
-    open: "Open case study",
+    projects: "Projects in this orbit",
     exit: "Exit ride",
     contact: "Contact",
-    fallbackDiscipline: "Portfolio project",
   },
   he: {
     chapter: "תחנת מסע",
     completeEyebrow: "המסלול הושלם",
     completeTitle: "סיימת את הסיבוב",
-    completeCopy: "זה היה המסלול המלא בין הפרויקטים הנבחרים. אפשר להמשיך לחקור, לפתוח את הרשימה, או ליצור קשר.",
+    completeCopy: "זה היה המסלול המלא בין כל התחומים. אפשר להמשיך לחקור, לפתוח את הרשימה, או ליצור קשר.",
     previous: "הקודם",
     next: "המשך מסע",
     finish: "סיום מסלול",
-    open: "פתח קייס סטאדי",
+    projects: "פרויקטים במסלול",
     exit: "לצאת מהמסלול",
     contact: "צור קשר",
-    fallbackDiscipline: "פרויקט פורטפוליו",
   },
 } as const;
 
 export function VoyageHUD({
   mode,
-  project,
   planet,
   activeIndex,
   total,
@@ -87,13 +82,10 @@ export function VoyageHUD({
     );
   }
 
-  if (!project || !planet || activeIndex === null) return null;
+  if (!planet || activeIndex === null) return null;
 
-  const title = (isHebrew && project.heTitle) || project.title;
-  const descriptor = (isHebrew && project.heDescriptor) || project.descriptor || project.summary;
-  const discipline =
-    (isHebrew && project.heDiscipline) || project.discipline || project.category || t.fallbackDiscipline;
-  const status = (isHebrew && project.heStatus) || project.status || project.year;
+  const title = (isHebrew && planet.heTitle) || planet.title;
+  const moons = planet.moons ?? [];
 
   return (
     <aside
@@ -109,14 +101,22 @@ export function VoyageHUD({
       </div>
       <h2 className="solar-voyage-title">{preventOrphan(title)}</h2>
       <div className="solar-voyage-meta">
-        <span>{preventOrphan(discipline)}</span>
-        <span>{preventOrphan(status)}</span>
+        <span>{preventOrphan(t.projects)}</span>
       </div>
-      {descriptor ? <p className="solar-voyage-copy">{preventOrphan(descriptor)}</p> : null}
+      <div className="solar-voyage-moons">
+        {moons.map((moon) => (
+          <button
+            key={moon.slug}
+            type="button"
+            className="solar-voyage-moon"
+            style={{ ["--moon-accent" as string]: moon.accent }}
+            onClick={() => onOpenProject(moon.slug)}
+          >
+            {preventOrphan((isHebrew && moon.heTitle) || moon.title)}
+          </button>
+        ))}
+      </div>
       <div className="solar-voyage-actions">
-        <button type="button" className="solar-voyage-primary" onClick={onOpenProject}>
-          {preventOrphan(t.open)}
-        </button>
         <button type="button" className="solar-voyage-secondary" onClick={onNext}>
           {preventOrphan(isLastStop ? t.finish : t.next)}
         </button>

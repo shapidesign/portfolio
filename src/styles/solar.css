@@ -155,29 +155,6 @@ body.solar-home {
   letter-spacing: 0.02em;
 }
 
-.solar-info-steps {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  margin: 0.9rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.solar-info-steps li {
-  min-height: 32px;
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid var(--solar-purple-dim);
-  border-radius: 999px;
-  padding: 0.32rem 0.62rem;
-  color: var(--solar-text);
-  background: rgba(255, 255, 255, 0.04);
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
 .solar-info-hint {
   margin: 0.85rem 0 0;
   color: var(--solar-cyan);
@@ -365,6 +342,7 @@ body.solar-home {
   letter-spacing: 0.05em;
   color: var(--solar-purple);
   margin-bottom: 0.7rem;
+  text-align: center;
 }
 
 .solar-ride-console {
@@ -421,8 +399,9 @@ body.solar-home {
 }
 
 .solar-mission-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.55rem;
   margin-bottom: 0.7rem;
 }
@@ -444,10 +423,32 @@ body.solar-home {
   filter: drop-shadow(0 0 0 transparent);
 }
 
-.solar-mission-dot svg {
-  width: 30px;
-  height: 30px;
-  display: block;
+/* Mini planet: lit from the top-left like the 3D bodies, with an accent halo. */
+.solar-mission-orb {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 32% 28%,
+    color-mix(in srgb, var(--dot-accent) 35%, #fff) 0%,
+    var(--dot-accent) 42%,
+    color-mix(in srgb, var(--dot-accent) 35%, #05030b) 100%
+  );
+  box-shadow: 0 0 10px color-mix(in srgb, var(--dot-accent) 55%, transparent),
+    inset -3px -3px 6px rgba(5, 3, 11, 0.55);
+}
+
+.solar-mission-orb.is-ringed::after {
+  content: "";
+  position: absolute;
+  inset: 50% -9px auto;
+  height: 7px;
+  translate: 0 -50%;
+  rotate: -18deg;
+  border: 1.5px solid color-mix(in srgb, var(--dot-accent) 70%, #fff);
+  border-radius: 50%;
+  opacity: 0.85;
 }
 
 .solar-mission-dot:hover,
@@ -466,12 +467,28 @@ body.solar-home {
   transform: scale(1.25);
 }
 
+.solar-mission-dot.is-focused .solar-mission-orb {
+  outline: 1.5px solid var(--dot-accent);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .solar-mission-dot,
+  .solar-mission-dot:hover,
+  .solar-mission-dot.is-hovered,
+  .solar-mission-dot.is-focused {
+    transition: none;
+    transform: none;
+  }
+}
+
 .solar-mission-progress {
   font-family: var(--font-mono-body);
   font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--solar-text-soft);
+  text-align: center;
 }
 
 /* ─── Floating planet HUD label ─────────────────────── */
@@ -1137,9 +1154,6 @@ body.solar-home {
     font-size: 1rem;
     line-height: 1.55;
   }
-  .solar-info-steps {
-    display: none;
-  }
   .solar-info-hint {
     display: none;
   }
@@ -1213,7 +1227,6 @@ body.solar-home {
     font-size: 0.75rem;
   }
   .solar-mission-grid {
-    grid-template-columns: repeat(6, 1fr);
     gap: 0.38rem;
     margin-bottom: 0.5rem;
   }
@@ -1222,9 +1235,9 @@ body.solar-home {
     height: 44px;
     justify-self: center;
   }
-  .solar-mission-dot svg {
-    width: 27px;
-    height: 27px;
+  .solar-mission-orb {
+    width: 20px;
+    height: 20px;
   }
   .solar-mission-progress {
     font-size: 0.75rem;
@@ -1365,7 +1378,6 @@ body.solar-home {
   text-transform: none;
 }
 
-.solar-root[dir="rtl"] .solar-info-steps li,
 .solar-root[dir="rtl"] .solar-btn,
 .solar-root[dir="rtl"] .solar-info-cta,
 .solar-root[dir="rtl"] .solar-ride-console button,
@@ -1789,4 +1801,74 @@ body.solar-home {
   font-family: "narkiss-gershayim", "narkiss-yair-local", "narkiss-yair-variable", sans-serif !important;
   font-style: normal !important;
   font-variation-settings: "MONO" 0, "wght" 400 !important;
+}
+
+/* Subject zoom: project moons listed in the ride HUD, plus a way back out. */
+.solar-voyage-moons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.solar-voyage-moon {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--moon-accent) 55%, transparent);
+  background: rgba(11, 6, 19, 0.42);
+  color: var(--solar-text);
+  font-size: 0.8rem;
+  text-align: start;
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.solar-voyage-moon::before {
+  content: "";
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--moon-accent);
+  box-shadow: 0 0 10px var(--moon-accent);
+}
+
+.solar-voyage-moon:hover {
+  transform: translateY(-1px);
+  border-color: var(--moon-accent);
+  background: color-mix(in srgb, var(--moon-accent) 14%, rgba(11, 6, 19, 0.6));
+}
+
+.solar-voyage-moon:focus-visible {
+  outline: 2px solid var(--moon-accent);
+  outline-offset: 3px;
+}
+
+.solar-zoom-back {
+  position: fixed;
+  top: max(1.6rem, env(safe-area-inset-top, 0px));
+  left: 50%;
+  translate: -50% 0;
+  z-index: 25;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .solar-voyage-moon,
+  .solar-voyage-moon:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* Phones: the top bar is full, so the back button sits just above Mission Control. */
+@media (max-width: 900px) {
+  .solar-zoom-back {
+    top: auto;
+    bottom: calc(max(0.75rem, env(safe-area-inset-bottom, 0.75rem)) + 12.5rem);
+  }
 }

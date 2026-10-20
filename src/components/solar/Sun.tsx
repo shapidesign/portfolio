@@ -3,10 +3,10 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
+import { Sparkles } from "@react-three/drei";
 
-const CORONA_SIZE = 11.5;
+const CORONA_SIZE = 8;
 const PURPLE = new THREE.Color("#7a56f2");
-const PURPLE_HOT = new THREE.Color("#a98bff");
 
 type SunProps = {
   onClick?: (event: { clientX: number; clientY: number }) => void;
@@ -34,18 +34,84 @@ function makeGlowTexture() {
   return texture;
 }
 
+/**
+ * Plasma surface: purple base, granulation cells and a few bright swirl bands.
+ * Bands use integer sine cycles across the width so the longitude seam tiles.
+ */
+function makeSunTexture(size = 512) {
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+  const TAU = Math.PI * 2;
+  // Deterministic noise so the surface is identical on every load.
+  let seed = 7;
+  const rand = () => {
+    seed = (seed * 16807) % 2147483647;
+    return seed / 2147483647;
+  };
+
+  const base = ctx.createLinearGradient(0, 0, 0, size);
+  base.addColorStop(0, "#6c4fe6");
+  base.addColorStop(0.5, "#b39dff");
+  base.addColorStop(1, "#6c4fe6");
+  ctx.fillStyle = base;
+  ctx.fillRect(0, 0, size, size);
+
+  // Granulation: many soft cells, bright centres with darker rims.
+  for (let i = 0; i < 420; i++) {
+    const x = rand() * size;
+    const y = rand() * size;
+    const r = 4 + rand() * 16;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, rand() > 0.5 ? "rgba(240,232,255,0.42)" : "rgba(200,175,255,0.3)");
+    g.addColorStop(0.7, "rgba(70,40,180,0.14)");
+    g.addColorStop(1, "rgba(40,20,120,0)");
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, TAU);
+    ctx.fill();
+  }
+
+  // Swirl bands: thin wavy streaks of hot plasma.
+  for (let b = 0; b < 7; b++) {
+    const yc = size * (0.15 + rand() * 0.7);
+    const k = 1 + Math.floor(rand() * 3);
+    const phase = rand() * TAU;
+    const amp = 6 + rand() * 18;
+    ctx.beginPath();
+    for (let x = 0; x <= size; x += 4) {
+      const y = yc + Math.sin((x / size) * TAU * k + phase) * amp;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = `rgba(246,240,255,${(0.28 + rand() * 0.22).toFixed(2)})`;
+    ctx.lineWidth = 1.5 + rand() * 4;
+    ctx.stroke();
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.needsUpdate = true;
+  return texture;
+}
+
 export function Sun({ onClick, onHoverChange, reducedMotion = false }: SunProps) {
   const groupRef = useRef<THREE.Group>(null);
   const haloRef = useRef<THREE.Mesh>(null);
   const glowRef = useRef<THREE.Sprite>(null);
   const pulsePhase = useRef(0);
   const glowTexture = useMemo(() => makeGlowTexture(), []);
+  const surfaceTexture = useMemo(() => makeSunTexture(), []);
 
   useEffect(
     () => () => {
       glowTexture?.dispose();
+      surfaceTexture?.dispose();
     },
-    [glowTexture],
+    [glowTexture, surfaceTexture],
   );
 
   useFrame((_state, delta) => {
@@ -59,7 +125,7 @@ export function Sun({ onClick, onHoverChange, reducedMotion = false }: SunProps)
         haloRef.current.scale.setScalar(pulse);
       }
       if (glowRef.current) {
-        const pulse = CORONA_SIZE + Math.sin(pulsePhase.current + 1.4) * 0.7;
+        const pulse = CORONA_SIZE + Math.sin(pulsePhase.current + 1.4) * 0.35;
         glowRef.current.scale.set(pulse, pulse, 1);
       }
     }
@@ -87,7 +153,7 @@ export function Sun({ onClick, onHoverChange, reducedMotion = false }: SunProps)
           <spriteMaterial
             map={glowTexture}
             transparent
-            opacity={0.85}
+            opacity={0.45}
             depthWrite={false}
             blending={THREE.AdditiveBlending}
           />
@@ -96,20 +162,47 @@ export function Sun({ onClick, onHoverChange, reducedMotion = false }: SunProps)
 
       <mesh ref={haloRef}>
         <sphereGeometry args={[3.2, 20, 20]} />
-        <meshBasicMaterial color={PURPLE} transparent opacity={0.12} />
+        <meshBasicMaterial color={PURPLE} transparent opacity={0.06} />
       </mesh>
 
       <mesh>
         <sphereGeometry args={[2.6, 32, 32]} />
         <meshStandardMaterial
-          color={PURPLE}
-          emissive={PURPLE_HOT}
-          emissiveIntensity={1.15}
+          color="#ffffff"
+          map={surfaceTexture}
+          bumpMap={surfaceTexture}
+          bumpScale={0.05}
+          emissiveMap={surfaceTexture}
+          // White emissive lets the plasma texture glow in its own colours;
+          // the sun's light sits inside it, so lighting alone can't show the surface.
+          emissive="#ffffff"
+          emissiveIntensity={0.9}
           metalness={0.1}
           roughness={0.55}
           toneMapped={false}
         />
       </mesh>
+
+      {/* Star dust: a flat drifting disk, plus a few brighter twinkles around the core. */}
+      <Sparkles
+        count={160}
+        scale={[12, 1.4, 12]}
+        size={5}
+        speed={reducedMotion ? 0 : 0.25}
+        opacity={0.9}
+        color="#d6c8ff"
+        noise={0.6}
+        raycast={() => null}
+      />
+      <Sparkles
+        count={36}
+        scale={8}
+        size={12}
+        speed={reducedMotion ? 0 : 0.4}
+        opacity={0.9}
+        color="#f1ebff"
+        raycast={() => null}
+      />
 
       <pointLight color="#b89bff" intensity={42} distance={80} decay={1.6} />
     </group>

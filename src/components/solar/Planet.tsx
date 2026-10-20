@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import { makeAtmosphereMaterial } from "./atmosphere-material";
@@ -23,6 +23,8 @@ export type PlanetConfig = {
   size: number;
   /** Saturn-style ring */
   ringed?: boolean;
+  /** Projects orbiting this subject planet; positions are relative to the parent. */
+  moons?: PlanetConfig[];
 };
 
 type PlanetProps = {
@@ -30,12 +32,16 @@ type PlanetProps = {
   paused?: boolean;
   isHovered?: boolean;
   isActive?: boolean;
+  /** false = selected planet: swallows pointer events without hover or click feedback. */
+  hoverable?: boolean;
   compact?: boolean;
   reducedMotion?: boolean;
   onHoverChange?: (hovered: boolean) => void;
   onClick?: (event: { clientX: number; clientY: number }) => void;
   /** receives the live world position each frame, for HUD projection */
   onPositionUpdate?: (pos: THREE.Vector3) => void;
+  /** Rendered in the planet's moving frame but outside its hover scale (moons). */
+  children?: ReactNode;
 };
 
 const seededUnit = (seed: string, index: number, salt: number) => {
@@ -307,11 +313,13 @@ export function Planet({
   paused = false,
   isHovered = false,
   isActive = false,
+  hoverable = true,
   compact = false,
   reducedMotion = false,
   onHoverChange,
   onClick,
   onPositionUpdate,
+  children,
 }: PlanetProps) {
   const groupRef = useRef<THREE.Group>(null);
   const scaleRef = useRef<THREE.Group>(null);
@@ -322,7 +330,7 @@ export function Planet({
   const tmpVec = useRef(new THREE.Vector3()).current;
 
   const surfaceTexture = useMemo(
-    () => makePlanetTexture(config, compact ? 256 : 512),
+    () => makePlanetTexture(config, compact || config.size < 0.6 ? 256 : 512),
     [config, compact],
   );
   const cityTexture = useMemo(
@@ -377,7 +385,7 @@ export function Planet({
       meshRef.current.rotation.y += delta * 0.4;
     }
     if (scaleRef.current) {
-      const target = config.size * (isHovered ? 1.3 : 1);
+      const target = config.size * (isHovered && hoverable ? 1.3 : 1);
       const next = THREE.MathUtils.damp(scaleRef.current.scale.x, target, 8, delta);
       scaleRef.current.scale.setScalar(next);
     }
@@ -409,16 +417,18 @@ export function Planet({
             ref={meshRef}
             onPointerOver={(e: ThreeEvent<PointerEvent>) => {
               e.stopPropagation();
+              if (!hoverable) return;
               document.body.style.cursor = "pointer";
               onHoverChange?.(true);
             }}
             onPointerOut={() => {
+              if (!hoverable) return;
               document.body.style.cursor = "";
               onHoverChange?.(false);
             }}
             onClick={(e: ThreeEvent<MouseEvent>) => {
               e.stopPropagation();
-              onClick?.({ clientX: e.clientX, clientY: e.clientY });
+              if (hoverable) onClick?.({ clientX: e.clientX, clientY: e.clientY });
             }}
           >
             <sphereGeometry args={[1, 32, 32]} />
@@ -453,6 +463,7 @@ export function Planet({
             </mesh>
           ) : null}
         </group>
+        {children}
       </group>
     </>
   );

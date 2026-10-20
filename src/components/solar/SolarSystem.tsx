@@ -7,7 +7,7 @@ import * as THREE from "three";
 import type { Project } from "../../types/project";
 import { StarShapesProvider } from "./StarShapesProvider";
 import { SolarScene } from "./SolarScene";
-import { buildPlanetConfigs } from "./planet-config";
+import { buildPlanetConfigs, outerMoonRadius } from "./planet-config";
 import type { CameraTarget } from "./CameraRig";
 import type { PlanetConfig } from "./Planet";
 import { PlanetHUD } from "./PlanetHUD";
@@ -47,15 +47,21 @@ function CameraExporter({ targetRef }: { targetRef: React.MutableRefObject<THREE
 export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   const router = useRouter();
   const planets = useMemo(() => buildPlanetConfigs(projects), [projects]);
+  const moons = useMemo(() => planets.flatMap((p) => p.moons ?? []), [planets]);
+  const subjectByProject = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const p of planets) for (const m of p.moons ?? []) map.set(m.slug, p.slug);
+    return map;
+  }, [planets]);
 
-  // Refs: live world position for each planet (updated each frame from Planet)
+  // Refs: live world position for each planet and moon (updated each frame from Planet)
   const planetPositions = useMemo(() => {
     const map: Record<string, React.MutableRefObject<THREE.Vector3>> = {};
-    for (const p of planets) {
+    for (const p of [...planets, ...moons]) {
       map[p.slug] = { current: new THREE.Vector3() };
     }
     return map;
-  }, [planets]);
+  }, [planets, moons]);
 
   const cameraRef = useRef<THREE.Camera | null>(null);
   const touchGesture = useRef<{ id: number; x: number; y: number } | null>(null);
@@ -67,6 +73,8 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
   const [sunHovered, setSunHovered] = useState(false);
   const [focusedSlug, setFocusedSlug] = useState<string | null>(null);
+  /** Subject zoomed into outside the guided ride. */
+  const [zoomedId, setZoomedId] = useState<string | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [listMode, setListMode] = useState(false);
@@ -104,15 +112,13 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   }, []);
 
   const activePlanet = activeIndex === null ? null : planets[activeIndex] ?? null;
-  const activeSlug = activePlanet?.slug ?? null;
+  const zoomedPlanet =
+    voyageMode === "riding" ? activePlanet : planets.find((p) => p.slug === zoomedId) ?? null;
+  const zoomedSlug = zoomedPlanet?.slug ?? null;
 
   const focusedProject = useMemo(
     () => (focusedSlug ? projects.find((p) => p.slug === focusedSlug) ?? null : null),
     [focusedSlug, projects],
-  );
-  const activeProject = useMemo(
-    () => (activeSlug ? projects.find((p) => p.slug === activeSlug) ?? null : null),
-    [activeSlug, projects],
   );
   const allProjectsOpened = useMemo(
     () => planets.length > 0 && planets.every((planet) => visited.has(planet.slug)),
@@ -128,18 +134,41 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
     });
   }, []);
 
+  // A planet that becomes selected stops reporting hover, so drop any hover it held.
+  const clearHover = useCallback(() => {
+    setHoveredSlug(null);
+    document.body.style.cursor = "";
+  }, []);
+
   const focusVoyageStop = useCallback(
     (index: number) => {
       if (!planets.length) return;
       const safeIndex = Math.max(0, Math.min(index, planets.length - 1));
+      markVisited(planets[safeIndex].slug);
+      clearHover();
+      setZoomedId(null);
       setVoyageMode("riding");
       setActiveIndex(safeIndex);
       setAboutOpen(false);
       setContactOpen(false);
       setListMode(false);
     },
-    [planets],
+    [clearHover, markVisited, planets],
   );
+
+  /** Free exploration: zoom into a subject without starting the guided ride. */
+  const zoomIdle = useCallback(
+    (index: number) => {
+      const planet = planets[index];
+      if (!planet) return;
+      markVisited(planet.slug);
+      clearHover();
+      setZoomedId(planet.slug);
+      setAboutOpen(false);
+    },
+    [clearHover, markVisited, planets],
+  );
+  const zoomedIndex = zoomedId ? planets.findIndex((p) => p.slug === zoomedId) : -1;
 
   const startRide = useCallback(() => {
     focusVoyageStop(0);
@@ -152,6 +181,10 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
 
   const goNext = useCallback(() => {
     if (!planets.length) return;
+    if (voyageMode === "idle") {
+      zoomIdle(Math.min(zoomedIndex + 1, planets.length - 1));
+      return;
+    }
     if (voyageMode !== "riding" || activeIndex === null) {
       focusVoyageStop(0);
       return;
@@ -167,7 +200,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
       return;
     }
     focusVoyageStop(activeIndex + 1);
-  }, [activeIndex, allProjectsOpened, focusVoyageStop, planets, visited, voyageMode]);
+  }, [activeIndex, allProjectsOpened, focusVoyageStop, planets, visited, voyageMode, zoomIdle, zoomedIndex]);
 
   const goPrevious = useCallback(() => {
     if (!planets.length) return;
@@ -175,9 +208,13 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
       focusVoyageStop(planets.length - 1);
       return;
     }
+    if (voyageMode === "idle") {
+      if (zoomedIndex > 0) zoomIdle(zoomedIndex - 1);
+      return;
+    }
     if (voyageMode !== "riding" || activeIndex === null) return;
     focusVoyageStop(activeIndex - 1);
-  }, [activeIndex, focusVoyageStop, planets.length, voyageMode]);
+  }, [activeIndex, focusVoyageStop, planets.length, voyageMode, zoomIdle, zoomedIndex]);
 
   const isGestureBlocked = useCallback(
     (target: EventTarget | null) => {
@@ -261,18 +298,21 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   const cameraTarget: CameraTarget = useMemo(() => {
     if (aboutOpen) return { kind: "sun" };
     if (voyageMode === "complete") return { kind: "sun" };
-    if (voyageMode === "riding" && activePlanet && planetPositions[activePlanet.slug]) {
+    if (zoomedPlanet && planetPositions[zoomedPlanet.slug]) {
+      // Frame the planet plus its outermost moon orbit (fov 45 => ~2.4x radius to fit).
       return {
         kind: "planet",
-        positionRef: planetPositions[activePlanet.slug],
-        offset: Math.max(24, activePlanet.size * 17),
+        positionRef: planetPositions[zoomedPlanet.slug],
+        // Portrait screens crop horizontally, so pull back further to keep moons in frame.
+        offset: Math.max(7, outerMoonRadius(zoomedPlanet) * (compactScene ? 3.6 : 2.2)),
       };
     }
     return voyageMode === "riding" ? { kind: "overview" } : { kind: "home" };
-  }, [aboutOpen, activePlanet, planetPositions, voyageMode]);
+  }, [aboutOpen, compactScene, zoomedPlanet, planetPositions, voyageMode]);
 
   const openProject = useCallback((slug: string) => {
-    markVisited(slug);
+    const subject = subjectByProject.get(slug);
+    if (subject) markVisited(subject);
     // Projects with their own page (e.g. /kibbutz-type/) navigate instead of opening the modal.
     const href = projects.find((p) => p.slug === slug)?.href;
     if (href) {
@@ -280,15 +320,31 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
       return;
     }
     setFocusedSlug(slug);
-  }, [markVisited, projects, router]);
+  }, [markVisited, projects, router, subjectByProject]);
 
   const closeProject = useCallback(() => {
     setFocusedSlug(null);
   }, []);
 
   const openActiveProject = useCallback(() => {
-    if (activeSlug) openProject(activeSlug);
-  }, [activeSlug, openProject]);
+    const first = zoomedPlanet?.moons?.[0];
+    if (first) openProject(first.slug);
+  }, [zoomedPlanet, openProject]);
+
+  const zoomInto = useCallback(
+    (slug: string) => {
+      const index = planets.findIndex((planet) => planet.slug === slug);
+      if (index < 0) return;
+      if (voyageMode === "riding") {
+        focusVoyageStop(index);
+        return;
+      }
+      zoomIdle(index);
+    },
+    [focusVoyageStop, planets, voyageMode, zoomIdle],
+  );
+
+  const zoomOut = useCallback(() => setZoomedId(null), []);
 
   const openAbout = () => setAboutOpen(true);
   const closeAbout = () => setAboutOpen(false);
@@ -296,17 +352,6 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   const openContact = () => setContactOpen(true);
   const closeContact = () => setContactOpen(false);
 
-  const selectMissionPlanet = useCallback(
-    (slug: string) => {
-      const index = planets.findIndex((planet) => planet.slug === slug);
-      if (voyageMode !== "idle" && index >= 0) {
-        focusVoyageStop(index);
-        return;
-      }
-      openProject(slug);
-    },
-    [focusVoyageStop, openProject, planets, voyageMode],
-  );
 
   // Escape to close
   useEffect(() => {
@@ -319,11 +364,12 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
         else if (aboutOpen) closeAbout();
         else if (contactOpen) closeContact();
         else if (listMode) setListMode(false);
+        else if (zoomedId) zoomOut();
         else if (voyageMode !== "idle") exitRide();
         return;
       }
 
-      if (isControl || overlayBlocked || voyageMode === "idle") return;
+      if (isControl || overlayBlocked || (voyageMode === "idle" && !zoomedId)) return;
       if (e.key === "ArrowRight" || e.key === "ArrowDown") {
         e.preventDefault();
         goNext();
@@ -350,10 +396,21 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
     openActiveProject,
     overlayBlocked,
     voyageMode,
+    zoomedId,
+    zoomOut,
   ]);
 
   const hoveredPlanet: PlanetConfig | null =
-    (hoveredSlug && planets.find((p) => p.slug === hoveredSlug)) || null;
+    (hoveredSlug && [...planets, ...moons].find((p) => p.slug === hoveredSlug)) || null;
+  const hoveredIsMoon = !!hoveredSlug && subjectByProject.has(hoveredSlug);
+  const hoveredMoonCount = hoveredPlanet?.moons?.length ?? 0;
+  const hoverLabel = hoveredIsMoon
+    ? isHebrew
+      ? "פרויקט"
+      : "Project"
+    : isHebrew
+      ? `תחום · ${hoveredMoonCount} ${hoveredMoonCount === 1 ? "פרויקט" : "פרויקטים"}`
+      : `Subject · ${hoveredMoonCount} ${hoveredMoonCount === 1 ? "project" : "projects"}`;
   const hoveredPositionRef =
     hoveredSlug && planetPositions[hoveredSlug] ? planetPositions[hoveredSlug] : null;
 
@@ -372,12 +429,16 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
             dpr={[1, 1.5]}
             camera={{ position: [0, 8, 32], fov: 45, near: 0.1, far: 200 }}
             gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
+            onPointerMissed={() => {
+              if (zoomedId && !modalOpen) zoomOut();
+            }}
           >
             <CameraExporter targetRef={cameraRef} />
             <SolarScene
               planets={planets}
               hoveredSlug={hoveredSlug}
-              focusedSlug={focusedSlug ?? activeSlug}
+              focusedSlug={focusedSlug ?? zoomedSlug}
+              zoomedSlug={zoomedSlug}
               cameraTarget={cameraTarget}
               reducedMotion={reducedMotion}
               spacecraftVisible={!modalOpen}
@@ -385,7 +446,8 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
               voyageMotion={voyageMode === "riding"}
               planetPositions={planetPositions}
               onPlanetHover={setHoveredSlug}
-              onPlanetClick={(slug) => openProject(slug)}
+              onPlanetClick={(slug) => zoomInto(slug)}
+              onMoonClick={openProject}
               onSunHover={(h) => setSunHovered(h)}
               onSunClick={openAbout}
             />
@@ -397,7 +459,14 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
             positionRef={hoveredPositionRef}
             cameraRef={cameraRef}
             isHebrew={isHebrew}
+            label={hoverLabel}
           />
+
+          {zoomedId && voyageMode === "idle" && !modalOpen ? (
+            <button type="button" className="solar-btn solar-zoom-back" onClick={zoomOut}>
+              {preventOrphan(isHebrew ? "חזרה למערכת" : "Back to system")}
+            </button>
+          ) : null}
 
           {sunHovered && !aboutOpen && !focusedSlug ? (
             <div
@@ -420,13 +489,15 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
               planets={planets}
               visited={visited}
               hoveredSlug={hoveredSlug}
-              focusedSlug={focusedSlug ?? activeSlug}
+              focusedSlug={zoomedSlug}
+              zoomedPlanet={zoomedPlanet}
               listMode={listMode}
               rideActive={voyageMode === "riding"}
               rideComplete={voyageMode === "complete"}
-              activeIndex={activeIndex}
+              activeIndex={voyageMode === "riding" ? activeIndex : zoomedIndex >= 0 ? zoomedIndex : null}
               isHebrew={isHebrew}
-              onPlanetSelect={selectMissionPlanet}
+              onPlanetSelect={zoomInto}
+              onMoonSelect={openProject}
               onAboutSelect={openAbout}
               onListToggle={() => setListMode((v) => !v)}
               onStartRide={startRide}
@@ -437,7 +508,6 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
 
             <VoyageHUD
               mode={voyageMode}
-              project={activeProject}
               planet={activePlanet}
               activeIndex={activeIndex}
               total={planets.length}
@@ -445,7 +515,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
               modalOpen={modalOpen}
               onPrevious={goPrevious}
               onNext={goNext}
-              onOpenProject={openActiveProject}
+              onOpenProject={openProject}
               onExit={exitRide}
               onContact={() => {
                 setVoyageMode("idle");
@@ -459,7 +529,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
         <ListView
           open={listMode}
           projects={projects}
-          planets={planets}
+          planets={moons}
           isHebrew={isHebrew}
           onSelect={(slug) => {
             setListMode(false);

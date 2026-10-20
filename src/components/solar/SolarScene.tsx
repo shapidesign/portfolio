@@ -13,6 +13,8 @@ type SolarSceneProps = {
   planets: PlanetConfig[];
   hoveredSlug: string | null;
   focusedSlug: string | null;
+  /** Subject planet the camera is zoomed into; only its moons are mounted. */
+  zoomedSlug: string | null;
   cameraTarget: CameraTarget;
   reducedMotion: boolean;
   spacecraftVisible: boolean;
@@ -21,6 +23,7 @@ type SolarSceneProps = {
   planetPositions: Record<string, React.MutableRefObject<THREE.Vector3>>;
   onPlanetHover: (slug: string | null) => void;
   onPlanetClick: (slug: string, evt: { clientX: number; clientY: number }) => void;
+  onMoonClick: (slug: string) => void;
   onSunHover: (hovered: boolean) => void;
   onSunClick: (evt: { clientX: number; clientY: number }) => void;
 };
@@ -29,6 +32,7 @@ export function SolarScene({
   planets,
   hoveredSlug,
   focusedSlug,
+  zoomedSlug,
   cameraTarget,
   reducedMotion,
   spacecraftVisible,
@@ -37,6 +41,7 @@ export function SolarScene({
   planetPositions,
   onPlanetHover,
   onPlanetClick,
+  onMoonClick,
   onSunHover,
   onSunClick,
 }: SolarSceneProps) {
@@ -54,6 +59,7 @@ export function SolarScene({
           paused={reducedMotion || focusedSlug === config.slug}
           isHovered={hoveredSlug === config.slug}
           isActive={focusedSlug === config.slug}
+          hoverable={zoomedSlug !== config.slug}
           compact={compact}
           reducedMotion={reducedMotion}
           onHoverChange={(h) => onPlanetHover(h ? config.slug : null)}
@@ -62,7 +68,28 @@ export function SolarScene({
             const ref = planetPositions[config.slug];
             if (ref) ref.current.copy(pos);
           }}
-        />
+        >
+          {/* ponytail: moons pop in on zoom; add a scale-in if it reads abrupt. */}
+          {zoomedSlug === config.slug
+            ? config.moons?.map((moon) => (
+                <Planet
+                  key={moon.slug}
+                  config={moon}
+                  paused={reducedMotion}
+                  isHovered={hoveredSlug === moon.slug}
+                  isActive={focusedSlug === moon.slug}
+                  compact={compact}
+                  reducedMotion={reducedMotion}
+                  onHoverChange={(h) => onPlanetHover(h ? moon.slug : null)}
+                  onClick={() => onMoonClick(moon.slug)}
+                  onPositionUpdate={(pos) => {
+                    const ref = planetPositions[moon.slug];
+                    if (ref) ref.current.copy(pos);
+                  }}
+                />
+              ))
+            : null}
+        </Planet>
       ))}
 
       <Spacecraft

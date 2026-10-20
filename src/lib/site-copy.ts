@@ -70,9 +70,9 @@ export const SITE_COPY_DEFAULTS: SiteCopy = {
   homeTitle: "time to start exploring",
   heHomeTitle: "הגיע הזמן להתחיל לחקור",
   homeIntro:
-    "Take the guided ride, tap a planet to open a project, or switch to the list when you want the quick version.",
+    "Take the guided ride, tap a planet to fly into a subject and pick a project from its moons, or switch to the list when you want the quick version.",
   heHomeIntro:
-    "אפשר לצאת למסלול מודרך, לפתוח פרויקט דרך אחד הכוכבים, או לעבור לרשימה כשבא לך לראות הכול מהר.",
+    "אפשר לצאת למסלול מודרך, להיכנס לתחום דרך אחד הכוכבים ולבחור פרויקט מהירחים שלו, או לעבור לרשימה כשבא לך לראות הכול מהר.",
   homeCtaStart: "Start the ride",
   heHomeCtaStart: "להתחיל את המסלול",
   homeCtaAbout: "About",
