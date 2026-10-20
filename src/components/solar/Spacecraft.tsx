@@ -94,7 +94,7 @@ export function Spacecraft({
     [],
   );
 
-  // Tron-style running-light strips along the fuselage sides.
+  // Accent running lights: rim beacons and the underside lift ring.
   const stripMat = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
@@ -360,100 +360,98 @@ export function Spacecraft({
       <EngineTrail craftRef={groupRef} accent={accent} enabled={!reducedMotion} />
       <group ref={groupRef} visible={false} scale={compact ? 1.25 : 1.08}>
       <group ref={bodyRef}>
-        {/* ── Fuselage: elongated hull along +z ── */}
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <capsuleGeometry args={[0.2, 0.85, 8, 20]} />
+        {/* Human-built saucer: symmetric lens hull, glass cockpit dome, lit rim,
+            and two rear thrusters (it still flies nose-first along +z). */}
+
+        {/* Lens hull */}
+        <mesh scale={[0.62, 0.12, 0.62]}>
+          <sphereGeometry args={[1, 40, 20]} />
           <meshStandardMaterial
             color={HULL}
             emissive={HULL}
-            emissiveIntensity={0.22}
-            metalness={0.72}
+            emissiveIntensity={0.2}
+            metalness={0.75}
             roughness={0.22}
           />
         </mesh>
 
-        {/* Nose cone */}
-        <mesh position={[0, 0, 0.78]} rotation={[Math.PI / 2, 0, 0]}>
-          <coneGeometry args={[0.165, 0.46, 20]} />
-          <meshStandardMaterial
-            color={HULL}
-            emissive={accentColor}
-            emissiveIntensity={0.3}
-            metalness={0.66}
-            roughness={0.2}
-          />
-        </mesh>
-
-        {/* Glass canopy — interior glow follows the destination accent */}
-        <mesh position={[0, 0.165, 0.3]} scale={[1, 0.72, 1.55]}>
-          <sphereGeometry args={[0.15, 24, 16]} />
-          <meshStandardMaterial
-            color={GLASS}
-            emissive={accentColor}
-            emissiveIntensity={0.9}
-            metalness={0.16}
-            roughness={0.1}
-            transparent
-            opacity={0.82}
-          />
-        </mesh>
-
-        {/* Running-light strips along the fuselage sides */}
-        {([1, -1] as const).map((side) => (
-          <mesh key={side} position={[side * 0.205, 0.02, 0.05]} material={stripMat}>
-            <boxGeometry args={[0.016, 0.035, 0.95]} />
-          </mesh>
-        ))}
-
-        {/* Accent ring around the hull */}
-        <mesh position={[0, 0, -0.06]}>
-          <torusGeometry args={[0.215, 0.022, 10, 40]} />
+        {/* Equator rim band in the destination accent */}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.6, 0.028, 10, 64]} />
           <meshStandardMaterial
             color={accentColor}
             emissive={accentColor}
-            emissiveIntensity={0.9}
+            emissiveIntensity={0.85}
             metalness={0.3}
             roughness={0.18}
           />
         </mesh>
 
-        {/* ── Swept delta wings: clean white silhouette, accent tips only ── */}
-        {([1, -1] as const).map((side) => (
-          <group key={side} position={[side * 0.42, -0.04, -0.22]} rotation={[0, side * -0.52, side * 0.08]}>
-            <mesh scale={[0.78, 0.045, 0.38]}>
-              <boxGeometry args={[1, 1, 1]} />
-              <meshStandardMaterial
-                color={HULL}
-                emissive={HULL}
-                emissiveIntensity={0.22}
-                metalness={0.68}
-                roughness={0.26}
-              />
+        {/* Rim running lights: evenly spaced, nav colours at port/starboard */}
+        {Array.from({ length: 12 }, (_, i) => {
+          const a = (i / 12) * Math.PI * 2;
+          const material = i === 0 ? navMats[0] : i === 6 ? navMats[1] : stripMat;
+          return (
+            <mesh
+              key={i}
+              position={[Math.cos(a) * 0.64, 0, Math.sin(a) * 0.64]}
+              material={material}
+            >
+              <sphereGeometry args={[i % 6 === 0 ? 0.04 : 0.022, 10, 8]} />
             </mesh>
-            {/* Wingtip nav light — red port (+x is left when facing +z), green starboard */}
-            <mesh position={[side * 0.4, 0, 0]} material={navMats[side === 1 ? 0 : 1]}>
-              <sphereGeometry args={[0.05, 12, 8]} />
-            </mesh>
-          </group>
-        ))}
+          );
+        })}
 
-        {/* Tail fin */}
-        <mesh position={[0, 0.21, -0.5]} rotation={[-0.42, 0, 0]} scale={[0.04, 0.36, 0.4]}>
-          <boxGeometry args={[1, 1, 1]} />
+        {/* Upper deck: stepped hull with a panel-line ring */}
+        <mesh position={[0, 0.1, 0]}>
+          <cylinderGeometry args={[0.24, 0.36, 0.09, 40]} />
           <meshStandardMaterial
             color={HULL}
             emissive={HULL}
-            emissiveIntensity={0.14}
-            metalness={0.66}
-            roughness={0.26}
+            emissiveIntensity={0.16}
+            metalness={0.72}
+            roughness={0.24}
+          />
+        </mesh>
+        <mesh position={[0, 0.072, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.43, 0.01, 6, 48]} />
+          <meshStandardMaterial color={HULL_DARK} metalness={0.6} roughness={0.4} />
+        </mesh>
+
+        {/* Glass cockpit dome — interior glow follows the destination accent */}
+        <mesh position={[0, 0.14, 0]}>
+          <sphereGeometry args={[0.2, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+          <meshStandardMaterial
+            color={GLASS}
+            emissive={accentColor}
+            emissiveIntensity={0.9}
+            metalness={0.16}
+            roughness={0.08}
+            transparent
+            opacity={0.82}
           />
         </mesh>
 
-        {/* ── Twin engine nacelles ── */}
+        {/* Underside: darker keel with a glowing lift ring */}
+        <mesh position={[0, -0.1, 0]}>
+          <cylinderGeometry args={[0.36, 0.2, 0.09, 40]} />
+          <meshStandardMaterial
+            color={HULL_DARK}
+            emissive={HULL_DARK}
+            emissiveIntensity={0.12}
+            metalness={0.7}
+            roughness={0.3}
+          />
+        </mesh>
+        <mesh position={[0, -0.148, 0]} rotation={[Math.PI / 2, 0, 0]} material={stripMat}>
+          <torusGeometry args={[0.15, 0.018, 8, 40]} />
+        </mesh>
+
+        {/* ── Twin rear thrusters ── */}
         {([1, -1] as const).map((side) => (
-          <group key={side} position={[side * 0.24, -0.02, -0.5]}>
+          <group key={side} position={[side * 0.2, 0, -0.5]}>
             <mesh rotation={[Math.PI / 2, 0, 0]}>
-              <cylinderGeometry args={[0.085, 0.105, 0.42, 16]} />
+              <cylinderGeometry args={[0.07, 0.085, 0.26, 16]} />
               <meshStandardMaterial
                 color={HULL_DARK}
                 emissive={HULL_DARK}
@@ -463,23 +461,23 @@ export function Spacecraft({
               />
             </mesh>
             {/* Engine glow disc */}
-            <mesh position={[0, 0, -0.215]} rotation={[Math.PI / 2, 0, 0]}>
-              <circleGeometry args={[0.085, 16]} />
+            <mesh position={[0, 0, -0.132]} rotation={[Math.PI / 2, 0, 0]}>
+              <circleGeometry args={[0.07, 16]} />
               <meshBasicMaterial color={accentColor} toneMapped={false} side={THREE.DoubleSide} />
             </mesh>
           </group>
         ))}
 
-        {/* ── Exhaust plumes: scale/fade with thrust ── */}
-        <group ref={thrustRef} position={[0, -0.02, -0.72]}>
+        {/* ── Exhaust plumes: scale/fade with thrust, stretching back from the nozzles ── */}
+        <group ref={thrustRef} position={[0, 0, -0.63]}>
           {([1, -1] as const).map((side) => (
             <mesh
               key={side}
-              position={[side * 0.24, 0, -0.22]}
+              position={[side * 0.2, 0, -0.3]}
               rotation={[-Math.PI / 2, 0, 0]}
               material={exhaustMat}
             >
-              <coneGeometry args={[0.08, 0.6, 12, 1, true]} />
+              <coneGeometry args={[0.07, 0.6, 12, 1, true]} />
             </mesh>
           ))}
         </group>
@@ -529,7 +527,7 @@ function EngineTrail({ craftRef, accent, enabled }: EngineTrailProps) {
   const cursor = useRef(0);
   const emitCarry = useRef(0);
   const prevCraftPos = useRef<THREE.Vector3 | null>(null);
-  const emitterLocal = useMemo(() => new THREE.Vector3(0, -0.02, -0.72), []);
+  const emitterLocal = useMemo(() => new THREE.Vector3(0, 0, -0.66), []);
   const emitterWorld = useMemo(() => new THREE.Vector3(), []);
 
   const positions = useMemo(() => new Float32Array(TRAIL_COUNT * 3).fill(99999), []);

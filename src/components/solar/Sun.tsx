@@ -100,6 +100,7 @@ function makeSunTexture(size = 512) {
 
 export function Sun({ onClick, onHoverChange, reducedMotion = false }: SunProps) {
   const groupRef = useRef<THREE.Group>(null);
+  const dustRef = useRef<THREE.Group>(null);
   const haloRef = useRef<THREE.Mesh>(null);
   const glowRef = useRef<THREE.Sprite>(null);
   const pulsePhase = useRef(0);
@@ -118,6 +119,9 @@ export function Sun({ onClick, onHoverChange, reducedMotion = false }: SunProps)
     if (groupRef.current && !reducedMotion) {
       groupRef.current.rotation.y += delta * 0.12;
     }
+    if (dustRef.current && !reducedMotion) {
+      dustRef.current.rotation.y += delta * 0.02;
+    }
     if (!reducedMotion) {
       pulsePhase.current += delta * 0.7;
       if (haloRef.current) {
@@ -132,79 +136,86 @@ export function Sun({ onClick, onHoverChange, reducedMotion = false }: SunProps)
   });
 
   return (
-    <group
-      ref={groupRef}
-      onPointerOver={(e: ThreeEvent<PointerEvent>) => {
-        e.stopPropagation();
-        document.body.style.cursor = "pointer";
-        onHoverChange?.(true);
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = "";
-        onHoverChange?.(false);
-      }}
-      onClick={(e: ThreeEvent<MouseEvent>) => {
-        e.stopPropagation();
-        onClick?.({ clientX: e.clientX, clientY: e.clientY });
-      }}
-    >
-      {glowTexture ? (
-        <sprite ref={glowRef} scale={[CORONA_SIZE, CORONA_SIZE, 1]} renderOrder={-1}>
-          <spriteMaterial
-            map={glowTexture}
-            transparent
-            opacity={0.45}
-            depthWrite={false}
-            blending={THREE.AdditiveBlending}
+    <>
+      <group
+        ref={groupRef}
+        onPointerOver={(e: ThreeEvent<PointerEvent>) => {
+          e.stopPropagation();
+          document.body.style.cursor = "pointer";
+          onHoverChange?.(true);
+        }}
+        onPointerOut={() => {
+          document.body.style.cursor = "";
+          onHoverChange?.(false);
+        }}
+        onClick={(e: ThreeEvent<MouseEvent>) => {
+          e.stopPropagation();
+          onClick?.({ clientX: e.clientX, clientY: e.clientY });
+        }}
+      >
+        {glowTexture ? (
+          <sprite ref={glowRef} scale={[CORONA_SIZE, CORONA_SIZE, 1]} renderOrder={-1}>
+            <spriteMaterial
+              map={glowTexture}
+              transparent
+              opacity={0.45}
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+            />
+          </sprite>
+        ) : null}
+
+        <mesh ref={haloRef}>
+          <sphereGeometry args={[3.2, 20, 20]} />
+          <meshBasicMaterial color={PURPLE} transparent opacity={0.06} />
+        </mesh>
+
+        <mesh>
+          <sphereGeometry args={[2.6, 32, 32]} />
+          <meshStandardMaterial
+            color="#ffffff"
+            map={surfaceTexture}
+            bumpMap={surfaceTexture}
+            bumpScale={0.05}
+            emissiveMap={surfaceTexture}
+            // White emissive lets the plasma texture glow in its own colours;
+            // the sun's light sits inside it, so lighting alone can't show the surface.
+            emissive="#ffffff"
+            emissiveIntensity={0.9}
+            metalness={0.1}
+            roughness={0.55}
+            toneMapped={false}
           />
-        </sprite>
-      ) : null}
+        </mesh>
 
-      <mesh ref={haloRef}>
-        <sphereGeometry args={[3.2, 20, 20]} />
-        <meshBasicMaterial color={PURPLE} transparent opacity={0.06} />
-      </mesh>
+        <pointLight color="#b89bff" intensity={42} distance={80} decay={1.6} />
+      </group>
 
-      <mesh>
-        <sphereGeometry args={[2.6, 32, 32]} />
-        <meshStandardMaterial
-          color="#ffffff"
-          map={surfaceTexture}
-          bumpMap={surfaceTexture}
-          bumpScale={0.05}
-          emissiveMap={surfaceTexture}
-          // White emissive lets the plasma texture glow in its own colours;
-          // the sun's light sits inside it, so lighting alone can't show the surface.
-          emissive="#ffffff"
-          emissiveIntensity={0.9}
-          metalness={0.1}
-          roughness={0.55}
-          toneMapped={false}
+      <group ref={dustRef}>
+        {/* Calm dust. It lives outside the spinning sun group on purpose: drei's
+            Sparkles derive each speck's bob phase from its world x, so a fast
+            spin turns the bob into jitter. A very slow turn keeps it floating. */}
+        <Sparkles
+          count={220}
+          scale={[12, 1.2, 12]}
+          size={2.4}
+          speed={reducedMotion ? 0 : 0.35}
+          noise={0.012}
+          opacity={0.55}
+          color="#d6c8ff"
+          raycast={() => null}
         />
-      </mesh>
-
-      {/* Star dust: a flat drifting disk, plus a few brighter twinkles around the core. */}
-      <Sparkles
-        count={160}
-        scale={[12, 1.4, 12]}
-        size={5}
-        speed={reducedMotion ? 0 : 0.25}
-        opacity={0.9}
-        color="#d6c8ff"
-        noise={0.6}
-        raycast={() => null}
-      />
-      <Sparkles
-        count={36}
-        scale={8}
-        size={12}
-        speed={reducedMotion ? 0 : 0.4}
-        opacity={0.9}
-        color="#f1ebff"
-        raycast={() => null}
-      />
-
-      <pointLight color="#b89bff" intensity={42} distance={80} decay={1.6} />
-    </group>
+        <Sparkles
+          count={14}
+          scale={8}
+          size={5}
+          speed={reducedMotion ? 0 : 0.25}
+          noise={0.02}
+          opacity={0.7}
+          color="#f1ebff"
+          raycast={() => null}
+        />
+      </group>
+    </>
   );
 }
