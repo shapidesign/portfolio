@@ -8,6 +8,7 @@ import { SITE_COPY_DEFAULTS, type SiteCopy } from "@/lib/site-copy";
 type MissionControlProps = {
   siteCopy?: SiteCopy;
   planets: PlanetConfig[];
+  projectCount?: number;
   visited: Set<string>;
   hoveredSlug: string | null;
   focusedSlug: string | null;
@@ -28,10 +29,19 @@ type MissionControlProps = {
   onExitRide: () => void;
 };
 
+const SHORT_SUBJECT_LABELS: Record<string, { en: string; he: string }> = {
+  "subject-brand": { en: "Brand", he: "מיתוג" },
+  "subject-type": { en: "Type", he: "טיפוגרפיה" },
+  "subject-web": { en: "Web", he: "אתרים" },
+  "subject-experimental": { en: "Lab", he: "ניסיוני" },
+};
+
 const STRINGS = {
   en: {
     orbitProjects: (n: number) => `${n} ${n === 1 ? "project" : "projects"} in this orbit`,
     rideHint: "Next and Previous move between stops. Escape exits the ride.",
+    mobileSwipeHint: "Swipe or tap a category below to explore",
+    allProjectsChip: (n: number) => `All ${n} projects`,
     threeView: "3D View",
     missionControl: "Mission Control",
     progress: (v: number, t: number) => `${v}/${t} missions explored`,
@@ -43,6 +53,8 @@ const STRINGS = {
   he: {
     orbitProjects: (n: number) => (n === 1 ? "פרויקט אחד במסלול" : `${n} פרויקטים במסלול`),
     rideHint: "הבא והקודם מעבירים בין תחנות. Escape מחזיר אותך החוצה.",
+    mobileSwipeHint: "החליקו או בחרו תחום למטה",
+    allProjectsChip: (n: number) => `כל ${n} הפרויקטים`,
     threeView: "לתצוגה מרחבית",
     missionControl: "בקרת משימה",
     progress: (v: number, t: number) => `${v}/${t} משימות נחקרו`,
@@ -56,6 +68,7 @@ const STRINGS = {
 export function MissionControl({
   siteCopy,
   planets,
+  projectCount = 6,
   visited,
   hoveredSlug,
   focusedSlug,
@@ -89,34 +102,70 @@ export function MissionControl({
     startRide: copy("homeCtaStart", "heHomeCtaStart"),
     about: copy("homeCtaAbout", "heHomeCtaAbout"),
     listView: copy("homeCtaList", "heHomeCtaList"),
+    brandName: copy("aboutPopupName", "heAboutPopupName"),
   };
   const currentStop = rideComplete ? planets.length : activeIndex === null ? 0 : activeIndex + 1;
+  const activeSubjectMode = rideActive || rideComplete || zoomedPlanet !== null;
 
   return (
     <>
+      <div className="solar-mobile-topbar" dir={isHebrew ? "rtl" : "ltr"}>
+        <button
+          type="button"
+          className="solar-mobile-brand"
+          onClick={onAboutSelect}
+          aria-label={t.about}
+        >
+          <span className="solar-mobile-brand-dot" aria-hidden />
+          <span className="solar-mobile-brand-name">{preventOrphan(t.brandName)}</span>
+        </button>
+        <div className="solar-mobile-top-actions">
+          <button
+            type="button"
+            className="solar-btn solar-mobile-list-pill"
+            onClick={onListToggle}
+            aria-label={listMode ? t.threeView : t.listView}
+          >
+            {preventOrphan(t.listView)}
+          </button>
+          <LanguageToggle />
+        </div>
+      </div>
+
       <div className="solar-info" dir={isHebrew ? "rtl" : "ltr"}>
         <span className="solar-info-eyebrow">{preventOrphan(t.universe)}</span>
         <h1 className="solar-info-title">{preventOrphan(t.title)}</h1>
         <p className="solar-info-text">{preventOrphan(t.intro)}</p>
-        <button
-          type="button"
-          className="solar-info-cta"
-          onClick={onStartRide}
-          aria-label={rideComplete ? t.restartRide : t.startRide}
-        >
-          {preventOrphan(rideComplete ? t.restartRide : t.startRide)}
-        </button>
+        <p className="solar-info-mobile-sub">{preventOrphan(t.mobileSwipeHint)}</p>
+        <div className="solar-info-cta-group">
+          <button
+            type="button"
+            className="solar-info-cta"
+            onClick={onStartRide}
+            aria-label={rideComplete ? t.restartRide : t.startRide}
+          >
+            {preventOrphan(rideComplete ? t.restartRide : t.startRide)}
+            <span aria-hidden>{isHebrew ? "←" : "→"}</span>
+          </button>
+          <button
+            type="button"
+            className="solar-info-secondary-chip"
+            onClick={onListToggle}
+          >
+            {preventOrphan(t.allProjectsChip(projectCount))}
+          </button>
+        </div>
         <p className="solar-info-hint">{preventOrphan(t.rideHint)}</p>
       </div>
 
       <div className="solar-actions">
         <button
           type="button"
-          className={`solar-btn solar-btn-primary ${rideActive ? "is-active" : ""}`}
-          onClick={rideActive ? onExitRide : onStartRide}
-          aria-label={rideActive ? t.exitRide : t.startRide}
+          className={`solar-btn solar-btn-primary ${activeSubjectMode ? "is-active" : ""}`}
+          onClick={activeSubjectMode ? onExitRide : onStartRide}
+          aria-label={activeSubjectMode ? t.exitRide : t.startRide}
         >
-          {preventOrphan(rideComplete ? t.restartRide : rideActive ? t.exitRide : t.startRide)}
+          {preventOrphan(rideComplete ? t.restartRide : activeSubjectMode ? t.exitRide : t.startRide)}
         </button>
         <button type="button" className="solar-btn" onClick={onAboutSelect} aria-label={t.about}>
           {preventOrphan(t.about)}
@@ -142,7 +191,7 @@ export function MissionControl({
           <button
             type="button"
             onClick={onPreviousStop}
-            disabled={rideComplete ? false : activeIndex === null || activeIndex === 0}
+            disabled={rideComplete ? false : activeIndex === null}
           >
             {t.previous}
           </button>
@@ -152,12 +201,12 @@ export function MissionControl({
           <button
             type="button"
             onClick={onNextStop}
-            disabled={!rideActive && !rideComplete && activeIndex === planets.length - 1}
+            disabled={!rideActive && !rideComplete && !zoomedPlanet && activeIndex === planets.length - 1}
           >
             {t.next}
           </button>
         </div>
-        <div className="solar-mission-grid">
+        <div className="solar-mission-grid solar-mission-grid--desktop">
           {(zoomedPlanet?.moons ?? planets).map((p) => {
             const isVisited = !!zoomedPlanet || visited.has(p.slug);
             const isHovered = hoveredSlug === p.slug;
@@ -176,6 +225,32 @@ export function MissionControl({
                 aria-label={title}
               >
                 <span className={`solar-mission-orb ${p.ringed ? "is-ringed" : ""}`} aria-hidden />
+              </button>
+            );
+          })}
+        </div>
+        <div className="solar-mission-grid solar-mission-grid--mobile">
+          {planets.map((p, idx) => {
+            const isVisited = visited.has(p.slug);
+            const isFocused = focusedSlug === p.slug || activeIndex === idx;
+            const title = (isHebrew && p.heTitle) || p.title;
+            const shortEntry = SHORT_SUBJECT_LABELS[p.slug];
+            const shortLabel = shortEntry ? (isHebrew ? shortEntry.he : shortEntry.en) : title;
+            return (
+              <button
+                key={p.slug}
+                type="button"
+                className={`solar-mission-dot solar-mission-subject-pill ${
+                  isVisited ? "is-visited" : ""
+                } ${isFocused ? "is-focused" : ""}`}
+                style={{ ["--dot-accent" as string]: p.accent }}
+                onClick={() => onPlanetSelect(p.slug)}
+                title={title}
+                aria-label={title}
+                aria-pressed={isFocused}
+              >
+                <span className={`solar-mission-orb ${p.ringed ? "is-ringed" : ""}`} aria-hidden />
+                <span className="solar-mission-subject-label">{preventOrphan(shortLabel)}</span>
               </button>
             );
           })}

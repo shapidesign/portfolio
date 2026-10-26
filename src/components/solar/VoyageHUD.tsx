@@ -30,6 +30,8 @@ const STRINGS = {
     projects: "Projects in this orbit",
     exit: "Exit ride",
     contact: "Contact",
+    mobileOverview: "Overview",
+    mobileNext: "Next",
   },
   he: {
     chapter: "תחנת מסע",
@@ -42,6 +44,8 @@ const STRINGS = {
     projects: "פרויקטים במסלול",
     exit: "לצאת מהמסלול",
     contact: "צור קשר",
+    mobileOverview: "למבט על",
+    mobileNext: "הבא",
   },
 } as const;
 
@@ -112,21 +116,51 @@ export function VoyageHUD({
             style={{ ["--moon-accent" as string]: moon.accent }}
             onClick={() => onOpenProject(moon.slug)}
           >
-            {preventOrphan((isHebrew && moon.heTitle) || moon.title)}
+            <span className="solar-voyage-moon-title">
+              {preventOrphan((isHebrew && moon.heTitle) || moon.title)}
+            </span>
+            <span className="solar-voyage-moon-arrow" aria-hidden>
+              ↗
+            </span>
           </button>
         ))}
       </div>
-      <div className="solar-voyage-actions">
+      <div className="solar-voyage-actions solar-voyage-actions--desktop">
         <button type="button" className="solar-voyage-secondary" onClick={onNext}>
           {preventOrphan(isLastStop ? t.finish : t.next)}
         </button>
       </div>
-      <div className="solar-voyage-nav">
-        <button type="button" onClick={onPrevious} disabled={activeIndex === 0}>
+      <div className="solar-voyage-nav solar-voyage-nav--desktop">
+        <button type="button" onClick={onPrevious}>
           {preventOrphan(t.previous)}
         </button>
         <button type="button" onClick={onExit}>
           {preventOrphan(t.exit)}
+        </button>
+      </div>
+      <div className="solar-voyage-mobile-controls">
+        <button
+          type="button"
+          className="solar-voyage-step-btn"
+          onClick={onPrevious}
+          aria-label={t.previous}
+        >
+          <span aria-hidden>{isHebrew ? "→" : "←"}</span>
+        </button>
+        <button
+          type="button"
+          className="solar-voyage-overview-btn"
+          onClick={onExit}
+        >
+          {preventOrphan(t.mobileOverview)}
+        </button>
+        <button
+          type="button"
+          className="solar-voyage-step-btn solar-voyage-step-btn--primary"
+          onClick={onNext}
+        >
+          <span>{preventOrphan(isLastStop ? t.finish : t.mobileNext)}</span>
+          <span aria-hidden>{isHebrew ? "←" : "→"}</span>
         </button>
       </div>
     </aside>

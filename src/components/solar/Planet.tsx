@@ -451,6 +451,20 @@ export function Planet({
             <primitive ref={atmosphereRef} object={atmosphereMat} attach="material" />
           </mesh>
 
+          {/* Forgiving finger hit-target on touch/compact screens (Fitts's Law). */}
+          {compact && hoverable ? (
+            <mesh
+              scale={1.85}
+              onClick={(e: ThreeEvent<MouseEvent>) => {
+                e.stopPropagation();
+                onClick?.({ clientX: e.clientX, clientY: e.clientY });
+              }}
+            >
+              <sphereGeometry args={[1, 12, 12]} />
+              <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+            </mesh>
+          ) : null}
+
           {config.ringed && ringTexture ? (
             <mesh rotation={[Math.PI / 2.6, 0, 0.35]} raycast={() => null}>
               <ringGeometry args={[RING_INNER, RING_OUTER, 96]} />

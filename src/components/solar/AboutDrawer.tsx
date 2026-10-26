@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { preventOrphan } from "@/i18n/typography";
 import { siteCopyText, type SiteCopy } from "@/lib/site-copy";
 
@@ -11,17 +12,31 @@ type AboutDrawerProps = {
 };
 
 export function AboutDrawer({ open, isHebrew, siteCopy, onClose }: AboutDrawerProps) {
+  const sheetRef = useRef<HTMLElement>(null);
+  const dragStartY = useRef<number | null>(null);
   const text = (en: string, he: string) => siteCopyText(siteCopy, isHebrew, en, he);
 
   if (!open) return null;
 
   return (
     <aside
+      ref={sheetRef}
       className="solar-drawer solar-drawer-about is-open"
       style={{ ["--drawer-accent" as string]: "#7a56f2" }}
       dir={isHebrew ? "rtl" : "ltr"}
+      onTouchStart={(e) => {
+        const scrollTop = sheetRef.current?.scrollTop ?? 0;
+        dragStartY.current = scrollTop <= 4 ? e.touches[0].clientY : null;
+      }}
+      onTouchEnd={(e) => {
+        if (dragStartY.current === null) return;
+        const dy = e.changedTouches[0].clientY - dragStartY.current;
+        dragStartY.current = null;
+        if (dy > 70 && (sheetRef.current?.scrollTop ?? 0) <= 4) onClose();
+      }}
     >
       <header className="solar-drawer-header">
+        <span className="solar-sheet-handle" aria-hidden />
         <div className="solar-drawer-eyebrow">
           <span className="solar-drawer-dot" />
           {preventOrphan(text("aboutPopupEyebrow", "heAboutPopupEyebrow"))}
