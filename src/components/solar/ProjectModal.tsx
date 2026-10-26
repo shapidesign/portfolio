@@ -24,6 +24,7 @@ export function ProjectModal({
 }: ProjectModalProps) {
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const dragStartY = useRef<number | null>(null);
   const titleId = useId();
 
   useEffect(() => {
@@ -56,8 +57,22 @@ export function ProjectModal({
       dir={isHebrew ? "rtl" : "ltr"}
     >
       <div className="solar-modal-backdrop" onClick={onClose} aria-hidden />
-      <div className="solar-modal-shell" ref={scrollRef}>
+      <div
+        className="solar-modal-shell"
+        ref={scrollRef}
+        onTouchStart={(e) => {
+          const scrollTop = scrollRef.current?.scrollTop ?? 0;
+          dragStartY.current = scrollTop <= 4 ? e.touches[0].clientY : null;
+        }}
+        onTouchEnd={(e) => {
+          if (dragStartY.current === null) return;
+          const dy = e.changedTouches[0].clientY - dragStartY.current;
+          dragStartY.current = null;
+          if (dy > 76 && (scrollRef.current?.scrollTop ?? 0) <= 4) onClose();
+        }}
+      >
         <div className="solar-modal-toolbar">
+          <span className="solar-sheet-handle" aria-hidden />
           <span className="solar-modal-esc-hint" aria-hidden>
             {preventOrphan(escHint)}
           </span>

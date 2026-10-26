@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { preventOrphan } from "@/i18n/typography";
 
@@ -35,17 +36,31 @@ const STRINGS = {
 } as const;
 
 export function ContactDrawer({ open, isHebrew, onClose }: ContactDrawerProps) {
+  const sheetRef = useRef<HTMLElement>(null);
+  const dragStartY = useRef<number | null>(null);
   const t = isHebrew ? STRINGS.he : STRINGS.en;
 
   if (!open) return null;
 
   return (
     <aside
+      ref={sheetRef}
       className="solar-drawer solar-drawer-contact is-open"
       style={{ ["--drawer-accent" as string]: "#66d9ef" }}
       dir={isHebrew ? "rtl" : "ltr"}
+      onTouchStart={(e) => {
+        const scrollTop = sheetRef.current?.scrollTop ?? 0;
+        dragStartY.current = scrollTop <= 4 ? e.touches[0].clientY : null;
+      }}
+      onTouchEnd={(e) => {
+        if (dragStartY.current === null) return;
+        const dy = e.changedTouches[0].clientY - dragStartY.current;
+        dragStartY.current = null;
+        if (dy > 70 && (sheetRef.current?.scrollTop ?? 0) <= 4) onClose();
+      }}
     >
       <header className="solar-drawer-header">
+        <span className="solar-sheet-handle" aria-hidden />
         <div className="solar-drawer-eyebrow">
           <span className="solar-drawer-dot" />
           {preventOrphan(t.eyebrow)}

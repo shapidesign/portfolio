@@ -29,11 +29,11 @@ type SolarSystemProps = {
 type VoyageMode = "idle" | "riding" | "complete";
 
 const GESTURE_COOLDOWN_MS = 720;
-const TOUCH_SWIPE_THRESHOLD = 54;
+const TOUCH_SWIPE_THRESHOLD = 46;
 const WHEEL_SWIPE_THRESHOLD = 72;
 const WHEEL_RESET_MS = 180;
 const GESTURE_BLOCK_SELECTOR =
-  ".solar-actions, .solar-mission-control, .solar-voyage-hud, .solar-phone, .solar-modal, .solar-drawer, .solar-list, button, a, input, textarea, select, [contenteditable='true']";
+  ".solar-actions, .solar-phone, .solar-mobile-tabbar, .solar-modal, .solar-drawer, .solar-list, button, a, input, textarea, select, [contenteditable='true']";
 
 /** Captures the live camera ref from inside the Canvas so DOM overlays can project planet positions. */
 function CameraExporter({ targetRef }: { targetRef: React.MutableRefObject<THREE.Camera | null> }) {
@@ -177,11 +177,22 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
   const exitRide = useCallback(() => {
     setVoyageMode("idle");
     setActiveIndex(null);
+    setZoomedId(null);
   }, []);
 
   const goNext = useCallback(() => {
     if (!planets.length) return;
     if (voyageMode === "idle") {
+      if (zoomedIndex >= planets.length - 1) {
+        if (allProjectsOpened) {
+          setVoyageMode("complete");
+          setZoomedId(null);
+          return;
+        }
+        const firstUnopenedIndex = planets.findIndex((planet) => !visited.has(planet.slug));
+        zoomIdle(firstUnopenedIndex >= 0 ? firstUnopenedIndex : 0);
+        return;
+      }
       zoomIdle(Math.min(zoomedIndex + 1, planets.length - 1));
       return;
     }
@@ -210,15 +221,21 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
     }
     if (voyageMode === "idle") {
       if (zoomedIndex > 0) zoomIdle(zoomedIndex - 1);
+      else if (zoomedIndex === 0) setZoomedId(null);
+      else zoomIdle(planets.length - 1);
       return;
     }
     if (voyageMode !== "riding" || activeIndex === null) return;
+    if (activeIndex === 0) {
+      exitRide();
+      return;
+    }
     focusVoyageStop(activeIndex - 1);
-  }, [activeIndex, focusVoyageStop, planets.length, voyageMode, zoomIdle, zoomedIndex]);
+  }, [activeIndex, exitRide, focusVoyageStop, planets.length, voyageMode, zoomIdle, zoomedIndex]);
 
   const isGestureBlocked = useCallback(
-    (target: EventTarget | null) => {
-      if (overlayBlocked || voyageMode === "idle" || !(target instanceof Element)) return true;
+    (target: EventTarget | null, allowIdle = false) => {
+      if (overlayBlocked || (!allowIdle && voyageMode === "idle") || !(target instanceof Element)) return true;
       return !!target.closest(GESTURE_BLOCK_SELECTOR);
     },
     [overlayBlocked, voyageMode],
@@ -237,7 +254,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
 
   const handlePointerDown = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
-      if (event.pointerType === "mouse" || isGestureBlocked(event.target)) {
+      if (event.pointerType === "mouse" || isGestureBlocked(event.target, true)) {
         touchGesture.current = null;
         return;
       }
@@ -254,14 +271,16 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
     (event: React.PointerEvent<HTMLDivElement>) => {
       const start = touchGesture.current;
       touchGesture.current = null;
-      if (!start || start.id !== event.pointerId || isGestureBlocked(event.target)) return;
+      if (!start || start.id !== event.pointerId || isGestureBlocked(event.target, true)) return;
 
       const dx = event.clientX - start.x;
       const dy = event.clientY - start.y;
       if (Math.abs(dx) < TOUCH_SWIPE_THRESHOLD || Math.abs(dx) < Math.abs(dy) * 1.15) return;
-      navigateByGesture(dx < 0 ? "next" : "previous");
+      const nextOnLeftSwipe = !isHebrew;
+      const isLeftSwipe = dx < 0;
+      navigateByGesture(isLeftSwipe === nextOnLeftSwipe ? "next" : "previous");
     },
-    [isGestureBlocked, navigateByGesture],
+    [isGestureBlocked, isHebrew, navigateByGesture],
   );
 
   const handlePointerCancel = useCallback(() => {
@@ -416,7 +435,9 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
 
   return (
     <div
-      className={`solar-root ${voyageMode !== "idle" ? "is-ride-active" : ""}`}
+      className={`solar-root ${
+        voyageMode !== "idle" || (compactScene && zoomedId) ? "is-ride-active" : ""
+      }`}
       dir={isHebrew ? "rtl" : "ltr"}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
@@ -443,7 +464,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
               reducedMotion={reducedMotion}
               spacecraftVisible={!modalOpen}
               compact={compactScene}
-              voyageMotion={voyageMode === "riding"}
+              voyageMotion={voyageMode === "riding" || zoomedId !== null}
               planetPositions={planetPositions}
               onPlanetHover={setHoveredSlug}
               onPlanetClick={(slug) => zoomInto(slug)}
@@ -487,6 +508,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
             <MissionControl
               siteCopy={siteCopy}
               planets={planets}
+              projectCount={projects.length}
               visited={visited}
               hoveredSlug={hoveredSlug}
               focusedSlug={zoomedSlug}
@@ -507,9 +529,15 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
             />
 
             <VoyageHUD
-              mode={voyageMode}
-              planet={activePlanet}
-              activeIndex={activeIndex}
+              mode={compactScene && voyageMode === "idle" && zoomedPlanet ? "riding" : voyageMode}
+              planet={compactScene ? zoomedPlanet : activePlanet}
+              activeIndex={
+                voyageMode === "riding"
+                  ? activeIndex
+                  : compactScene && zoomedIndex >= 0
+                    ? zoomedIndex
+                    : null
+              }
               total={planets.length}
               isHebrew={isHebrew}
               modalOpen={modalOpen}
@@ -518,8 +546,7 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
               onOpenProject={openProject}
               onExit={exitRide}
               onContact={() => {
-                setVoyageMode("idle");
-                setActiveIndex(null);
+                exitRide();
                 openContact();
               }}
             />
@@ -566,6 +593,75 @@ export function SolarSystem({ projects, siteCopy }: SolarSystemProps) {
             </svg>
           </button>
         ) : null}
+
+        <nav
+          className="solar-mobile-tabbar"
+          aria-label={isHebrew ? "ניווט מהיר" : "Mobile navigation"}
+          dir={isHebrew ? "rtl" : "ltr"}
+        >
+          <button
+            type="button"
+            className={`solar-mobile-tab ${!listMode && !aboutOpen && !contactOpen ? "is-active" : ""}`}
+            onClick={() => {
+              setListMode(false);
+              setAboutOpen(false);
+              setContactOpen(false);
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
+              <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(-24 12 12)" stroke="currentColor" strokeWidth="1.5" />
+            </svg>
+            <span>{isHebrew ? "מסלול" : "Explore"}</span>
+          </button>
+          <button
+            type="button"
+            className={`solar-mobile-tab ${listMode ? "is-active" : ""}`}
+            onClick={() => {
+              setAboutOpen(false);
+              setContactOpen(false);
+              setListMode((v) => !v);
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <rect x="3.5" y="4" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+              <rect x="13.5" y="4" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+              <rect x="3.5" y="13" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+              <rect x="13.5" y="13" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+            </svg>
+            <span>{isHebrew ? `עבודות (${projects.length})` : `Work (${projects.length})`}</span>
+          </button>
+          <button
+            type="button"
+            className={`solar-mobile-tab ${aboutOpen ? "is-active" : ""}`}
+            onClick={() => {
+              setListMode(false);
+              setContactOpen(false);
+              setAboutOpen((v) => !v);
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.7" />
+              <path d="M5 19.5c1.6-3.2 4.1-4.8 7-4.8s5.4 1.6 7 4.8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+            </svg>
+            <span>{isHebrew ? "אודות" : "About"}</span>
+          </button>
+          <button
+            type="button"
+            className={`solar-mobile-tab ${contactOpen ? "is-active" : ""}`}
+            onClick={() => {
+              setListMode(false);
+              setAboutOpen(false);
+              setContactOpen((v) => !v);
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" strokeWidth="1.7" />
+              <path d="m4 7 8 6 8-6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span>{isHebrew ? "קשר" : "Contact"}</span>
+          </button>
+        </nav>
       </StarShapesProvider>
     </div>
   );

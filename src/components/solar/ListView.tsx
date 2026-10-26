@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import type { Project } from "../../types/project";
 import type { PlanetConfig } from "./Planet";
+import { SUBJECTS } from "./planet-config";
 import { preventOrphan } from "@/i18n/typography";
 
 type ListViewProps = {
@@ -21,6 +23,8 @@ const STRINGS = {
     close: "Back to 3D",
     fullIndex: "Open full /work index",
     fallbackStatus: "Project",
+    allFilter: "All",
+    readCaseStudy: "Read case study",
   },
   he: {
     eyebrow: "ארכיון משימות",
@@ -28,32 +32,72 @@ const STRINGS = {
     close: "לתצוגה מרחבית",
     fullIndex: "לכל העבודות",
     fallbackStatus: "פרויקט",
+    allFilter: "הכול",
+    readCaseStudy: "לצפייה בפרויקט",
   },
 } as const;
 
 export function ListView({ open, projects, planets, isHebrew, onSelect, onClose }: ListViewProps) {
+  const [activeSubjectId, setActiveSubjectId] = useState<string>("all");
   const accentBySlug = new Map(planets.map((p) => [p.slug, p.accent]));
   const t = isHebrew ? STRINGS.he : STRINGS.en;
 
   if (!open) return null;
 
+  const activeSubject = SUBJECTS.find((s) => s.id === activeSubjectId);
+  const visibleProjects = activeSubject
+    ? projects.filter((p) => activeSubject.projectSlugs.includes(p.slug))
+    : projects;
+
   return (
     <section className="solar-list is-open" dir={isHebrew ? "rtl" : "ltr"}>
       <header className="solar-list-header">
-        <div>
-          <span className="solar-list-eyebrow">{preventOrphan(t.eyebrow)}</span>
-          <h2 className="solar-list-title">{preventOrphan(t.title)}</h2>
+        <div className="solar-list-header-top">
+          <div>
+            <span className="solar-list-eyebrow">{preventOrphan(t.eyebrow)}</span>
+            <h2 className="solar-list-title">{preventOrphan(t.title)}</h2>
+          </div>
+          <button type="button" className="solar-list-close" onClick={onClose} aria-label={t.close}>
+            {preventOrphan(t.close)}
+          </button>
         </div>
-        <button type="button" className="solar-list-close" onClick={onClose} aria-label={t.close}>
-          {preventOrphan(t.close)}
-        </button>
+        <div className="solar-list-filters" role="tablist" aria-label={t.title}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeSubjectId === "all"}
+            className={`solar-list-filter-chip ${activeSubjectId === "all" ? "is-active" : ""}`}
+            onClick={() => setActiveSubjectId("all")}
+          >
+            {t.allFilter} ({projects.length})
+          </button>
+          {SUBJECTS.map((subject) => {
+            const label = isHebrew ? subject.heTitle : subject.title;
+            const isSelected = activeSubjectId === subject.id;
+            return (
+              <button
+                key={subject.id}
+                type="button"
+                role="tab"
+                aria-selected={isSelected}
+                className={`solar-list-filter-chip ${isSelected ? "is-active" : ""}`}
+                style={{ ["--chip-accent" as string]: subject.accent }}
+                onClick={() => setActiveSubjectId(subject.id)}
+              >
+                <span className="solar-list-filter-dot" aria-hidden />
+                {preventOrphan(label)}
+              </button>
+            );
+          })}
+        </div>
       </header>
       <div className="solar-list-grid">
-        {projects.map((project) => {
+        {visibleProjects.map((project) => {
           const accent = accentBySlug.get(project.slug) ?? "#7a56f2";
           const cover = project.images?.[0];
           const title = (isHebrew && project.heTitle) || project.title;
           const status = (isHebrew && project.heStatus) || project.status || t.fallbackStatus;
+          const discipline = (isHebrew && project.heDiscipline) || project.discipline || project.category;
           const descriptor =
             (isHebrew && (project.heDescriptor || project.heContext || project.heSubHeader)) ||
             project.descriptor ||
@@ -82,7 +126,12 @@ export function ListView({ open, projects, planets, isHebrew, onSelect, onClose 
                 </svg>
               </div>
               <div className="solar-list-text">
-                <span className="solar-list-status">{preventOrphan(status)}</span>
+                <div className="solar-list-meta-row">
+                  <span className="solar-list-status">{preventOrphan(discipline || status)}</span>
+                  <span className="solar-list-cta-hint" aria-hidden>
+                    {preventOrphan(t.readCaseStudy)} ↗
+                  </span>
+                </div>
                 <h3 className="solar-list-card-title">{preventOrphan(title)}</h3>
                 {descriptor ? <p>{preventOrphan(descriptor)}</p> : null}
               </div>
